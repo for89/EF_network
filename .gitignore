@@ -1,0 +1,7 @@
+# Quarto build artifacts
+*.pdf
+*.html
+*.docx
+_freeze/
+.quarto/
+*_cache/
