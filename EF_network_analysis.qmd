@@ -461,8 +461,6 @@ ggplot(plot_delta_ei, aes(x = node, y = mean, ymin = lo95, ymax = hi95, colour =
   geom_hline(yintercept = 0, linetype = 2) +
   labs(title = "Δ Expected Influence across intervals", y = "ΔEI (mean ± 95% CI)", x = "") +
   theme_minimal()
-
-
 ```
 
 
