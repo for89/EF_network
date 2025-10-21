@@ -5,3 +5,4 @@
 _freeze/
 .quarto/
 *_cache/
+.Rproj.user

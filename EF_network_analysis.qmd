@@ -93,6 +93,11 @@ library(dplyr)
 library(ggplot2)
 library(stringr)
 library(psych) 
+library(dplyr)
+library(tibble)
+library(BDgraph)
+library(haven)
+library(ggplot2)
 ```
 
 ```{r load data}
@@ -227,14 +232,238 @@ give a summary of the data checks.
 Histograms indicated that all executive-function task scores were approximately symmetric and unimodal. Mean performance increased and variability decreased across time, consistent with developmental improvements. No evidence of severe skewness, kurtosis, or ceiling/floor effects was observed, so raw scores were retained for analysis.
 ```{r}
 
+# Split EF vars by wave
+ef_map <- list(
+  T1 = c("MrAnt_Pt_T1","GNG_IC_T1","CS_SwAcc_T1"),
+  T2 = c("MrAnt_Pt_T2","GNG_IC_T2","CS_SwAcc_T2"),
+  T3 = c("MrAnt_Pt_T3","GNG_IC_T3","CS_SwAcc_T3")
+)
+
+# Helper to pull a wave to common names (WM, INH, SHIFT)
+extract_wave <- function(df, vars) {
+  stopifnot(length(vars) == 3)
+  out <- df[, vars]
+  colnames(out) <- c("mr_ant", "gng", "cs")
+  out
+}
 ```
 
+```{r}
+
+set.seed(42)
+
+# mean imputation so BDgraph always sees a full matrix
+impute_once <- function(M){
+  for (j in seq_len(ncol(M))) if (anyNA(M[,j])) M[is.na(M[,j]), j] <- mean(M[,j], na.rm = TRUE)
+  M
+}
+
+# precision -> partial correlations
+K_to_pcor <- function(K){
+  d <- sqrt(diag(K))
+  P <- - K / (d %o% d)
+  diag(P) <- 1
+  P
+}
+
+# Fit per wave (Bayesian GGM; partial correlations) 
+fit_wave <- function(dat_wave, iter = 20000, burnin = 5000) {
+  X <- scale(dat_wave) |> as.matrix() |> impute_once()
+  fit <- BDgraph::bdgraph(
+    data   = X,
+    method = "ggm",
+    iter   = iter,
+    burnin = burnin,
+    save   = FALSE   # some builds ignore 'save'; use bootstrap for CIs
+  )
+  P   <- K_to_pcor(fit$K_hat)                 # posterior mean partial-corr
+  PIP <- BDgraph::plinks(fit)                 # edge inclusion probabilities
+  GS  <- sum(abs(P[upper.tri(P)]))            # global strength (Σ|edges|)
+  COR <- stats::cor(X, use = "pairwise.complete.obs")  # zero-order (reference)
+  list(fit = fit, pcor = P, pip = PIP, gs = GS, cor = COR)
+}
+
+# Run fits 
+wave_data <- purrr::imap(ef_map, ~ extract_wave(aus_data, .x))
+fits      <- purrr::imap(wave_data, ~ fit_wave(.x))
+
+# summaries
+fits_summary <- tibble(wave = names(fits), GS = purrr::map_dbl(fits, "gs"))
+print(fits_summary)
+
+EI <- function(P) colSums(P)
+ei_tab <- tibble(
+  node = colnames(fits$T1$pcor),
+  EI_T1 = EI(fits$T1$pcor),
+  EI_T2 = EI(fits$T2$pcor),
+  EI_T3 = EI(fits$T3$pcor)
+)
+print(ei_tab)
+
+```
+
+```{r}
+# Plots for GS and EI 
+p1 <- ggplot(fits_summary, aes(wave, GS)) +
+  geom_line(group = 1, linewidth = 1) +
+  geom_point(size = 3) +
+  theme_minimal() +
+  labs(title = "Global Strength of EF Network Over Time",
+       y = "Global Strength (Σ|edges|)", x = "Wave")
+print(p1)
+
+ei_tab_long <- tidyr::pivot_longer(ei_tab, cols = starts_with("EI_"),
+                                   names_to = "wave", values_to = "EI") |>
+  mutate(wave = sub("^EI_", "", wave))
+
+p2 <- ggplot(ei_tab_long, aes(x = wave, y = EI, group = node, colour = node)) +
+  geom_line(linewidth = 1.1) +
+  geom_point(size = 3) +
+  theme_minimal() +
+  labs(title = "Expected Influence (Centrality) by EF Task",
+       y = "Expected Influence", x = "Wave")
+print(p2)
+```
+
+```{r}
+# Bootstrap CIs (no saved MCMC draws needed)
+# Resample participants WITH replacement per wave, refit, store edges/GS/EI.
+bootstrap_wave <- function(dat_wave, B = 300, iter = 10000, burnin = 2500) {
+  X0 <- as.matrix(scale(dat_wave))
+  n  <- nrow(X0)
+
+  edge_draws <- matrix(NA_real_, nrow = B, ncol = 3)   # (mr_ant-gng, mr_ant-cs, gng-cs)
+  gs_draws   <- numeric(B)
+  ei_draws   <- matrix(NA_real_, nrow = B, ncol = 3)   # EI per node
+
+  for (b in seq_len(B)) {
+    idx <- sample.int(n, n, replace = TRUE)
+    X   <- X0[idx, , drop = FALSE]
+    for (j in seq_len(ncol(X))) if (anyNA(X[,j])) X[is.na(X[,j]), j] <- mean(X[,j], na.rm = TRUE)
+
+    fit <- BDgraph::bdgraph(data = X, method = "ggm", iter = iter, burnin = burnin)
+    K   <- fit$K_hat
+    d   <- sqrt(diag(K))
+    P   <- -K/(d %o% d); diag(P) <- 1
+
+    edge_draws[b, ] <- P[upper.tri(P)]                  # order: (1,2),(1,3),(2,3)
+    gs_draws[b]     <- sum(abs(P[upper.tri(P)]))
+    ei_draws[b, ]   <- colSums(P)
+  }
+
+  colnames(edge_draws) <- c("mr_ant-gng","mr_ant-cs","gng-cs")
+  colnames(ei_draws)   <- colnames(dat_wave)
+  list(edges = edge_draws, gs = gs_draws, ei = ei_draws)
+}
+
+set.seed(2025)
+boot_T1 <- bootstrap_wave(wave_data$T1, B = 300)
+set.seed(2025)
+boot_T2 <- bootstrap_wave(wave_data$T2, B = 300)
+set.seed(2025)
+boot_T3 <- bootstrap_wave(wave_data$T3, B = 300)
+```
+
+```{r}
+# Summaries with 95% CIs per wave
+summ_edges <- function(M) tibble(
+  edge = colnames(M),
+  mean = colMeans(M),
+  lo95 = apply(M, 2, quantile, .025),
+  hi95 = apply(M, 2, quantile, .975)
+)
+summ_gs <- function(v) tibble(mean = mean(v), lo95 = quantile(v,.025), hi95 = quantile(v,.975))
+summ_ei <- function(M) tibble(
+  node = colnames(M),
+  mean = colMeans(M),
+  lo95 = apply(M, 2, quantile, .025),
+  hi95 = apply(M, 2, quantile, .975)
+)
+
+edge_T1 <- summ_edges(boot_T1$edges); gs_T1 <- summ_gs(boot_T1$gs); ei_T1 <- summ_ei(boot_T1$ei)
+edge_T2 <- summ_edges(boot_T2$edges); gs_T2 <- summ_gs(boot_T2$gs); ei_T2 <- summ_ei(boot_T2$ei)
+edge_T3 <- summ_edges(boot_T3$edges); gs_T3 <- summ_gs(boot_T3$gs); ei_T3 <- summ_ei(boot_T3$ei)
+
+print(edge_T1); print(edge_T2); print(edge_T3)
+print(gs_T1); print(gs_T2); print(gs_T3)
+print(ei_T1); print(ei_T2); print(ei_T3)
+
+# paired differences (Δ) with 95% CIs 
+S <- min(nrow(boot_T1$edges), nrow(boot_T2$edges), nrow(boot_T3$edges))
+
+# Edge deltas
+d_edges_T2_T1 <- boot_T2$edges[1:S, ] - boot_T1$edges[1:S, ]
+d_edges_T3_T2 <- boot_T3$edges[1:S, ] - boot_T2$edges[1:S, ]
+
+delta_summary <- function(D) tibble(
+  edge = colnames(D),
+  mean = colMeans(D),
+  lo95 = apply(D, 2, quantile, .025),
+  hi95 = apply(D, 2, quantile, .975)
+)
+delta_edges_T2_T1 <- delta_summary(d_edges_T2_T1)
+delta_edges_T3_T2 <- delta_summary(d_edges_T3_T2)
+
+# ΔGS deltas
+gs_from_vec <- function(v){ P <- matrix(0,3,3); P[upper.tri(P)] <- v; P <- P + t(P); diag(P) <- 1; sum(abs(P[upper.tri(P)])) }
+d_gs_T2_T1 <- boot_T2$gs[1:S] - boot_T1$gs[1:S]
+d_gs_T3_T2 <- boot_T3$gs[1:S] - boot_T2$gs[1:S]
+
+delta_gs_T2_T1 <- tibble(contrast = "T2 - T1",
+                         mean = mean(d_gs_T2_T1),
+                         lo95 = quantile(d_gs_T2_T1, .025),
+                         hi95 = quantile(d_gs_T2_T1, .975))
+delta_gs_T3_T2 <- tibble(contrast = "T3 - T2",
+                         mean = mean(d_gs_T3_T2),
+                         lo95 = quantile(d_gs_T3_T2, .025),
+                         hi95 = quantile(d_gs_T3_T2, .975))
+
+# EI deltas
+d_ei_T2_T1 <- boot_T2$ei[1:S, ] - boot_T1$ei[1:S, ]
+d_ei_T3_T2 <- boot_T3$ei[1:S, ] - boot_T2$ei[1:S, ]
+delta_ei_T2_T1 <- summ_ei(d_ei_T2_T1)
+delta_ei_T3_T2 <- summ_ei(d_ei_T3_T2)
+
+# Print all Δ summaries
+print(delta_edges_T2_T1)
+print(delta_edges_T3_T2)
+print(delta_gs_T2_T1)
+print(delta_gs_T3_T2)
+print(delta_ei_T2_T1)
+print(delta_ei_T3_T2)
+
+```
+
+```{r}
+# checks
+# Compare side by side
+dplyr::full_join(
+  dplyr::rename(delta_ei_T2_T1, mean_T2_T1 = mean, lo95_T2_T1 = lo95, hi95_T2_T1 = hi95),
+  dplyr::rename(delta_ei_T3_T2, mean_T3_T2 = mean, lo95_T3_T2 = lo95, hi95_T3_T2 = hi95),
+  by = "node"
+)
+
+# Numeric deltas between periods (T3−T2) − (T2−T1)
+delta_ei_diff <- delta_ei_T3_T2 |>
+  dplyr::select(node, mean) |>
+  dplyr::left_join(dplyr::select(delta_ei_T2_T1, node, mean), by = "node", suffix = c("_T3_T2","_T2_T1")) |>
+  dplyr::mutate(change_of_change = mean_T3_T2 - mean_T2_T1)
+delta_ei_diff
+```
+```{r}
+plot_delta_ei <- dplyr::bind_rows(
+  dplyr::mutate(delta_ei_T2_T1, contrast = "T2 − T1"),
+  dplyr::mutate(delta_ei_T3_T2, contrast = "T3 − T2")
+)
+
+ggplot(plot_delta_ei, aes(x = node, y = mean, ymin = lo95, ymax = hi95, colour = contrast)) +
+  geom_pointrange(position = position_dodge(width = 0.4)) +
+  geom_hline(yintercept = 0, linetype = 2) +
+  labs(title = "Δ Expected Influence across intervals", y = "ΔEI (mean ± 95% CI)", x = "") +
+  theme_minimal()
 
 
-
-
-
-
+```
 
 
 
