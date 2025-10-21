@@ -89,6 +89,10 @@ library(broom.mixed)
 library(lmerTest)
 library(png)
 library(emmeans)
+library(dplyr)
+library(ggplot2)
+library(stringr)
+library(psych) 
 ```
 
 ```{r load data}
@@ -165,8 +169,62 @@ miss_var <- aus_data |>
 
 miss_var
 
-```
+# check skew - skew > 2 or kurtosis > 7 problematic
+ef_desc <- psych::describe(aus_data[ef_vars]) |>
+  as.data.frame() |>
+  tibble::rownames_to_column("variable") |>
+  transmute(
+    variable, n, mean, sd, median, min, max,
+    skew   = skew, 
+    kurt   = kurtosis,   # note: psych uses "kurtosis" column name
+    se
+  ) |>
+  arrange(variable)
+ef_desc
+# all within range; no transformations required.
 
+# histograms
+ef_long <- aus_data |>
+  select(Age, all_of(ef_vars)) |>
+  pivot_longer(cols = all_of(ef_vars), names_to = "var", values_to = "value") |>
+  mutate(
+    timepoint = str_extract(var, "T[123]"),
+    construct = case_when(
+      str_starts(var, "MrAnt") ~ "WM",
+      str_starts(var, "GNG")   ~ "INH",
+      str_starts(var, "CS_")   ~ "SHIFT",
+      TRUE ~ "EF"
+    )
+  )
+
+ggplot(ef_long, aes(x = value)) +
+  geom_histogram(bins = 30, na.rm = TRUE) +
+  facet_wrap(~ var, scales = "free") +
+  labs(title = "EF distributions", x = NULL, y = "Count")
+
+# check outliers
+z_df <- aus_data |>
+  mutate(across(all_of(ef_vars), ~ (.-mean(., na.rm=TRUE))/sd(., na.rm=TRUE),
+                .names = "z_{.col}"))
+
+outlier_flags <- z_df |>
+  transmute(across(starts_with("z_"), ~ abs(.) > 3.5, .names = "{.col}_out")) |>
+  bind_cols(aus_data |> select(all_of(ef_vars)))  # keep originals alongside
+
+# How many outliers per variable?
+outlier_summary <- outlier_flags |>
+  summarise(across(ends_with("_out"), ~ sum(.x, na.rm = TRUE))) |>
+  pivot_longer(everything(), names_to = "flag", values_to = "n_outliers") |>
+  mutate(variable = str_remove(flag, "^z_"),
+         variable = str_remove(variable, "_out$")) |>
+  arrange(desc(n_outliers))
+
+outlier_summary
+
+```
+give a summary of the data checks. 
+
+Histograms indicated that all executive-function task scores were approximately symmetric and unimodal. Mean performance increased and variability decreased across time, consistent with developmental improvements. No evidence of severe skewness, kurtosis, or ceiling/floor effects was observed, so raw scores were retained for analysis.
 ```{r}
 
 ```
