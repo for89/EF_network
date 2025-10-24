@@ -119,6 +119,15 @@ aus_data <- read_sav("~/Library/CloudStorage/GoogleDrive-foreilly@stanford.edu/M
 colnames(aus_data)
 View(aus_data)
 ```
+```{r check age}
+table(table(aus_data$CID))
+
+summary(aus_data$Age)
+
+library(dplyr)
+aus_data %>% group_by(Timepoint) %>% summarise(mean_age = mean(Age, na.rm = TRUE))
+```
+
 
 ```{r explore data}
 #| cache: false
@@ -128,45 +137,6 @@ ef_vars <- c(
   "MrAnt_Pt_T2","GNG_IC_T2","CS_SwAcc_T2",
   "MrAnt_Pt_T3","GNG_IC_T3","CS_SwAcc_T3"
 )
-
-# EF t1 vars
-ggplot(aus_data, aes(x = Age, y = MrAnt_Pt_T1)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = TRUE)
-
-ggplot(aus_data, aes(x = Age, y = GNG_IC_T1)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = TRUE)
-
-ggplot(aus_data, aes(x = Age, y = CS_SwAcc_T1)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = TRUE)
-
-# EF t2 vars
-ggplot(aus_data, aes(x = Age, y = MrAnt_Pt_T2)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = TRUE)
-
-ggplot(aus_data, aes(x = Age, y = GNG_IC_T2)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = TRUE)
-
-ggplot(aus_data, aes(x = Age, y = CS_SwAcc_T2)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = TRUE)
-
-# EF t3 vars
-ggplot(aus_data, aes(x = Age, y = MrAnt_Pt_T3)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = TRUE)
-
-ggplot(aus_data, aes(x = Age, y = GNG_IC_T3)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = TRUE)
-
-ggplot(aus_data, aes(x = Age, y = CS_SwAcc_T3)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = TRUE)
 
 # missingness
 miss_var <- aus_data |>
@@ -235,7 +205,84 @@ outlier_summary <- outlier_flags |>
   arrange(desc(n_outliers))
 
 outlier_summary
+```
 
+```{r}
+ef_long <- aus_data %>%
+  select(Age, all_of(ef_vars)) %>%
+  pivot_longer(cols = all_of(ef_vars), names_to = "measure", values_to = "score") %>%
+  # Split names like MrAnt_Pt_T1 -> task = MrAnt, metric = Pt, tp = T1
+  extract(measure, into = c("task","metric","tp"), regex = "^([^_]+)_([^_]+)_(T\\d+)$", remove = FALSE) %>%
+  mutate(
+    task = recode(task,
+                  "MrAnt" = "Memory Game (MrAnt)",
+                  "GNG"   = "Go/No-Go (GNG)",
+                  "CS"    = "Hearts & Flowers (CS)"),  # tweak labels as you like
+    tp   = factor(tp, levels = c("T1","T2","T3"))
+  )
+
+p1 <- ggplot(ef_long, aes(x = Age, y = score, colour = tp)) +
+  geom_point(alpha = 0.25, size = 1) +
+  geom_smooth(se = FALSE, method = "loess", formula = y ~ x, linewidth = 1) +
+  facet_wrap(~ task, scales = "free_y") +
+  labs(
+    x = "Age (years)",
+    y = "Score",
+    colour = "Time point",
+    title = "Developmental change in EF tasks across age",
+    subtitle = "Each panel shows one task; LOESS trend per time point"
+  ) +
+  theme_minimal(base_size = 12)
+
+p1
+
+ef_long_z <- ef_long %>%
+  group_by(measure) %>%
+  mutate(score_z = as.numeric(scale(score))) %>%
+  ungroup()
+
+p2 <- ggplot(ef_long_z, aes(x = Age, y = score_z, colour = tp)) +
+  geom_point(alpha = 0.25, size = 1) +
+  geom_smooth(se = FALSE, method = "loess", formula = y ~ x, linewidth = 1) +
+  facet_wrap(~ task) +
+  labs(
+    x = "Age (years)",
+    y = "Standardised score (z within measure)",
+    colour = "Time point",
+    title = "Age trends in EF (z-scored within variable)",
+    subtitle = "Faceted by task; standardisation makes panels comparable"
+  ) +
+  theme_minimal(base_size = 12)
+
+p2  
+
+plot_ef_var <- function(var, df = aus_data, age_col = "Age") {
+  stopifnot(var %in% ef_vars)
+  tmp <- df %>%
+    select(age = all_of(age_col), score = all_of(var)) %>%
+    mutate(var = var)
+
+  ggplot(tmp, aes(x = age, y = score)) +
+    geom_point(alpha = 0.35, size = 1) +
+    geom_smooth(se = FALSE, method = "loess", formula = y ~ x, linewidth = 1) +
+    labs(
+      x = "Age (years)",
+      y = var,
+      title = paste0("Age trend: ", var)
+    ) +
+    theme_minimal(base_size = 12)
+}
+
+colnames(aus_data)
+plot_ef_var("MrAnt_Pt_T1")
+plot_ef_var("MrAnt_Pt_T2")
+plot_ef_var("MrAnt_Pt_T3")
+plot_ef_var("GNG_IC_T1")
+plot_ef_var("GNG_IC_T2")
+plot_ef_var("GNG_IC_T3")
+plot_ef_var("CS_SwAcc_T1")
+plot_ef_var("CS_SwAcc_T2")
+plot_ef_var("CS_SwAcc_T3")
 ```
 give a summary of the data checks. 
 
@@ -262,7 +309,6 @@ Y_t3 <- extract_wave(aus_data, ef_map$T3)
 Z_t1 <- as.data.frame(scale(Y_t1))
 Z_t2 <- as.data.frame(scale(Y_t2))
 Z_t3 <- as.data.frame(scale(Y_t3))
-
 ```
 
 ```{r estimate BGGM networks per wave}
@@ -271,7 +317,6 @@ set.seed(42)
 fit_t1 <- BGGM::estimate(Z_t1, type = "continuous", iter = 10000, impute = TRUE)
 fit_t2 <- BGGM::estimate(Z_t2, type = "continuous", iter = 10000, impute = TRUE)
 fit_t3 <- BGGM::estimate(Z_t3, type = "continuous", iter = 10000, impute = TRUE)
-
 ```
 
 ```{r Extract posterior-mean partial correlation matrices (pcor) and weighted adjacency (pcor with tiny edges set to 0, depending on class)}
@@ -326,11 +371,7 @@ labs <- c("Mr Ant","Go/No-Go","Card Sort")
 qgraph(pc_t1, layout = "spring", labels = labs, title = "T1 (BGGM posterior mean)")
 qgraph(pc_t2, layout = "spring", labels = labs, title = "T2 (BGGM posterior mean)")
 qgraph(pc_t3, layout = "spring", labels = labs, title = "T3 (BGGM posterior mean)")
-
 ```
-
-
-
 
 
 
