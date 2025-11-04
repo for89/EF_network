@@ -7,6 +7,8 @@ author:
   orcid: 0000-0002-4355-9088 
   affiliations: 
     - ref: stanford
+  email: foreilly@stanford.edu
+  corresponding: true
 
 - name: "Jelena Sucevic" 
   orcid: 0000-0001-5091-5434 
@@ -41,6 +43,9 @@ abstract: TO BE ADDED.
 keywords: ["executive function"] 
 word-count: true
 
+project:
+  type: default
+  
 bibliography: library.bib
 
 floatsintext: true
@@ -119,15 +124,14 @@ aus_data <- read_sav("~/Library/CloudStorage/GoogleDrive-foreilly@stanford.edu/M
 colnames(aus_data)
 View(aus_data)
 ```
+
 ```{r check age}
 table(table(aus_data$CID))
-
 summary(aus_data$Age)
-
-library(dplyr)
 aus_data %>% group_by(Timepoint) %>% summarise(mean_age = mean(Age, na.rm = TRUE))
 ```
 
+## Explore data
 
 ```{r explore data}
 #| cache: false
@@ -207,7 +211,11 @@ outlier_summary <- outlier_flags |>
 outlier_summary
 ```
 
-```{r}
+### Developmental change in tasks across age
+
+```{r age trends}
+#| cache: false
+
 ef_long <- aus_data %>%
   select(Age, all_of(ef_vars)) %>%
   pivot_longer(cols = all_of(ef_vars), names_to = "measure", values_to = "score") %>%
@@ -284,10 +292,236 @@ plot_ef_var("CS_SwAcc_T1")
 plot_ef_var("CS_SwAcc_T2")
 plot_ef_var("CS_SwAcc_T3")
 ```
-give a summary of the data checks. 
+
+### Within child trajectories (raw scores)
+
+```{r within child trajectories}
+#| cache: false
+
+id_col <- "CID"   # change if your ID column is named differently
+
+ef_long <- aus_data %>%
+  select(all_of(id_col), Age, all_of(ef_vars)) %>%
+  pivot_longer(cols = all_of(ef_vars), names_to = "measure", values_to = "score") %>%
+  # Split e.g., "MrAnt_Pt_T1" -> task = MrAnt, metric = Pt, tp = T1
+  extract(measure, into = c("task","metric","tp"),
+          regex = "^([^_]+)_([^_]+)_(T\\d+)$", remove = FALSE) %>%
+  mutate(
+    tp     = factor(tp, levels = c("T1","T2","T3")),
+    task_l = recode(task,
+                    "MrAnt" = "Memory Game (MrAnt)",
+                    "GNG"   = "Go/No-Go (GNG)",
+                    "CS"    = "Hearts & Flowers (CS)")
+  )
+
+# Compute T2–T1, T3–T2, T3–T1 per child and per measure
+change_wide <- ef_long %>%
+  select(all_of(id_col), measure, tp, score) %>%
+  pivot_wider(names_from = tp, values_from = score) %>%
+  mutate(
+    d12 = T2 - T1,
+    d23 = T3 - T2,
+    d13 = T3 - T1
+  )
+
+# Per-measure summaries: n pairs, mean change, SD, 95% CI
+paired_change_summary <- change_wide %>%
+  pivot_longer(c(d12, d23, d13), names_to = "contrast", values_to = "delta") %>%
+  group_by(measure, contrast) %>%
+  summarise(
+    n_pairs = sum(!is.na(delta)),
+    mean    = mean(delta, na.rm = TRUE),
+    sd      = sd(delta,  na.rm = TRUE),
+    se      = sd / sqrt(n_pairs),
+    ci95_l  = mean - 1.96 * se,
+    ci95_u  = mean + 1.96 * se,
+    .groups = "drop"
+  ) %>%
+  arrange(measure, factor(contrast, levels = c("d12","d23","d13")))
+paired_change_summary
+
+# Spaghetti plot per task (raw scores)
+ggplot(
+  ef_long,
+  aes(x = tp, y = score,
+      group  = .data[[id_col]],
+      colour = factor(.data[[id_col]]))
+) +
+  geom_line(alpha = 0.35, linewidth = 0.4) +
+  geom_point(alpha = 0.6, size = 0.8) +
+  facet_wrap(~ task_l, scales = "free_y") +
+  guides(colour = "none") +
+  labs(x = "Time point", y = "Raw score",
+       title = "Within-child trajectories across time (raw scores)")
+```
+### EF change over time (raw scores)
+
+```{r mean change over time within task, raw scores}
+#| cache: false
+
+summary_ci <- ef_long %>%
+  group_by(task_l, tp) %>%
+  summarise(
+    n   = sum(!is.na(score)),
+    mean = mean(score, na.rm = TRUE),
+    sd   = sd(score,   na.rm = TRUE),
+    se   = sd / sqrt(n),
+    ci_l = mean - 1.96*se,
+    ci_u = mean + 1.96*se,
+    .groups = "drop"
+  )
+
+y_lims <- range(summary_ci$ci_l, summary_ci$ci_u, na.rm = TRUE)
+pad    <- diff(y_lims) * 0.05
+y_lims <- c(y_lims[1] - pad, y_lims[2] + pad)
+
+p <- ggplot(summary_ci, aes(x = tp, y = mean, group = 1)) +
+  geom_ribbon(aes(ymin = ci_l, ymax = ci_u), alpha = 0.15) +
+  geom_line(linewidth = 0.8) +
+  geom_point(size = 1.8) +
+  facet_wrap(~ task_l, scales = "fixed") +
+  coord_cartesian(ylim = y_lims, expand = FALSE) +
+  labs(
+    x = "Time point",
+    y = "Raw score",
+    title = "EF change over time (means with 95% CIs)"
+  )
+print(p)
+```
+### Box plots (raw scores)
+
+```{r boxplots}
+ggplot(ef_long, aes(x = tp, y = score)) +
+  geom_boxplot(outlier.alpha = 0.25, width = 0.6) +
+  facet_wrap(~ task_l, scales = "free_y") +
+  labs(x = "Time point", y = "Raw score",
+       title = "EF distributions across time") +
+  theme_minimal(base_size = 12)
+
+```
+
+### EF change over time standardised to each task’s T1 standard deviation
+
+```{r mean change over time within task, standardised scores}
+#| cache: false
+
+# task-level T1 mean/SD
+t1_stats <- ef_long %>%
+  filter(tp == "T1") %>%
+  group_by(task_l) %>%
+  summarise(mu_T1 = mean(score, na.rm = TRUE),
+            sd_T1 = sd(score, na.rm = TRUE),
+            .groups = "drop")
+
+ef_long_zT1 <- ef_long %>%
+  left_join(t1_stats, by = "task_l") %>%
+  mutate(score_zT1 = (score - mu_T1) / sd_T1)
+
+# Means + 95% CIs on the z(T1) scale
+summary_ci_z <- ef_long_zT1 %>%
+  group_by(task_l, tp) %>%
+  summarise(
+    n = sum(!is.na(score_zT1)),
+    mean = mean(score_zT1, na.rm = TRUE),
+    sd   = sd(score_zT1,   na.rm = TRUE),
+    se   = sd / sqrt(n),
+    ci_l = mean - 1.96 * se,
+    ci_u = mean + 1.96 * se,
+    .groups = "drop"
+  )
+
+ggplot(summary_ci_z, aes(tp, mean, group = 1)) +
+  geom_ribbon(aes(ymin = ci_l, ymax = ci_u), alpha = 0.15) +
+  geom_line(linewidth = 0.8) +
+  geom_point(size = 1.8) +
+  facet_wrap(~ task_l, scales = "fixed") +
+  labs(x = "Time point", y = "Change in SD units (z vs T1)",
+       title = "EF change over time (standardised to each task’s T1 SD)")
+```
+
+### Mixed effects model to test if change from T1 to T2 is statistically significant
+
+```{r mixed effects}
+#| cache: false
+
+# Ensure time is ordered and add a "measure root" without the T1/T2/T3 suffix
+ef_long2 <- ef_long %>%
+  mutate(
+    tp = factor(tp, levels = c("T1","T2","T3")),
+    meas_root = str_remove(measure, "_T[123]$")
+  )
+
+fit_time_tests <- function(dat, id_col = "CID") {
+  # Give lmer() a concrete ID column name
+  dat2 <- dat %>% rename(.id = all_of(id_col))
+
+  fit <- lmerTest::lmer(score ~ tp + (1 | .id), data = dat2, REML = FALSE)
+  emm <- emmeans(fit, ~ tp)
+
+  cont <- contrast(emm, method = list(
+    "T2 - T1" = c(-1, 1, 0),
+    "T3 - T1" = c(-1, 0, 1),
+    "T3 - T2" = c( 0,-1, 1)
+  ))
+
+  cont_df <- as.data.frame(summary(cont, infer = TRUE)) %>%
+    transmute(
+      contrast, estimate, SE, df, t = t.ratio,
+      p = `p.value`, lower.CL, upper.CL
+    )
+
+  an <- anova(fit)
+  cont_df %>%
+    mutate(
+      anova_F  = unname(an["tp","F value"]),
+      anova_df1 = unname(an["tp","NumDF"]),
+      anova_df2 = unname(an["tp","DenDF"]),
+      anova_p  = unname(an["tp","Pr(>F)"])
+    )
+}
+
+# Run one model per measure root (e.g., "GNG_IC", "CS_SwAcc", "MrAnt_Pt")
+results <- ef_long2 %>%
+  group_by(meas_root) %>%
+  group_modify(~ fit_time_tests(.x)) %>%
+  ungroup() %>%
+  group_by(contrast) %>%
+  mutate(p_adj = p.adjust(p, method = "BH")) %>%
+  ungroup()
+
+results
+
+
+# (optional) pretty names for each measure root
+pretty_names <- c(
+  "GNG_IC"   = "Go/No-Go (GNG)",
+  "CS_SwAcc" = "Hearts & Flowers (CS)",
+  "MrAnt_Pt" = "Memory Game (MrAnt)"
+)
+
+t12_tbl <- results %>%
+  filter(contrast == "T2 - T1") %>%
+  transmute(
+    Task     = recode(meas_root, !!!pretty_names, .default = meas_root),
+    Estimate = estimate,                                   # raw-score change
+    `95% CI` = sprintf("[%.2f, %.2f]", lower.CL, upper.CL),
+    p        = pvalue(p),                                  # unadjusted p
+    `p (BH)` = pvalue(p_adj),                              # FDR-adjusted p
+    `Omnibus F (time)` = sprintf("%.2f (df %d, %.1f), p=%s",
+                                 anova_F, anova_df1, anova_df2, pvalue(anova_p))
+  ) %>%
+  arrange(Task)
+
+knitr::kable(t12_tbl, digits = 2, col.names = c("Task", "Δ (T2−T1)", "95% CI", "p", "p (BH)", "Omnibus F (time)")) %>% kableExtra::kable_styling(full_width = FALSE)
+```
 
 Histograms indicated that all executive-function task scores were approximately symmetric and unimodal. Mean performance increased and variability decreased across time, consistent with developmental improvements. No evidence of severe skewness, kurtosis, or ceiling/floor effects was observed, so raw scores were retained for analysis.
+
+## Network analysis (rough work)
+
 ```{r split by wave}
+#| cache: false
+
 ef_map <- list(
   T1 = c("MrAnt_Pt_T1","GNG_IC_T1","CS_SwAcc_T1"),
   T2 = c("MrAnt_Pt_T2","GNG_IC_T2","CS_SwAcc_T2"),
@@ -312,6 +546,8 @@ Z_t3 <- as.data.frame(scale(Y_t3))
 ```
 
 ```{r estimate BGGM networks per wave}
+#| cache: false
+
 set.seed(42)
 # estimate() gives posterior for every partial correlation (edge)
 fit_t1 <- BGGM::estimate(Z_t1, type = "continuous", iter = 10000, impute = TRUE)
@@ -319,7 +555,7 @@ fit_t2 <- BGGM::estimate(Z_t2, type = "continuous", iter = 10000, impute = TRUE)
 fit_t3 <- BGGM::estimate(Z_t3, type = "continuous", iter = 10000, impute = TRUE)
 ```
 
-```{r Extract posterior-mean partial correlation matrices (pcor) and weighted adjacency (pcor with tiny edges set to 0, depending on class)}
+```{r Extract posterior mean partial correlation matrices (pcor) and weighted adjacency (pcor with tiny edges set to 0, depending on class)}
 pc_t1 <- BGGM::pcor_mat(fit_t1)
 pc_t2 <- BGGM::pcor_mat(fit_t2)
 pc_t3 <- BGGM::pcor_mat(fit_t3)
