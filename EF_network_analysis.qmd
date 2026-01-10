@@ -79,6 +79,7 @@ execute:
 ---
 
 ```{r setup}
+#| label: packages
 #| include: false
 #| cache: false
 
@@ -101,7 +102,10 @@ library(tibble)
 library(haven)
 library(BGGM)
 library(networktools)  
-library(qgraph) 
+library(qgraph)
+library(haven)
+library(readxl)
+library(tidyr)
 
 if (requireNamespace("conflicted", quietly = TRUE)) {
   conflicted::conflicts_prefer(
@@ -116,24 +120,229 @@ if (requireNamespace("conflicted", quietly = TRUE)) {
 
 ```
 
-```{r load data}
+```{r}
+#| label: load-data
+#| include: false
 #| cache: false
 
-#load data
-aus_data <- read_sav("~/Library/CloudStorage/GoogleDrive-foreilly@stanford.edu/My Drive/EF_network analysis/DECRA Master Dataset (T1-T3) 2020-10-16 (1).sav")
+aus_data <- read_sav("REDACTED")
 colnames(aus_data)
-View(aus_data)
+view(aus_data)
+
+sa_data <- read_excel("/Users/foreilly/Library/CloudStorage/OneDrive-Nexus365/Network_analysis_2026/sa_data/SAGCRFStudy20202021_DATA_2023-12-11_1121_deidentified.xlsx")
+colnames(sa_data)
+view(sa_data)
+
 ```
 
-```{r check age}
+# South African data
+
+```{r}
+#| label: sa-data-check
+#| include: false
+#| cache: false
+
+table(sa_data$redcap_event_name) # count of entries for each time point
+table(sa_data$child_id, sa_data$redcap_event_name) # do same child IDs appear twice?
+sum(table(sa_data$child_id) > 1) # count of how many children with longitudinal data
+
+# choose an ID (use child_id if it truly uniquely identifies children;
+# otherwise caregiver_child_studyid is often the safer REDCap export key)
+sa_ids <- sa_data %>%
+  mutate(
+    child = coalesce(as.character(child_id), as.character(caregiver_child_studyid))
+  )
+
+# 1) Map REDCap event names -> timepoint (T1 vs T2) based on your pattern
+sa_tp <- sa_ids %>%
+  mutate(
+    timepoint = case_when(
+      str_detect(redcap_event_name, "_arm_1b$") ~ "t2",  # e.g., data_collection_20_arm_1b
+      str_detect(redcap_event_name, "_arm_1$")  ~ "t1",  # e.g., data_collection_20_arm_1
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(child), !is.na(timepoint)) %>%
+  distinct(child, timepoint)  # removes duplicates if you have multiple rows per child/event
+
+# 2) Make child-level flags: has T1? has T2?
+child_flags <- sa_tp %>%
+  mutate(present = TRUE) %>%
+  pivot_wider(
+    names_from  = timepoint,
+    values_from = present,
+    values_fill = FALSE
+  ) %>%
+  mutate(
+    t1 = if (!"t1" %in% names(.)) FALSE else t1,
+    t2 = if (!"t2" %in% names(.)) FALSE else t2
+  )
+
+# 3) Counts you want
+counts <- child_flags %>%
+  summarise(
+    n_children = n(),
+    n_t1       = sum(t1),
+    n_t2       = sum(t2),
+    n_both     = sum(t1 & t2),
+    n_t1_only  = sum(t1 & !t2),
+    n_t2_only  = sum(!t1 & t2)
+  )
+counts # n=138 longitudinal
+```
+
+```{r}
+#| label: sa-ef-longitudinal
+#| include: false
+#| cache: false
+
+# checking if the EF longitudinal data lines up with above (i.e. n=138)
+ef_vars <- c("ef_inhibition", "ef_cogflex", "ef_workingmem")
+
+ef_long_flags <- sa_data %>%
+  mutate(
+    child = coalesce(as.character(child_id), as.character(caregiver_child_studyid)),
+    timepoint = case_when(
+      str_detect(redcap_event_name, "_arm_1b$") ~ "t2",
+      str_detect(redcap_event_name, "_arm_1$")  ~ "t1",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(child), !is.na(timepoint)) %>%
+  group_by(child, timepoint) %>%
+  summarise(
+    # EF present if any EF variable is non-missing at that timepoint
+    has_ef = any(if_any(all_of(ef_vars), ~ !is.na(.x))),
+    .groups = "drop"
+  ) %>%
+  mutate(present = TRUE) %>%
+  pivot_wider(
+    names_from  = timepoint,
+    values_from = c(present, has_ef),
+    values_fill = list(present = FALSE, has_ef = FALSE)
+  )
+
+ef_counts <- ef_long_flags %>%
+  summarise(
+    n_children   = n(),
+    n_ef_t1      = sum(has_ef_t1),
+    n_ef_t2      = sum(has_ef_t2),
+    n_ef_both    = sum(has_ef_t1 & has_ef_t2),
+    n_ef_t1_only = sum(has_ef_t1 & !has_ef_t2),
+    n_ef_t2_only = sum(!has_ef_t1 & has_ef_t2)
+  )
+
+ef_counts # n=109 with data on any of the three EF measures
+```
+
+```{r}
+#| label: sa-ef-complete
+#| include: false
+#| cache: false
+
+# have data on all EF measures
+ef_vars <- c("ef_inhibition", "ef_cogflex", "ef_workingmem")
+
+ef_complete_flags <- sa_data %>%
+  mutate(
+    child = coalesce(as.character(child_id), as.character(caregiver_child_studyid)),
+    timepoint = case_when(
+      str_detect(redcap_event_name, "_arm_1b$") ~ "t2",
+      str_detect(redcap_event_name, "_arm_1$")  ~ "t1",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(child), !is.na(timepoint)) %>%
+  group_by(child, timepoint) %>%
+  summarise(
+    # count how many EF vars have ANY non-missing value in this child×timepoint group
+    n_present = sum(map_lgl(pick(all_of(ef_vars)), ~ any(!is.na(.x)))),
+    .groups = "drop"
+  ) %>%
+  mutate(has_all3 = (n_present == length(ef_vars))) %>%
+  pivot_wider(
+    names_from = timepoint,
+    values_from = c(has_all3, n_present),
+    values_fill = list(has_all3 = FALSE, n_present = 0)
+  )
+
+# quick check: how many kids have 0/1/2/3 EF vars at each timepoint?
+ef_complete_flags %>%
+  count(n_present_t1, n_present_t2) %>%
+  arrange(desc(n))
+
+# Counts: complete EF at T1, complete EF at T2, and complete at BOTH
+ef_complete_counts <- ef_complete_flags %>%
+  summarise(
+    n_children     = n(),
+    n_all3_t1      = sum(has_all3_t1),
+    n_all3_t2      = sum(has_all3_t2),
+    n_all3_both    = sum(has_all3_t1 & has_all3_t2),
+    n_all3_t1_only = sum(has_all3_t1 & !has_all3_t2),
+    n_all3_t2_only = sum(!has_all3_t1 & has_all3_t2)
+  )
+ef_complete_counts # 100
+
+```
+
+```{r}
+#| label: sa-ef-longitudinal-sample
+#| include: false
+#| cache: false
+
+# children with all or some longitudinal data (n=100 with complete, n=9 with non-complete)
+ef_longitudinal_ids <- ef_long_flags %>%
+  filter(has_ef_t1 & has_ef_t2) %>%
+  pull(child)
+
+sa_ef_longitudinal <- sa_data %>%
+  mutate(child = coalesce(as.character(child_id), as.character(caregiver_child_studyid))) %>%
+  filter(child %in% ef_longitudinal_ids)
+
+```
+
+# Australian data
+
+```{r}
+#| label: aus-ef-longitudinal-sample
+#| include: false
+#| cache: false
+
 table(table(aus_data$CID))
-summary(aus_data$Age)
-aus_data %>% group_by(Timepoint) %>% summarise(mean_age = mean(Age, na.rm = TRUE))
+
+id_var <- if ("CID" %in% names(aus_data)) "CID" else "ServiceID"
+
+t1_vars <- c("MrAnt_Pt_T1","GNG_IC_T1","CS_SwAcc_T1")
+t2_vars <- c("MrAnt_Pt_T2","GNG_IC_T2","CS_SwAcc_T2")
+t3_vars <- c("MrAnt_Pt_T3","GNG_IC_T3","CS_SwAcc_T3")
+
+ef_any_counts <- aus_data %>%
+  mutate(
+    child = .data[[id_var]],
+    ef_t1 = if_any(all_of(t1_vars), ~ !is.na(.x)),
+    ef_t2 = if_any(all_of(t2_vars), ~ !is.na(.x)),
+    ef_t3 = if_any(all_of(t3_vars), ~ !is.na(.x))
+  ) %>%
+  filter(!is.na(child)) %>%
+  distinct(child, .keep_all = TRUE) %>%  # safety: one row per child
+  summarise(
+    n_children = n(),
+    n_t1 = sum(ef_t1),
+    n_t2 = sum(ef_t2),
+    n_t3 = sum(ef_t3),
+    n_2_timepoints = sum(ef_t1 & ef_t2),
+    n_all3_timepoints = sum(ef_t1 & ef_t2 & ef_t3)
+  )
+
+ef_any_counts # 217 with two time points, 103 with all three time points
+
 ```
 
 ## Explore data
 
-```{r explore data}
+```{r}
+#| label: aus-explore-data
+#| include: true
 #| cache: false
 
 ef_vars <- c(
@@ -142,7 +351,9 @@ ef_vars <- c(
   "MrAnt_Pt_T3","GNG_IC_T3","CS_SwAcc_T3"
 )
 
-# missingness
+age_vars <- c("Age_T1", "Age_T2", "Age_T3")
+
+# Missingness
 miss_var <- aus_data |>
   summarise(across(all_of(ef_vars),
                    list(n_miss = ~sum(is.na(.)),
@@ -158,57 +369,132 @@ miss_var <- aus_data |>
 
 miss_var
 
-# check skew - skew > 2 or kurtosis > 7 problematic
+# Descriptives
 ef_desc <- psych::describe(aus_data[ef_vars]) |>
   as.data.frame() |>
   tibble::rownames_to_column("variable") |>
   transmute(
     variable, n, mean, sd, median, min, max,
-    skew   = skew, 
-    kurt   = kurtosis,   # note: psych uses "kurtosis" column name
+    skew   = skew,
+    kurt   = kurtosis,   # psych column name
     se
   ) |>
   arrange(variable)
 ef_desc
-# all within range; no transformations required.
 
-# histograms
-ef_long <- aus_data |>
-  select(Age, all_of(ef_vars)) |>
-  pivot_longer(cols = all_of(ef_vars), names_to = "var", values_to = "value") |>
+# Descriptives table
+# Long version of EF variables
+ef_long <- aus_data %>%
+  select(all_of(age_vars), all_of(ef_vars)) %>%
+  pivot_longer(cols = all_of(ef_vars), names_to = "var", values_to = "value") %>%
   mutate(
-    timepoint = str_extract(var, "T[123]"),
-    construct = case_when(
-      str_starts(var, "MrAnt") ~ "WM",
-      str_starts(var, "GNG")   ~ "INH",
-      str_starts(var, "CS_")   ~ "SHIFT",
-      TRUE ~ "EF"
+    timepoint = stringr::str_extract(var, "T[123]"),
+    measure = dplyr::case_when(
+      stringr::str_starts(var, "MrAnt") ~ "Mr Ant (points)",
+      stringr::str_starts(var, "GNG")   ~ "Go/No-Go (IC)",
+      stringr::str_starts(var, "CS_")   ~ "Card Sort (switch acc)",
+      TRUE ~ var
+    ),
+    age = dplyr::case_when(
+      timepoint == "T1" ~ Age_T1,
+      timepoint == "T2" ~ Age_T2,
+      timepoint == "T3" ~ Age_T3,
+      TRUE ~ NA_real_
     )
   )
 
-ggplot(ef_long, aes(x = value)) +
-  geom_histogram(bins = 30, na.rm = TRUE) +
-  facet_wrap(~ var, scales = "free") +
-  labs(title = "EF distributions", x = NULL, y = "Count")
+# EF summary (per measure x timepoint)
+ef_summary <- ef_long %>%
+  group_by(measure, timepoint) %>%
+  summarise(
+    n_nonmiss = sum(!is.na(value)),
+    miss_pct  = round(100 * mean(is.na(value)), 1),
+    mean      = mean(value, na.rm = TRUE),
+    sd        = sd(value, na.rm = TRUE),
+    median    = median(value, na.rm = TRUE),
+    q25       = quantile(value, 0.25, na.rm = TRUE),
+    q75       = quantile(value, 0.75, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    mean_sd    = ifelse(n_nonmiss > 0, sprintf("%.2f (%.2f)", mean, sd), NA_character_),
+    median_iqr = ifelse(n_nonmiss > 0, sprintf("%.2f [%.2f, %.2f]", median, q25, q75), NA_character_)
+  ) %>%
+  select(measure, timepoint, n_nonmiss, miss_pct, mean_sd, median_iqr) %>%
+  pivot_wider(
+    names_from = timepoint,
+    values_from = c(n_nonmiss, miss_pct, mean_sd, median_iqr),
+    names_glue = "{.value}_{timepoint}"
+  )
 
-# check outliers
-z_df <- aus_data |>
-  mutate(across(all_of(ef_vars), ~ (.-mean(., na.rm=TRUE))/sd(., na.rm=TRUE),
-                .names = "z_{.col}"))
+# Age summary (one row, split by timepoint)
+age_row <- aus_data %>%
+  select(all_of(age_vars)) %>%
+  pivot_longer(cols = all_of(age_vars), names_to = "age_var", values_to = "age") %>%
+  mutate(
+    timepoint = stringr::str_extract(age_var, "T[123]"),
+    age = suppressWarnings(as.numeric(age))
+  ) %>%
+  group_by(timepoint) %>%
+  summarise(
+    n_nonmiss = sum(!is.na(age)),
+    miss_pct  = round(100 * mean(is.na(age)), 1),
+    mean      = mean(age, na.rm = TRUE),
+    sd        = sd(age, na.rm = TRUE),
+    median    = median(age, na.rm = TRUE),
+    q25       = quantile(age, 0.25, na.rm = TRUE),
+    q75       = quantile(age, 0.75, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    mean_sd    = ifelse(n_nonmiss > 0, sprintf("%.2f (%.2f)", mean, sd), NA_character_),
+    median_iqr = ifelse(n_nonmiss > 0, sprintf("%.2f [%.2f, %.2f]", median, q25, q75), NA_character_)
+  ) %>%
+  select(timepoint, n_nonmiss, miss_pct, mean_sd, median_iqr) %>%
+  pivot_wider(
+    names_from  = timepoint,
+    values_from = c(n_nonmiss, miss_pct, mean_sd, median_iqr),
+    names_glue  = "{.value}_{timepoint}"
+  ) %>%
+  mutate(measure = "Age") %>%
+  select(measure, everything())
 
-outlier_flags <- z_df |>
-  transmute(across(starts_with("z_"), ~ abs(.) > 3.5, .names = "{.col}_out")) |>
-  bind_cols(aus_data |> select(all_of(ef_vars)))  # keep originals alongside
+# Build Age row explicitly (clearer than acrobatics)
+age_row <- ef_long %>%
+  distinct(Age_T1, Age_T2, Age_T3) %>%
+  summarise(
+    n_nonmiss_T1 = sum(!is.na(Age_T1)),
+    miss_pct_T1  = round(100 * mean(is.na(Age_T1)), 1),
+    mean_sd_T1   = sprintf("%.2f (%.2f)", mean(Age_T1, na.rm = TRUE), sd(Age_T1, na.rm = TRUE)),
+    median_iqr_T1= sprintf("%.2f [%.2f, %.2f]", median(Age_T1, na.rm = TRUE),
+                           quantile(Age_T1, .25, na.rm = TRUE), quantile(Age_T1, .75, na.rm = TRUE)),
 
-# How many outliers per variable?
-outlier_summary <- outlier_flags |>
-  summarise(across(ends_with("_out"), ~ sum(.x, na.rm = TRUE))) |>
-  pivot_longer(everything(), names_to = "flag", values_to = "n_outliers") |>
-  mutate(variable = str_remove(flag, "^z_"),
-         variable = str_remove(variable, "_out$")) |>
-  arrange(desc(n_outliers))
+    n_nonmiss_T2 = sum(!is.na(Age_T2)),
+    miss_pct_T2  = round(100 * mean(is.na(Age_T2)), 1),
+    mean_sd_T2   = sprintf("%.2f (%.2f)", mean(Age_T2, na.rm = TRUE), sd(Age_T2, na.rm = TRUE)),
+    median_iqr_T2= sprintf("%.2f [%.2f, %.2f]", median(Age_T2, na.rm = TRUE),
+                           quantile(Age_T2, .25, na.rm = TRUE), quantile(Age_T2, .75, na.rm = TRUE)),
 
-outlier_summary
+    n_nonmiss_T3 = sum(!is.na(Age_T3)),
+    miss_pct_T3  = round(100 * mean(is.na(Age_T3)), 1),
+    mean_sd_T3   = sprintf("%.2f (%.2f)", mean(Age_T3, na.rm = TRUE), sd(Age_T3, na.rm = TRUE)),
+    median_iqr_T3= sprintf("%.2f [%.2f, %.2f]", median(Age_T3, na.rm = TRUE),
+                           quantile(Age_T3, .25, na.rm = TRUE), quantile(Age_T3, .75, na.rm = TRUE))
+  ) %>%
+  mutate(measure = "Age") %>%
+  select(measure, everything())
+
+# Final table
+desc_table <- bind_rows(age_row, ef_summary) %>%
+  select(
+    Measure = measure,
+    `N (T1)` = n_nonmiss_T1, `Missing % (T1)` = miss_pct_T1, `Mean (SD) (T1)` = mean_sd_T1, `Median [IQR] (T1)` = median_iqr_T1,
+    `N (T2)` = n_nonmiss_T2, `Missing % (T2)` = miss_pct_T2, `Mean (SD) (T2)` = mean_sd_T2, `Median [IQR] (T2)` = median_iqr_T2,
+    `N (T3)` = n_nonmiss_T3, `Missing % (T3)` = miss_pct_T3, `Mean (SD) (T3)` = mean_sd_T3, `Median [IQR] (T3)` = median_iqr_T3
+  )
+
+desc_table
+
 ```
 
 ### Developmental change in tasks across age
