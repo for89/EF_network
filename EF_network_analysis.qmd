@@ -14,24 +14,34 @@ author:
   orcid: 0000-0001-5091-5434 
   affiliations: 
     - ref: oxford
+    
+- name: "Caylee Cook"
+  orcid: 0000-0001-9718-8887
+  affiliations:
+    - ref: witwatersrand
+    
+- name: "Catherine Draper"
+  orcid: 0000-0002-2885-437X
+  affiliations:
+    - ref: witwatersrand
 
 - name: "Steven Howard" 
   orcid: 0000-0002-1258-3210 
   affiliations: 
-    - ref: wollongong
+    - ref: oxford
 
 - name: "Gaia Scerif" 
   orcid: 0000-0002-6371-8874 
   affiliations: 
-    - ref: wollongong
+    - ref: oxford
 
 affiliations: 
   - id: stanford 
     name: "Stanford University" 
   - id: oxford 
     name: "University of Oxford" 
-  - id: wollongong 
-    name: "University of Wollongong"
+  - id: witwatersrand 
+    name: "University of the Witwatersrand"
 
 author-note: 
   disclosures: 
@@ -106,6 +116,8 @@ library(qgraph)
 library(haven)
 library(readxl)
 library(tidyr)
+library(readr)
+
 
 if (requireNamespace("conflicted", quietly = TRUE)) {
   conflicted::conflicts_prefer(
@@ -121,7 +133,7 @@ if (requireNamespace("conflicted", quietly = TRUE)) {
 ```
 
 ```{r}
-#| label: load-data
+#| label: load-aus-data
 #| include: false
 #| cache: false
 
@@ -129,179 +141,145 @@ aus_data <- read_sav("REDACTED")
 colnames(aus_data)
 view(aus_data)
 
-sa_data <- read_excel("/Users/foreilly/Library/CloudStorage/OneDrive-Nexus365/Network_analysis_2026/sa_data/SAGCRFStudy20202021_DATA_2023-12-11_1121_deidentified.xlsx")
+```
+
+```{r}
+#| label: load-sa-data
+#| include: false
+#| cache: false
+
+# sa_data <- read_csv("REDACTED")
+
+# Caylee's do file as text file
+path <- "REDACTED"
+system2("open", path)
+
+do_lines <- read_lines("REDACTED")
+
+idx <- which(str_detect(do_lines, "^\\s*import\\s+delimited\\b"))[1]
+stopifnot(!is.na(idx))
+
+line <- do_lines[idx]
+
+# remove "import delimited", then keep the varlist (everything before " using ")
+tmp <- line |>
+  str_remove("^\\s*import\\s+delimited\\s+") |>
+  str_split("\\s+using\\s+", n = 2, simplify = TRUE)
+
+varlist <- tmp[1]  # everything before "using"
+
+cols <- str_split(str_squish(varlist), "\\s+")[[1]]
+
+sa_data <- read_csv(
+  "REDACTED",
+  col_names = FALSE
+)
+
+stopifnot(length(cols) == ncol(sa_data))
+names(sa_data) <- cols
+
+# checks
+length(cols)
+ncol(sa_data)
+
 colnames(sa_data)
-view(sa_data)
-
-```
-
-# South African data
-
-```{r}
-#| label: sa-data-check
-#| include: false
-#| cache: false
-
-table(sa_data$redcap_event_name) # count of entries for each time point
-table(sa_data$child_id, sa_data$redcap_event_name) # do same child IDs appear twice?
-sum(table(sa_data$child_id) > 1) # count of how many children with longitudinal data
-
-# choose an ID (use child_id if it truly uniquely identifies children;
-# otherwise caregiver_child_studyid is often the safer REDCap export key)
-sa_ids <- sa_data %>%
-  mutate(
-    child = coalesce(as.character(child_id), as.character(caregiver_child_studyid))
-  )
-
-# 1) Map REDCap event names -> timepoint (T1 vs T2) based on your pattern
-sa_tp <- sa_ids %>%
-  mutate(
-    timepoint = case_when(
-      str_detect(redcap_event_name, "_arm_1b$") ~ "t2",  # e.g., data_collection_20_arm_1b
-      str_detect(redcap_event_name, "_arm_1$")  ~ "t1",  # e.g., data_collection_20_arm_1
-      TRUE ~ NA_character_
-    )
-  ) %>%
-  filter(!is.na(child), !is.na(timepoint)) %>%
-  distinct(child, timepoint)  # removes duplicates if you have multiple rows per child/event
-
-# 2) Make child-level flags: has T1? has T2?
-child_flags <- sa_tp %>%
-  mutate(present = TRUE) %>%
-  pivot_wider(
-    names_from  = timepoint,
-    values_from = present,
-    values_fill = FALSE
-  ) %>%
-  mutate(
-    t1 = if (!"t1" %in% names(.)) FALSE else t1,
-    t2 = if (!"t2" %in% names(.)) FALSE else t2
-  )
-
-# 3) Counts you want
-counts <- child_flags %>%
-  summarise(
-    n_children = n(),
-    n_t1       = sum(t1),
-    n_t2       = sum(t2),
-    n_both     = sum(t1 & t2),
-    n_t1_only  = sum(t1 & !t2),
-    n_t2_only  = sum(!t1 & t2)
-  )
-counts # n=138 longitudinal
 ```
 
 ```{r}
-#| label: sa-ef-longitudinal
+#| label: create-dataframe
 #| include: false
 #| cache: false
 
-# checking if the EF longitudinal data lines up with above (i.e. n=138)
-ef_vars <- c("ef_inhibition", "ef_cogflex", "ef_workingmem")
+eyt_vars <- c(
+  "date_of_eyt", "eyt_child_age_at_testing", "eyt2_ageinmonths", "time_btwn_testing",
+  "ef_inhibition", "ef_cogflex", "ef_workingmem",
+  "refuse_missing_eyt", "notes_eyt", "early_years_toolbox_complete"
+)
 
-ef_long_flags <- sa_data %>%
-  mutate(
-    child = coalesce(as.character(child_id), as.character(caregiver_child_studyid)),
-    timepoint = case_when(
-      str_detect(redcap_event_name, "_arm_1b$") ~ "t2",
-      str_detect(redcap_event_name, "_arm_1$")  ~ "t1",
-      TRUE ~ NA_character_
-    )
-  ) %>%
-  filter(!is.na(child), !is.na(timepoint)) %>%
-  group_by(child, timepoint) %>%
+ses_vars <- c(
+  "nids_income_1", "nids_income_2", "nids_income_3",
+  "nids_income_4", "nids_income_5", "nids_income_6",
+  "income_range", "monthly_income_given",
+  "marital_status", "education_school", "education_post_school", "education_post_school_b",
+  "children_in_house", "adults_in_house", "total_in_household"
+)
+
+id_vars <- c(
+  "caregiver_child_studyid", "redcap_event_name", "interview_date",
+  "ra", "child_id", "caregiver_id",
+  "child_sex", "child_dob", "child_age", "child_birthweight",
+  "caregiver_dob", "caregiver_age", "relationship_child",
+  "child_education", "child_education_specific", "child_education_frequency"
+)
+
+sa_subset <- sa_data %>%
+  select(any_of(c(id_vars, ses_vars, eyt_vars)))
+colnames(sa_subset)
+
+# create long format
+sa_subset_long <- sa_subset %>%
+  distinct(caregiver_child_studyid, redcap_event_name, .keep_all = TRUE)
+
+```
+
+```{r}
+#| label: check-ef-sample-size-sa
+#| include: false
+#| cache: false
+
+ef <- c("ef_inhibition", "ef_cogflex", "ef_workingmem")
+
+ef_counts_by_tp <- sa_subset_long %>%
+  group_by(redcap_event_name) %>%
   summarise(
-    # EF present if any EF variable is non-missing at that timepoint
-    has_ef = any(if_any(all_of(ef_vars), ~ !is.na(.x))),
+    n_children = n_distinct(caregiver_child_studyid),
+    across(all_of(ef),
+           ~ sum(!is.na(.)),
+           .names = "n_nonmiss_{.col}"),
     .groups = "drop"
   ) %>%
-  mutate(present = TRUE) %>%
-  pivot_wider(
-    names_from  = timepoint,
-    values_from = c(present, has_ef),
-    values_fill = list(present = FALSE, has_ef = FALSE)
-  )
+  arrange(redcap_event_name)
 
-ef_counts <- ef_long_flags %>%
+ef_counts_by_tp
+
+# complete ef
+
+ef_complete_by_tp <- sa_subset_long %>%
+  group_by(redcap_event_name) %>%
   summarise(
-    n_children   = n(),
-    n_ef_t1      = sum(has_ef_t1),
-    n_ef_t2      = sum(has_ef_t2),
-    n_ef_both    = sum(has_ef_t1 & has_ef_t2),
-    n_ef_t1_only = sum(has_ef_t1 & !has_ef_t2),
-    n_ef_t2_only = sum(!has_ef_t1 & has_ef_t2)
-  )
-
-ef_counts # n=109 with data on any of the three EF measures
-```
-
-```{r}
-#| label: sa-ef-complete
-#| include: false
-#| cache: false
-
-# have data on all EF measures
-ef_vars <- c("ef_inhibition", "ef_cogflex", "ef_workingmem")
-
-ef_complete_flags <- sa_data %>%
-  mutate(
-    child = coalesce(as.character(child_id), as.character(caregiver_child_studyid)),
-    timepoint = case_when(
-      str_detect(redcap_event_name, "_arm_1b$") ~ "t2",
-      str_detect(redcap_event_name, "_arm_1$")  ~ "t1",
-      TRUE ~ NA_character_
-    )
-  ) %>%
-  filter(!is.na(child), !is.na(timepoint)) %>%
-  group_by(child, timepoint) %>%
-  summarise(
-    # count how many EF vars have ANY non-missing value in this child×timepoint group
-    n_present = sum(map_lgl(pick(all_of(ef_vars)), ~ any(!is.na(.x)))),
+    n_children = n_distinct(caregiver_child_studyid),
+    n_complete_ef = sum(if_all(all_of(ef), ~ !is.na(.))),
+    pct_complete_ef = round(100 * mean(if_all(all_of(ef), ~ !is.na(.))), 1),
     .groups = "drop"
   ) %>%
-  mutate(has_all3 = (n_present == length(ef_vars))) %>%
-  pivot_wider(
-    names_from = timepoint,
-    values_from = c(has_all3, n_present),
-    values_fill = list(has_all3 = FALSE, n_present = 0)
-  )
+  arrange(redcap_event_name)
 
-# quick check: how many kids have 0/1/2/3 EF vars at each timepoint?
-ef_complete_flags %>%
-  count(n_present_t1, n_present_t2) %>%
-  arrange(desc(n))
+ef_complete_by_tp
 
-# Counts: complete EF at T1, complete EF at T2, and complete at BOTH
-ef_complete_counts <- ef_complete_flags %>%
-  summarise(
-    n_children     = n(),
-    n_all3_t1      = sum(has_all3_t1),
-    n_all3_t2      = sum(has_all3_t2),
-    n_all3_both    = sum(has_all3_t1 & has_all3_t2),
-    n_all3_t1_only = sum(has_all3_t1 & !has_all3_t2),
-    n_all3_t2_only = sum(!has_all3_t1 & has_all3_t2)
-  )
-ef_complete_counts # 100
-
+# tag children with complete ef
+sa_subset_long <- sa_subset_long %>%
+  mutate(ef_complete = if_all(all_of(ef), ~ !is.na(.)))
+colnames(sa_subset_long)
 ```
 
 ```{r}
-#| label: sa-ef-longitudinal-sample
-#| include: false
-#| cache: false
-
-# children with all or some longitudinal data (n=100 with complete, n=9 with non-complete)
-ef_longitudinal_ids <- ef_long_flags %>%
-  filter(has_ef_t1 & has_ef_t2) %>%
-  pull(child)
-
-sa_ef_longitudinal <- sa_data %>%
-  mutate(child = coalesce(as.character(child_id), as.character(caregiver_child_studyid))) %>%
-  filter(child %in% ef_longitudinal_ids)
+age_by_tp <- sa_subset_long %>%
+  mutate(child_age = as.numeric(child_age)) %>%   # change to your age var if needed
+  group_by(redcap_event_name) %>%
+  summarise(
+    n       = sum(!is.na(child_age)),
+    mean    = mean(child_age, na.rm = TRUE),
+    sd      = sd(child_age, na.rm = TRUE),
+    min     = min(child_age, na.rm = TRUE),
+    max     = max(child_age, na.rm = TRUE),
+    median  = median(child_age, na.rm = TRUE),
+    iqr     = IQR(child_age, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  arrange(redcap_event_name)
+age_by_tp
 
 ```
-
-# Australian data
 
 ```{r}
 #| label: aus-ef-longitudinal-sample
@@ -338,73 +316,59 @@ ef_any_counts # 217 with two time points, 103 with all three time points
 
 ```
 
-## Explore data
-
 ```{r}
 #| label: aus-explore-data
 #| include: true
 #| cache: false
 
-ef_vars <- c(
+ef_vars_aus <- c(
   "MrAnt_Pt_T1","GNG_IC_T1","CS_SwAcc_T1",
   "MrAnt_Pt_T2","GNG_IC_T2","CS_SwAcc_T2",
   "MrAnt_Pt_T3","GNG_IC_T3","CS_SwAcc_T3"
 )
 
-age_vars <- c("Age_T1", "Age_T2", "Age_T3")
+age_vars_aus <- c("Age_T1", "Age_T2", "Age_T3")
 
-# Missingness
-miss_var <- aus_data |>
-  summarise(across(all_of(ef_vars),
-                   list(n_miss = ~sum(is.na(.)),
-                        pct_miss = ~mean(is.na(.))*100,
-                        n_nonmiss = ~sum(!is.na(.))),
-                   .names = "{.col}__{.fn}")) |>
-  pivot_longer(everything(),
-               names_to = c("variable","metric"),
-               names_sep = "__",
-               values_to = "value") |>
+# Missingness (EF)
+miss_var_aus <- aus_data |>
+  summarise(across(
+    all_of(ef_vars_aus),
+    list(
+      n_miss    = ~ sum(is.na(.)),
+      pct_miss  = ~ mean(is.na(.)) * 100,
+      n_nonmiss = ~ sum(!is.na(.))
+    ),
+    .names = "{.col}__{.fn}"
+  )) |>
+  pivot_longer(
+    everything(),
+    names_to  = c("variable", "metric"),
+    names_sep = "__",
+    values_to = "value"
+  ) |>
   pivot_wider(names_from = metric, values_from = value) |>
   arrange(desc(pct_miss))
 
-miss_var
+miss_var_aus
+```
 
-# Descriptives
-ef_desc <- psych::describe(aus_data[ef_vars]) |>
-  as.data.frame() |>
-  tibble::rownames_to_column("variable") |>
-  transmute(
-    variable, n, mean, sd, median, min, max,
-    skew   = skew,
-    kurt   = kurtosis,   # psych column name
-    se
-  ) |>
-  arrange(variable)
-ef_desc
-
-# Descriptives table
-# Long version of EF variables
-ef_long <- aus_data %>%
-  select(all_of(age_vars), all_of(ef_vars)) %>%
-  pivot_longer(cols = all_of(ef_vars), names_to = "var", values_to = "value") %>%
+```{r}
+# Long version of EF variables (with timepoint + measure labels)
+ef_long_aus <- aus_data %>%
+  select(all_of(age_vars_aus), all_of(ef_vars_aus)) %>%
+  pivot_longer(cols = all_of(ef_vars_aus), names_to = "var", values_to = "value") %>%
   mutate(
-    timepoint = stringr::str_extract(var, "T[123]"),
-    measure = dplyr::case_when(
-      stringr::str_starts(var, "MrAnt") ~ "Mr Ant (points)",
-      stringr::str_starts(var, "GNG")   ~ "Go/No-Go (IC)",
-      stringr::str_starts(var, "CS_")   ~ "Card Sort (switch acc)",
+    timepoint = str_extract(var, "T[123]"),
+    measure = case_when(
+      str_starts(var, "MrAnt") ~ "Mr Ant (points)",
+      str_starts(var, "GNG")   ~ "Go/No-Go (IC)",
+      str_starts(var, "CS_")   ~ "Card Sort (switch acc)",
       TRUE ~ var
-    ),
-    age = dplyr::case_when(
-      timepoint == "T1" ~ Age_T1,
-      timepoint == "T2" ~ Age_T2,
-      timepoint == "T3" ~ Age_T3,
-      TRUE ~ NA_real_
     )
   )
 
 # EF summary (per measure x timepoint)
-ef_summary <- ef_long %>%
+ef_summary_aus <- ef_long_aus %>%
   group_by(measure, timepoint) %>%
   summarise(
     n_nonmiss = sum(!is.na(value)),
@@ -414,7 +378,7 @@ ef_summary <- ef_long %>%
     median    = median(value, na.rm = TRUE),
     q25       = quantile(value, 0.25, na.rm = TRUE),
     q75       = quantile(value, 0.75, na.rm = TRUE),
-    .groups = "drop"
+    .groups   = "drop"
   ) %>%
   mutate(
     mean_sd    = ifelse(n_nonmiss > 0, sprintf("%.2f (%.2f)", mean, sd), NA_character_),
@@ -422,17 +386,19 @@ ef_summary <- ef_long %>%
   ) %>%
   select(measure, timepoint, n_nonmiss, miss_pct, mean_sd, median_iqr) %>%
   pivot_wider(
-    names_from = timepoint,
+    names_from  = timepoint,
     values_from = c(n_nonmiss, miss_pct, mean_sd, median_iqr),
-    names_glue = "{.value}_{timepoint}"
+    names_glue  = "{.value}_{timepoint}"
   )
 
-# Age summary (one row, split by timepoint)
-age_row <- aus_data %>%
-  select(all_of(age_vars)) %>%
-  pivot_longer(cols = all_of(age_vars), names_to = "age_var", values_to = "age") %>%
+# Age summary (months; one decimal)
+fmt_months <- function(x, d = 1) sprintf(paste0("%.", d, "f"), x)
+
+age_row_aus <- aus_data %>%
+  select(all_of(age_vars_aus)) %>%
+  pivot_longer(cols = all_of(age_vars_aus), names_to = "age_var", values_to = "age") %>%
   mutate(
-    timepoint = stringr::str_extract(age_var, "T[123]"),
+    timepoint = str_extract(age_var, "T[123]"),
     age = suppressWarnings(as.numeric(age))
   ) %>%
   group_by(timepoint) %>%
@@ -444,11 +410,19 @@ age_row <- aus_data %>%
     median    = median(age, na.rm = TRUE),
     q25       = quantile(age, 0.25, na.rm = TRUE),
     q75       = quantile(age, 0.75, na.rm = TRUE),
-    .groups = "drop"
+    .groups   = "drop"
   ) %>%
   mutate(
-    mean_sd    = ifelse(n_nonmiss > 0, sprintf("%.2f (%.2f)", mean, sd), NA_character_),
-    median_iqr = ifelse(n_nonmiss > 0, sprintf("%.2f [%.2f, %.2f]", median, q25, q75), NA_character_)
+    mean_sd = ifelse(
+      n_nonmiss > 0,
+      paste0(fmt_months(mean, 1), " (", fmt_months(sd, 1), ")"),
+      NA_character_
+    ),
+    median_iqr = ifelse(
+      n_nonmiss > 0,
+      paste0(fmt_months(median, 1), " [", fmt_months(q25, 1), ", ", fmt_months(q75, 1), "]"),
+      NA_character_
+    )
   ) %>%
   select(timepoint, n_nonmiss, miss_pct, mean_sd, median_iqr) %>%
   pivot_wider(
@@ -456,36 +430,11 @@ age_row <- aus_data %>%
     values_from = c(n_nonmiss, miss_pct, mean_sd, median_iqr),
     names_glue  = "{.value}_{timepoint}"
   ) %>%
-  mutate(measure = "Age") %>%
-  select(measure, everything())
-
-# Build Age row explicitly (clearer than acrobatics)
-age_row <- ef_long %>%
-  distinct(Age_T1, Age_T2, Age_T3) %>%
-  summarise(
-    n_nonmiss_T1 = sum(!is.na(Age_T1)),
-    miss_pct_T1  = round(100 * mean(is.na(Age_T1)), 1),
-    mean_sd_T1   = sprintf("%.2f (%.2f)", mean(Age_T1, na.rm = TRUE), sd(Age_T1, na.rm = TRUE)),
-    median_iqr_T1= sprintf("%.2f [%.2f, %.2f]", median(Age_T1, na.rm = TRUE),
-                           quantile(Age_T1, .25, na.rm = TRUE), quantile(Age_T1, .75, na.rm = TRUE)),
-
-    n_nonmiss_T2 = sum(!is.na(Age_T2)),
-    miss_pct_T2  = round(100 * mean(is.na(Age_T2)), 1),
-    mean_sd_T2   = sprintf("%.2f (%.2f)", mean(Age_T2, na.rm = TRUE), sd(Age_T2, na.rm = TRUE)),
-    median_iqr_T2= sprintf("%.2f [%.2f, %.2f]", median(Age_T2, na.rm = TRUE),
-                           quantile(Age_T2, .25, na.rm = TRUE), quantile(Age_T2, .75, na.rm = TRUE)),
-
-    n_nonmiss_T3 = sum(!is.na(Age_T3)),
-    miss_pct_T3  = round(100 * mean(is.na(Age_T3)), 1),
-    mean_sd_T3   = sprintf("%.2f (%.2f)", mean(Age_T3, na.rm = TRUE), sd(Age_T3, na.rm = TRUE)),
-    median_iqr_T3= sprintf("%.2f [%.2f, %.2f]", median(Age_T3, na.rm = TRUE),
-                           quantile(Age_T3, .25, na.rm = TRUE), quantile(Age_T3, .75, na.rm = TRUE))
-  ) %>%
-  mutate(measure = "Age") %>%
+  mutate(measure = "Age (months)") %>%
   select(measure, everything())
 
 # Final table
-desc_table <- bind_rows(age_row, ef_summary) %>%
+desc_table_aus <- bind_rows(age_row_aus, ef_summary_aus) %>%
   select(
     Measure = measure,
     `N (T1)` = n_nonmiss_T1, `Missing % (T1)` = miss_pct_T1, `Mean (SD) (T1)` = mean_sd_T1, `Median [IQR] (T1)` = median_iqr_T1,
@@ -493,7 +442,16 @@ desc_table <- bind_rows(age_row, ef_summary) %>%
     `N (T3)` = n_nonmiss_T3, `Missing % (T3)` = miss_pct_T3, `Mean (SD) (T3)` = mean_sd_T3, `Median [IQR] (T3)` = median_iqr_T3
   )
 
-desc_table
+desc_table_aus %>%
+  gt::gt() %>%
+  gt::tab_header(title = gt::md("**Australia: Descriptives for EF Measures and Age**")) %>%
+  gt::cols_align(align = "left", columns = Measure) %>%
+  gt::cols_align(align = "center", columns = -Measure) %>%
+  gt::tab_options(
+    table.font.size = gt::px(12),
+    data_row.padding = gt::px(3),
+    heading.title.font.size = gt::px(14)
+  )
 
 ```
 
@@ -502,83 +460,64 @@ desc_table
 ```{r age trends}
 #| cache: false
 
-ef_long <- aus_data %>%
-  select(Age, all_of(ef_vars)) %>%
-  pivot_longer(cols = all_of(ef_vars), names_to = "measure", values_to = "score") %>%
-  # Split names like MrAnt_Pt_T1 -> task = MrAnt, metric = Pt, tp = T1
-  extract(measure, into = c("task","metric","tp"), regex = "^([^_]+)_([^_]+)_(T\\d+)$", remove = FALSE) %>%
+ef_long_aus_age_aligned <- aus_data %>%
+  select(all_of(age_vars_aus), all_of(ef_vars_aus)) %>%
+  pivot_longer(cols = all_of(ef_vars_aus), names_to = "var", values_to = "score") %>%
+  extract(var, into = c("task", "metric", "tp"),
+          regex = "^([^_]+)_([^_]+)_(T\\d+)$", remove = FALSE) %>%
   mutate(
+    tp = factor(tp, levels = c("T1", "T2", "T3")),
+    age_months = case_when(
+      tp == "T1" ~ Age_T1,
+      tp == "T2" ~ Age_T2,
+      tp == "T3" ~ Age_T3,
+      TRUE ~ NA_real_
+    ),
+    # Nice task labels (updated)
     task = recode(task,
-                  "MrAnt" = "Memory Game (MrAnt)",
-                  "GNG"   = "Go/No-Go (GNG)",
-                  "CS"    = "Hearts & Flowers (CS)"),  # tweak labels as you like
-    tp   = factor(tp, levels = c("T1","T2","T3"))
-  )
+      "MrAnt" = "Working Memory",
+      "GNG"   = "Inhibition",
+      "CS"    = "Cognitive Flexibility"
+    )
+  ) %>%
+  filter(is.finite(age_months), is.finite(score))
 
-p1 <- ggplot(ef_long, aes(x = Age, y = score, colour = tp)) +
+p1 <- ggplot(ef_long_aus_age_aligned, aes(x = age_months, y = score, colour = tp)) +
   geom_point(alpha = 0.25, size = 1) +
   geom_smooth(se = FALSE, method = "loess", formula = y ~ x, linewidth = 1) +
   facet_wrap(~ task, scales = "free_y") +
   labs(
-    x = "Age (years)",
+    x = "Age (months)",
     y = "Score",
     colour = "Time point",
     title = "Developmental change in EF tasks across age",
     subtitle = "Each panel shows one task; LOESS trend per time point"
   ) +
   theme_minimal(base_size = 12)
-
 p1
 
-ef_long_z <- ef_long %>%
-  group_by(measure) %>%
+# z-score within measure (i.e., within each task x metric combo)
+ef_long_aus_z <- ef_long_aus_age_aligned %>%
+  group_by(var) %>%               # var is the original name like MrAnt_Pt_T1
   mutate(score_z = as.numeric(scale(score))) %>%
   ungroup()
 
-p2 <- ggplot(ef_long_z, aes(x = Age, y = score_z, colour = tp)) +
+p2 <- ggplot(ef_long_aus_z, aes(x = age_months, y = score_z, colour = tp)) +
   geom_point(alpha = 0.25, size = 1) +
   geom_smooth(se = FALSE, method = "loess", formula = y ~ x, linewidth = 1) +
   facet_wrap(~ task) +
   labs(
-    x = "Age (years)",
+    x = "Age (months)",
     y = "Standardised score (z within measure)",
     colour = "Time point",
-    title = "Age trends in EF (z-scored within variable)",
-    subtitle = "Faceted by task; standardisation makes panels comparable"
+    title = "Age trends in EF (z-scored within measure)",
+    subtitle = "Faceted by EF domain; z-scoring makes panels comparable"
   ) +
   theme_minimal(base_size = 12)
+p2
 
-p2  
-
-plot_ef_var <- function(var, df = aus_data, age_col = "Age") {
-  stopifnot(var %in% ef_vars)
-  tmp <- df %>%
-    select(age = all_of(age_col), score = all_of(var)) %>%
-    mutate(var = var)
-
-  ggplot(tmp, aes(x = age, y = score)) +
-    geom_point(alpha = 0.35, size = 1) +
-    geom_smooth(se = FALSE, method = "loess", formula = y ~ x, linewidth = 1) +
-    labs(
-      x = "Age (years)",
-      y = var,
-      title = paste0("Age trend: ", var)
-    ) +
-    theme_minimal(base_size = 12)
-}
-
-colnames(aus_data)
-plot_ef_var("MrAnt_Pt_T1")
-plot_ef_var("MrAnt_Pt_T2")
-plot_ef_var("MrAnt_Pt_T3")
-plot_ef_var("GNG_IC_T1")
-plot_ef_var("GNG_IC_T2")
-plot_ef_var("GNG_IC_T3")
-plot_ef_var("CS_SwAcc_T1")
-plot_ef_var("CS_SwAcc_T2")
-plot_ef_var("CS_SwAcc_T3")
 ```
-
+# START HERE JAN 15TH
 ### Within child trajectories (raw scores)
 
 ```{r within child trajectories}
@@ -640,6 +579,7 @@ ggplot(
   labs(x = "Time point", y = "Raw score",
        title = "Within-child trajectories across time (raw scores)")
 ```
+
 ### EF change over time (raw scores)
 
 ```{r mean change over time within task, raw scores}
