@@ -73,9 +73,7 @@ format:
     keep-tex: true
     include-in-header: preamble.tex
     fig-format: png
-    # fig-pos: H        
-    # tbl-pos: H
-
+   
 knitr:
   opts_chunk:
     ft.arraystretch: 1.25
@@ -187,6 +185,8 @@ names(sa_data) <- cols
 length(cols)
 ncol(sa_data)
 
+#datasets
+colnames(aus_data)
 colnames(sa_data)
 ```
 
@@ -194,13 +194,8 @@ colnames(sa_data)
 #| label: setup-helpers
 #| include: false
 
-library(dplyr)
-library(tidyr)
 library(gt)
-
-# ----------------------------
 # Formatting helpers
-# ----------------------------
 fmt_mean_sd <- function(mean, sd, digits = 2) {
   ifelse(
     is.na(mean) | is.na(sd),
@@ -218,10 +213,7 @@ fmt_med_rng <- function(median, min, max, digits = 2) {
   )
 }
 
-# ----------------------------
-# Table helper functions
-# ----------------------------
-
+# Table helper 
 # EF descriptives (expects standard long format)
 # ef_long: country, timepoint, id, variable, value
 # any_ids: country, timepoint, id
@@ -312,8 +304,6 @@ desc_cat_tp <- function(df, var, any_ids, variable_label) {
       cell     = paste0(n, " (", sprintf("%.1f", pct), "%)")
     )
 }
-
-
 ```
 
 ```{r}
@@ -323,9 +313,7 @@ desc_cat_tp <- function(df, var, any_ids, variable_label) {
 stopifnot(exists("sa_data"))
 stopifnot(exists("aus_data"))
 
-# ----------------------------
 # SA: subset -> long -> anchor -> standard long objects
-# ----------------------------
 eyt_vars <- c(
   "date_of_eyt", "eyt_child_age_at_testing", "eyt2_ageinmonths", "time_btwn_testing",
   "ef_inhibition", "ef_cogflex", "ef_workingmem",
@@ -430,9 +418,7 @@ sa_ses <- sa_subset_long %>%
     income_sa = as.character(income_range)
   )
 
-# ----------------------------
 # AUS: wide -> standard EF long + anchors + age + SES
-# ----------------------------
 id_var <- if ("CID" %in% names(aus_data)) "CID" else "ServiceID"
 
 t1_vars <- c("MrAnt_Pt_T1","GNG_IC_T1","CS_SwAcc_T1")
@@ -536,13 +522,13 @@ aus_income_tp<- desc_cat_tp(aus_ses_tp,"income_aus",aus_any_ids, "Household inco
 
 ses_tp_long <- bind_rows(sa_edu_tp, sa_income_tp, aus_edu_tp, aus_income_tp) %>%
   arrange(country, timepoint, variable, level)
-
-
 ```
 
+::: {.landscape}
 ```{r}
 #| label: render-table1
 #| include: true
+#| ft.arraystretch: 1
 
 group_levels <- tp_sizes %>%
   mutate(group = paste(country, timepoint, sep = " — ")) %>%
@@ -627,8 +613,12 @@ paper_gt <- paper_table %>%
   )
 paper_gt
 ```
+:::
 
 ```{r}
+#| label: graph-prep
+#| include: false
+
 # EF longitudinal exploration
 
 stopifnot(exists("sa_ef_long"), exists("aus_ef_long"))
@@ -662,112 +652,16 @@ age_all <- bind_rows(
 ```
 
 ```{r}
-# test-retest (not standardized) 
+#| label: standardize
+#| include: false
 
-# consistent label names
-standardise_country <- function(x) {
-  x <- stringr::str_squish(x)
-  dplyr::recode(x, SA = "South Africa")
-}
+# pretty labels (define once)
+ef_labels_pretty <- c(
+  ef_inhibition = "Inhibition",
+  ef_cogflex    = "Cognitive flexibility",
+  ef_workingmem = "Working memory"
+)
 
-# Helper: build a pairwise wide df with columns x (earlier) and y (later)
-make_pair_df <- function(ef_long, age_long, tp1, tp2, countries_keep = NULL) {
-
-  df_wide <- ef_long %>%
-    dplyr::mutate(country = standardise_country(country)) %>%   # << add
-    dplyr::filter(timepoint %in% c(tp1, tp2)) %>%
-    dplyr::select(country, id, variable, timepoint, value) %>%
-    tidyr::pivot_wider(names_from = timepoint, values_from = value) %>%
-    dplyr::rename(x = !!tp1, y = !!tp2) %>%
-    dplyr::filter(!is.na(x), !is.na(y)) %>%
-    dplyr::mutate(
-      pair = paste0(tp1, "-", tp2),
-      task = unname(ef_labels[as.character(variable)])
-    )
-
-  age_tp1 <- age_long %>%
-    dplyr::mutate(country = standardise_country(country)) %>%   # << add
-    dplyr::filter(timepoint == tp1) %>%
-    dplyr::select(country, id, age) %>%
-    dplyr::rename(age_tp1 = age)
-
-  out <- df_wide %>%
-    dplyr::left_join(age_tp1, by = c("country", "id"))
-
-  if (!is.null(countries_keep)) {
-    out <- out %>% dplyr::filter(country %in% countries_keep)
-  }
-
-  out
-}
-
-# build comparisons
-df_t12 <- make_pair_df(ef_all, age_all, "T1", "T2") %>%
-  dplyr::filter(country %in% c("South Africa", "Australia"))
-
-df_t23 <- make_pair_df(ef_all, age_all, "T2", "T3") %>%
-  dplyr::filter(country == "Australia")
-
-df_pairs <- dplyr::bind_rows(df_t12, df_t23) %>%
-  dplyr::mutate(country = factor(country, levels = c("Australia", "South Africa")))  # optional but nice
-
-# Downsample IDs heavily per panel (safe alternative to slice_sample(n=min(...)))
-sample_ids_per_panel <- function(df, n_ids = 250, seed = 123) {
-  set.seed(seed)
-  df %>%
-    distinct(country, pair, task, id) %>%
-    group_by(country, pair, task) %>%
-    summarise(
-      id = list(sample(id, size = min(n_ids, dplyr::n()), replace = FALSE)),
-      .groups = "drop"
-    ) %>%
-    tidyr::unnest(id)
-}
-
-ids_keep_retest <- sample_ids_per_panel(df_pairs, n_ids = 250, seed = 123)
-
-df_plot_retest <- df_pairs %>%
-  inner_join(ids_keep_retest, by = c("country","pair","task","id"))
-
-# Panel stats (r + N), computed on full df_pairs (not downsampled)
-corr_stats <- df_pairs %>%
-  group_by(country, pair, task) %>%
-  summarise(
-    n = sum(complete.cases(x, y)),
-    r_pearson = suppressWarnings(cor(x, y, use = "complete.obs")),
-    .groups = "drop"
-  ) %>%
-  mutate(label = paste0("r = ", sprintf("%.2f", r_pearson), "\nN = ", n))
-
-p_retest <- ggplot(df_plot_retest, aes(x = x, y = y, colour = age_tp1)) +
-  geom_abline(slope = 1, intercept = 0, linetype = "dotted", alpha = 0.6) +
-  geom_point(alpha = 0.25, size = 1.1) +
-  geom_smooth(
-    data = df_pairs,
-    aes(x = x, y = y),
-    inherit.aes = FALSE,
-    method = "lm", formula = y ~ x, se = TRUE
-  ) +
-  geom_text(
-    data = corr_stats,
-    aes(x = -Inf, y = Inf, label = label),
-    inherit.aes = FALSE,
-    hjust = -0.05, vjust = 1.1, size = 3.5
-  ) +
-  facet_grid(country + pair ~ task, scales = "free") +
-  labs(
-    title = "EF test–retest associations across waves",
-    subtitle = "Points downsampled by ID within panel; line is linear fit; colour is age at the first wave of the pair",
-    x = "Score at earlier wave",
-    y = "Score at later wave",
-    colour = "Age (years)"
-  ) +
-  theme(legend.position = "right")
-
-p_retest
-```
-```{r}
-# Standardize (pooled within EF task) + join age
 ef_std <- ef_all %>%
   dplyr::group_by(variable) %>%
   dplyr::mutate(value_z = as.numeric(scale(value))) %>%
@@ -776,23 +670,171 @@ ef_std <- ef_all %>%
     age_all %>% dplyr::select(country, timepoint, id, age),
     by = c("country", "timepoint", "id")
   ) %>%
-  dplyr::mutate(task = unname(ef_labels[as.character(variable)]))
-
-ef_std <- ef_std %>%
   dplyr::mutate(
-    # standardise country labels
     country = dplyr::recode(country, SA = "South Africa"),
-
-    # then factor with the levels you want
     country = factor(country, levels = c("Australia", "South Africa")),
 
-    # and your task labelling
-    task = factor(task, levels = ef_levels, labels = ef_labels_pretty[ef_levels])
+    # derive task from VARIABLE (not from the existing label)
+    task = factor(
+      as.character(variable),
+      levels = ef_levels,
+      labels = unname(ef_labels_pretty[ef_levels])
+    )
   )
 
 ```
 
 ```{r}
+#| label: test-re-test
+#| include: false
+
+# keep only children who have >1 wave for a given task (within country)
+ef_retest_scores <- ef_std %>%
+  group_by(country, id, task) %>%
+  arrange(country, id, task, timepoint) %>%
+  filter(n_distinct(timepoint) > 1) %>%
+  ungroup()
+
+# wide format: one row per child × task (within country), columns per wave
+# (also widens age so we can compute age gaps)
+retest_wide <- ef_retest_scores %>%
+  # if you *ever* have duplicates within a wave, this collapses safely
+  group_by(country, id, task, timepoint) %>%
+  summarise(
+    value_z = mean(value_z, na.rm = TRUE),
+    age     = mean(age,     na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  tidyr::pivot_wider(
+    id_cols     = c(country, id, task),
+    names_from  = timepoint,
+    values_from = c(value_z, age),
+    names_sep   = "_"
+  ) %>%
+  mutate(
+    mean_age      = rowMeans(dplyr::select(., dplyr::starts_with("age_")), na.rm = TRUE),
+    age_gap_T12_y = age_T2 - age_T1,
+    age_gap_T23_y = age_T3 - age_T2
+  ) %>%
+  select(
+    country, id, task,
+    mean_age,
+    age_gap_T12_y, age_gap_T23_y,
+    value_z_T1, value_z_T2, value_z_T3
+  )
+
+# helper: only compute r if there are enough complete pairs
+safe_cor <- function(a, b, min_n = 3) {
+  n <- sum(stats::complete.cases(a, b))
+  if (n < min_n) return(NA_real_)
+  suppressWarnings(stats::cor(a, b, use = "complete.obs"))
+}
+
+# 3) test–retest correlations by country × task
+trt <- retest_wide %>%
+  group_by(country, task) %>%
+  summarise(
+    r_T12   = safe_cor(value_z_T1, value_z_T2),
+    n_T12   = sum(complete.cases(value_z_T1, value_z_T2)),
+    gap_T12 = mean(age_gap_T12_y, na.rm = TRUE) * 12,  # months
+
+    r_T23   = safe_cor(value_z_T2, value_z_T3),
+    n_T23   = sum(complete.cases(value_z_T2, value_z_T3)),
+    gap_T23 = mean(age_gap_T23_y, na.rm = TRUE) * 12,  # months
+    .groups = "drop"
+  ) %>%
+  arrange(task, country)
+
+trt
+```
+
+```{r}
+#| label: test-re-test-plot
+#| fig-cap: "Executive Function associations across waves. Note: Standardised scores (z); colour indicates mean age across available waves"
+#| include: true
+#| fig-align: center
+#| fig-width: 8
+#| fig-height: 8
+
+# From retest_wide -> one row per child × task × pair (T1–T2 and T2–T3), then build a single row facet that only includes observed combos.
+
+retest_long_pairs <- dplyr::bind_rows(
+  retest_wide %>%
+    dplyr::transmute(
+      country, id, task, mean_age,
+      pair = "T1–T2",
+      x = value_z_T1, y = value_z_T2
+    ),
+  retest_wide %>%
+    dplyr::transmute(
+      country, id, task, mean_age,
+      pair = "T2–T3",
+      x = value_z_T2, y = value_z_T3
+    )
+) %>%
+  dplyr::filter(!is.na(x) & !is.na(y)) %>%
+  dplyr::mutate(
+    pair = factor(pair, levels = c("T1–T2", "T2–T3")),
+    row_facet = paste(country, pair, sep = "\n")
+  ) %>%
+  dplyr::mutate(
+    row_facet = factor(
+      row_facet,
+      levels = c(
+        "Australia\nT1–T2",
+        "Australia\nT2–T3",
+        "South Africa\nT1–T2"
+      )
+    )
+  )
+
+# Panel stats (r + N), using the same "safe" logic as above
+pair_stats <- retest_long_pairs %>%
+  dplyr::group_by(country, task, pair, row_facet) %>%
+  dplyr::summarise(
+    n = sum(stats::complete.cases(x, y)),
+    r = safe_cor(x, y, min_n = 3),
+    .groups = "drop"
+  ) %>%
+  dplyr::mutate(
+    label = ifelse(
+      is.na(r),
+      paste0("r = NA\nN = ", n),
+      paste0("r = ", sprintf("%.2f", r), "\nN = ", n)
+    )
+  )
+
+# Plot
+p_retest_simple <- ggplot(retest_long_pairs, aes(x = x, y = y)) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dotted", alpha = 0.6) +
+  geom_point(aes(colour = mean_age), alpha = 0.5, size = 1.4) +
+  geom_smooth(method = "lm", formula = y ~ x, se = TRUE) +
+  geom_text(
+    data = pair_stats,
+    aes(label = label),
+    x = -Inf, y = Inf,
+    inherit.aes = FALSE,
+    hjust = -0.05, vjust = 1.1, size = 3.5
+  ) +
+  facet_grid(row_facet ~ task) +
+  labs(
+    x = "Earlier wave (z)",
+    y = "Later wave (z)",
+    colour = "Mean age (years)"
+  ) +
+  theme(legend.position = "bottom")
+
+p_retest_simple
+```
+
+```{r}
+#| label: age-ef-wave
+#| fig-cap: "Executive Function by age across waves (z-scored within EF task). Note: Points jittered + transparent; lines are linear fits with 95% CI"
+#| include: true
+#| fig-align: center
+#| fig-width: 6
+#| fig-height: 6
+
 # Age x EF x wave (standardized)
 p_age_by_wave <- ggplot(
   ef_std %>% dplyr::filter(!is.na(age), !is.na(value_z)),
@@ -807,8 +849,8 @@ p_age_by_wave <- ggplot(
   ) +
   facet_grid(timepoint ~ task, scales = "fixed") +
   labs(
-    title = "EF by age across waves (z-scored within EF task)",
-    subtitle = "Points jittered + transparent; lines are linear fits with 95% CI",
+    #title = "EF by age across waves (z-scored within EF task)",
+    #subtitle = "Points jittered + transparent; lines are linear fits with 95% CI",
     x = "Age (years)",
     y = "EF (z-score within task)",
     colour = "Country"
@@ -821,6 +863,9 @@ p_age_by_wave
 ```
 
 ```{r}
+#| label: restricted-sample
+#| include: false
+
 # restricted to at least 2 waves sample
 # SA: EF at T1 and T2
 # Aus: strict (T1+T2+T3) or lenient (T1+T2)
@@ -885,10 +930,18 @@ ef_restricted <- ef_std %>%
 ```
 
 ```{r}
-# Mean trend over time (standardized, restricted sample)
+#| label: mean-trend
+#| include: true
+#| fig-align: center
+#| fig-width: 8
+#| fig-height: 8
+#| fig-cap: |
+#|   **Mean EF scores over time (children with repeated EF data).**  
+#|   *Note.* “EF observed” at a wave means at least one EF task score is non-missing. The analytic sample includes only children meeting the wave-coverage rule: South Africa = EF observed at both T1 and T2; Australia = EF observed at T1–T3 (“strict”) or at T1 and T2 (“t12”)."
+
+# Mean trend over time (standardised, restricted sample)
 mean_df <- ef_restricted %>%
   dplyr::mutate(
-    # robust task coding: use variable as the domain code
     task = factor(as.character(variable),
                   levels = ef_levels,
                   labels = ef_labels_pretty[ef_levels]),
@@ -911,8 +964,6 @@ p_mean_trend <- ggplot(mean_df, aes(x = timepoint, y = m, group = 1)) +
   geom_errorbar(aes(ymin = lo, ymax = hi), width = 0.10) +
   facet_grid(country ~ task) +
   labs(
-    title = paste0("Mean EF change over time (restricted sample; AUS=", aus_restriction, ")"),
-    subtitle = "Means ± 95% CI; EF scores z-scored within task (pooled)",
     x = "Timepoint",
     y = "Mean EF (z-score)"
   )
@@ -922,9 +973,16 @@ p_mean_trend
 ```
 
 ```{r}
-# --- ensure labels/levels align with plotting helper ---
+#| label: spaghetti-plot
+#| include: true
+#| fig-align: center
+#| fig-width: 8
+#| fig-height: 8
+#| fig-cap: |
+#|   **Individual EF trajectories over time (children with repeated EF data).**  
+#|   *Note.* “EF observed” at a wave means at least one EF task score is non-missing. The analytic sample includes only children meeting the wave-coverage rule: South Africa = EF observed at both T1 and T2; Australia = EF observed at T1–T3 (“strict”) or at T1 and T2 (“t12”). Mean ± 95% CI is overlaid. EF scores are z-scored within task (pooled).
 
-# Standardise labels in ef_restricted
+# Standardize labels in ef_restricted
 ef_restricted_lab <- ef_restricted %>%
   dplyr::mutate(
     country  = dplyr::recode(as.character(country), SA = "South Africa"),
@@ -947,27 +1005,8 @@ mean_df_lab <- mean_df %>%
     timepoint = factor(timepoint, levels = c("T1", "T2", "T3"))
   )
 
-# --- sampling helper (uses the labelled task + country) ---
-sample_ids_country_task <- function(df, n_ids = 150, seed = 123) {
-  set.seed(seed)
-  df %>%
-    dplyr::distinct(country, task, id) %>%
-    dplyr::group_by(country, task) %>%
-    dplyr::summarise(
-      id = list(sample(id, size = min(n_ids, dplyr::n()), replace = FALSE)),
-      .groups = "drop"
-    ) %>%
-    tidyr::unnest(id)
-}
-
-# call function
-ids_keep_spag <- sample_ids_country_task(ef_restricted_lab, n_ids = 150, seed = 123)
-
-df_spag <- ef_restricted_lab %>%
-  dplyr::inner_join(ids_keep_spag, by = c("country", "task", "id"))
-
-# --- plot ---
-p_spaghetti <- ggplot(df_spag, aes(x = timepoint, y = value_z, group = id)) +
+# plot (no downsampling)
+p_spaghetti <- ggplot(ef_restricted_lab, aes(x = timepoint, y = value_z, group = id)) +
   geom_line(alpha = 0.08) +
   geom_point(alpha = 0.08, size = 0.7) +
   geom_line(
@@ -990,14 +1029,11 @@ p_spaghetti <- ggplot(df_spag, aes(x = timepoint, y = value_z, group = id)) +
   ) +
   facet_grid(country ~ task) +
   labs(
-    title = paste0("EF spaghetti (restricted sample; AUS=", aus_restriction, ")"),
-    subtitle = "Trajectories downsampled by ID; mean ± 95% CI overlaid; z-scored within task (pooled)",
     x = "Timepoint",
     y = "EF (z-score)"
   ) +
-  theme(legend.position = "none")  
+  theme(legend.position = "none")
 p_spaghetti
-
 ```
 
 

@@ -133,8 +133,8 @@ Network Analysis Approach}
 
 
 
-\authorsnames[{1},{2},{3},{3}]{Fionnuala O'Reilly,Jelena Sucevic,Steven
-Howard,Gaia Scerif}
+\authorsnames[{1},{2},{3},{3},{2},{2}]{Fionnuala O'Reilly,Jelena
+Sucevic,Caylee Cook,Catherine Draper,Steven Howard,Gaia Scerif}
 
 
 
@@ -143,12 +143,13 @@ Howard,Gaia Scerif}
 
 
 \authorsaffiliations{
-{Stanford University},{University of Oxford},{University of Wollongong}}
+{Stanford University},{University of Oxford},{University of the
+Witwatersrand}}
 
 
 
 
-\leftheader{O'Reilly, Sucevic, Howard and Scerif}
+\leftheader{O'Reilly, Sucevic, Cook, Draper, Howard and Scerif}
 
 
 
@@ -158,7 +159,9 @@ Howard,Gaia Scerif}
 
 \authornote{\par{\addORCIDlink{Fionnuala
 O'Reilly}{0000-0002-4355-9088}}\par{\addORCIDlink{Jelena
-Sucevic}{0000-0001-5091-5434}}\par{\addORCIDlink{Steven
+Sucevic}{0000-0001-5091-5434}}\par{\addORCIDlink{Caylee
+Cook}{0000-0001-9718-8887}}\par{\addORCIDlink{Catherine
+Draper}{0000-0002-2885-437X}}\par{\addORCIDlink{Steven
 Howard}{0000-0002-1258-3210}}\par{\addORCIDlink{Gaia
 Scerif}{0000-0002-6371-8874}} 
 
@@ -181,21 +184,16 @@ O'Reilly, Email: \href{mailto:foreilly@stanford.edu}{foreilly@stanford.edu}}
 
 
 
-
+\usepackage{setspace}
+% \AtBeginEnvironment{longtable}{\singlespacing\footnotesize}
+\AtBeginEnvironment{longtable}{\singlespacing\renewcommand*{\arraystretch}{1.15}}
 \usepackage{booktabs}
+\usepackage{caption}
 \usepackage{longtable}
-\usepackage{array}
-\usepackage{multirow}
-\usepackage{wrapfig}
-\usepackage{float}
 \usepackage{colortbl}
-\usepackage{pdflscape}
-\usepackage{tabu}
-\usepackage{threeparttable}
-\usepackage{threeparttablex}
-\usepackage[normalem]{ulem}
-\usepackage{makecell}
-\usepackage{xcolor}
+\usepackage{array}
+\usepackage{anyfontsize}
+\usepackage{multirow}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -230,6 +228,9 @@ O'Reilly, Email: \href{mailto:foreilly@stanford.edu}{foreilly@stanford.edu}}
 \@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
 \floatname{codelisting}{Listing}
 \newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\usepackage{pdflscape}
 \makeatother
 \makeatletter
 \makeatother
@@ -281,576 +282,119 @@ O'Reilly, Email: \href{mailto:foreilly@stanford.edu}{foreilly@stanford.edu}}
 
 
 
-\begin{verbatim}
-[1] 344
-\end{verbatim}
-
-\begin{verbatim}
-[1] 344
-\end{verbatim}
-
-\begin{verbatim}
-  [1] "caregiver_child_studyid"      "redcap_event_name"           
-  [3] "interview_date"               "ra"                          
-  [5] "child_id"                     "caregiver_id"                
-  [7] "child_sex"                    "child_dob"                   
-  [9] "child_age"                    "child_birthweight"           
- [11] "caregiver_dob"                "caregiver_age"               
- [13] "relationship_child"           "marital_status"              
- [15] "education_school"             "education_post_school"       
- [17] "education_post_school_b"      "child_education"             
- [19] "child_education_specific"     "child_education_frequency"   
- [21] "children_in_house"            "adults_in_house"             
- [23] "total_in_household"           "language_at_home___1"        
- [25] "language_at_home___2"         "language_at_home___3"        
- [27] "language_at_home___4"         "language_at_home___unk"      
- [29] "language_at_home___na"        "language_at_home___999"      
- [31] "language_at_home___9999"      "stress_gunshots"             
- [33] "stress_arrested"              "stress_unsafeathome"         
- [35] "stress_drugdeal"              "stress_see_beaten"           
- [37] "stress_yelling"               "stress_stabbing"             
- [39] "stress_shot"                  "stress_unsafe_school"        
- [41] "stress_adults_hit"            "stress_unsafe_outside"       
- [43] "stress_deadbody"              "stress_see_gangs"            
- [45] "stress_see_gun"               "stress_see_knife"            
- [47] "stress_see_stealing"          "stress_threat_beaten_fam"    
- [49] "stress_threat_beat_non"       "stress_get_beaten_fam"       
- [51] "stress_get_beaten_non"        "stress_threat_killed"        
- [53] "stress_threat_stabbed"        "stress_sexual_touch_non"     
- [55] "stress_genitals_non"          "stress_use_weapons"          
- [57] "stress_know_killed"           "stress_see_murder"           
- [59] "stress_fam_pinch"             "stress_non_pinched"          
- [61] "cecv_factor_1"                "cecv_factor_2"               
- [63] "cecv_factor_3"                "stress_total_score"          
- [65] "parental_consistant_1"        "positive_encourage_1"        
- [67] "parental_consistant_2"        "parental_consistant_3"       
- [69] "coercive_parent_1"            "positive_encourage_2"        
- [71] "coercive_parent_2"            "positive_encourage_3"        
- [73] "coercive_parent_3"            "coercive_parent_4"           
- [75] "parental_consistant_4"        "parental_consistant_5"       
- [77] "coercive_parent_5"            "relationship_1"              
- [79] "relationship_2"               "relationship_3"              
- [81] "relationship_4"               "relationship_5"              
- [83] "parental_adjust_1"            "parental_adjust_2"           
- [85] "parental_adjust_3"            "parental_adjust_4"           
- [87] "parental_adjust_5"            "family_relation_1"           
- [89] "family_relation_2"            "family_relation_3"           
- [91] "family_relation_4"            "parental_consistency_score"  
- [93] "coercive_parent_score"        "positive_encourage_score"    
- [95] "relationship_score"           "parental_adjust_score"       
- [97] "family_relationship_score"    "parent_scales_total"         
- [99] "hle_read_books"               "hle_read_who___1"            
-[101] "hle_read_who___2"             "hle_read_who___3"            
-[103] "hle_read_who___4"             "hle_read_who___5"            
-[105] "hle_read_who___6"             "hle_read_who___unk"          
-[107] "hle_read_who___na"            "hle_read_who___999"          
-[109] "hle_read_who___9999"          "hle_read_specify"            
-[111] "hle_stories"                  "hle_stories_who___1"         
-[113] "hle_stories_who___2"          "hle_stories_who___3"         
-[115] "hle_stories_who___4"          "hle_stories_who___5"         
-[117] "hle_stories_who___6"          "hle_stories_who___unk"       
-[119] "hle_stories_who___na"         "hle_stories_who___999"       
-[121] "hle_stories_who___9999"       "hle_stories_specify"         
-[123] "hle_songs"                    "hle_songs_who___1"           
-[125] "hle_songs_who___2"            "hle_songs_who___3"           
-[127] "hle_songs_who___4"            "hle_songs_who___5"           
-[129] "hle_songs_who___6"            "hle_songs_who___unk"         
-[131] "hle_songs_who___na"           "hle_songs_who___999"         
-[133] "hle_songs_who___9999"         "hle_songs_specify"           
-[135] "hle_outside"                  "hle_outside_who___1"         
-[137] "hle_outside_who___2"          "hle_outside_who___3"         
-[139] "hle_outside_who___4"          "hle_outside_who___5"         
-[141] "hle_outside_who___6"          "hle_outside_who___unk"       
-[143] "hle_outside_who___na"         "hle_outside_who___999"       
-[145] "hle_outside_who___9999"       "hle_outside_specify"         
-[147] "hle_play"                     "hle_play_who___1"            
-[149] "hle_play_who___2"             "hle_play_who___3"            
-[151] "hle_play_who___4"             "hle_play_who___5"            
-[153] "hle_play_who___6"             "hle_play_who___unk"          
-[155] "hle_play_who___na"            "hle_play_who___999"          
-[157] "hle_play_who___9999"          "hle_play_specify"            
-[159] "hle_names"                    "hle_names_who___1"           
-[161] "hle_names_who___2"            "hle_names_who___3"           
-[163] "hle_names_who___4"            "hle_names_who___5"           
-[165] "hle_names_who___6"            "hle_names_who___unk"         
-[167] "hle_names_who___na"           "hle_names_who___999"         
-[169] "hle_names_who___9999"         "hle_names_specify"           
-[171] "hle_count"                    "hle_count_who___1"           
-[173] "hle_count_who___2"            "hle_count_who___3"           
-[175] "hle_count_who___4"            "hle_count_who___5"           
-[177] "hle_count_who___6"            "hle_count_who___unk"         
-[179] "hle_count_who___na"           "hle_count_who___999"         
-[181] "hle_count_who___9999"         "hle_count_specify"           
-[183] "hle_draw"                     "hle_draw_who___1"            
-[185] "hle_draw_who___2"             "hle_draw_who___3"            
-[187] "hle_draw_who___4"             "hle_draw_who___5"            
-[189] "hle_draw_who___6"             "hle_draw_who___unk"          
-[191] "hle_draw_who___na"            "hle_draw_who___999"          
-[193] "hle_draw_who___9999"          "hle_draw_specify"            
-[195] "hle_freqency_score"           "hle_time_week"               
-[197] "hle_time_weekend"             "total_time_with_child"       
-[199] "hle_books_home"               "hle_books_number"            
-[201] "hle_homemade_toys"            "hle_homemade_toys_specify"   
-[203] "hle_toys_shop"                "hle_toys_shop_specify"       
-[205] "hle_household_objects"        "hle_objects_specify"         
-[207] "books_toys_house_total"       "nids_items_1"                
-[209] "nids_items_2"                 "nids_items_3"                
-[211] "nids_items_4"                 "nids_items_5"                
-[213] "nids_items_6"                 "nids_items_7"                
-[215] "nids_items_8"                 "nids_items_9"                
-[217] "nids_items_10"                "nids_items_11"               
-[219] "nids_items_12"                "nids_items_13"               
-[221] "nids_items_14"                "nids_items_15"               
-[223] "nids_items_16"                "nids_items_17"               
-[225] "nids_items_18"                "nids_items_19"               
-[227] "nids_items_20"                "nids_items_21"               
-[229] "nids_items_22"                "nids_items_23"               
-[231] "nids_items_24"                "nids_items_25"               
-[233] "nids_items_26"                "household_items_score"       
-[235] "nids_income_1"                "nids_income_2"               
-[237] "nids_income_3"                "nids_income_4"               
-[239] "nids_income_5"                "nids_income_6"               
-[241] "income_range"                 "monthly_income_given"        
-[243] "field_notes"                  "water_1"                     
-[245] "water_2"                      "water_2_other"               
-[247] "water_3"                      "water_3_a"                   
-[249] "water_3_other"                "water_3_b"                   
-[251] "water_4___0"                  "water_4___1"                 
-[253] "water_4___2"                  "water_4___3"                 
-[255] "water_4___4"                  "water_4___5"                 
-[257] "water_4___unk"                "water_4___na"                
-[259] "water_4___999"                "water_4___9999"              
-[261] "water_4_other"                "water_5"                     
-[263] "water_5_other"                "water_6___1"                 
-[265] "water_6___2"                  "water_6___3"                 
-[267] "water_6___unk"                "water_6___na"                
-[269] "water_6___999"                "water_6___9999"              
-[271] "water_6_a"                    "water_6_other"               
-[273] "covid_711___1"                "covid_711___2"               
-[275] "covid_711___3"                "covid_711___4"               
-[277] "covid_711___5"                "covid_711___6"               
-[279] "covid_711___7"                "covid_711___unk"             
-[281] "covid_711___na"               "covid_711___999"             
-[283] "covid_711___9999"             "covid_712"                   
-[285] "covid_721"                    "covid_722"                   
-[287] "covid_731___1"                "covid_731___2"               
-[289] "covid_731___3"                "covid_731___unk"             
-[291] "covid_731___na"               "covid_731___999"             
-[293] "covid_731___9999"             "covid_732"                   
-[295] "covid_741___1"                "covid_741___2"               
-[297] "covid_741___3"                "covid_741___4"               
-[299] "covid_741___5"                "covid_741___6"               
-[301] "covid_741___unk"              "covid_741___na"              
-[303] "covid_741___999"              "covid_741___9999"            
-[305] "covid_742"                    "covid_751"                   
-[307] "covid_752"                    "covid_761"                   
-[309] "covid_762"                    "covid_771"                   
-[311] "covid_772"                    "covid_78"                    
-[313] "covid_79___1"                 "covid_79___2"                
-[315] "covid_79___3"                 "covid_79___unk"              
-[317] "covid_79___na"                "covid_79___999"              
-[319] "covid_79___9999"              "covid_710"                   
-[321] "v2_covid_1"                   "v2_covid_1a"                 
-[323] "v2_covid_1a_other"            "v2_covid_1b"                 
-[325] "v2_covid_1b_other"            "v2_covid_2"                  
-[327] "v2_covid_3"                   "v2_covid_4"                  
-[329] "v2_covid_5"                   "v2_covid_6"                  
-[331] "v2_covid_7"                   "v2_covid_8_details"          
-[333] "additional_details"           "caregiver_interview_complete"
-[335] "date_of_eyt"                  "eyt_child_age_at_testing"    
-[337] "eyt2_ageinmonths"             "time_btwn_testing"           
-[339] "ef_inhibition"                "ef_cogflex"                  
-[341] "ef_workingmem"                "refuse_missing_eyt"          
-[343] "notes_eyt"                    "early_years_toolbox_complete"
-\end{verbatim}
-
-\section{South African data}\label{south-african-data}
-
-\section{Australian data}\label{australian-data}
-
-\subsection{Explore data}\label{explore-data}
-
-\begin{verbatim}
-# A tibble: 9 x 4
-  variable    n_miss pct_miss n_nonmiss
-  <chr>        <dbl>    <dbl>     <dbl>
-1 MrAnt_Pt_T3    127   54.7         105
-2 GNG_IC_T3      127   54.7         105
-3 CS_SwAcc_T3    126   54.3         106
-4 MrAnt_Pt_T2     17    7.33        215
-5 GNG_IC_T2       17    7.33        215
-6 CS_SwAcc_T2     16    6.90        216
-7 CS_SwAcc_T1      1    0.431       231
-8 MrAnt_Pt_T1      0    0           232
-9 GNG_IC_T1        0    0           232
-\end{verbatim}
-
-\begin{verbatim}
-     variable   n      mean        sd    median        min        max
-1 CS_SwAcc_T1 231 4.6883117 4.1239272 4.0000000 0.00000000 12.0000000
-2 CS_SwAcc_T2 216 5.9907407 4.0116003 8.0000000 0.00000000 12.0000000
-3 CS_SwAcc_T3 106 8.7641509 2.1405468 9.0000000 0.00000000 12.0000000
-4   GNG_IC_T1 232 0.5643068 0.1947821 0.5622222 0.07105263  0.9666667
-5   GNG_IC_T2 215 0.6963384 0.1868113 0.7222222 0.00000000  1.0000000
-6   GNG_IC_T3 105 0.7713185 0.1719128 0.8000000 0.20000000  1.0000000
-7 MrAnt_Pt_T1 232 1.5028736 0.9524487 1.6666667 0.00000000  4.3333333
-8 MrAnt_Pt_T2 215 1.8217054 0.8888044 2.0000000 0.00000000  4.3333333
-9 MrAnt_Pt_T3 105 2.5555556 0.7853720 2.3333333 0.66666667  4.3333333
-         skew       kurt         se
-1  0.09286742 -1.6612093 0.27133449
-2 -0.40717414 -1.4369049 0.27295483
-3 -0.76296708  1.1403194 0.20790829
-4 -0.18199158 -0.4609305 0.01278807
-5 -1.02697868  1.2074697 0.01274043
-6 -0.99864210  1.0234818 0.01677697
-7 -0.08319587 -0.6137035 0.06253132
-8 -0.40007133 -0.1854160 0.06061595
-9  0.03511300 -0.3474178 0.07664446
-\end{verbatim}
-
-\begin{verbatim}
-# A tibble: 4 x 13
-  Measure         `N (T1)` `Missing % (T1)` `Mean (SD) (T1)` `Median [IQR] (T1)`
-  <chr>              <int>            <dbl> <chr>            <chr>              
-1 Age                  224              0   4.42 (0.38)      4.43 [4.19, 4.66]  
-2 Card Sort (swi~      231              0.4 4.69 (4.12)      4.00 [0.00, 9.00]  
-3 Go/No-Go (IC)        232              0   0.56 (0.19)      0.56 [0.43, 0.71]  
-4 Mr Ant (points)      232              0   1.50 (0.95)      1.67 [1.00, 2.00]  
-# i 8 more variables: `N (T2)` <int>, `Missing % (T2)` <dbl>,
-#   `Mean (SD) (T2)` <chr>, `Median [IQR] (T2)` <chr>, `N (T3)` <int>,
-#   `Missing % (T3)` <dbl>, `Mean (SD) (T3)` <chr>, `Median [IQR] (T3)` <chr>
-\end{verbatim}
-
-\subsubsection{Developmental change in tasks across
-age}\label{developmental-change-in-tasks-across-age}
-
-\begin{verbatim}
-Error in `select()`:
-! Can't select columns that don't exist.
-x Column `Age` doesn't exist.
-\end{verbatim}
-
-\begin{verbatim}
-Error in `combine_vars()`:
-! At least one layer must contain all faceting variables: `task`
-x Plot is missing `task`
-x Layer 1 is missing `task`
-x Layer 2 is missing `task`
-\end{verbatim}
-
-\begin{verbatim}
-Error in `mutate()`:
-i In argument: `score_z = as.numeric(scale(score))`.
-i In group 1: `measure = "Card Sort (switch acc)"`.
-Caused by error:
-! object 'score' not found
-\end{verbatim}
-
-\begin{verbatim}
-Error: object 'ef_long_z' not found
-\end{verbatim}
-
-\begin{verbatim}
-Error: object 'p2' not found
-\end{verbatim}
-
-\begin{verbatim}
- [1] "CID"                "ServiceID"          "Age_T1"            
- [4] "Age_T2"             "Age_T3"             "Sex"               
- [7] "Group"              "A2_MatEdu"          "A3_FamIncome"      
-[10] "A5_HomeLang"        "HLE_Index"          "C4_ATSI"           
-[13] "C5_SleepTime"       "C5_1_SleepStart"    "C5_2_SleepEnd"     
-[16] "C6_Nap"             "C6_a_NapDur"        "C7_PA_Mins"        
-[19] "C8_Screen_Mins"     "C9_SportsPartic"    "C9_b_Sports_FreqWk"
-[22] "C9_c_Sports_MinsWk" "HTKS_T1"            "HTKS_T2"           
-[25] "HTKS_T3"            "MrAnt_Pt_T1"        "MrAnt_Pt_T2"       
-[28] "MrAnt_Pt_T3"        "GNG_IC_T1"          "GNG_IC_T2"         
-[31] "GNG_IC_T3"          "CS_SwAcc_T1"        "CS_SwAcc_T2"       
-[34] "CS_SwAcc_T3"        "Bracken_Raw_T1"     "Bracken_Raw_T2"    
-[37] "Num_T3"             "Vocab_Acc_T3"      
-\end{verbatim}
-
-\begin{verbatim}
-Error in `select()`:
-i In argument: `all_of(age_col)`.
-Caused by error in `all_of()`:
-! Can't subset elements that don't exist.
-x Element `Age` doesn't exist.
-\end{verbatim}
-
-\begin{verbatim}
-Error in `select()`:
-i In argument: `all_of(age_col)`.
-Caused by error in `all_of()`:
-! Can't subset elements that don't exist.
-x Element `Age` doesn't exist.
-\end{verbatim}
-
-\begin{verbatim}
-Error in `select()`:
-i In argument: `all_of(age_col)`.
-Caused by error in `all_of()`:
-! Can't subset elements that don't exist.
-x Element `Age` doesn't exist.
-\end{verbatim}
-
-\begin{verbatim}
-Error in `select()`:
-i In argument: `all_of(age_col)`.
-Caused by error in `all_of()`:
-! Can't subset elements that don't exist.
-x Element `Age` doesn't exist.
-\end{verbatim}
-
-\begin{verbatim}
-Error in `select()`:
-i In argument: `all_of(age_col)`.
-Caused by error in `all_of()`:
-! Can't subset elements that don't exist.
-x Element `Age` doesn't exist.
-\end{verbatim}
-
-\begin{verbatim}
-Error in `select()`:
-i In argument: `all_of(age_col)`.
-Caused by error in `all_of()`:
-! Can't subset elements that don't exist.
-x Element `Age` doesn't exist.
-\end{verbatim}
-
-\begin{verbatim}
-Error in `select()`:
-i In argument: `all_of(age_col)`.
-Caused by error in `all_of()`:
-! Can't subset elements that don't exist.
-x Element `Age` doesn't exist.
-\end{verbatim}
-
-\begin{verbatim}
-Error in `select()`:
-i In argument: `all_of(age_col)`.
-Caused by error in `all_of()`:
-! Can't subset elements that don't exist.
-x Element `Age` doesn't exist.
-\end{verbatim}
-
-\begin{verbatim}
-Error in `select()`:
-i In argument: `all_of(age_col)`.
-Caused by error in `all_of()`:
-! Can't subset elements that don't exist.
-x Element `Age` doesn't exist.
-\end{verbatim}
-
-\subsubsection{Within child trajectories (raw
-scores)}\label{within-child-trajectories-raw-scores}
-
-\begin{verbatim}
-Error in `select()`:
-! Can't select columns that don't exist.
-x Column `Age` doesn't exist.
-\end{verbatim}
-
-\begin{verbatim}
-Error in `select()`:
-i In argument: `all_of(id_col)`.
-Caused by error in `all_of()`:
-! Can't subset elements that don't exist.
-x Element `CID` doesn't exist.
-\end{verbatim}
-
-\begin{verbatim}
-Error: object 'change_wide' not found
-\end{verbatim}
-
-\begin{verbatim}
-Error: object 'paired_change_summary' not found
-\end{verbatim}
-
-\begin{verbatim}
-Error in `combine_vars()`:
-! At least one layer must contain all faceting variables: `task_l`
-x Plot is missing `task_l`
-x Layer 1 is missing `task_l`
-x Layer 2 is missing `task_l`
-\end{verbatim}
-
-\subsubsection{EF change over time (raw
-scores)}\label{ef-change-over-time-raw-scores}
-
-\begin{verbatim}
-Error in `group_by()`:
-! Must group by variables found in `.data`.
-Column `task_l` is not found.
-Column `tp` is not found.
-\end{verbatim}
-
-\begin{verbatim}
-Error: object 'summary_ci' not found
-\end{verbatim}
-
-\begin{verbatim}
-Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'diff': object 'y_lims' not found
-\end{verbatim}
-
-\begin{verbatim}
-Error: object 'y_lims' not found
-\end{verbatim}
-
-\begin{verbatim}
-Error: object 'summary_ci' not found
-\end{verbatim}
-
-\begin{verbatim}
-Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'print': object 'p' not found
-\end{verbatim}
-
-\subsubsection{Box plots (raw scores)}\label{box-plots-raw-scores}
-
-\pandocbounded{\includegraphics[keepaspectratio]{EF_network_analysis_files/figure-pdf/boxplots-1.png}}
-
-\subsubsection{EF change over time standardised to each task's T1
-standard
-deviation}\label{ef-change-over-time-standardised-to-each-tasks-t1-standard-deviation}
-
-\begin{verbatim}
-Error in `filter()`:
-i In argument: `tp == "T1"`.
-Caused by error:
-! object 'tp' not found
-\end{verbatim}
-
-\begin{verbatim}
-Error: object 't1_stats' not found
-\end{verbatim}
-
-\begin{verbatim}
-Error: object 'ef_long_zT1' not found
-\end{verbatim}
-
-\begin{verbatim}
-Error: object 'summary_ci_z' not found
-\end{verbatim}
-
-\subsubsection{Mixed effects model to test if change from T1 to T2 is
-statistically
-significant}\label{mixed-effects-model-to-test-if-change-from-t1-to-t2-is-statistically-significant}
-
-\begin{verbatim}
-Error in `mutate()`:
-i In argument: `tp = factor(tp, levels = c("T1", "T2", "T3"))`.
-Caused by error:
-! object 'tp' not found
-\end{verbatim}
-
-\begin{verbatim}
-Error: object 'ef_long2' not found
-\end{verbatim}
-
-\begin{verbatim}
-Error: object 'results' not found
-\end{verbatim}
-
-\begin{verbatim}
-Error: object 'results' not found
-\end{verbatim}
-
-\begin{verbatim}
-Error: object 't12_tbl' not found
-\end{verbatim}
-
-Histograms indicated that all executive-function task scores were
-approximately symmetric and unimodal. Mean performance increased and
-variability decreased across time, consistent with developmental
-improvements. No evidence of severe skewness, kurtosis, or ceiling/floor
-effects was observed, so raw scores were retained for analysis.
-
-\subsection{Network analysis (rough
-work)}\label{network-analysis-rough-work}
-
-\begin{verbatim}
-[1] 0.657
-\end{verbatim}
-
-\begin{verbatim}
-[1] 0.67
-\end{verbatim}
-
-\begin{verbatim}
-[1] 0.592
-\end{verbatim}
-
-\begin{verbatim}
-BGGM: Bayesian Gaussian Graphical Models 
---- 
-Type: continuous 
-Analytic: FALSE 
-Formula:  
-Posterior Samples: 10000 
-Observations (n):
-  Group 1: 231 
-  Group 2: 213 
-Nodes (p): 3 
-Relations: 3 
---- 
-Call: 
-BGGM::ggm_compare_estimate(Z_t1, Z_t2, type = "continuous", iter = 10000, 
-    impute = TRUE)
---- 
-Estimates:
-
- 
- Relation    Post.mean Post.sd Cred.lb Cred.ub
- mr_ant--gng -0.029    0.087   -0.199  0.140  
- mr_ant--cs   0.108    0.089   -0.067  0.279  
- gng--cs     -0.093    0.095   -0.277  0.096  
---- 
-\end{verbatim}
-
-\begin{verbatim}
-BGGM: Bayesian Gaussian Graphical Models 
---- 
-Type: continuous 
-Analytic: FALSE 
-Formula:  
-Posterior Samples: 10000 
-Observations (n):
-  Group 1: 213 
-  Group 2: 105 
-Nodes (p): 3 
-Relations: 3 
---- 
-Call: 
-BGGM::ggm_compare_estimate(Z_t2, Z_t3, type = "continuous", iter = 10000, 
-    impute = TRUE)
---- 
-Estimates:
-
- 
- Relation    Post.mean Post.sd Cred.lb Cred.ub
- mr_ant--gng  0.034    0.107   -0.173  0.244  
- mr_ant--cs   0.076    0.118   -0.148  0.311  
- gng--cs     -0.029    0.120   -0.257  0.212  
---- 
-\end{verbatim}
-
-\begin{verbatim}
-[[1]]
-\end{verbatim}
-
-\pandocbounded{\includegraphics[keepaspectratio]{EF_network_analysis_files/figure-pdf/pairwise Bayesian comparisons of networks-1.png}}
-
-\begin{verbatim}
-[[1]]
-\end{verbatim}
-
-\pandocbounded{\includegraphics[keepaspectratio]{EF_network_analysis_files/figure-pdf/pairwise Bayesian comparisons of networks-2.png}}
-
-\pandocbounded{\includegraphics[keepaspectratio]{EF_network_analysis_files/figure-pdf/plots-1.png}}
-
-\pandocbounded{\includegraphics[keepaspectratio]{EF_network_analysis_files/figure-pdf/plots-2.png}}
-
-\pandocbounded{\includegraphics[keepaspectratio]{EF_network_analysis_files/figure-pdf/plots-3.png}}
+\begin{landscape}
+
+\begin{table}
+\caption*{
+{\fontsize{20}{25}\selectfont  Table 1. Sample characteristics by country and timepoint\fontsize{8}{10}\selectfont } \\ 
+{\fontsize{14}{17}\selectfont  All summaries are anchored to children with any EF observed at that timepoint (partial EF allowed).\fontsize{8}{10}\selectfont }
+} 
+\fontsize{8.0pt}{10.0pt}\selectfont
+\begin{tabular*}{1\linewidth}{@{\extracolsep{\fill}}l|l|ccccc}
+\toprule
+\multicolumn{2}{c}{} & Australia — T1 & Australia — T2 & Australia — T3 & SA — T1 & SA — T2 \\ 
+\midrule\addlinespace[2.5pt]
+{\bfseries \multirow[t]{2}{*}{Sample size (anchored on any EF)}} & EF anchor N & 232 & 217 & 106 & 217 & 190 \\ 
+ & EF complete N (\%) & 231 (99.6\%) & 213 (98.2\%) & 105 (99.1\%) & 205 (94.5\%) & 186 (97.9\%) \\ 
+\midrule\addlinespace[2.5pt]
+{\bfseries \multirow[t]{2}{*}{Age}} & Age (years), Mean (SD) & 4.43 (0.38) & 4.99 (0.38) & 5.92 (0.33) & 4.71 (0.59) & 5.35 (0.57) \\ 
+ & Age (years), Median [min, max] & 4.44 [3.20, 5.24] & 4.99 [3.74, 5.88] & 5.90 [5.27, 6.59] & 4.68 [2.80, 5.89] & 5.36 [3.54, 6.55] \\ 
+\midrule\addlinespace[2.5pt]
+{\bfseries \multirow[t]{6}{*}{Executive function}} & Cognitive flexibility, Mean (SD) & 4.69 (4.12) & 5.99 (4.01) & 8.76 (2.14) & 7.73 (2.15) & 8.16 (2.73) \\ 
+ & Cognitive flexibility, n & 231 & 216 & 106 & 214 & 187 \\ 
+ & Inhibition, Mean (SD) & 0.56 (0.19) & 0.70 (0.19) & 0.77 (0.17) & 0.59 (0.24) & 0.73 (0.21) \\ 
+ & Inhibition, n & 232 & 215 & 105 & 213 & 188 \\ 
+ & Working memory, Mean (SD) & 1.50 (0.95) & 1.82 (0.89) & 2.56 (0.79) & 1.55 (0.81) & 2.00 (0.83) \\ 
+ & Working memory, n & 232 & 215 & 105 & 211 & 188 \\ 
+\midrule\addlinespace[2.5pt]
+{\bfseries \multirow[t]{4}{*}{Caregiver education (SA)}} & 1 & NA & NA & NA & 30 (13.8\%) & 30 (15.8\%) \\ 
+ & 2 & NA & NA & NA & 5 (2.3\%) & 5 (2.6\%) \\ 
+ & 3 & NA & NA & NA & 1 (0.5\%) & 1 (0.5\%) \\ 
+ & NA & NA & NA & NA & 181 (83.4\%) & 154 (81.1\%) \\ 
+\midrule\addlinespace[2.5pt]
+{\bfseries \multirow[t]{6}{*}{Caregiver education (AUS)}} & 1 & 18 (7.8\%) & 17 (7.8\%) & 8 (7.5\%) & NA & NA \\ 
+ & 2 & 16 (6.9\%) & 15 (6.9\%) & 6 (5.7\%) & NA & NA \\ 
+ & 3 & 61 (26.3\%) & 56 (25.8\%) & 24 (22.6\%) & NA & NA \\ 
+ & 4 & 68 (29.3\%) & 65 (30.0\%) & 34 (32.1\%) & NA & NA \\ 
+ & 5 & 35 (15.1\%) & 34 (15.7\%) & 16 (15.1\%) & NA & NA \\ 
+ & NA & 34 (14.7\%) & 30 (13.8\%) & 18 (17.0\%) & NA & NA \\ 
+\midrule\addlinespace[2.5pt]
+{\bfseries \multirow[t]{9}{*}{Household income (SA)}} & 1 & NA & NA & NA & 17 (7.8\%) & 13 (6.8\%) \\ 
+ & 2 & NA & NA & NA & 61 (28.1\%) & 46 (24.2\%) \\ 
+ & 3 & NA & NA & NA & 80 (36.9\%) & 63 (33.2\%) \\ 
+ & 4 & NA & NA & NA & 43 (19.8\%) & 39 (20.5\%) \\ 
+ & 5 & NA & NA & NA & 8 (3.7\%) & 7 (3.7\%) \\ 
+ & 7 & NA & NA & NA & 1 (0.5\%) & 1 (0.5\%) \\ 
+ & 999 & NA & NA & NA & 1 (0.5\%) & NA \\ 
+ & UNK & NA & NA & NA & 3 (1.4\%) & NA \\ 
+ & NA & NA & NA & NA & 3 (1.4\%) & 21 (11.1\%) \\ 
+\midrule\addlinespace[2.5pt]
+{\bfseries \multirow[t]{4}{*}{Household income (AUS)}} & 1 & 20 (8.6\%) & 19 (8.8\%) & 8 (7.5\%) & NA & NA \\ 
+ & 2 & 126 (54.3\%) & 117 (53.9\%) & 51 (48.1\%) & NA & NA \\ 
+ & 3 & 43 (18.5\%) & 43 (19.8\%) & 27 (25.5\%) & NA & NA \\ 
+ & NA & 43 (18.5\%) & 38 (17.5\%) & 20 (18.9\%) & NA & NA \\ 
+\bottomrule
+\end{tabular*}
+\end{table}
+
+\end{landscape}
+
+\begin{figure}[H]
+
+\caption{Executive Function associations across waves. Note:
+Standardised scores (z); colour indicates mean age across available
+waves}
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{EF_network_analysis_files/figure-pdf/test-re-test-plot-1.png}}
+
+}
+
+\end{figure}%
+
+\begin{figure}[H]
+
+\caption{Executive Function by age across waves (z-scored within EF
+task). Note: Points jittered + transparent; lines are linear fits with
+95\% CI}
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{EF_network_analysis_files/figure-pdf/age-ef-wave-1.png}}
+
+}
+
+\end{figure}%
+
+\begin{figure}[H]
+
+\caption{\textbf{Mean EF scores over time (children with repeated EF
+data).}\\
+\emph{Note.} ``EF observed'' at a wave means at least one EF task score
+is non-missing. The analytic sample includes only children meeting the
+wave-coverage rule: South Africa = EF observed at both T1 and T2;
+Australia = EF observed at T1--T3 (``strict'') or at T1 and T2
+(``t12'').''}
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{EF_network_analysis_files/figure-pdf/mean-trend-1.png}}
+
+}
+
+\end{figure}%
+
+\begin{figure}[H]
+
+\caption{\textbf{Individual EF trajectories over time (children with
+repeated EF data).}\\
+\emph{Note.} ``EF observed'' at a wave means at least one EF task score
+is non-missing. The analytic sample includes only children meeting the
+wave-coverage rule: South Africa = EF observed at both T1 and T2;
+Australia = EF observed at T1--T3 (``strict'') or at T1 and T2
+(``t12''). Mean ± 95\% CI is overlaid. EF scores are z-scored within
+task (pooled).}
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{EF_network_analysis_files/figure-pdf/spaghetti-plot-1.png}}
+
+}
+
+\end{figure}%
 
 
 
