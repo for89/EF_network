@@ -191,6 +191,212 @@ colnames(sa_data)
 ```
 
 ```{r}
+
+
+table(sa_data$hle_read_books)
+table(sa_data$hle_read_who___1)
+table(sa_data$hle_read_who___2)
+table(sa_data$hle_read_who___3)
+table(sa_data$hle_read_who___4)
+table(sa_data$hle_read_who___5)
+table(sa_data$hle_read_who___6)
+table(sa_data$hle_read_who___unk)
+table(sa_data$hle_read_who___na)
+table(sa_data$hle_read_who___999)
+table(sa_data$hle_read_who___9999)
+table(sa_data$hle_read_specify)
+table(sa_data$hle_stories)    
+table(sa_data$hle_stories_who___1)
+table(sa_data$hle_stories_who___2)
+table(sa_data$hle_stories_who___3)
+table(sa_data$hle_stories_who___4)
+table(sa_data$hle_stories_who___5)
+table(sa_data$hle_stories_who___6)
+table(sa_data$hle_stories_who___unk)
+table(sa_data$hle_stories_who___na)
+table(sa_data$hle_stories_who___999)
+table(sa_data$hle_stories_who___9999)
+table(sa_data$hle_stories_specify)
+table(sa_data$hle_songs)
+table(sa_data$hle_songs_who___1)
+table(sa_data$hle_songs_who___2)
+table(sa_data$hle_songs_who___3)
+table(sa_data$hle_songs_who___4)
+table(sa_data$hle_songs_who___5)
+table(sa_data$hle_songs_who___6)
+table(sa_data$hle_songs_who___unk)
+table(sa_data$hle_songs_who___na)
+table(sa_data$hle_songs_who___999)
+table(sa_data$hle_songs_who___9999)
+table(sa_data$hle_songs_specify)
+table(sa_data$hle_outside)
+table(sa_data$hle_outside_who___1)
+table(sa_data$hle_outside_who___2)
+table(sa_data$hle_outside_who___3)
+table(sa_data$hle_outside_who___4)
+table(sa_data$hle_outside_who___5)
+table(sa_data$hle_outside_who___6)
+table(sa_data$hle_outside_who___unk)
+table(sa_data$hle_outside_who___na)
+table(sa_data$hle_outside_who___999)
+table(sa_data$hle_outside_who___9999)
+table(sa_data$hle_outside_specify)
+table(sa_data$hle_play)
+table(sa_data$hle_play_who___1)
+table(sa_data$hle_play_who___2)
+table(sa_data$hle_play_who___3)
+table(sa_data$hle_play_who___4)
+table(sa_data$hle_play_who___5)
+table(sa_data$hle_play_who___6)
+table(sa_data$hle_play_who___unk)
+table(sa_data$hle_play_who___na)
+table(sa_data$hle_play_who___999)
+table(sa_data$hle_play_who___9999)
+table(sa_data$hle_play_specify)
+table(sa_data$hle_names)
+table(sa_data$hle_names_who___1)
+table(sa_data$hle_names_who___2)
+table(sa_data$hle_names_who___3)
+table(sa_data$hle_names_who___4)
+table(sa_data$hle_names_who___5)
+table(sa_data$hle_names_who___6)
+table(sa_data$hle_names_who___unk)
+table(sa_data$hle_names_who___na)
+table(sa_data$hle_names_who___999)
+table(sa_data$hle_names_who___999)
+table(sa_data$hle_names_specify)
+table(sa_data$hle_count)
+table(sa_data$hle_count_who___1)
+table(sa_data$hle_count_who___2)
+table(sa_data$hle_count_who___3)
+table(sa_data$hle_count_who___4)
+table(sa_data$hle_count_who___5)
+table(sa_data$hle_count_who___6)
+table(sa_data$hle_count_who___unk)
+table(sa_data$hle_count_who___na)
+table(sa_data$hle_count_who___999)
+table(sa_data$hle_count_who___9999)
+table(sa_data$hle_count_specify)
+table(sa_data$hle_draw)
+table(sa_data$hle_draw_who___1)
+table(sa_data$hle_draw_who___2)
+table(sa_data$hle_draw_who___3)
+table(sa_data$hle_draw_who___4)
+table(sa_data$hle_draw_who___5)
+table(sa_data$hle_draw_who___6)
+table(sa_data$hle_draw_who___unk)
+table(sa_data$hle_draw_who___na)
+table(sa_data$hle_draw_who___999)
+table(sa_data$hle_draw_who___9999)
+table(sa_data$hle_draw_specify)
+table(sa_data$hle_freqency_score)
+table(sa_data$hle_time_week)
+table(sa_data$hle_time_weekend)
+table(sa_data$total_time_with_child)
+table(sa_data$hle_books_home)
+table(sa_data$hle_books_number)
+table(sa_data$hle_homemade_toys)
+table(sa_data$hle_homemade_toys_specify)
+table(sa_data$hle_toys_shop)
+table(sa_data$hle_toys_shop_specify)
+table(sa_data$hle_household_objects)
+table(sa_data$hle_objects_specify)
+table(sa_data$books_toys_house_total)
+
+```
+
+
+```{r}
+#| label: derive-hle-vars
+#| echo: true
+#| label: derive-hle-vars
+#| echo: true
+
+
+to_num <- function(x) suppressWarnings(as.numeric(as.character(x)))
+
+# (1) HLA frequency (8 items: 0/1/2) -> range 0..16
+hla_freq_vars <- c(
+  "hle_read_books", "hle_stories", "hle_songs", "hle_outside",
+  "hle_play", "hle_names", "hle_count", "hle_draw"
+)
+
+# (2) Unique caregiver types across any activity (codes 1..6)
+activities <- c("read", "stories", "songs", "outside", "play", "names", "count", "draw")
+caregiver_codes <- 1:6
+
+# (3) Books/toys total (4 items: 0/1) -> range 0..4
+books_toys_vars <- c(
+  "hle_books_home", "hle_homemade_toys", "hle_toys_shop", "hle_household_objects"
+)
+
+# (4) Time total: week + weekend (each 1..3) -> range 2..6
+time_vars <- c("hle_time_week", "hle_time_weekend")
+
+# ---- derive (1), (3), (4) ----
+sa_data <- sa_data %>%
+  mutate(
+    hla_frequency1 = if_else(
+      if_any(all_of(hla_freq_vars), is.na),
+      NA_real_,
+      rowSums(across(all_of(hla_freq_vars), to_num))
+    ),
+    books_toys_total1 = if_else(
+      if_any(all_of(books_toys_vars), is.na),
+      NA_real_,
+      rowSums(across(all_of(books_toys_vars), to_num))
+    ),
+    time_total1 = if_else(
+      if_any(all_of(time_vars), is.na),
+      NA_real_,
+      rowSums(across(all_of(time_vars), to_num))
+    )
+  )
+
+# ---- derive (2): num_caregivers ----
+who_all <- as.vector(sapply(
+  activities,
+  function(a) paste0("hle_", a, "_who___", caregiver_codes)
+))
+
+who_mat <- as.matrix(sa_data[, who_all, drop = FALSE])
+all_missing_who <- rowSums(!is.na(who_mat)) == 0
+
+present_mat <- sapply(caregiver_codes, function(k) {
+  X <- as.matrix(sa_data[, paste0("hle_", activities, "_who___", k), drop = FALSE])
+  X[is.na(X)] <- 0
+  rowSums(X) > 0
+})
+
+sa_data$num_caregivers <- rowSums(present_mat)
+sa_data$num_caregivers[all_missing_who] <- NA_integer_
+
+# checks
+summary(sa_data$hla_frequency1)
+summary(sa_data$num_caregivers)
+summary(sa_data$books_toys_total1)
+summary(sa_data$time_total1)
+
+# quick distributions
+table(sa_data$hla_frequency1, useNA = "ifany")
+table(sa_data$num_caregivers, useNA = "ifany")
+table(sa_data$books_toys_total1, useNA = "ifany")
+table(sa_data$time_total1, useNA = "ifany")
+
+# key consistency check: activities reported but "0 caregivers"
+with(sa_data, table(hla_frequency1 > 0, num_caregivers == 0, useNA = "ifany"))
+
+sa_data <- sa_data %>%
+  mutate(
+    num_caregivers_clean = ifelse(hla_frequency1 > 0 & num_caregivers == 0, NA_integer_, num_caregivers)
+  )
+
+sum(sa_data$hla_frequency1 > 0 & sa_data$num_caregivers == 0, na.rm = TRUE)
+sum(sa_data$hla_frequency1 > 0 & is.na(sa_data$num_caregivers_clean), na.rm = TRUE) # n=84 with no caregiver info. reported.
+
+```
+
+```{r}
 #| label: setup-helpers
 #| include: false
 
