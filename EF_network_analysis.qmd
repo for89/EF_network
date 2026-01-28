@@ -630,16 +630,17 @@ aus_age_long <- aus_data %>%
 
 stopifnot(all(c("A2_MatEdu","A3_FamIncome") %in% names(aus_data)))
 
-# child-level SES (native coding)
+# child-level SES + HLE 
 aus_ses_child <- aus_data %>%
-  mutate(id = as.character(.data[[id_var]])) %>%
+  mutate(id = as.character(.data[[id_var]])) %>%   # make id consistent
   filter(!is.na(id)) %>%
   distinct(id, .keep_all = TRUE) %>%
   transmute(
     country    = "Australia",
     id,
-    edu_aus    = as.integer(A2_MatEdu),     # 1–5
-    income_aus = as.character(A3_FamIncome) # 1–3
+    edu_aus    = as.integer(A2_MatEdu),# 1–5
+    income_aus = as.character(A3_FamIncome), # 1–3
+    hle_aus    = as.numeric(HLE_Index)
   )
 
 # expand across anchored timepoints
@@ -744,33 +745,28 @@ gt1
 #| label: summarise-table2-components
 #| include: false
 
-# Categorical SES (anchored)
-sa_edu_tp    <- desc_cat_tp(sa_ses,     "edu_sa",     sa_any_ids,  "Caregiver education (SA)")
-aus_edu_tp   <- desc_cat_tp(aus_ses_tp, "edu_aus",    aus_any_ids, "Caregiver education (AUS)")
-aus_income_tp<- desc_cat_tp(aus_ses_tp, "income_aus", aus_any_ids, "Household income (AUS)")
+# Categorical
+sa_edu_tp     <- desc_cat_tp(sa_ses,     "edu_sa",     sa_any_ids,  "Caregiver education (SA)")
+aus_edu_tp    <- desc_cat_tp(aus_ses_tp, "edu_aus",    aus_any_ids, "Caregiver education (AUS)")
+aus_income_tp <- desc_cat_tp(aus_ses_tp, "income_aus", aus_any_ids, "Household income (AUS)")
 
 ses_tp_long2 <- bind_rows(sa_edu_tp, aus_edu_tp, aus_income_tp) %>%
   arrange(country, timepoint, variable, level)
 
-# Continuous SES + HLE (anchored; SA only variables will be NA for AUS columns)
-tp_assets <- summ_cont_tp(sa_ses, "nids_assets_sa", sa_any_ids,
-                          "Household assets score (SA; NIDS, 0–26)")
+# Continuous
+# SA income derived from NIDS assets score
+tp_income_sa <- summ_cont_tp(sa_ses, "nids_assets_sa", sa_any_ids, "Household income (SA)")
 
-tp_hle1 <- summ_cont_tp(sa_ses, "hla_frequency1", sa_any_ids,
-                        "HLE activity frequency (sum)")
+# SA HLE
+tp_hle_sa <- bind_rows(
+  summ_cont_tp(sa_ses, "hla_frequency1",       sa_any_ids, "HLE activity frequency (sum)"),
+  summ_cont_tp(sa_ses, "num_caregivers_clean", sa_any_ids, "HLE: unique caregiver types involved"),
+  summ_cont_tp(sa_ses, "books_toys_total1",    sa_any_ids, "HLE: books/toys total"),
+  summ_cont_tp(sa_ses, "time_total1",          sa_any_ids, "HLE: time total")
+) %>% arrange(country, timepoint, variable)
 
-tp_hle2 <- summ_cont_tp(sa_ses, "num_caregivers_clean", sa_any_ids,
-                        "HLE: unique caregiver types involved")
-
-tp_hle3 <- summ_cont_tp(sa_ses, "books_toys_total1", sa_any_ids,
-                        "HLE: books/toys total")
-
-tp_hle4 <- summ_cont_tp(sa_ses, "time_total1", sa_any_ids,
-                        "HLE: time total")
-
-tp_cont2 <- bind_rows(tp_assets, tp_hle1, tp_hle2, tp_hle3, tp_hle4) %>%
-  arrange(country, timepoint, variable)
-
+# AUS HLE index (note: this will repeat across timepoints because it's child-level)
+tp_hle_aus <- summ_cont_tp(aus_ses_tp, "hle_aus", aus_any_ids, "Home learning environment (AUS; HLE Index)")
 ```
 
 ::: {.landscape}
@@ -778,43 +774,81 @@ tp_cont2 <- bind_rows(tp_assets, tp_hle1, tp_hle2, tp_hle3, tp_hle4) %>%
 #| label: render-table2
 #| include: true
 
-# reuse same group_levels as Table 1 (recompute safely here)
 group_levels <- bind_rows(
-  tp_cont2 %>% distinct(country, timepoint),
-  ses_tp_long2 %>% distinct(country, timepoint)
+  ses_tp_long2 %>% distinct(country, timepoint),
+  tp_income_sa %>% distinct(country, timepoint),
+  tp_hle_sa %>% distinct(country, timepoint),
+  tp_hle_aus %>% distinct(country, timepoint)
 ) %>%
   distinct(country, timepoint) %>%
   mutate(
     timepoint = factor(timepoint, levels = paste0("T", 1:10)),
     group = paste(country, timepoint, sep = " — ")
   ) %>%
-  arrange(match(country, c("SA","Australia")), timepoint) %>%
+  arrange(match(country, c("Australia","SA")), timepoint) %>%  # <-- Australia first
   pull(group)
 
-# Continuous block (assets + HLE)
-metrics2_long <- bind_rows(
-  tp_cont2 %>%
+# SA income (continuous)
+income2_long <- bind_rows(
+  tp_income_sa %>%
     mutate(group = paste(country, timepoint, sep = " — ")) %>%
-    transmute(section = "Assets and home learning environment (continuous)",
+    transmute(section = "Household income (SA)",
               row = paste0(variable, ", n"),
-              group,
-              value = as.character(n)),
-
-  tp_cont2 %>%
+              group, value = as.character(n)),
+  tp_income_sa %>%
     mutate(group = paste(country, timepoint, sep = " — ")) %>%
-    transmute(section = "Assets and home learning environment (continuous)",
+    transmute(section = "Household income (SA)",
               row = paste0(variable, ", Mean (SD)"),
-              group,
-              value = fmt_mean_sd(mean, sd, digits = 2))
+              group, value = fmt_mean_sd(mean, sd, digits = 2))
 )
 
-metrics2_wide <- metrics2_long %>%
+income2_wide <- income2_long %>%
   mutate(group = factor(group, levels = group_levels)) %>%
   select(section, row, group, value) %>%
   tidyr::pivot_wider(names_from = group, values_from = value) %>%
   arrange(section, row)
 
-# Categorical block (education + AUS income)
+# SA HLE (continuous)
+hle_sa_long <- bind_rows(
+  tp_hle_sa %>%
+    mutate(group = paste(country, timepoint, sep = " — ")) %>%
+    transmute(section = "Home learning environment (SA)",
+              row = paste0(variable, ", n"),
+              group, value = as.character(n)),
+  tp_hle_sa %>%
+    mutate(group = paste(country, timepoint, sep = " — ")) %>%
+    transmute(section = "Home learning environment (SA)",
+              row = paste0(variable, ", Mean (SD)"),
+              group, value = fmt_mean_sd(mean, sd, digits = 2))
+)
+
+hle_sa_wide <- hle_sa_long %>%
+  mutate(group = factor(group, levels = group_levels)) %>%
+  select(section, row, group, value) %>%
+  tidyr::pivot_wider(names_from = group, values_from = value) %>%
+  arrange(section, row)
+
+# AUS HLE index (continuous) 
+hle_aus_long <- bind_rows(
+  tp_hle_aus %>%
+    mutate(group = paste(country, timepoint, sep = " — ")) %>%
+    transmute(section = "Home learning environment (AUS)",
+              row = paste0(variable, ", n"),
+              group, value = as.character(n)),
+  tp_hle_aus %>%
+    mutate(group = paste(country, timepoint, sep = " — ")) %>%
+    transmute(section = "Home learning environment (AUS)",
+              row = paste0(variable, ", Mean (SD)"),
+              group, value = fmt_mean_sd(mean, sd, digits = 2))
+)
+
+hle_aus_wide <- hle_aus_long %>%
+  mutate(group = factor(group, levels = group_levels)) %>%
+  select(section, row, group, value) %>%
+  tidyr::pivot_wider(names_from = group, values_from = value) %>%
+  arrange(section, row)
+
+# Categorical block (education SA/AUS + income AUS)
 ses2_wide <- ses_tp_long2 %>%
   mutate(group = paste(country, timepoint, sep = " — "),
          group = factor(group, levels = group_levels)) %>%
@@ -822,20 +856,24 @@ ses2_wide <- ses_tp_long2 %>%
   tidyr::pivot_wider(names_from = group, values_from = value) %>%
   arrange(section, row)
 
-paper_table2 <- bind_rows(metrics2_wide, ses2_wide) %>%
+paper_table2 <- bind_rows(ses2_wide, income2_wide, hle_aus_wide, hle_sa_wide) %>%
   mutate(section = factor(section, levels = c(
-    "Caregiver education (SA)",
     "Caregiver education (AUS)",
+    "Caregiver education (SA)",
     "Household income (AUS)",
-    "Assets and home learning environment (continuous)"
+    "Household income (SA)",
+    "Home learning environment (AUS)",
+    "Home learning environment (SA)"
   ))) %>%
   arrange(section, row)
 
 gt2 <- paper_table2 %>%
   gt(groupname_col = "section", rowname_col = "row") %>%
   tab_header(
-    title = "Table 2. Socioeconomic status and home learning environment by country and timepoint",
-    subtitle = "All summaries are anchored to children with any EF observed at that timepoint (partial EF allowed)."
+    title = "Table 2. Socioeconomic status and home learning environment by country and timepoint"
+  ) %>%
+  tab_source_note(
+    source_note = md("**Note.** Summaries are restricted to children with any EF data at each wave (partial EF allowed). In Australia, caregiver education, household income, and the HLE Index are measured once per child and carried across waves; *n* and summary statistics may still differ across T1–T3 because the EF-available sample varies by wave (attrition/partial EF). In South Africa, caregiver education, income, and HLE measures are recorded by wave and summarised only where collected (later-wave cells are NA if not assessed).")
   ) %>%
   cols_align(align = "center") %>%
   tab_options(
@@ -849,7 +887,6 @@ gt2 <- paper_table2 %>%
   )
 
 gt2
-
 ```
 :::
 
