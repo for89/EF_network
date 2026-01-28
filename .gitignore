@@ -8,3 +8,7 @@ _freeze/
 .Rproj.user
 
 /.quarto/
+
+**/*.quarto_ipynb
+EF_network_analysis_files/
+*.png

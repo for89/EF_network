@@ -73,6 +73,7 @@ format:
     keep-tex: true
     include-in-header: preamble.tex
     fig-format: png
+    pdf-engine: xelatex
    
 knitr:
   opts_chunk:
@@ -185,155 +186,34 @@ names(sa_data) <- cols
 length(cols)
 ncol(sa_data)
 
-#datasets
-colnames(aus_data)
 colnames(sa_data)
 ```
 
 ```{r}
-
-
-table(sa_data$hle_read_books)
-table(sa_data$hle_read_who___1)
-table(sa_data$hle_read_who___2)
-table(sa_data$hle_read_who___3)
-table(sa_data$hle_read_who___4)
-table(sa_data$hle_read_who___5)
-table(sa_data$hle_read_who___6)
-table(sa_data$hle_read_who___unk)
-table(sa_data$hle_read_who___na)
-table(sa_data$hle_read_who___999)
-table(sa_data$hle_read_who___9999)
-table(sa_data$hle_read_specify)
-table(sa_data$hle_stories)    
-table(sa_data$hle_stories_who___1)
-table(sa_data$hle_stories_who___2)
-table(sa_data$hle_stories_who___3)
-table(sa_data$hle_stories_who___4)
-table(sa_data$hle_stories_who___5)
-table(sa_data$hle_stories_who___6)
-table(sa_data$hle_stories_who___unk)
-table(sa_data$hle_stories_who___na)
-table(sa_data$hle_stories_who___999)
-table(sa_data$hle_stories_who___9999)
-table(sa_data$hle_stories_specify)
-table(sa_data$hle_songs)
-table(sa_data$hle_songs_who___1)
-table(sa_data$hle_songs_who___2)
-table(sa_data$hle_songs_who___3)
-table(sa_data$hle_songs_who___4)
-table(sa_data$hle_songs_who___5)
-table(sa_data$hle_songs_who___6)
-table(sa_data$hle_songs_who___unk)
-table(sa_data$hle_songs_who___na)
-table(sa_data$hle_songs_who___999)
-table(sa_data$hle_songs_who___9999)
-table(sa_data$hle_songs_specify)
-table(sa_data$hle_outside)
-table(sa_data$hle_outside_who___1)
-table(sa_data$hle_outside_who___2)
-table(sa_data$hle_outside_who___3)
-table(sa_data$hle_outside_who___4)
-table(sa_data$hle_outside_who___5)
-table(sa_data$hle_outside_who___6)
-table(sa_data$hle_outside_who___unk)
-table(sa_data$hle_outside_who___na)
-table(sa_data$hle_outside_who___999)
-table(sa_data$hle_outside_who___9999)
-table(sa_data$hle_outside_specify)
-table(sa_data$hle_play)
-table(sa_data$hle_play_who___1)
-table(sa_data$hle_play_who___2)
-table(sa_data$hle_play_who___3)
-table(sa_data$hle_play_who___4)
-table(sa_data$hle_play_who___5)
-table(sa_data$hle_play_who___6)
-table(sa_data$hle_play_who___unk)
-table(sa_data$hle_play_who___na)
-table(sa_data$hle_play_who___999)
-table(sa_data$hle_play_who___9999)
-table(sa_data$hle_play_specify)
-table(sa_data$hle_names)
-table(sa_data$hle_names_who___1)
-table(sa_data$hle_names_who___2)
-table(sa_data$hle_names_who___3)
-table(sa_data$hle_names_who___4)
-table(sa_data$hle_names_who___5)
-table(sa_data$hle_names_who___6)
-table(sa_data$hle_names_who___unk)
-table(sa_data$hle_names_who___na)
-table(sa_data$hle_names_who___999)
-table(sa_data$hle_names_who___999)
-table(sa_data$hle_names_specify)
-table(sa_data$hle_count)
-table(sa_data$hle_count_who___1)
-table(sa_data$hle_count_who___2)
-table(sa_data$hle_count_who___3)
-table(sa_data$hle_count_who___4)
-table(sa_data$hle_count_who___5)
-table(sa_data$hle_count_who___6)
-table(sa_data$hle_count_who___unk)
-table(sa_data$hle_count_who___na)
-table(sa_data$hle_count_who___999)
-table(sa_data$hle_count_who___9999)
-table(sa_data$hle_count_specify)
-table(sa_data$hle_draw)
-table(sa_data$hle_draw_who___1)
-table(sa_data$hle_draw_who___2)
-table(sa_data$hle_draw_who___3)
-table(sa_data$hle_draw_who___4)
-table(sa_data$hle_draw_who___5)
-table(sa_data$hle_draw_who___6)
-table(sa_data$hle_draw_who___unk)
-table(sa_data$hle_draw_who___na)
-table(sa_data$hle_draw_who___999)
-table(sa_data$hle_draw_who___9999)
-table(sa_data$hle_draw_specify)
-table(sa_data$hle_freqency_score)
-table(sa_data$hle_time_week)
-table(sa_data$hle_time_weekend)
-table(sa_data$total_time_with_child)
-table(sa_data$hle_books_home)
-table(sa_data$hle_books_number)
-table(sa_data$hle_homemade_toys)
-table(sa_data$hle_homemade_toys_specify)
-table(sa_data$hle_toys_shop)
-table(sa_data$hle_toys_shop_specify)
-table(sa_data$hle_household_objects)
-table(sa_data$hle_objects_specify)
-table(sa_data$books_toys_house_total)
-
-```
-
-
-```{r}
 #| label: derive-hle-vars
-#| echo: true
-#| label: derive-hle-vars
-#| echo: true
-
+#| include: false
 
 to_num <- function(x) suppressWarnings(as.numeric(as.character(x)))
 
-# (1) HLA frequency (8 items: 0/1/2) -> range 0..16
+# (1) HLA frequency (8 items: 0/1/2)
 hla_freq_vars <- c(
   "hle_read_books", "hle_stories", "hle_songs", "hle_outside",
   "hle_play", "hle_names", "hle_count", "hle_draw"
 )
 
-# (2) Unique caregiver types across any activity (codes 1..6)
+# (2) Unique caregiver types across any activity (codes 1-6)
 activities <- c("read", "stories", "songs", "outside", "play", "names", "count", "draw")
 caregiver_codes <- 1:6
 
-# (3) Books/toys total (4 items: 0/1) -> range 0..4
+# (3) Books/toys total (4 items: 0/1)
 books_toys_vars <- c(
   "hle_books_home", "hle_homemade_toys", "hle_toys_shop", "hle_household_objects"
 )
 
-# (4) Time total: week + weekend (each 1..3) -> range 2..6
+# (4) Time total: week + weekend (each 1..3) 
 time_vars <- c("hle_time_week", "hle_time_weekend")
 
-# ---- derive (1), (3), (4) ----
+# derive 1, 3 and 4
 sa_data <- sa_data %>%
   mutate(
     hla_frequency1 = if_else(
@@ -353,7 +233,7 @@ sa_data <- sa_data %>%
     )
   )
 
-# ---- derive (2): num_caregivers ----
+# derive 2: num_caregivers
 who_all <- as.vector(sapply(
   activities,
   function(a) paste0("hle_", a, "_who___", caregiver_codes)
@@ -377,13 +257,13 @@ summary(sa_data$num_caregivers)
 summary(sa_data$books_toys_total1)
 summary(sa_data$time_total1)
 
-# quick distributions
+# distributions
 table(sa_data$hla_frequency1, useNA = "ifany")
 table(sa_data$num_caregivers, useNA = "ifany")
 table(sa_data$books_toys_total1, useNA = "ifany")
 table(sa_data$time_total1, useNA = "ifany")
 
-# key consistency check: activities reported but "0 caregivers"
+# consistency check: activities reported but "0 caregivers"
 with(sa_data, table(hla_frequency1 > 0, num_caregivers == 0, useNA = "ifany"))
 
 sa_data <- sa_data %>%
@@ -393,6 +273,36 @@ sa_data <- sa_data %>%
 
 sum(sa_data$hla_frequency1 > 0 & sa_data$num_caregivers == 0, na.rm = TRUE)
 sum(sa_data$hla_frequency1 > 0 & is.na(sa_data$num_caregivers_clean), na.rm = TRUE) # n=84 with no caregiver info. reported.
+
+```
+
+```{r}
+#| label: derive-nids-assets-score
+#| include: false
+
+asset_vars <- paste0("nids_items_", 1:26)
+
+sa_data <- sa_data %>%
+  mutate(
+    # optional: turn refuse/don't know into NA for clarity
+    across(all_of(asset_vars), ~ ifelse(.x %in% c(3L, 4L), NA_integer_, as.integer(.x))),
+    
+    # replicate the data dictionary scoring: count "Yes" (1) across 26 items
+    household_items_score_repl = rowSums(
+      across(all_of(asset_vars), ~ as.integer(.x == 1L)),
+      na.rm = TRUE
+    ),
+    
+    # optional diagnostics
+    n_assets_answered = rowSums(!is.na(across(all_of(asset_vars))), na.rm = TRUE)
+  )
+
+# quick check vs existing score (if present)
+cor(sa_data$household_items_score, sa_data$household_items_score_repl,
+    use = "pairwise.complete.obs")
+
+sum(!is.na(sa_data$household_items_score) & !is.na(sa_data$household_items_score_repl) &
+      sa_data$household_items_score != sa_data$household_items_score_repl)
 
 ```
 
@@ -417,6 +327,29 @@ fmt_med_rng <- function(median, min, max, digits = 2) {
     sprintf(paste0("%.", digits, "f [%.", digits, "f, %.", digits, "f]"),
             median, min, max)
   )
+}
+
+# Continuous descriptives within EF-anchored sample (generic)
+summ_cont_tp <- function(df, var, any_ids, variable_label) {
+  stopifnot(all(c("country","timepoint","id") %in% names(df)))
+  stopifnot(all(c("country","timepoint","id") %in% names(any_ids)))
+  stopifnot(var %in% names(df))
+
+  df %>%
+    inner_join(distinct(any_ids, country, timepoint, id),
+               by = c("country","timepoint","id")) %>%
+    transmute(country, timepoint, id, x = as.numeric(.data[[var]])) %>%
+    group_by(country, timepoint) %>%
+    summarise(
+      n      = sum(!is.na(x)),
+      mean   = ifelse(all(is.na(x)), NA_real_, mean(x, na.rm = TRUE)),
+      sd     = ifelse(sum(!is.na(x)) > 1, sd(x, na.rm = TRUE), NA_real_),
+      median = ifelse(all(is.na(x)), NA_real_, median(x, na.rm = TRUE)),
+      min    = ifelse(all(is.na(x)), NA_real_, min(x, na.rm = TRUE)),
+      max    = ifelse(all(is.na(x)), NA_real_, max(x, na.rm = TRUE)),
+      .groups = "drop"
+    ) %>%
+    mutate(variable = variable_label)
 }
 
 # Table helper 
@@ -527,11 +460,20 @@ eyt_vars <- c(
 )
 
 ses_vars <- c(
+  # NIDS / income-related
   "nids_income_1", "nids_income_2", "nids_income_3",
   "nids_income_4", "nids_income_5", "nids_income_6",
   "income_range", "monthly_income_given",
+
+  # NEW: NIDS assets-derived score
+  "household_items_score_repl",
+
+  # education etc
   "marital_status", "education_school", "education_post_school", "education_post_school_b",
-  "children_in_house", "adults_in_house", "total_in_household"
+  "children_in_house", "adults_in_house", "total_in_household",
+
+  # NEW: HLE derived vars
+  "hla_frequency1", "num_caregivers_clean", "books_toys_total1", "time_total1"
 )
 
 id_vars <- c(
@@ -618,10 +560,20 @@ sa_ses <- sa_subset_long %>%
     country   = "SA",
     timepoint = timepoint,
     id        = caregiver_child_studyid,
+
+    # caregiver education
     edu_sa    = if_else(education_post_school == 1,
                         as.integer(education_post_school_b),
                         NA_integer_),
-    income_sa = as.character(income_range)
+
+    # "income derived from NIDS" (assets score)
+    nids_assets_sa = as.numeric(household_items_score_repl),
+
+    # HLE
+    hla_frequency1       = as.numeric(hla_frequency1),
+    num_caregivers_clean = as.numeric(num_caregivers_clean),
+    books_toys_total1    = as.numeric(books_toys_total1),
+    time_total1          = as.numeric(time_total1)
   )
 
 # AUS: wide -> standard EF long + anchors + age + SES
@@ -635,7 +587,7 @@ ef_vars <- c(t1_vars, t2_vars, t3_vars)
 stopifnot(all(ef_vars %in% names(aus_data)))
 
 aus_ef_long <- aus_data %>%
-  mutate(id = .data[[id_var]]) %>%
+  mutate(id = as.character(.data[[id_var]])) %>%
   filter(!is.na(id)) %>%
   select(id, all_of(ef_vars)) %>%
   pivot_longer(
@@ -665,7 +617,7 @@ aus_any_ids <- aus_ef_long %>%
 stopifnot(all(c("Age_T1","Age_T2","Age_T3") %in% names(aus_data)))
 
 aus_age_long <- aus_data %>%
-  mutate(id = .data[[id_var]]) %>%
+  mutate(id = as.character(.data[[id_var]])) %>%
   filter(!is.na(id)) %>%
   select(id, Age_T1, Age_T2, Age_T3) %>%
   pivot_longer(cols = starts_with("Age_T"), names_to = "timepoint", values_to = "age") %>%
@@ -680,7 +632,7 @@ stopifnot(all(c("A2_MatEdu","A3_FamIncome") %in% names(aus_data)))
 
 # child-level SES (native coding)
 aus_ses_child <- aus_data %>%
-  mutate(id = .data[[id_var]]) %>%
+  mutate(id = as.character(.data[[id_var]])) %>%
   filter(!is.na(id)) %>%
   distinct(id, .keep_all = TRUE) %>%
   transmute(
@@ -705,11 +657,6 @@ ef_labels <- c(
   ef_workingmem = "Working memory"
 )
 
-tp_sizes <- bind_rows(
-  summ_sizes(sa_ef_long,  sa_any_ids,  n_measures_complete = 3),
-  summ_sizes(aus_ef_long, aus_any_ids, n_measures_complete = 3)
-) %>% arrange(country, timepoint)
-
 tp_age <- bind_rows(
   summ_age_long(sa_age_long,  sa_any_ids),
   summ_age_long(aus_age_long, aus_any_ids)
@@ -720,14 +667,6 @@ tp_ef_desc <- bind_rows(
   summ_ef_desc(aus_ef_long, aus_any_ids)
 ) %>% arrange(country, timepoint, variable)
 
-# SES distributions (anchored)
-sa_edu_tp    <- desc_cat_tp(sa_ses,    "edu_sa",    sa_any_ids,  "Caregiver education (SA)")
-sa_income_tp <- desc_cat_tp(sa_ses,    "income_sa", sa_any_ids,  "Household income (SA)")
-aus_edu_tp   <- desc_cat_tp(aus_ses_tp,"edu_aus",   aus_any_ids, "Caregiver education (AUS)")
-aus_income_tp<- desc_cat_tp(aus_ses_tp,"income_aus",aus_any_ids, "Household income (AUS)")
-
-ses_tp_long <- bind_rows(sa_edu_tp, sa_income_tp, aus_edu_tp, aus_income_tp) %>%
-  arrange(country, timepoint, variable, level)
 ```
 
 ::: {.landscape}
@@ -736,23 +675,20 @@ ses_tp_long <- bind_rows(sa_edu_tp, sa_income_tp, aus_edu_tp, aus_income_tp) %>%
 #| include: true
 #| ft.arraystretch: 1
 
-group_levels <- tp_sizes %>%
-  mutate(group = paste(country, timepoint, sep = " — ")) %>%
+# consistent column order
+group_levels <- bind_rows(
+  tp_age %>% distinct(country, timepoint),
+  tp_ef_desc %>% distinct(country, timepoint)
+) %>%
+  distinct(country, timepoint) %>%
+  mutate(
+    timepoint = factor(timepoint, levels = paste0("T", 1:10)),
+    group = paste(country, timepoint, sep = " — ")
+  ) %>%
   arrange(match(country, c("SA","Australia")), timepoint) %>%
-  pull(group) %>%
-  unique()
+  pull(group)
 
-metrics_long <- bind_rows(
-  tp_sizes %>%
-    mutate(group = paste(country, timepoint, sep = " — ")) %>%
-    transmute(section = "Sample size (anchored on any EF)", row = "EF anchor N", group,
-              value = as.character(n_children_any_ef)),
-
-  tp_sizes %>%
-    mutate(group = paste(country, timepoint, sep = " — ")) %>%
-    transmute(section = "Sample size (anchored on any EF)", row = "EF complete N (%)", group,
-              value = paste0(n_complete_ef, " (", pct_complete_ef, "%)")),
-
+metrics1_long <- bind_rows(
   tp_age %>%
     mutate(group = paste(country, timepoint, sep = " — ")) %>%
     transmute(section = "Age", row = "Age (years), Mean (SD)", group,
@@ -776,35 +712,16 @@ metrics_long <- bind_rows(
               value = fmt_mean_sd(mean, sd, digits = 2))
 )
 
-metrics_wide <- metrics_long %>%
+paper_table1 <- metrics1_long %>%
   mutate(group = factor(group, levels = group_levels)) %>%
   select(section, row, group, value) %>%
-  pivot_wider(names_from = group, values_from = value) %>%
+  tidyr::pivot_wider(names_from = group, values_from = value) %>%
   arrange(section, row)
 
-ses_wide <- ses_tp_long %>%
-  mutate(group = paste(country, timepoint, sep = " — "),
-         group = factor(group, levels = group_levels)) %>%
-  transmute(section = variable, row = level, group, value = cell) %>%
-  pivot_wider(names_from = group, values_from = value) %>%
-  arrange(section, row)
-
-paper_table <- bind_rows(metrics_wide, ses_wide) %>%
-  mutate(section = factor(section, levels = c(
-    "Sample size (anchored on any EF)",
-    "Age",
-    "Executive function",
-    "Caregiver education (SA)",
-    "Caregiver education (AUS)",
-    "Household income (SA)",
-    "Household income (AUS)"
-  ))) %>%
-  arrange(section, row)
-
-paper_gt <- paper_table %>%
+gt1 <- paper_table1 %>%
   gt(groupname_col = "section", rowname_col = "row") %>%
   tab_header(
-    title = "Table 1. Sample characteristics by country and timepoint",
+    title = "Table 1. Age and executive function by country and timepoint",
     subtitle = "All summaries are anchored to children with any EF observed at that timepoint (partial EF allowed)."
   ) %>%
   cols_align(align = "center") %>%
@@ -817,7 +734,122 @@ paper_gt <- paper_table %>%
     style = cell_text(weight = "bold"),
     locations = cells_row_groups()
   )
-paper_gt
+
+gt1
+
+```
+:::
+
+```{r}
+#| label: summarise-table2-components
+#| include: false
+
+# Categorical SES (anchored)
+sa_edu_tp    <- desc_cat_tp(sa_ses,     "edu_sa",     sa_any_ids,  "Caregiver education (SA)")
+aus_edu_tp   <- desc_cat_tp(aus_ses_tp, "edu_aus",    aus_any_ids, "Caregiver education (AUS)")
+aus_income_tp<- desc_cat_tp(aus_ses_tp, "income_aus", aus_any_ids, "Household income (AUS)")
+
+ses_tp_long2 <- bind_rows(sa_edu_tp, aus_edu_tp, aus_income_tp) %>%
+  arrange(country, timepoint, variable, level)
+
+# Continuous SES + HLE (anchored; SA only variables will be NA for AUS columns)
+tp_assets <- summ_cont_tp(sa_ses, "nids_assets_sa", sa_any_ids,
+                          "Household assets score (SA; NIDS, 0–26)")
+
+tp_hle1 <- summ_cont_tp(sa_ses, "hla_frequency1", sa_any_ids,
+                        "HLE activity frequency (sum)")
+
+tp_hle2 <- summ_cont_tp(sa_ses, "num_caregivers_clean", sa_any_ids,
+                        "HLE: unique caregiver types involved")
+
+tp_hle3 <- summ_cont_tp(sa_ses, "books_toys_total1", sa_any_ids,
+                        "HLE: books/toys total")
+
+tp_hle4 <- summ_cont_tp(sa_ses, "time_total1", sa_any_ids,
+                        "HLE: time total")
+
+tp_cont2 <- bind_rows(tp_assets, tp_hle1, tp_hle2, tp_hle3, tp_hle4) %>%
+  arrange(country, timepoint, variable)
+
+```
+
+::: {.landscape}
+```{r}
+#| label: render-table2
+#| include: true
+
+# reuse same group_levels as Table 1 (recompute safely here)
+group_levels <- bind_rows(
+  tp_cont2 %>% distinct(country, timepoint),
+  ses_tp_long2 %>% distinct(country, timepoint)
+) %>%
+  distinct(country, timepoint) %>%
+  mutate(
+    timepoint = factor(timepoint, levels = paste0("T", 1:10)),
+    group = paste(country, timepoint, sep = " — ")
+  ) %>%
+  arrange(match(country, c("SA","Australia")), timepoint) %>%
+  pull(group)
+
+# Continuous block (assets + HLE)
+metrics2_long <- bind_rows(
+  tp_cont2 %>%
+    mutate(group = paste(country, timepoint, sep = " — ")) %>%
+    transmute(section = "Assets and home learning environment (continuous)",
+              row = paste0(variable, ", n"),
+              group,
+              value = as.character(n)),
+
+  tp_cont2 %>%
+    mutate(group = paste(country, timepoint, sep = " — ")) %>%
+    transmute(section = "Assets and home learning environment (continuous)",
+              row = paste0(variable, ", Mean (SD)"),
+              group,
+              value = fmt_mean_sd(mean, sd, digits = 2))
+)
+
+metrics2_wide <- metrics2_long %>%
+  mutate(group = factor(group, levels = group_levels)) %>%
+  select(section, row, group, value) %>%
+  tidyr::pivot_wider(names_from = group, values_from = value) %>%
+  arrange(section, row)
+
+# Categorical block (education + AUS income)
+ses2_wide <- ses_tp_long2 %>%
+  mutate(group = paste(country, timepoint, sep = " — "),
+         group = factor(group, levels = group_levels)) %>%
+  transmute(section = variable, row = level, group, value = cell) %>%
+  tidyr::pivot_wider(names_from = group, values_from = value) %>%
+  arrange(section, row)
+
+paper_table2 <- bind_rows(metrics2_wide, ses2_wide) %>%
+  mutate(section = factor(section, levels = c(
+    "Caregiver education (SA)",
+    "Caregiver education (AUS)",
+    "Household income (AUS)",
+    "Assets and home learning environment (continuous)"
+  ))) %>%
+  arrange(section, row)
+
+gt2 <- paper_table2 %>%
+  gt(groupname_col = "section", rowname_col = "row") %>%
+  tab_header(
+    title = "Table 2. Socioeconomic status and home learning environment by country and timepoint",
+    subtitle = "All summaries are anchored to children with any EF observed at that timepoint (partial EF allowed)."
+  ) %>%
+  cols_align(align = "center") %>%
+  tab_options(
+    table.width = pct(100),
+    row_group.as_column = TRUE,
+    table.font.size = px(11)
+  ) %>%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_row_groups()
+  )
+
+gt2
+
 ```
 :::
 
@@ -1244,7 +1276,121 @@ p_spaghetti
 
 
 
+```{r}
+#| label: excess-code
+#| include: false
+# excess code to be removed
+table(sa_data$hle_read_books)
+table(sa_data$hle_read_who___1)
+table(sa_data$hle_read_who___2)
+table(sa_data$hle_read_who___3)
+table(sa_data$hle_read_who___4)
+table(sa_data$hle_read_who___5)
+table(sa_data$hle_read_who___6)
+table(sa_data$hle_read_who___unk)
+table(sa_data$hle_read_who___na)
+table(sa_data$hle_read_who___999)
+table(sa_data$hle_read_who___9999)
+table(sa_data$hle_read_specify)
+table(sa_data$hle_stories)    
+table(sa_data$hle_stories_who___1)
+table(sa_data$hle_stories_who___2)
+table(sa_data$hle_stories_who___3)
+table(sa_data$hle_stories_who___4)
+table(sa_data$hle_stories_who___5)
+table(sa_data$hle_stories_who___6)
+table(sa_data$hle_stories_who___unk)
+table(sa_data$hle_stories_who___na)
+table(sa_data$hle_stories_who___999)
+table(sa_data$hle_stories_who___9999)
+table(sa_data$hle_stories_specify)
+table(sa_data$hle_songs)
+table(sa_data$hle_songs_who___1)
+table(sa_data$hle_songs_who___2)
+table(sa_data$hle_songs_who___3)
+table(sa_data$hle_songs_who___4)
+table(sa_data$hle_songs_who___5)
+table(sa_data$hle_songs_who___6)
+table(sa_data$hle_songs_who___unk)
+table(sa_data$hle_songs_who___na)
+table(sa_data$hle_songs_who___999)
+table(sa_data$hle_songs_who___9999)
+table(sa_data$hle_songs_specify)
+table(sa_data$hle_outside)
+table(sa_data$hle_outside_who___1)
+table(sa_data$hle_outside_who___2)
+table(sa_data$hle_outside_who___3)
+table(sa_data$hle_outside_who___4)
+table(sa_data$hle_outside_who___5)
+table(sa_data$hle_outside_who___6)
+table(sa_data$hle_outside_who___unk)
+table(sa_data$hle_outside_who___na)
+table(sa_data$hle_outside_who___999)
+table(sa_data$hle_outside_who___9999)
+table(sa_data$hle_outside_specify)
+table(sa_data$hle_play)
+table(sa_data$hle_play_who___1)
+table(sa_data$hle_play_who___2)
+table(sa_data$hle_play_who___3)
+table(sa_data$hle_play_who___4)
+table(sa_data$hle_play_who___5)
+table(sa_data$hle_play_who___6)
+table(sa_data$hle_play_who___unk)
+table(sa_data$hle_play_who___na)
+table(sa_data$hle_play_who___999)
+table(sa_data$hle_play_who___9999)
+table(sa_data$hle_play_specify)
+table(sa_data$hle_names)
+table(sa_data$hle_names_who___1)
+table(sa_data$hle_names_who___2)
+table(sa_data$hle_names_who___3)
+table(sa_data$hle_names_who___4)
+table(sa_data$hle_names_who___5)
+table(sa_data$hle_names_who___6)
+table(sa_data$hle_names_who___unk)
+table(sa_data$hle_names_who___na)
+table(sa_data$hle_names_who___999)
+table(sa_data$hle_names_who___999)
+table(sa_data$hle_names_specify)
+table(sa_data$hle_count)
+table(sa_data$hle_count_who___1)
+table(sa_data$hle_count_who___2)
+table(sa_data$hle_count_who___3)
+table(sa_data$hle_count_who___4)
+table(sa_data$hle_count_who___5)
+table(sa_data$hle_count_who___6)
+table(sa_data$hle_count_who___unk)
+table(sa_data$hle_count_who___na)
+table(sa_data$hle_count_who___999)
+table(sa_data$hle_count_who___9999)
+table(sa_data$hle_count_specify)
+table(sa_data$hle_draw)
+table(sa_data$hle_draw_who___1)
+table(sa_data$hle_draw_who___2)
+table(sa_data$hle_draw_who___3)
+table(sa_data$hle_draw_who___4)
+table(sa_data$hle_draw_who___5)
+table(sa_data$hle_draw_who___6)
+table(sa_data$hle_draw_who___unk)
+table(sa_data$hle_draw_who___na)
+table(sa_data$hle_draw_who___999)
+table(sa_data$hle_draw_who___9999)
+table(sa_data$hle_draw_specify)
+table(sa_data$hle_freqency_score)
+table(sa_data$hle_time_week)
+table(sa_data$hle_time_weekend)
+table(sa_data$total_time_with_child)
+table(sa_data$hle_books_home)
+table(sa_data$hle_books_number)
+table(sa_data$hle_homemade_toys)
+table(sa_data$hle_homemade_toys_specify)
+table(sa_data$hle_toys_shop)
+table(sa_data$hle_toys_shop_specify)
+table(sa_data$hle_household_objects)
+table(sa_data$hle_objects_specify)
+table(sa_data$books_toys_house_total)
 
+```
 
 
 
