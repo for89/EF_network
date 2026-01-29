@@ -438,9 +438,11 @@ third). Model estimation was restricted to EF-complete cases within each
 wave (all three EF nodes observed).
 
 Networks were estimated using BGGM::estimate for continuous-data GGMs
-(iter = 12,000; burn-in = 6,000; 4 chains). For each cohort-wave model,
-we extracted posterior draws of the 3×3 partial-correlation matrix and
-summarized each edge using the posterior median and 95\% credible
+(iter = 12,000; burn-in = 6,000; 4 chains) on EF node scores that were
+residualised for age and sex within each cohort × wave × node and then
+z-standardised within cohort × wave. For each cohort--wave model, we
+extracted posterior draws of the 3×3 partial-correlation matrix and
+summarised each edge using the posterior median and 95\% credible
 interval (CrI). To support inference about practical magnitude, we
 additionally computed a ROPE-style probability for each edge,
 P(\textbar r\textbar{} \textgreater{} 0.10), and defined edges as
@@ -449,36 +451,36 @@ P(\textbar r\textbar{} \textgreater{} 0.10), and defined edges as
 
 In Australia, the inhibition--working memory edge was robust across
 waves (T1: median r = 0.27, 95\% CrI {[}0.15, 0.39{]},
-P(\textbar r\textbar{} \textgreater{} 0.1) = 0.996; T2: median r = 0.31,
-95\% CrI {[}0.18, 0.43{]}, P(\textbar r\textbar{} \textgreater{} 0.1) =
-0.999; T3: median r = 0.30, 95\% CrI {[}0.11, 0.47{]},
-P(\textbar r\textbar{} \textgreater{} 0.1) = 0.982) and met the
+P(\textbar r\textbar{} \textgreater{} 0.1) = 0.998; T2: median r = 0.31,
+95\% CrI {[}0.18, 0.42{]}, P(\textbar r\textbar{} \textgreater{} 0.1) =
+1.000; T3: median r = 0.30, 95\% CrI {[}0.12, 0.47{]},
+P(\textbar r\textbar{} \textgreater{} 0.1) = 0.985) and met the
 predefined meaningfulness criterion at each wave (T1: TRUE; T2: TRUE;
 T3: TRUE). The cognitive flexibility--working memory edge was strongest
-at T1 (median r = 0.26, 95\% CrI {[}0.13, 0.37{]},
-P(\textbar r\textbar{} \textgreater{} 0.1) = 0.992) and remained
+at T1 (median r = 0.25, 95\% CrI {[}0.13, 0.37{]},
+P(\textbar r\textbar{} \textgreater{} 0.1) = 0.993) and remained
 positive at later waves (T2: median r = 0.19, 95\% CrI {[}0.06, 0.32{]},
-P(\textbar r\textbar{} \textgreater{} 0.1) = 0.909; T3: median r = 0.15,
+P(\textbar r\textbar{} \textgreater{} 0.1) = 0.910; T3: median r = 0.16,
 95\% CrI {[}-0.04, 0.34{]}, P(\textbar r\textbar{} \textgreater{} 0.1) =
-0.720), but did not consistently exceed the meaningfulness threshold at
+0.718), but did not consistently exceed the meaningfulness threshold at
 T2--T3. The inhibition--cognitive flexibility edge was comparatively
 weaker and more uncertain across waves (T1: median r = 0.05, 95\% CrI
 {[}-0.08, 0.18{]}, P(\textbar r\textbar{} \textgreater{} 0.1) = 0.248;
-T2: median r = 0.15, 95\% CrI {[}0.02, 0.28{]}, P(\textbar r\textbar{}
-\textgreater{} 0.1) = 0.764; T3: median r = 0.18, 95\% CrI {[}-0.01,
-0.36{]}, P(\textbar r\textbar{} \textgreater{} 0.1) = 0.807).
+T2: median r = 0.15, 95\% CrI {[}0.01, 0.28{]}, P(\textbar r\textbar{}
+\textgreater{} 0.1) = 0.762; T3: median r = 0.18, 95\% CrI {[}-0.01,
+0.37{]}, P(\textbar r\textbar{} \textgreater{} 0.1) = 0.810).
 
 In South Africa, posterior medians were generally small-to-moderate and
 positive across T1--T2 (T1: median r = 0.19, 95\% CrI {[}0.06, 0.32{]},
-P(\textbar r\textbar{} \textgreater{} 0.1) = 0.911, median r = 0.15,
-95\% CrI {[}0.01, 0.28{]}, P(\textbar r\textbar{} \textgreater{} 0.1) =
-0.768, median r = 0.13, 95\% CrI {[}-0.01, 0.26{]},
-P(\textbar r\textbar{} \textgreater{} 0.1) = 0.645; T2: median r = 0.10,
-95\% CrI {[}-0.05, 0.24{]}, P(\textbar r\textbar{} \textgreater{} 0.1) =
-0.517, median r = 0.19, 95\% CrI {[}0.04, 0.32{]},
-P(\textbar r\textbar{} \textgreater{} 0.1) = 0.884, median r = 0.11,
-95\% CrI {[}-0.03, 0.25{]}, P(\textbar r\textbar{} \textgreater{} 0.1) =
-0.564). However, no South Africa edge met the meaningfulness criterion
+P(\textbar r\textbar{} \textgreater{} 0.1) = 0.910, median r = 0.15,
+95\% CrI {[}0.02, 0.28{]}, P(\textbar r\textbar{} \textgreater{} 0.1) =
+0.769, median r = 0.12, 95\% CrI {[}-0.01, 0.26{]},
+P(\textbar r\textbar{} \textgreater{} 0.1) = 0.640; T2: median r = 0.10,
+95\% CrI {[}-0.04, 0.24{]}, P(\textbar r\textbar{} \textgreater{} 0.1) =
+0.509, median r = 0.19, 95\% CrI {[}0.04, 0.32{]},
+P(\textbar r\textbar{} \textgreater{} 0.1) = 0.876, median r = 0.11,
+95\% CrI {[}-0.04, 0.25{]}, P(\textbar r\textbar{} \textgreater{} 0.1) =
+0.568). However, no South Africa edge met the meaningfulness criterion
 (P(\textbar r\textbar{} \textgreater{} 0.10) \textgreater{} 0.95) at
 either wave. See Figure~\ref{fig-step1-edges-by-edge} for graphical
 representation.
@@ -486,7 +488,7 @@ representation.
 Overall, Step 1 indicates stronger and more consistent within-wave EF
 coupling in Australia---driven primarily by stable inhibition--working
 memory coupling---whereas South Africa shows weaker and/or less certain
-within-wave coupling under the preregistered ROPE decision rule.
+within-wave coupling under the ROPE decision rule.
 
 \begin{figure}
 
@@ -505,6 +507,92 @@ ROPE bounds (±0.10). Labels show P(\textbar r\textbar{} \textgreater{}
 \end{figure}%
 
 \clearpage
+
+To evaluate whether within-wave EF coupling changed over time within
+each cohort (RQ2), we quantified posterior changes in each edge between
+adjacent waves, defining Δr = r(tp2) − r(tp1). For each cohort ×
+contrast, we summarized Δr using the posterior median and 95\% credible
+interval (CrI), and computed a ROPE-style probability
+P(\textbar Δr\textbar{} \textgreater{} 0.10); changes were classified as
+meaningful where P(\textbar Δr\textbar{} \textgreater{} 0.10)
+\textgreater{} 0.95.
+
+In Australia, edge changes from T1 to T2 were modest and uncertain
+(inhibition--working memory: Δmedian r = 0.03, 95\% CrI {[}-0.14,
+0.21{]}, P(\textbar Δr\textbar{} \textgreater{} 0.1) = 0.294, P(Δr
+\textgreater{} 0) = 0.656 (n: 231→213); inhibition--cognitive
+flexibility: Δmedian r = 0.10, 95\% CrI {[}-0.09, 0.28{]},
+P(\textbar Δr\textbar{} \textgreater{} 0.1) = 0.503, P(Δr \textgreater{}
+0) = 0.847 (n: 231→213); cognitive flexibility--working memory: Δmedian
+r = -0.06, 95\% CrI {[}-0.24, 0.12{]}, P(\textbar Δr\textbar{}
+\textgreater{} 0.1) = 0.381, P(Δr \textgreater{} 0) = 0.249 (n:
+231→213)) and none met the predefined meaningful-change criterion
+(inhibition--working memory: FALSE; inhibition--cognitive flexibility:
+FALSE; cognitive flexibility--working memory: FALSE). From T2 to T3,
+changes remained small-to-moderate with credible intervals overlapping
+zero (inhibition--working memory: Δmedian r = -0.00, 95\% CrI {[}-0.22,
+0.20{]}, P(\textbar Δr\textbar{} \textgreater{} 0.1) = 0.365, P(Δr
+\textgreater{} 0) = 0.482 (n: 213→105); inhibition--cognitive
+flexibility: Δmedian r = 0.03, 95\% CrI {[}-0.20, 0.26{]},
+P(\textbar Δr\textbar{} \textgreater{} 0.1) = 0.411, P(Δr \textgreater{}
+0) = 0.615 (n: 213→105); cognitive flexibility--working memory: Δmedian
+r = -0.04, 95\% CrI {[}-0.27, 0.19{]}, P(\textbar Δr\textbar{}
+\textgreater{} 0.1) = 0.414, P(Δr \textgreater{} 0) = 0.377 (n:
+213→105)), and again no edge exceeded the meaningful-change threshold
+(inhibition--working memory: FALSE; inhibition--cognitive flexibility:
+FALSE; cognitive flexibility--working memory: FALSE).
+
+In South Africa (T2-T1), posterior changes were similarly small and
+uncertain (inhibition--working memory: Δmedian r = 0.03, 95\% CrI
+{[}-0.16, 0.23{]}, P(\textbar Δr\textbar{} \textgreater{} 0.1) = 0.340,
+P(Δr \textgreater{} 0) = 0.631 (n: 205→185); inhibition--cognitive
+flexibility: Δmedian r = -0.09, 95\% CrI {[}-0.29, 0.11{]},
+P(\textbar Δr\textbar{} \textgreater{} 0.1) = 0.493, P(Δr \textgreater{}
+0) = 0.178 (n: 205→185); cognitive flexibility--working memory: Δmedian
+r = -0.01, 95\% CrI {[}-0.21, 0.19{]}, P(\textbar Δr\textbar{}
+\textgreater{} 0.1) = 0.341, P(Δr \textgreater{} 0) = 0.452 (n:
+205→185)) and none met the meaningful-change criterion
+(inhibition--working memory: FALSE; inhibition--cognitive flexibility:
+FALSE; cognitive flexibility--working memory: FALSE). Overall, RQ2
+provides little evidence for practically meaningful within-cohort
+changes in EF coupling across waves under the ROPE decision rule. Refer
+to Figure~\ref{fig-step2-delta-edges} for graphical representation.
+
+\begin{figure}
+
+\caption{\label{fig-step2-delta-edges}RQ2: Change in within-wave EF
+coupling across adjacent waves. Points show posterior median Δr (tp2 −
+tp1); whiskers show 95\% credible intervals. Solid line = no change
+(Δr=0); dashed lines = ROPE bounds (±0.10). Labels show
+P(\textbar Δr\textbar{} \textgreater{} 0.10).}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{EF_network_analysis_files/figure-pdf/fig-step2-delta-edges-1.png}}
+
+}
+
+\end{figure}%
+
+\clearpage
+
+At T1, AU--SA differences were: inhibition--working memory (Δmedian r =
+0.12, 95\% CrI {[}-0.06, 0.30{]}, P(\textbar Δr\textbar{} \textgreater{}
+0.1) = 0.595, P(Δr \textgreater{} 0) = 0.906), inhibition--cognitive
+flexibility (Δmedian r = -0.14, 95\% CrI {[}-0.32, 0.05{]},
+P(\textbar Δr\textbar{} \textgreater{} 0.1) = 0.660, P(Δr \textgreater{}
+0) = 0.070), and cognitive flexibility--working memory (Δmedian r =
+0.13, 95\% CrI {[}-0.05, 0.31{]}, P(\textbar Δr\textbar{} \textgreater{}
+0.1) = 0.629, P(Δr \textgreater{} 0) = 0.918).
+
+At T2, AU--SA differences were: inhibition--working memory (Δmedian r =
+0.12, 95\% CrI {[}-0.07, 0.31{]}, P(\textbar Δr\textbar{} \textgreater{}
+0.1) = 0.599, P(Δr \textgreater{} 0) = 0.897), inhibition--cognitive
+flexibility (Δmedian r = 0.05, 95\% CrI {[}-0.15, 0.25{]},
+P(\textbar Δr\textbar{} \textgreater{} 0.1) = 0.378, P(Δr \textgreater{}
+0) = 0.686), and cognitive flexibility--working memory (Δmedian r =
+0.08, 95\% CrI {[}-0.12, 0.27{]}, P(\textbar Δr\textbar{} \textgreater{}
+0.1) = 0.455, P(Δr \textgreater{} 0) = 0.788).
 
 
 

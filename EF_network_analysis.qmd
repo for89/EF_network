@@ -1498,7 +1498,7 @@ fit_one <- function(df) {
     iter   = bggm_iter,
     burnin = bggm_burnin,
     chains = bggm_chains,
-    save   = TRUE   # <-- ADD THIS (critical)
+    save   = TRUE 
   )
 }
 
@@ -1746,19 +1746,19 @@ edge_report <- function(country, timepoint, edge, rope = 0.10,
 
 To characterize within-wave coupling among executive function (EF) domains, we estimated cohort- and wave-specific Gaussian graphical models (GGMs) in a Bayesian framework. Networks were fitted separately for each cohort × wave using three EF nodes—inhibition, cognitive flexibility, and working memory—with edges interpreted as partial correlations (associations between two EF domains conditional on the third). Model estimation was restricted to EF-complete cases within each wave (all three EF nodes observed).
 
-Networks were estimated using BGGM::estimate for continuous-data GGMs (iter = 12,000; burn-in = 6,000; 4 chains). For each cohort-wave model, we extracted posterior draws of the 3×3 partial-correlation matrix and summarized each edge using the posterior median and 95% credible interval (CrI). To support inference about practical magnitude, we additionally computed a ROPE-style probability for each edge, P(|r| > 0.10), and defined edges as “meaningful” where P(|r| > 0.10) > 0.95.
+Networks were estimated using BGGM::estimate for continuous-data GGMs (iter = 12,000; burn-in = 6,000; 4 chains) on EF node scores that were residualised for age and sex within each cohort × wave × node and then z-standardised within cohort × wave. For each cohort–wave model, we extracted posterior draws of the 3×3 partial-correlation matrix and summarised each edge using the posterior median and 95% credible interval (CrI). To support inference about practical magnitude, we additionally computed a ROPE-style probability for each edge, P(|r| > 0.10), and defined edges as “meaningful” where P(|r| > 0.10) > 0.95.
 
 In Australia, the inhibition–working memory edge was robust across waves (T1: `r edge_report("Australia", "T1", "Inhibition – Working memory")`; T2: `r edge_report("Australia", "T2", "Inhibition – Working memory")`; T3: `r edge_report("Australia", "T3", "Inhibition – Working memory")`) and met the predefined meaningfulness criterion at each wave (T1: `r edge_meaningful("Australia", "T1", "Inhibition – Working memory")`; T2: `r edge_meaningful("Australia", "T2", "Inhibition – Working memory")`; T3: `r edge_meaningful("Australia", "T3", "Inhibition – Working memory")`). The cognitive flexibility–working memory edge was strongest at T1 (`r edge_report("Australia", "T1", "Cognitive flexibility – Working memory")`) and remained positive at later waves (T2: `r edge_report("Australia", "T2", "Cognitive flexibility – Working memory")`; T3: `r edge_report("Australia", "T3", "Cognitive flexibility – Working memory")`), but did not consistently exceed the meaningfulness threshold at T2–T3. The inhibition–cognitive flexibility edge was comparatively weaker and more uncertain across waves (T1: `r edge_report("Australia", "T1", "Inhibition – Cognitive flexibility")`; T2: `r edge_report("Australia", "T2", "Inhibition – Cognitive flexibility")`; T3: `r edge_report("Australia", "T3", "Inhibition – Cognitive flexibility")`).
 
 In South Africa, posterior medians were generally small-to-moderate and positive across T1–T2 (T1: `r edge_report("SA", "T1", "Inhibition – Cognitive flexibility")`, `r edge_report("SA", "T1", "Inhibition – Working memory")`, `r edge_report("SA", "T1", "Cognitive flexibility – Working memory")`; T2: `r edge_report("SA", "T2", "Inhibition – Cognitive flexibility")`, `r edge_report("SA", "T2", "Inhibition – Working memory")`, `r edge_report("SA", "T2", "Cognitive flexibility – Working memory")`). However, no South Africa edge met the meaningfulness criterion (P(|r| > 0.10) > 0.95) at either wave. See @fig-step1-edges-by-edge for graphical representation.
 
-Overall, Step 1 indicates stronger and more consistent within-wave EF coupling in Australia—driven primarily by stable inhibition–working memory coupling—whereas South Africa shows weaker and/or less certain within-wave coupling under the preregistered ROPE decision rule.
+Overall, Step 1 indicates stronger and more consistent within-wave EF coupling in Australia—driven primarily by stable inhibition–working memory coupling—whereas South Africa shows weaker and/or less certain within-wave coupling under the ROPE decision rule.
 
 ```{r}
 #| label: fig-step1-edges-by-edge
 #| fig-cap: "Within-wave EF partial correlations by edge across time. Points show posterior medians; whiskers show 95% credible intervals. Solid line = 0; dashed lines = ROPE bounds (±0.10). Labels show P(|r| > 0.10)."
-#| fig-width: 7.5
-#| fig-height: 5.5
+#| fig-width: 8.5
+#| fig-height: 6
 
 edges_plot_df <- edges_step1 %>%
   mutate(
@@ -1814,6 +1814,552 @@ ggplot(edges_plot_df, aes(x = timepoint, y = median, group = country)) +
 ```
 
 \clearpage
+
+```{r}
+#| label: step2a-within-cohort-edge-change
+#| include: false
+
+# --- RQ2: within-cohort edge change across adjacent waves ---
+stopifnot(exists("fit_tbl"))
+stopifnot(exists("n_by_ct"))
+stopifnot(exists("get_pcor_draws"))
+stopifnot(exists("edge_pairs"))
+
+nodes <- c("ef_inhibition", "ef_cogflex", "ef_workingmem")
+
+# Quick diagnostic: which cohort×wave fits are missing?
+fit_status <- fit_tbl %>%
+  dplyr::mutate(is_null_fit = purrr::map_lgl(fit, is.null)) %>%
+  dplyr::select(country, timepoint, is_null_fit)
+
+fit_status
+
+# Helper: parse T1/T2/T3 into numeric order
+tp_num <- function(tp) suppressWarnings(as.integer(gsub("^T", "", as.character(tp))))
+
+# Safe posterior draw extraction (returns NULL if it can't extract)
+safe_get_draws <- purrr::possibly(
+  function(f) get_pcor_draws(f, nodes = nodes, min_iter = 5000),
+  otherwise = NULL
+)
+
+# 1) Extract posterior pcor draws where possible
+draws_by_ct <- fit_tbl %>%
+  dplyr::mutate(
+    timepoint = as.character(timepoint),
+    tp_n      = tp_num(timepoint),
+    draws     = purrr::map(fit, safe_get_draws),
+    is_null_draws = purrr::map_lgl(draws, is.null),
+    n_draws   = purrr::map_int(draws, ~ if (is.null(.x)) NA_integer_ else dim(.x)[1])
+  ) %>%
+  dplyr::arrange(country, tp_n)
+
+# Show which cohort×wave combos have draws
+draws_by_ct %>% dplyr::select(country, timepoint, tp_n, is_null_draws, n_draws)
+
+# 2) Build *adjacent* wave contrasts per cohort based on available draws
+#    (e.g., Australia: T2–T1 and/or T3–T2 if both exist; SA: T2–T1 if both exist)
+draw_pairs <- draws_by_ct %>%
+  dplyr::filter(!is_null_draws) %>%
+  dplyr::group_by(country) %>%
+  dplyr::arrange(tp_n, .by_group = TRUE) %>%
+  dplyr::mutate(
+    tp1    = dplyr::lag(timepoint),
+    tp2    = timepoint,
+    draws1 = dplyr::lag(draws),
+    draws2 = draws,
+    contrast = paste0(tp2, " \u2013 ", tp1)   # "T2 – T1"
+  ) %>%
+  dplyr::ungroup() %>%
+  dplyr::filter(!is.na(tp1)) %>%            # keep only pairs
+  dplyr::select(country, tp1, tp2, contrast, draws1, draws2)
+
+draw_pairs
+
+# If this is empty, you truly don't have adjacent-wave networks with complete cases
+stopifnot(nrow(draw_pairs) > 0)
+
+# 3) Summarise posterior deltas for each edge
+summ_delta_edges <- function(draws_tp1, draws_tp2, rope = 0.10) {
+  it <- min(dim(draws_tp1)[1], dim(draws_tp2)[1])
+  d1 <- draws_tp1[seq_len(it), , , drop = FALSE]
+  d2 <- draws_tp2[seq_len(it), , , drop = FALSE]
+
+  purrr::pmap_dfr(edge_pairs, function(i, j, edge_id, edge) {
+    delta <- d2[, i, j] - d1[, i, j]
+    tibble::tibble(
+      edge_id       = edge_id,
+      edge          = edge,
+      median        = median(delta),
+      crI_low       = unname(stats::quantile(delta, 0.025)),
+      crI_high      = unname(stats::quantile(delta, 0.975)),
+      p_abs_gt_rope = mean(abs(delta) > rope),
+      p_gt_0        = mean(delta > 0)
+    )
+  })
+}
+
+delta_edges_step2 <- draw_pairs %>%
+  dplyr::mutate(
+    out = purrr::map2(draws1, draws2, ~ summ_delta_edges(.x, .y, rope = 0.10))
+  ) %>%
+  tidyr::unnest(out)
+
+# 4) Add n per wave for context (same EF-complete network estimation sample)
+n_lookup <- n_by_ct %>%
+  dplyr::mutate(timepoint = as.character(timepoint)) %>%
+  dplyr::select(country, timepoint, n)
+
+delta_edges_step2 <- delta_edges_step2 %>%
+  dplyr::left_join(n_lookup %>% dplyr::rename(tp1 = timepoint, n_tp1 = n),
+                   by = c("country","tp1")) %>%
+  dplyr::left_join(n_lookup %>% dplyr::rename(tp2 = timepoint, n_tp2 = n),
+                   by = c("country","tp2")) %>%
+  dplyr::mutate(
+    meaningful_change = p_abs_gt_rope > 0.95
+  ) %>%
+  dplyr::arrange(country, contrast, edge)
+
+delta_edges_step2
+
+fit_tbl %>% count(country, timepoint)
+
+delta_edges_step2 %>%
+  select(country, contrast, edge, n_tp1, n_tp2,
+         median, crI_low, crI_high, p_abs_gt_rope, p_gt_0, meaningful_change) %>%
+  arrange(country, contrast, edge)
+
+```
+
+```{r}
+#| label: step2b-delta-reporting-helper
+#| include: false
+
+stopifnot(exists("delta_edges_step2"))
+
+fmt_num <- function(x, digits = 2) formatC(x, format = "f", digits = digits)
+fmt_p   <- function(x, digits = 3) formatC(x, format = "f", digits = digits)
+
+norm_country <- function(x) {
+  x <- trimws(as.character(x))
+  dplyr::case_when(
+    x %in% c("AU","AUS","Australia") ~ "Australia",
+    x %in% c("SA","South Africa","South_Africa","SouthAfrica") ~ "SA",
+    TRUE ~ x
+  )
+}
+
+norm_edge <- function(x) {
+  x <- trimws(as.character(x))
+  x <- gsub("\\s*[-\u2013\u2014]\\s*", " \u2013 ", x)
+  x
+}
+
+get_delta_edge <- function(country, contrast, edge, df = delta_edges_step2) {
+  country_in  <- norm_country(country)
+  contrast_in <- trimws(as.character(contrast))
+  edge_in     <- trimws(as.character(edge))
+
+  df2 <- df %>%
+    dplyr::mutate(
+      country   = norm_country(.data$country),
+      contrast  = trimws(as.character(.data$contrast)),
+      edge      = norm_edge(.data$edge),
+      edge_id   = trimws(as.character(.data$edge_id))
+    )
+
+  use_edge_id <- edge_in %in% df2$edge_id
+
+  out <- if (use_edge_id) {
+    df2 %>% dplyr::filter(country == country_in, contrast == contrast_in, edge_id == edge_in)
+  } else {
+    edge_key <- norm_edge(edge_in)
+    df2 %>% dplyr::filter(country == country_in, contrast == contrast_in, edge == edge_key)
+  }
+
+  if (nrow(out) != 1) stop("Expected 1 row; found ", nrow(out), " for: ", country, " / ", contrast, " / ", edge)
+  out
+}
+
+delta_report <- function(country, contrast, edge, rope = 0.10, r_digits = 2, p_digits = 3) {
+  r <- get_delta_edge(country, contrast, edge)
+  paste0(
+    "Δmedian r = ", fmt_num(r$median, r_digits),
+    ", 95% CrI [", fmt_num(r$crI_low, r_digits), ", ", fmt_num(r$crI_high, r_digits), "]",
+    ", P(|Δr| > ", rope, ") = ", fmt_p(r$p_abs_gt_rope, p_digits),
+    ", P(Δr > 0) = ", fmt_p(r$p_gt_0, p_digits),
+    " (n: ", r$n_tp1, "→", r$n_tp2, ")"
+  )
+}
+
+delta_meaningful <- function(country, contrast, edge, threshold = 0.95) {
+  get_delta_edge(country, contrast, edge)$p_abs_gt_rope > threshold
+}
+```
+
+To evaluate whether within-wave EF coupling changed over time within each cohort (RQ2), we quantified posterior changes in each edge between adjacent waves, defining Δr = r(tp2) − r(tp1). For each cohort × contrast, we summarized Δr using the posterior median and 95% credible interval (CrI), and computed a ROPE-style probability P(|Δr| > 0.10); changes were classified as meaningful where P(|Δr| > 0.10) > 0.95.
+
+In Australia, edge changes from T1 to T2 were modest and uncertain (inhibition–working memory: `r delta_report("Australia", "T2 – T1", "Inhibition – Working memory")`; inhibition–cognitive flexibility: `r delta_report("Australia", "T2 – T1", "Inhibition – Cognitive flexibility")`; cognitive flexibility–working memory: `r delta_report("Australia", "T2 – T1", "Cognitive flexibility – Working memory")`) and none met the predefined meaningful-change criterion (inhibition–working memory: `r delta_meaningful("Australia", "T2 – T1", "Inhibition – Working memory")`; inhibition–cognitive flexibility: `r delta_meaningful("Australia", "T2 – T1", "Inhibition – Cognitive flexibility")`; cognitive flexibility–working memory: `r delta_meaningful("Australia", "T2 – T1", "Cognitive flexibility – Working memory")`). From T2 to T3, changes remained small-to-moderate with credible intervals overlapping zero (inhibition–working memory: `r delta_report("Australia", "T3 – T2", "Inhibition – Working memory")`; inhibition–cognitive flexibility: `r delta_report("Australia", "T3 – T2", "Inhibition – Cognitive flexibility")`; cognitive flexibility–working memory: `r delta_report("Australia", "T3 – T2", "Cognitive flexibility – Working memory")`), and again no edge exceeded the meaningful-change threshold (inhibition–working memory: `r delta_meaningful("Australia", "T3 – T2", "Inhibition – Working memory")`; inhibition–cognitive flexibility: `r delta_meaningful("Australia", "T3 – T2", "Inhibition – Cognitive flexibility")`; cognitive flexibility–working memory: `r delta_meaningful("Australia", "T3 – T2", "Cognitive flexibility – Working memory")`).
+
+In South Africa (T2-T1), posterior changes were similarly small and uncertain (inhibition–working memory: `r delta_report("SA", "T2 – T1", "Inhibition – Working memory")`; inhibition–cognitive flexibility: `r delta_report("SA", "T2 – T1", "Inhibition – Cognitive flexibility")`; cognitive flexibility–working memory: `r delta_report("SA", "T2 – T1", "Cognitive flexibility – Working memory")`) and none met the meaningful-change criterion (inhibition–working memory: `r delta_meaningful("SA", "T2 – T1", "Inhibition – Working memory")`; inhibition–cognitive flexibility: `r delta_meaningful("SA", "T2 – T1", "Inhibition – Cognitive flexibility")`; cognitive flexibility–working memory: `r delta_meaningful("SA", "T2 – T1", "Cognitive flexibility – Working memory")`). Overall, RQ2 provides little evidence for practically meaningful within-cohort changes in EF coupling across waves under the ROPE decision rule. Refer to @fig-step2-delta-edges for graphical representation.
+
+```{r}
+#| label: fig-step2-delta-edges
+#| fig-cap: "RQ2: Change in within-wave EF coupling across adjacent waves. Points show posterior median Δr (tp2 − tp1); whiskers show 95% credible intervals. Solid line = no change (Δr=0); dashed lines = ROPE bounds (±0.10). Labels show P(|Δr| > 0.10)."
+#| fig-width: 8.5
+#| fig-height: 6
+
+stopifnot(exists("delta_edges_step2"))
+
+delta_plot_df <- delta_edges_step2 %>%
+  dplyr::mutate(
+    # consistent cohort labels
+    cohort = dplyr::case_when(
+      country %in% c("AU","AUS","Australia") ~ "Australia",
+      country %in% c("SA","South Africa") ~ "South Africa",
+      TRUE ~ as.character(country)
+    ),
+    cohort = factor(cohort, levels = c("Australia", "South Africa")),
+
+    # adjacent-wave contrasts shown on the x-axis
+    contrast = factor(contrast, levels = c("T2 – T1", "T3 – T2")),
+
+    # one panel per edge
+    edge = factor(edge, levels = c(
+      "Inhibition – Cognitive flexibility",
+      "Inhibition – Working memory",
+      "Cognitive flexibility – Working memory"
+    )),
+
+    # annotate posterior support for practically meaningful change
+    p_label = sprintf("P=%.2f", p_abs_gt_rope)
+  )
+
+pd <- position_dodge(width = 0.45)
+
+ggplot(delta_plot_df, aes(x = contrast, y = median, group = cohort)) +
+
+  # ---- Reference lines (explained in legend) ----
+  # Solid line at 0 = no change in the edge between waves
+  geom_hline(aes(yintercept = 0,     linetype = "No change (Δr = 0)"), alpha = 0.45) +
+  # Dashed lines at ±0.10 = ROPE bounds for practically meaningful change
+  geom_hline(aes(yintercept = 0.10,  linetype = "ROPE bounds (±0.10)"), alpha = 0.45) +
+  geom_hline(aes(yintercept = -0.10, linetype = "ROPE bounds (±0.10)"), alpha = 0.45) +
+
+  scale_linetype_manual(
+    name   = "Reference lines",
+    breaks = c("No change (Δr = 0)", "ROPE bounds (±0.10)"),
+    values = c("No change (Δr = 0)" = "solid", "ROPE bounds (±0.10)" = "dashed")
+  ) +
+
+  # Point estimates + uncertainty
+  geom_errorbar(
+    aes(ymin = crI_low, ymax = crI_high, colour = cohort),
+    width = 0.10, linewidth = 0.6, position = pd
+  ) +
+  geom_point(
+    aes(colour = cohort, shape = cohort),
+    size = 2.4, position = pd
+  ) +
+
+  # Posterior probability label for ROPE-style change
+  geom_label(
+    aes(label = p_label, colour = cohort),
+    position = pd,
+    nudge_y = 0.06,
+    size = 3,
+    label.size = 0,
+    fill = "white",
+    show.legend = FALSE,
+    na.rm = TRUE
+  ) +
+
+  facet_wrap(~ edge, ncol = 1) +
+  labs(
+    x = "Adjacent-wave contrast",
+    y = expression(Delta * " partial correlation (median ± 95% CrI)"),
+    colour = "Cohort",
+    shape  = "Cohort"
+  ) +
+  guides(
+    linetype = guide_legend(order = 1),
+    colour   = guide_legend(order = 2),
+    shape    = guide_legend(order = 2)
+  ) +
+  theme(legend.position = "bottom")
+```
+
+\clearpage
+
+```{r}
+#| label: step3a-rq3-cross-cohort-and-did
+#| include: false
+
+# rq3: cross-cohort differences at matched waves + DID for change T1→T2
+
+stopifnot(exists("fit_tbl"))
+stopifnot(exists("n_by_ct"))
+stopifnot(exists("get_pcor_draws"))
+stopifnot(exists("edge_pairs"))
+stopifnot(exists("norm_country"))
+stopifnot(exists("safe_get_draws"))  # from your Step 2 chunk (purrr::possibly wrapper)
+
+nodes <- c("ef_inhibition", "ef_cogflex", "ef_workingmem")
+rope  <- 0.10
+
+# helpers: extract draws + summarize edge contrasts
+
+# (A) get posterior draws for a given cohort×wave
+get_fit_ct <- function(country, timepoint) {
+  c_in <- norm_country(country)
+  t_in <- trimws(as.character(timepoint))
+
+  out <- fit_tbl %>%
+    dplyr::mutate(
+      country   = norm_country(.data$country),
+      timepoint = trimws(as.character(.data$timepoint))
+    ) %>%
+    dplyr::filter(country == c_in, timepoint == t_in)
+
+  if (nrow(out) != 1) {
+    stop("Expected exactly 1 fit for ", country, " ", timepoint, "; found ", nrow(out))
+  }
+  out$fit[[1]]
+}
+
+get_draws_ct <- function(country, timepoint) {
+  f <- get_fit_ct(country, timepoint)
+  d <- safe_get_draws(f)  # returns NULL if extraction fails
+  if (is.null(d)) stop("Could not extract posterior draws for ", country, " ", timepoint)
+  d
+}
+
+# (B) summarise an edge-wise contrast between two posterior draw arrays
+# draws_B - draws_A  (same ROPE logic as Step 2)
+summ_edge_contrast <- function(draws_A, draws_B, rope = 0.10) {
+  it <- min(dim(draws_A)[1], dim(draws_B)[1])
+  A  <- draws_A[seq_len(it), , , drop = FALSE]
+  B  <- draws_B[seq_len(it), , , drop = FALSE]
+
+  purrr::pmap_dfr(edge_pairs, function(i, j, edge_id, edge) {
+    d <- B[, i, j] - A[, i, j]
+    tibble::tibble(
+      edge_id       = edge_id,
+      edge          = edge,
+      median        = median(d),
+      crI_low       = unname(stats::quantile(d, 0.025)),
+      crI_high      = unname(stats::quantile(d, 0.975)),
+      p_abs_gt_rope = mean(abs(d) > rope),
+      p_gt_0        = mean(d > 0)
+    )
+  })
+}
+
+# extract draws for matched waves (T1, T2) in both cohorts
+needed <- tibble::tibble(
+  country   = c("Australia","Australia","SA","SA"),
+  timepoint = c("T1","T2","T1","T2")
+)
+
+draws_needed <- needed %>%
+  dplyr::mutate(
+    draws   = purrr::pmap(list(country, timepoint), get_draws_ct),
+    n_draws = purrr::map_int(draws, ~ dim(.x)[1])
+  )
+
+draws_needed
+
+# convenience accessors
+draws_AU_T1 <- draws_needed$draws[[which(draws_needed$country=="Australia" & draws_needed$timepoint=="T1")]]
+draws_AU_T2 <- draws_needed$draws[[which(draws_needed$country=="Australia" & draws_needed$timepoint=="T2")]]
+draws_SA_T1 <- draws_needed$draws[[which(draws_needed$country=="SA"        & draws_needed$timepoint=="T1")]]
+draws_SA_T2 <- draws_needed$draws[[which(draws_needed$country=="SA"        & draws_needed$timepoint=="T2")]]
+
+
+# cross-cohort differences at each matched wave: AU(Tk) - SA(Tk)
+delta_T1_AUvsSA <- summ_edge_contrast(draws_A = draws_SA_T1, draws_B = draws_AU_T1, rope = rope) %>%
+  dplyr::mutate(time_contrast = "AU – SA at T1")
+
+delta_T2_AUvsSA <- summ_edge_contrast(draws_A = draws_SA_T2, draws_B = draws_AU_T2, rope = rope) %>%
+  dplyr::mutate(time_contrast = "AU – SA at T2")
+
+cross_wave_step3 <- dplyr::bind_rows(delta_T1_AUvsSA, delta_T2_AUvsSA) %>%
+  dplyr::mutate(meaningful = p_abs_gt_rope > 0.95)
+
+cross_wave_step3
+
+# Difference-in-differences for change T1→T2: DID = (AU_T2 - AU_T1) - (SA_T2 - SA_T1)
+delta_AU_T12 <- draws_AU_T2 - draws_AU_T1
+delta_SA_T12 <- draws_SA_T2 - draws_SA_T1
+did_draws    <- delta_AU_T12 - delta_SA_T12
+
+# summarize DID per edge
+did_step3 <- summ_edge_contrast(
+  draws_A = array(0, dim = dim(did_draws)),  # baseline = 0, so this summarises did_draws - 0
+  draws_B = did_draws,
+  rope    = rope
+) %>%
+  dplyr::mutate(
+    time_contrast = "(T2 – T1)AU – (T2 – T1)SA",
+    meaningful    = p_abs_gt_rope > 0.95
+  )
+
+# Attach n's for context (NO join on timepoint; DID has no single wave)
+n_lookup <- n_by_ct %>%
+  dplyr::mutate(
+    country   = norm_country(country),
+    timepoint = as.character(timepoint)
+  )
+
+# one-row wide table: Australia_T1, Australia_T2, SA_T1, SA_T2
+n_wide_T12 <- n_lookup %>%
+  dplyr::filter(country %in% c("Australia","SA"), timepoint %in% c("T1","T2")) %>%
+  dplyr::transmute(key = paste0(country, "_", timepoint), n) %>%
+  tidyr::pivot_wider(names_from = key, values_from = n)
+
+# bind those n's onto every DID row
+did_step3 <- did_step3 %>%
+  dplyr::bind_cols(n_wide_T12) %>%
+  dplyr::rename(
+    n_AU_T1 = Australia_T1,
+    n_AU_T2 = Australia_T2,
+    n_SA_T1 = SA_T1,
+    n_SA_T2 = SA_T2
+  )
+
+did_step3
+
+# nice printouts
+cross_wave_step3 %>%
+  dplyr::select(time_contrast, edge, median, crI_low, crI_high, p_abs_gt_rope, p_gt_0, meaningful) %>%
+  dplyr::arrange(time_contrast, edge)
+
+did_step3 %>%
+  dplyr::select(time_contrast, edge, n_AU_T1, n_AU_T2, n_SA_T1, n_SA_T2,
+                median, crI_low, crI_high, p_abs_gt_rope, p_gt_0, meaningful) %>%
+  dplyr::arrange(edge)
+
+```
+
+
+```{r}
+#| label: step3b-rq3-reporting-helpers
+#| include: false
+
+stopifnot(exists("cross_wave_step3"))
+
+fmt_num <- function(x, digits = 2) formatC(x, format = "f", digits = digits)
+fmt_p   <- function(x, digits = 3) formatC(x, format = "f", digits = digits)
+
+# normalise dashes + spacing so "AU - SA at T1" and "AU – SA at T1" both work
+norm_contrast <- function(x) {
+  x <- trimws(as.character(x))
+  x <- gsub("\\s*[-\u2013\u2014]\\s*", " \u2013 ", x)
+  x
+}
+
+# reuse your existing normalisers if they exist, else define minimal versions
+if (!exists("norm_country")) {
+  norm_country <- function(x) {
+    x <- trimws(as.character(x))
+    dplyr::case_when(
+      x %in% c("AU","AUS","Australia") ~ "Australia",
+      x %in% c("SA","South Africa","South_Africa","SouthAfrica") ~ "SA",
+      TRUE ~ x
+    )
+  }
+}
+if (!exists("norm_edge")) {
+  norm_edge <- function(x) {
+    x <- trimws(as.character(x))
+    gsub("\\s*[-\u2013\u2014]\\s*", " \u2013 ", x)
+  }
+}
+
+get_cross_edge <- function(contrast, edge, df = cross_wave_step3) {
+  contrast_in <- norm_contrast(contrast)
+  edge_in     <- trimws(as.character(edge))
+
+  df2 <- df %>%
+    dplyr::mutate(
+      time_contrast = norm_contrast(.data$time_contrast),
+      edge          = norm_edge(.data$edge),
+      edge_id       = trimws(as.character(.data$edge_id))
+    )
+
+  use_edge_id <- edge_in %in% df2$edge_id
+
+  out <- if (use_edge_id) {
+    df2 %>% dplyr::filter(time_contrast == contrast_in, edge_id == edge_in)
+  } else {
+    df2 %>% dplyr::filter(time_contrast == contrast_in, edge == norm_edge(edge_in))
+  }
+
+  if (nrow(out) != 1) {
+    stop("Expected 1 row; found ", nrow(out), " for: ", contrast, " / ", edge)
+  }
+  out
+}
+
+cross_report <- function(contrast, edge, rope = 0.10, r_digits = 2, p_digits = 3) {
+  r <- get_cross_edge(contrast, edge)
+  paste0(
+    "Δmedian r = ", fmt_num(r$median, r_digits),
+    ", 95% CrI [", fmt_num(r$crI_low, r_digits), ", ", fmt_num(r$crI_high, r_digits), "]",
+    ", P(|Δr| > ", rope, ") = ", fmt_p(r$p_abs_gt_rope, p_digits),
+    ", P(Δr > 0) = ", fmt_p(r$p_gt_0, p_digits)
+  )
+}
+
+cross_meaningful <- function(contrast, edge, threshold = 0.95) {
+  get_cross_edge(contrast, edge)$p_abs_gt_rope > threshold
+}
+
+# ---- DID helpers (only if did_step3 exists) ----
+if (exists("did_step3")) {
+
+  get_did_edge <- function(edge, df = did_step3) {
+    edge_in <- trimws(as.character(edge))
+
+    df2 <- df %>%
+      dplyr::mutate(
+        edge    = norm_edge(.data$edge),
+        edge_id = trimws(as.character(.data$edge_id))
+      )
+
+    use_edge_id <- edge_in %in% df2$edge_id
+
+    out <- if (use_edge_id) {
+      df2 %>% dplyr::filter(edge_id == edge_in)
+    } else {
+      df2 %>% dplyr::filter(edge == norm_edge(edge_in))
+    }
+
+    if (nrow(out) != 1) stop("Expected 1 row; found ", nrow(out), " for DID edge: ", edge)
+    out
+  }
+
+  did_report <- function(edge, rope = 0.10, r_digits = 2, p_digits = 3) {
+    r <- get_did_edge(edge)
+    paste0(
+      "DID median = ", fmt_num(r$median, r_digits),
+      ", 95% CrI [", fmt_num(r$crI_low, r_digits), ", ", fmt_num(r$crI_high, r_digits), "]",
+      ", P(|DID| > ", rope, ") = ", fmt_p(r$p_abs_gt_rope, p_digits),
+      ", P(DID > 0) = ", fmt_p(r$p_gt_0, p_digits),
+      " (n AU: ", r$n_AU_T1, "→", r$n_AU_T2, "; SA: ", r$n_SA_T1, "→", r$n_SA_T2, ")"
+    )
+  }
+
+  did_meaningful <- function(edge, threshold = 0.95) {
+    get_did_edge(edge)$p_abs_gt_rope > threshold
+  }
+}
+
+```
+
+At T1, AU–SA differences were: inhibition–working memory (`r cross_report("AU – SA at T1", "Inhibition – Working memory")`), inhibition–cognitive flexibility (`r cross_report("AU – SA at T1", "Inhibition – Cognitive flexibility")`), and cognitive flexibility–working memory (`r cross_report("AU – SA at T1", "Cognitive flexibility – Working memory")`).
+
+At T2, AU–SA differences were: inhibition–working memory (`r cross_report("AU – SA at T2", "Inhibition – Working memory")`), inhibition–cognitive flexibility (`r cross_report("AU – SA at T2", "Inhibition – Cognitive flexibility")`), and cognitive flexibility–working memory (`r cross_report("AU – SA at T2", "Cognitive flexibility – Working memory")`).
 
 ```{r}
 #| label: excess-code
