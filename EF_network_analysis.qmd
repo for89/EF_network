@@ -7,7 +7,8 @@ author:
   orcid: 0000-0002-4355-9088 
   affiliations: 
     - ref: stanford
-  email: foreilly@stanford.edu
+    - ref: oxford
+  email: fionnuala.oreilly@psy.ox.ac.uk
   corresponding: true
 
 - name: "Jelena Sucevic" 
@@ -20,17 +21,27 @@ author:
   affiliations:
     - ref: witwatersrand
     
-- name: "Catherine Draper"
+- name: "Justin E. Karr"
+  orcid: 0000-0003-3653-332X
+  affiliations:
+    - ref: kentucky
+    
+- name: "Philippe Rast"
+  orcid: 0000-0003-3630-6629
+  affiliations:
+    - ref: ucdavis
+    
+- name: "Catherine Draper*"
   orcid: 0000-0002-2885-437X
   affiliations:
     - ref: witwatersrand
 
-- name: "Steven Howard" 
+- name: "Steven Howard*" 
   orcid: 0000-0002-1258-3210 
   affiliations: 
     - ref: oxford
 
-- name: "Gaia Scerif" 
+- name: "Gaia Scerif*" 
   orcid: 0000-0002-6371-8874 
   affiliations: 
     - ref: oxford
@@ -42,6 +53,10 @@ affiliations:
     name: "University of Oxford" 
   - id: witwatersrand 
     name: "University of the Witwatersrand"
+  - id: kentucky
+    name: "University of Kentucky"
+  - id: ucdavis
+    name: "University of California, Davis"
 
 author-note: 
   disclosures: 
@@ -87,7 +102,7 @@ execute:
   cache: true
 ---
 
-```{r setup}
+```{r}
 #| label: packages
 #| include: false
 #| cache: false
@@ -187,6 +202,8 @@ length(cols)
 ncol(sa_data)
 
 colnames(sa_data)
+colnames(aus_data)
+
 ```
 
 ```{r}
@@ -443,6 +460,29 @@ desc_cat_tp <- function(df, var, any_ids, variable_label) {
       cell     = paste0(n, " (", sprintf("%.1f", pct), "%)")
     )
 }
+
+# Sex
+harmonise_sex_sa <- function(x) {
+  x <- as.character(x)
+  out <- dplyr::case_when(
+    is.na(x) | x == "" ~ "Missing",
+    x == "0" ~ "Female",   # swap if codebook says 0=Male
+    x == "1" ~ "Male",
+    TRUE ~ "Other/Unknown"
+  )
+  factor(out, levels = c("Female","Male","Other/Unknown","Missing"))
+}
+
+harmonise_sex_aus <- function(x) {
+  x <- as.character(x)
+  out <- dplyr::case_when(
+    is.na(x) | x == "" ~ "Missing",
+    x == "1" ~ "Male",     # swap if codebook says 1=Female
+    x == "2" ~ "Female",
+    TRUE ~ "Other/Unknown"
+  )
+  factor(out, levels = c("Female","Male","Other/Unknown","Missing"))
+}
 ```
 
 ```{r}
@@ -524,6 +564,15 @@ if ("interview_date" %in% names(sa_subset_long)) {
     arrange(redcap_event_name) %>%
     mutate(timepoint = paste0("T", row_number()))
 }
+
+sa_sex_long <- sa_subset_long %>%
+  left_join(sa_tp_map, by = "redcap_event_name") %>%
+  transmute(
+    country   = "SA",
+    timepoint = timepoint,
+    id        = caregiver_child_studyid,
+    sex       = harmonise_sex_sa(child_sex)
+  )
 
 # standardised anchor ids: country,timepoint,id
 sa_any_ids <- sa_any_ef_ids_by_tp %>%
@@ -630,6 +679,29 @@ aus_age_long <- aus_data %>%
 
 stopifnot(all(c("A2_MatEdu","A3_FamIncome") %in% names(aus_data)))
 
+# Sex
+sex_var_aus <- if ("Sex" %in% names(aus_data)) {
+  "Sex"
+} else if ("sex" %in% names(aus_data)) {
+  "sex"
+} else {
+  stop("Couldn't find sex variable in aus_data (expected sex or Sex).")
+}
+
+
+aus_sex_child <- aus_data %>%
+  mutate(id = as.character(.data[[id_var]])) %>%
+  filter(!is.na(id)) %>%
+  distinct(id, .keep_all = TRUE) %>%
+  transmute(
+    country = "Australia",
+    id,
+    sex = harmonise_sex_aus(.data[[sex_var_aus]])
+  )
+
+aus_sex_tp <- aus_any_ids %>%
+  left_join(aus_sex_child, by = c("country","id"))
+
 # child-level SES + HLE 
 aus_ses_child <- aus_data %>%
   mutate(id = as.character(.data[[id_var]])) %>%   # make id consistent
@@ -663,6 +735,12 @@ tp_age <- bind_rows(
   summ_age_long(aus_age_long, aus_any_ids)
 ) %>% arrange(country, timepoint)
 
+tp_sex <- bind_rows(
+  desc_cat_tp(sa_sex_long, "sex", sa_any_ids, variable_label = "Sex"),
+  desc_cat_tp(aus_sex_tp,  "sex", aus_any_ids, variable_label = "Sex")
+) %>%
+  arrange(match(country, c("SA","Australia")), timepoint, level)
+
 tp_ef_desc <- bind_rows(
   summ_ef_desc(sa_ef_long,  sa_any_ids),
   summ_ef_desc(aus_ef_long, aus_any_ids)
@@ -676,10 +754,10 @@ tp_ef_desc <- bind_rows(
 #| include: true
 #| ft.arraystretch: 1
 
-# consistent column order
 group_levels <- bind_rows(
   tp_age %>% distinct(country, timepoint),
-  tp_ef_desc %>% distinct(country, timepoint)
+  tp_ef_desc %>% distinct(country, timepoint),
+  tp_sex %>% distinct(country, timepoint)
 ) %>%
   distinct(country, timepoint) %>%
   mutate(
@@ -690,16 +768,7 @@ group_levels <- bind_rows(
   pull(group)
 
 metrics1_long <- bind_rows(
-  tp_age %>%
-    mutate(group = paste(country, timepoint, sep = " — ")) %>%
-    transmute(section = "Age", row = "Age (years), Mean (SD)", group,
-              value = fmt_mean_sd(age_mean, age_sd, digits = 2)),
-
-  tp_age %>%
-    mutate(group = paste(country, timepoint, sep = " — ")) %>%
-    transmute(section = "Age", row = "Age (years), Median [min, max]", group,
-              value = fmt_med_rng(age_median, age_min, age_max, digits = 2)),
-
+  # EF 
   tp_ef_desc %>%
     mutate(group = paste(country, timepoint, sep = " — "),
            domain = unname(ef_labels[as.character(variable)])) %>%
@@ -710,8 +779,31 @@ metrics1_long <- bind_rows(
     mutate(group = paste(country, timepoint, sep = " — "),
            domain = unname(ef_labels[as.character(variable)])) %>%
     transmute(section = "Executive function", row = paste0(domain, ", Mean (SD)"), group,
-              value = fmt_mean_sd(mean, sd, digits = 2))
+              value = fmt_mean_sd(mean, sd, digits = 2)),
+
+  # Age
+  tp_age %>%
+    mutate(group = paste(country, timepoint, sep = " — ")) %>%
+    transmute(section = "Age", row = "Age (years), Mean (SD)", group,
+              value = fmt_mean_sd(age_mean, age_sd, digits = 2)),
+
+  tp_age %>%
+    mutate(group = paste(country, timepoint, sep = " — ")) %>%
+    transmute(section = "Age", row = "Age (years), Median [min, max]", group,
+              value = fmt_med_rng(age_median, age_min, age_max, digits = 2)),
+
+  # Sex
+  tp_sex %>%
+    mutate(group = paste(country, timepoint, sep = " — ")) %>%
+    transmute(section = "Sex",
+              row     = paste0(level, ", n (%)"),
+              group,
+              value   = cell)
 )
+
+metrics1_long <- metrics1_long %>%
+  mutate(section = factor(section, levels = c("Executive function", "Age", "Sex")))
+
 
 paper_table1 <- metrics1_long %>%
   mutate(group = factor(group, levels = group_levels)) %>%
@@ -737,7 +829,6 @@ gt1 <- paper_table1 %>%
   )
 
 gt1
-
 ```
 :::
 
@@ -1310,8 +1401,419 @@ p_spaghetti <- ggplot(ef_restricted_lab, aes(x = timepoint, y = value_z, group =
   theme(legend.position = "none")
 p_spaghetti
 ```
+\clearpage
+
+```{r}
+#| label: step0-data-prep
+#| include: false
+
+# EF-complete per wave 
+ef_complete_ids <- ef_all %>%
+  dplyr::group_by(country, timepoint, id) %>%
+  dplyr::summarise(
+    n_nodes = dplyr::n_distinct(variable[!is.na(value)]),
+    .groups = "drop"
+  ) %>%
+  dplyr::filter(n_nodes == length(ef_levels)) %>%
+  dplyr::select(country, timepoint, id)
+
+# sex
+sex_all_tp <- dplyr::bind_rows(
+  sa_sex_long %>% dplyr::select(country, timepoint, id, sex),
+  aus_sex_tp  %>% dplyr::select(country, timepoint, id, sex)
+)
+
+# helper for within-group z
+z_within <- function(x) {
+  m <- mean(x, na.rm = TRUE)
+  s <- stats::sd(x, na.rm = TRUE)
+  if (is.na(s) || s == 0) return(rep(NA_real_, length(x)))
+  (x - m) / s
+}
+
+# residualize within wave + z-score within cohort×wave×node
+ef_net <- ef_all %>%
+  dplyr::inner_join(ef_complete_ids, by = c("country","timepoint","id")) %>%
+  dplyr::left_join(age_all %>% dplyr::select(country, timepoint, id, age),
+                   by = c("country","timepoint","id")) %>%
+  dplyr::left_join(sex_all_tp, by = c("country","timepoint","id")) %>%
+  dplyr::filter(!is.na(age), !is.na(sex)) %>%  # decision: require both for residualisation
+  dplyr::group_by(country, timepoint, variable) %>%
+  dplyr::group_modify(~{
+    d <- .x
+    fit <- stats::lm(value ~ age + sex, data = d)
+    d$resid <- stats::residuals(fit)
+    d
+  }) %>%
+  dplyr::ungroup() %>%
+  dplyr::group_by(country, timepoint, variable) %>%
+  dplyr::mutate(node = z_within(resid)) %>%
+  dplyr::ungroup()
+
+# wide, ready for BGGM per cohort×wave
+ef_net_wide <- ef_net %>%
+  dplyr::select(country, timepoint, id, variable, node) %>%
+  tidyr::pivot_wider(names_from = variable, values_from = node) %>%
+  dplyr::filter(dplyr::if_all(dplyr::all_of(ef_levels), ~ !is.na(.)))
+```
+
+```{r}
+#| label: step_1a-fit-bggm
+#| include: false
+
+nodes <- c("ef_inhibition", "ef_cogflex", "ef_workingmem")
+
+# checks
+stopifnot(exists("ef_net_wide"))
+stopifnot(all(c("country","timepoint","id", nodes) %in% names(ef_net_wide)))
+
+# split data by cohort × wave
+dat_split <- ef_net_wide %>%
+  select(country, timepoint, id, all_of(nodes)) %>%
+  group_by(country, timepoint) %>%
+  group_split()
+
+keys <- ef_net_wide %>%
+  distinct(country, timepoint) %>%
+  arrange(country, timepoint)
+
+# BGGM settings
+bggm_iter   <- 12000
+bggm_burnin <- 6000
+bggm_chains <- 4
+
+fit_one <- function(df) {
+  Y <- df %>%
+    dplyr::select(all_of(nodes)) %>%
+    dplyr::mutate(dplyr::across(dplyr::everything(), as.numeric)) %>%
+    as.matrix()
+
+  Y <- Y[stats::complete.cases(Y), , drop = FALSE]
+
+  if (nrow(Y) < 10) return(NULL)
+
+  BGGM::estimate(
+    Y,
+    type   = "continuous",
+    iter   = bggm_iter,
+    burnin = bggm_burnin,
+    chains = bggm_chains,
+    save   = TRUE   # <-- ADD THIS (critical)
+  )
+}
+
+ggm_fits_step1 <- purrr::map(dat_split, fit_one)
+
+# keep these objects explicit for Step 1C
+fit_tbl <- keys %>%
+  mutate(fit = ggm_fits_step1)
+
+# n used per cohort × wave in EF-complete network-estimation sample
+n_by_ct <- ef_net_wide %>%
+  dplyr::group_by(country, timepoint) %>%
+  dplyr::summarise(n = sum(if_all(all_of(nodes), ~ !is.na(.))), .groups = "drop")
+
+sapply(ef_net_wide[, nodes], class)
+```
+
+```{r}
+#| label: step1b-extract-pcor
+#| include: false
+
+nodes <- c("ef_inhibition", "ef_cogflex", "ef_workingmem")
+
+find_big_pcor <- function(x, p, min_iter = 1000) {
+  # Return the first "big" posterior pcor object found (array or matrix), else NULL
+  if (is.array(x) && is.numeric(x) && length(dim(x)) == 3) {
+    d <- dim(x)
+    # iter × p × p
+    if (d[1] >= min_iter && d[2] == p && d[3] == p) return(list(obj = x, kind = "iter_pp"))
+    # p × p × iter
+    if (d[3] >= min_iter && d[1] == p && d[2] == p) return(list(obj = x, kind = "pp_iter"))
+  }
+
+  if (is.matrix(x) && is.numeric(x)) {
+    # iter × choose(p,2)
+    if (nrow(x) >= min_iter && ncol(x) == choose(p,2)) return(list(obj = x, kind = "iter_edges"))
+  }
+
+  if (is.list(x)) {
+    for (k in seq_along(x)) {
+      out <- find_big_pcor(x[[k]], p = p, min_iter = min_iter)
+      if (!is.null(out)) return(out)
+    }
+  }
+
+  NULL
+}
+
+as_iter_pp <- function(found, p) {
+  obj <- found$obj
+  if (found$kind == "iter_pp") return(obj)
+  if (found$kind == "pp_iter") return(aperm(obj, c(3,1,2)))
+
+  # iter × edges (vech): fill into iter × p × p
+  if (found$kind == "iter_edges") {
+    it <- nrow(obj)
+    A  <- array(NA_real_, dim = c(it, p, p))
+    cmb <- combn(p, 2)
+    for (e in seq_len(ncol(cmb))) {
+      i <- cmb[1, e]; j <- cmb[2, e]
+      A[, i, j] <- obj[, e]
+      A[, j, i] <- obj[, e]
+    }
+    for (i in 1:p) A[, i, i] <- 1
+    return(A)
+  }
+
+  stop("Unhandled object kind.")
+}
+
+get_pcor_draws <- function(fit, nodes = nodes, min_iter = 5000) {
+  p <- length(nodes)  # <-- ADD THIS LINE (this is what your error is about)
+
+  # 1) search inside fit
+  found <- find_big_pcor(fit, p = p, min_iter = min_iter)
+  if (!is.null(found)) return(as_iter_pp(found, p))
+
+  # 2) search inside BGGM::pcor(fit)
+  pc_try <- try(BGGM::pcor(fit), silent = TRUE)
+  if (!inherits(pc_try, "try-error")) {
+    found <- find_big_pcor(pc_try, p = p, min_iter = min_iter)
+    if (!is.null(found)) return(as_iter_pp(found, p))
+  }
+
+  stop("Could not locate a large posterior sample of partial correlations. Inspect with: str(fit, max.level=3); str(BGGM::pcor(fit), max.level=3)")
+}
+dim(get_pcor_draws(fit_tbl$fit[[1]], nodes))
+
+```
+
+```{r}
+#| label: step1c-edge-summary
+#| include: false
+
+edge_pairs <- tibble::tribble(
+  ~i, ~j, ~edge_id,                 ~edge,
+  1, 2, "ef_inhibition__ef_cogflex", "Inhibition – Cognitive flexibility",
+  1, 3, "ef_inhibition__ef_workingmem", "Inhibition – Working memory",
+  2, 3, "ef_cogflex__ef_workingmem", "Cognitive flexibility – Working memory"
+)
+
+summ_edge <- function(draws, rope = 0.10) {
+  purrr::pmap_dfr(edge_pairs, function(i, j, edge_id, edge) {
+    samp <- draws[, i, j]
+    tibble::tibble(
+      edge_id   = edge_id,
+      edge      = edge,
+      median    = median(samp),
+      crI_low   = unname(quantile(samp, 0.025)),
+      crI_high  = unname(quantile(samp, 0.975)),
+      p_abs_gt_0.10 = mean(abs(samp) > rope),
+      p_abs_lt_0.10 = mean(abs(samp) < rope)
+    )
+  })
+}
 
 
+edges_step1 <- fit_tbl %>%
+  mutate(
+    draws = purrr::map(fit, ~ get_pcor_draws(.x, nodes)),
+    out   = purrr::map(draws, ~ summ_edge(.x, rope = 0.10))
+  )
+
+# NEW: sanity check (must be lots of posterior draws)
+draw_sizes <- purrr::map_int(edges_step1$draws, ~ dim(.x)[1])
+if (any(draw_sizes < 1000)) {
+  stop("Posterior draw extraction failed (too few draws). Inspect: str(fit_tbl$fit[[which.min(draw_sizes)]], max.level=3)")
+}
+
+edges_step1 <- edges_step1 %>%
+  tidyr::unnest(out) %>%
+  left_join(n_by_ct, by = c("country","timepoint")) %>%
+  arrange(country, timepoint, edge)
+
+edges_step1
+
+edges_step1 %>%
+  select(country, timepoint, edge, n, median, crI_low, crI_high, p_abs_gt_0.10, p_abs_lt_0.10) %>%
+  arrange(country, timepoint, edge)
+
+# flag meaningful edges
+edges_step1 %>%
+  mutate(meaningful = p_abs_gt_0.10 > 0.95) %>%
+  select(country, timepoint, edge, median, crI_low, crI_high, p_abs_gt_0.10, meaningful)
+```
+
+```{r}
+#| label: step1-reporting-helper
+#| include: false
+
+fmt_num <- function(x, digits = 2) formatC(x, format = "f", digits = digits)
+fmt_p   <- function(x, digits = 3) formatC(x, format = "f", digits = digits)
+
+# normalise common country codings
+norm_country <- function(x) {
+  x <- trimws(as.character(x))
+  dplyr::case_when(
+    x %in% c("AU","AUS","Australia") ~ "Australia",
+    x %in% c("SA","South Africa","South_Africa","SouthAfrica") ~ "SA",
+    TRUE ~ x
+  )
+}
+
+# normalise edge labels so hyphen/en-dash/em-dash all match
+norm_edge <- function(x) {
+  x <- trimws(as.character(x))
+  # replace any dash-like separator ( - , – , — ) with a standard " – "
+  x <- gsub("\\s*[-\u2013\u2014]\\s*", " \u2013 ", x)
+  x
+}
+
+get_edge <- function(country, timepoint, edge, df = edges_step1) {
+  country_in  <- norm_country(country)
+  timepoint_in <- trimws(as.character(timepoint))
+  edge_in     <- trimws(as.character(edge))
+
+  df2 <- df %>%
+    dplyr::mutate(
+      country   = norm_country(.data$country),
+      timepoint = trimws(as.character(.data$timepoint)),
+      edge      = norm_edge(.data$edge),
+      edge_id   = if ("edge_id" %in% names(df)) trimws(as.character(.data$edge_id)) else NA_character_
+    )
+
+  # decide whether 'edge' refers to edge_id or edge label
+  use_edge_id <- ("edge_id" %in% names(df2)) && (edge_in %in% df2$edge_id)
+
+  out <- if (use_edge_id) {
+    df2 %>%
+      dplyr::filter(
+        .data$country   == .env$country_in,
+        .data$timepoint == .env$timepoint_in,
+        .data$edge_id   == .env$edge_in
+      )
+  } else {
+    edge_key <- norm_edge(edge_in)
+    df2 %>%
+      dplyr::filter(
+        .data$country   == .env$country_in,
+        .data$timepoint == .env$timepoint_in,
+        .data$edge      == .env$edge_key
+      )
+  }
+
+  if (nrow(out) != 1) {
+    stop(
+      "Expected exactly 1 row for: ", country, " ", timepoint, " ", edge,
+      ". Found ", nrow(out), ".\n",
+      "Available countries: ", paste(sort(unique(df2$country)), collapse = ", "), "\n",
+      "Available timepoints: ", paste(sort(unique(df2$timepoint)), collapse = ", "), "\n",
+      "Example edge labels: ", paste(utils::head(sort(unique(df2$edge)), 3), collapse = " | "), "\n",
+      if ("edge_id" %in% names(df2)) paste0("Example edge_id: ", paste(utils::head(sort(unique(df2$edge_id)), 3), collapse = " | ")) else ""
+    )
+  }
+
+  out
+}
+
+edge_median <- function(country, timepoint, edge, digits = 2) {
+  fmt_num(get_edge(country, timepoint, edge)$median, digits)
+}
+
+edge_cri <- function(country, timepoint, edge, digits = 2) {
+  r <- get_edge(country, timepoint, edge)
+  paste0("[", fmt_num(r$crI_low, digits), ", ", fmt_num(r$crI_high, digits), "]")
+}
+
+edge_p_gt <- function(country, timepoint, edge, digits = 3) {
+  fmt_p(get_edge(country, timepoint, edge)$p_abs_gt_0.10, digits)
+}
+
+edge_meaningful <- function(country, timepoint, edge, threshold = 0.95) {
+  get_edge(country, timepoint, edge)$p_abs_gt_0.10 > threshold
+}
+
+edge_report <- function(country, timepoint, edge, rope = 0.10,
+                        r_digits = 2, p_digits = 3) {
+  paste0(
+    "median r = ", edge_median(country, timepoint, edge, r_digits),
+    ", 95% CrI ", edge_cri(country, timepoint, edge, r_digits),
+    ", P(|r| > ", rope, ") = ", edge_p_gt(country, timepoint, edge, p_digits)
+  )
+}
+```
+
+To characterize within-wave coupling among executive function (EF) domains, we estimated cohort- and wave-specific Gaussian graphical models (GGMs) in a Bayesian framework. Networks were fitted separately for each cohort × wave using three EF nodes—inhibition, cognitive flexibility, and working memory—with edges interpreted as partial correlations (associations between two EF domains conditional on the third). Model estimation was restricted to EF-complete cases within each wave (all three EF nodes observed).
+
+Networks were estimated using BGGM::estimate for continuous-data GGMs (iter = 12,000; burn-in = 6,000; 4 chains). For each cohort-wave model, we extracted posterior draws of the 3×3 partial-correlation matrix and summarized each edge using the posterior median and 95% credible interval (CrI). To support inference about practical magnitude, we additionally computed a ROPE-style probability for each edge, P(|r| > 0.10), and defined edges as “meaningful” where P(|r| > 0.10) > 0.95.
+
+In Australia, the inhibition–working memory edge was robust across waves (T1: `r edge_report("Australia", "T1", "Inhibition – Working memory")`; T2: `r edge_report("Australia", "T2", "Inhibition – Working memory")`; T3: `r edge_report("Australia", "T3", "Inhibition – Working memory")`) and met the predefined meaningfulness criterion at each wave (T1: `r edge_meaningful("Australia", "T1", "Inhibition – Working memory")`; T2: `r edge_meaningful("Australia", "T2", "Inhibition – Working memory")`; T3: `r edge_meaningful("Australia", "T3", "Inhibition – Working memory")`). The cognitive flexibility–working memory edge was strongest at T1 (`r edge_report("Australia", "T1", "Cognitive flexibility – Working memory")`) and remained positive at later waves (T2: `r edge_report("Australia", "T2", "Cognitive flexibility – Working memory")`; T3: `r edge_report("Australia", "T3", "Cognitive flexibility – Working memory")`), but did not consistently exceed the meaningfulness threshold at T2–T3. The inhibition–cognitive flexibility edge was comparatively weaker and more uncertain across waves (T1: `r edge_report("Australia", "T1", "Inhibition – Cognitive flexibility")`; T2: `r edge_report("Australia", "T2", "Inhibition – Cognitive flexibility")`; T3: `r edge_report("Australia", "T3", "Inhibition – Cognitive flexibility")`).
+
+In South Africa, posterior medians were generally small-to-moderate and positive across T1–T2 (T1: `r edge_report("SA", "T1", "Inhibition – Cognitive flexibility")`, `r edge_report("SA", "T1", "Inhibition – Working memory")`, `r edge_report("SA", "T1", "Cognitive flexibility – Working memory")`; T2: `r edge_report("SA", "T2", "Inhibition – Cognitive flexibility")`, `r edge_report("SA", "T2", "Inhibition – Working memory")`, `r edge_report("SA", "T2", "Cognitive flexibility – Working memory")`). However, no South Africa edge met the meaningfulness criterion (P(|r| > 0.10) > 0.95) at either wave. See @fig-step1-edges-by-edge for graphical representation.
+
+Overall, Step 1 indicates stronger and more consistent within-wave EF coupling in Australia—driven primarily by stable inhibition–working memory coupling—whereas South Africa shows weaker and/or less certain within-wave coupling under the preregistered ROPE decision rule.
+
+```{r}
+#| label: fig-step1-edges-by-edge
+#| fig-cap: "Within-wave EF partial correlations by edge across time. Points show posterior medians; whiskers show 95% credible intervals. Solid line = 0; dashed lines = ROPE bounds (±0.10). Labels show P(|r| > 0.10)."
+#| fig-width: 7.5
+#| fig-height: 5.5
+
+edges_plot_df <- edges_step1 %>%
+  mutate(
+    country   = factor(country, levels = c("Australia","SA")),
+    timepoint = factor(timepoint, levels = c("T1","T2","T3")),
+    edge      = factor(edge, levels = c(
+      "Inhibition – Cognitive flexibility",
+      "Inhibition – Working memory",
+      "Cognitive flexibility – Working memory"
+    )),
+    p_label = sprintf("P=%.2f", p_abs_gt_0.10)
+    )
+  
+pd <- position_dodge(width = 0.35)
+
+ggplot(edges_plot_df, aes(x = timepoint, y = median, group = country)) +
+  geom_hline(aes(yintercept = 0, linetype = "Zero"), alpha = 0.45) +
+  geom_hline(aes(yintercept = 0.10, linetype = "ROPE ±0.10"), alpha = 0.45) +
+  geom_hline(aes(yintercept = -0.10, linetype = "ROPE ±0.10"), alpha = 0.45) +
+  scale_linetype_manual(
+    name   = "Reference",
+    breaks = c("Zero", "ROPE ±0.10"),
+    values = c("Zero" = "solid", "ROPE ±0.10" = "dashed")
+  ) +
+  geom_errorbar(
+    aes(ymin = crI_low, ymax = crI_high, colour = country),
+    width = 0.10, linewidth = 0.6,
+    position = pd
+  ) +
+  geom_point(
+    aes(colour = country, shape = country),
+    size = 2.4,
+    position = pd
+  ) +
+  geom_label(
+    aes(label = p_label, colour = country),
+    position = pd,
+    nudge_y  = 0.06,
+    size     = 3,
+    label.size = 0,
+    fill = "white",
+    show.legend = FALSE,
+    na.rm = TRUE
+  ) +
+  facet_wrap(~ edge, ncol = 1) +
+  labs(
+    x = "Timepoint",
+    y = "Partial correlation (posterior median ± 95% CrI)",
+    colour = "Cohort",
+    shape  = "Cohort"
+  ) +
+  theme(legend.position = "bottom")
+```
+
+\clearpage
 
 ```{r}
 #| label: excess-code

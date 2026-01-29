@@ -133,8 +133,9 @@ Network Analysis Approach}
 
 
 
-\authorsnames[{1},{2},{3},{3},{2},{2}]{Fionnuala O'Reilly,Jelena
-Sucevic,Caylee Cook,Catherine Draper,Steven Howard,Gaia Scerif}
+\authorsnames[{1,2},{2},{3},{4},{5},{3},{2},{2}]{Fionnuala
+O'Reilly,Jelena Sucevic,Caylee Cook,Justin E. Karr,Philippe
+Rast,Catherine Draper*,Steven Howard*,Gaia Scerif*}
 
 
 
@@ -144,12 +145,13 @@ Sucevic,Caylee Cook,Catherine Draper,Steven Howard,Gaia Scerif}
 
 \authorsaffiliations{
 {Stanford University},{University of Oxford},{University of the
-Witwatersrand}}
+Witwatersrand},{University of Kentucky},{University of California,
+Davis}}
 
 
 
 
-\leftheader{O'Reilly, Sucevic, Cook, Draper, Howard and Scerif}
+\leftheader{O'Reilly, Sucevic, Cook, Karr, Rast, Draper*, Howard* and Scerif*}
 
 
 
@@ -160,16 +162,18 @@ Witwatersrand}}
 \authornote{\par{\addORCIDlink{Fionnuala
 O'Reilly}{0000-0002-4355-9088}}\par{\addORCIDlink{Jelena
 Sucevic}{0000-0001-5091-5434}}\par{\addORCIDlink{Caylee
-Cook}{0000-0001-9718-8887}}\par{\addORCIDlink{Catherine
-Draper}{0000-0002-2885-437X}}\par{\addORCIDlink{Steven
-Howard}{0000-0002-1258-3210}}\par{\addORCIDlink{Gaia
-Scerif}{0000-0002-6371-8874}} 
+Cook}{0000-0001-9718-8887}}\par{\addORCIDlink{Justin E.
+Karr}{0000-0003-3653-332X}}\par{\addORCIDlink{Philippe
+Rast}{0000-0003-3630-6629}}\par{\addORCIDlink{Catherine
+Draper*}{0000-0002-2885-437X}}\par{\addORCIDlink{Steven
+Howard*}{0000-0002-1258-3210}}\par{\addORCIDlink{Gaia
+Scerif*}{0000-0002-6371-8874}} 
 
 \par{   The author has no conflict of interest to declare. This work was
 supported by X.   }
 \par{Correspondence concerning this article should be addressed
 to Fionnuala
-O'Reilly, Email: \href{mailto:foreilly@stanford.edu}{foreilly@stanford.edu}}
+O'Reilly, Email: \href{mailto:fionnuala.oreilly@psy.ox.ac.uk}{fionnuala.oreilly@psy.ox.ac.uk}}
 }
 
 \makeatletter
@@ -294,15 +298,19 @@ O'Reilly, Email: \href{mailto:foreilly@stanford.edu}{foreilly@stanford.edu}}
 \toprule
 \multicolumn{2}{c}{} & Australia — T1 & Australia — T2 & Australia — T3 & SA — T1 & SA — T2 \\ 
 \midrule\addlinespace[2.5pt]
-{\bfseries \multirow[t]{2}{*}{Age}} & Age (years), Mean (SD) & 4.43 (0.38) & 4.99 (0.38) & 5.92 (0.33) & 4.71 (0.59) & 5.35 (0.57) \\ 
- & Age (years), Median [min, max] & 4.44 [3.20, 5.24] & 4.99 [3.74, 5.88] & 5.90 [5.27, 6.59] & 4.68 [2.80, 5.89] & 5.36 [3.54, 6.55] \\ 
-\midrule\addlinespace[2.5pt]
 {\bfseries \multirow[t]{6}{*}{Executive function}} & Cognitive flexibility, Mean (SD) & 4.69 (4.12) & 5.99 (4.01) & 8.76 (2.14) & 7.73 (2.15) & 8.16 (2.73) \\ 
  & Cognitive flexibility, n & 231 & 216 & 106 & 214 & 187 \\ 
  & Inhibition, Mean (SD) & 0.56 (0.19) & 0.70 (0.19) & 0.77 (0.17) & 0.59 (0.24) & 0.73 (0.21) \\ 
  & Inhibition, n & 232 & 215 & 105 & 213 & 188 \\ 
  & Working memory, Mean (SD) & 1.50 (0.95) & 1.82 (0.89) & 2.56 (0.79) & 1.55 (0.81) & 2.00 (0.83) \\ 
  & Working memory, n & 232 & 215 & 105 & 211 & 188 \\ 
+\midrule\addlinespace[2.5pt]
+{\bfseries \multirow[t]{2}{*}{Age}} & Age (years), Mean (SD) & 4.43 (0.38) & 4.99 (0.38) & 5.92 (0.33) & 4.71 (0.59) & 5.35 (0.57) \\ 
+ & Age (years), Median [min, max] & 4.44 [3.20, 5.24] & 4.99 [3.74, 5.88] & 5.90 [5.27, 6.59] & 4.68 [2.80, 5.89] & 5.36 [3.54, 6.55] \\ 
+\midrule\addlinespace[2.5pt]
+{\bfseries \multirow[t]{3}{*}{Sex}} & Female, n (\%) & 107 (46.1\%) & 101 (46.5\%) & 53 (50.0\%) & 103 (47.5\%) & 85 (44.7\%) \\ 
+ & Male, n (\%) & 125 (53.9\%) & 116 (53.5\%) & 53 (50.0\%) & 114 (52.5\%) & 104 (54.7\%) \\ 
+ & Missing, n (\%) & NA & NA & NA & NA & 1 (0.5\%) \\ 
 \bottomrule
 \end{tabular*}
 \end{table}
@@ -417,6 +425,86 @@ task (pooled).}
 }
 
 \end{figure}%
+
+\clearpage
+
+To characterize within-wave coupling among executive function (EF)
+domains, we estimated cohort- and wave-specific Gaussian graphical
+models (GGMs) in a Bayesian framework. Networks were fitted separately
+for each cohort × wave using three EF nodes---inhibition, cognitive
+flexibility, and working memory---with edges interpreted as partial
+correlations (associations between two EF domains conditional on the
+third). Model estimation was restricted to EF-complete cases within each
+wave (all three EF nodes observed).
+
+Networks were estimated using BGGM::estimate for continuous-data GGMs
+(iter = 12,000; burn-in = 6,000; 4 chains). For each cohort-wave model,
+we extracted posterior draws of the 3×3 partial-correlation matrix and
+summarized each edge using the posterior median and 95\% credible
+interval (CrI). To support inference about practical magnitude, we
+additionally computed a ROPE-style probability for each edge,
+P(\textbar r\textbar{} \textgreater{} 0.10), and defined edges as
+``meaningful'' where P(\textbar r\textbar{} \textgreater{} 0.10)
+\textgreater{} 0.95.
+
+In Australia, the inhibition--working memory edge was robust across
+waves (T1: median r = 0.27, 95\% CrI {[}0.15, 0.39{]},
+P(\textbar r\textbar{} \textgreater{} 0.1) = 0.996; T2: median r = 0.31,
+95\% CrI {[}0.18, 0.43{]}, P(\textbar r\textbar{} \textgreater{} 0.1) =
+0.999; T3: median r = 0.30, 95\% CrI {[}0.11, 0.47{]},
+P(\textbar r\textbar{} \textgreater{} 0.1) = 0.982) and met the
+predefined meaningfulness criterion at each wave (T1: TRUE; T2: TRUE;
+T3: TRUE). The cognitive flexibility--working memory edge was strongest
+at T1 (median r = 0.26, 95\% CrI {[}0.13, 0.37{]},
+P(\textbar r\textbar{} \textgreater{} 0.1) = 0.992) and remained
+positive at later waves (T2: median r = 0.19, 95\% CrI {[}0.06, 0.32{]},
+P(\textbar r\textbar{} \textgreater{} 0.1) = 0.909; T3: median r = 0.15,
+95\% CrI {[}-0.04, 0.34{]}, P(\textbar r\textbar{} \textgreater{} 0.1) =
+0.720), but did not consistently exceed the meaningfulness threshold at
+T2--T3. The inhibition--cognitive flexibility edge was comparatively
+weaker and more uncertain across waves (T1: median r = 0.05, 95\% CrI
+{[}-0.08, 0.18{]}, P(\textbar r\textbar{} \textgreater{} 0.1) = 0.248;
+T2: median r = 0.15, 95\% CrI {[}0.02, 0.28{]}, P(\textbar r\textbar{}
+\textgreater{} 0.1) = 0.764; T3: median r = 0.18, 95\% CrI {[}-0.01,
+0.36{]}, P(\textbar r\textbar{} \textgreater{} 0.1) = 0.807).
+
+In South Africa, posterior medians were generally small-to-moderate and
+positive across T1--T2 (T1: median r = 0.19, 95\% CrI {[}0.06, 0.32{]},
+P(\textbar r\textbar{} \textgreater{} 0.1) = 0.911, median r = 0.15,
+95\% CrI {[}0.01, 0.28{]}, P(\textbar r\textbar{} \textgreater{} 0.1) =
+0.768, median r = 0.13, 95\% CrI {[}-0.01, 0.26{]},
+P(\textbar r\textbar{} \textgreater{} 0.1) = 0.645; T2: median r = 0.10,
+95\% CrI {[}-0.05, 0.24{]}, P(\textbar r\textbar{} \textgreater{} 0.1) =
+0.517, median r = 0.19, 95\% CrI {[}0.04, 0.32{]},
+P(\textbar r\textbar{} \textgreater{} 0.1) = 0.884, median r = 0.11,
+95\% CrI {[}-0.03, 0.25{]}, P(\textbar r\textbar{} \textgreater{} 0.1) =
+0.564). However, no South Africa edge met the meaningfulness criterion
+(P(\textbar r\textbar{} \textgreater{} 0.10) \textgreater{} 0.95) at
+either wave. See Figure~\ref{fig-step1-edges-by-edge} for graphical
+representation.
+
+Overall, Step 1 indicates stronger and more consistent within-wave EF
+coupling in Australia---driven primarily by stable inhibition--working
+memory coupling---whereas South Africa shows weaker and/or less certain
+within-wave coupling under the preregistered ROPE decision rule.
+
+\begin{figure}
+
+\caption{\label{fig-step1-edges-by-edge}Within-wave EF partial
+correlations by edge across time. Points show posterior medians;
+whiskers show 95\% credible intervals. Solid line = 0; dashed lines =
+ROPE bounds (±0.10). Labels show P(\textbar r\textbar{} \textgreater{}
+0.10).}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{EF_network_analysis_files/figure-pdf/fig-step1-edges-by-edge-1.png}}
+
+}
+
+\end{figure}%
+
+\clearpage
 
 
 
