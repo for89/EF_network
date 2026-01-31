@@ -131,6 +131,7 @@ library(haven)
 library(readxl)
 library(tidyr)
 library(readr)
+library(gt)
 
 
 if (requireNamespace("conflicted", quietly = TRUE)) {
@@ -230,23 +231,23 @@ books_toys_vars <- c(
 # (4) Time total: week + weekend (each 1..3) 
 time_vars <- c("hle_time_week", "hle_time_weekend")
 
-# derive 1, 3 and 4
+# derive 1, 3 and 4 (NA only if ALL items missing; otherwise sum observed)
 sa_data <- sa_data %>%
-  mutate(
-    hla_frequency1 = if_else(
-      if_any(all_of(hla_freq_vars), is.na),
+  dplyr::mutate(
+    hla_frequency1 = dplyr::if_else(
+      dplyr::if_all(dplyr::all_of(hla_freq_vars), is.na),
       NA_real_,
-      rowSums(across(all_of(hla_freq_vars), to_num))
+      rowSums(dplyr::across(dplyr::all_of(hla_freq_vars), to_num), na.rm = TRUE)
     ),
-    books_toys_total1 = if_else(
-      if_any(all_of(books_toys_vars), is.na),
+    books_toys_total1 = dplyr::if_else(
+      dplyr::if_all(dplyr::all_of(books_toys_vars), is.na),
       NA_real_,
-      rowSums(across(all_of(books_toys_vars), to_num))
+      rowSums(dplyr::across(dplyr::all_of(books_toys_vars), to_num), na.rm = TRUE)
     ),
-    time_total1 = if_else(
-      if_any(all_of(time_vars), is.na),
+    time_total1 = dplyr::if_else(
+      dplyr::if_all(dplyr::all_of(time_vars), is.na),
       NA_real_,
-      rowSums(across(all_of(time_vars), to_num))
+      rowSums(dplyr::across(dplyr::all_of(time_vars), to_num), na.rm = TRUE)
     )
   )
 
@@ -256,11 +257,18 @@ who_all <- as.vector(sapply(
   function(a) paste0("hle_", a, "_who___", caregiver_codes)
 ))
 
-who_mat <- as.matrix(sa_data[, who_all, drop = FALSE])
-all_missing_who <- rowSums(!is.na(who_mat)) == 0
+who_mat <- sa_data %>% dplyr::select(dplyr::any_of(who_all)) %>% as.matrix()
+
+all_missing_who <- if (ncol(who_mat) == 0) {
+  rep(TRUE, nrow(sa_data))
+} else {
+  rowSums(!is.na(who_mat)) == 0
+}
 
 present_mat <- sapply(caregiver_codes, function(k) {
-  X <- as.matrix(sa_data[, paste0("hle_", activities, "_who___", k), drop = FALSE])
+  cols_k <- paste0("hle_", activities, "_who___", k)
+  X <- sa_data %>% dplyr::select(dplyr::any_of(cols_k)) %>% as.matrix()
+  if (ncol(X) == 0) return(rep(FALSE, nrow(sa_data)))
   X[is.na(X)] <- 0
   rowSums(X) > 0
 })
@@ -268,24 +276,31 @@ present_mat <- sapply(caregiver_codes, function(k) {
 sa_data$num_caregivers <- rowSums(present_mat)
 sa_data$num_caregivers[all_missing_who] <- NA_integer_
 
-# checks
-summary(sa_data$hla_frequency1)
-summary(sa_data$num_caregivers)
-summary(sa_data$books_toys_total1)
-summary(sa_data$time_total1)
-
-# distributions
-table(sa_data$hla_frequency1, useNA = "ifany")
-table(sa_data$num_caregivers, useNA = "ifany")
-table(sa_data$books_toys_total1, useNA = "ifany")
-table(sa_data$time_total1, useNA = "ifany")
-
-# consistency check: activities reported but "0 caregivers"
-with(sa_data, table(hla_frequency1 > 0, num_caregivers == 0, useNA = "ifany"))
+# # checks
+# summary(sa_data$hla_frequency1)
+# summary(sa_data$num_caregivers)
+# summary(sa_data$books_toys_total1)
+# summary(sa_data$time_total1)
+# 
+# # distributions
+# table(sa_data$hla_frequency1, useNA = "ifany")
+# table(sa_data$num_caregivers, useNA = "ifany")
+# table(sa_data$books_toys_total1, useNA = "ifany")
+# table(sa_data$time_total1, useNA = "ifany")
+# 
+# check: activities reported but "0 caregivers"
+if (interactive()) {
+  with(sa_data, table(num_caregivers > 0, hla_frequency1 == 0, useNA = "ifany"))
+  with(sa_data, table(num_caregivers > 0, is.na(hla_frequency1), useNA = "ifany"))
+}
 
 sa_data <- sa_data %>%
-  mutate(
-    num_caregivers_clean = ifelse(hla_frequency1 > 0 & num_caregivers == 0, NA_integer_, num_caregivers)
+  dplyr::mutate(
+    num_caregivers_clean = dplyr::if_else(
+      !is.na(hla_frequency1) & hla_frequency1 > 0 & num_caregivers == 0,
+      NA_integer_,
+      num_caregivers
+    )
   )
 
 sum(sa_data$hla_frequency1 > 0 & sa_data$num_caregivers == 0, na.rm = TRUE)
@@ -300,18 +315,22 @@ sum(sa_data$hla_frequency1 > 0 & is.na(sa_data$num_caregivers_clean), na.rm = TR
 asset_vars <- paste0("nids_items_", 1:26)
 
 sa_data <- sa_data %>%
-  mutate(
-    # optional: turn refuse/don't know into NA for clarity
-    across(all_of(asset_vars), ~ ifelse(.x %in% c(3L, 4L), NA_integer_, as.integer(.x))),
-    
-    # replicate the data dictionary scoring: count "Yes" (1) across 26 items
-    household_items_score_repl = rowSums(
-      across(all_of(asset_vars), ~ as.integer(.x == 1L)),
-      na.rm = TRUE
+  dplyr::mutate(
+    # re-code asset items: set refuse/don't know (3/4) to NA, otherwise keep integer
+    dplyr::across(
+      dplyr::all_of(asset_vars),
+      ~ dplyr::if_else(.x %in% c(3L, 4L), NA_integer_, as.integer(.x))
     ),
-    
-    # optional diagnostics
-    n_assets_answered = rowSums(!is.na(across(all_of(asset_vars))), na.rm = TRUE)
+
+    # diagnostics: number answered (non-missing) across the 26 items
+    n_assets_answered = rowSums(!is.na(as.matrix(dplyr::pick(dplyr::all_of(asset_vars))))),
+
+    # score: count "Yes" (== 1) across items, but only if >= 20 answered
+    household_items_score_repl = dplyr::if_else(
+      n_assets_answered < 20,
+      NA_real_,
+      rowSums(as.matrix(dplyr::pick(dplyr::all_of(asset_vars)) == 1L), na.rm = TRUE)
+    )
   )
 
 # quick check vs existing score (if present)
@@ -320,6 +339,11 @@ cor(sa_data$household_items_score, sa_data$household_items_score_repl,
 
 sum(!is.na(sa_data$household_items_score) & !is.na(sa_data$household_items_score_repl) &
       sa_data$household_items_score != sa_data$household_items_score_repl)
+
+# optional: inspect threshold behaviour
+table(sa_data$n_assets_answered < 20, useNA = "ifany")
+summary(sa_data$household_items_score_repl)
+
 
 ```
 
@@ -483,14 +507,12 @@ harmonise_sex_aus <- function(x) {
   )
   factor(out, levels = c("Female","Male","Other/Unknown","Missing"))
 }
+
 ```
 
 ```{r}
 #| label: build-sa-aus-objects
 #| include: false
-
-stopifnot(exists("sa_data"))
-stopifnot(exists("aus_data"))
 
 # SA: subset -> long -> anchor -> standard long objects
 eyt_vars <- c(
@@ -505,14 +527,14 @@ ses_vars <- c(
   "nids_income_4", "nids_income_5", "nids_income_6",
   "income_range", "monthly_income_given",
 
-  # NEW: NIDS assets-derived score
+  # NIDS assets-derived score
   "household_items_score_repl",
 
   # education etc
   "marital_status", "education_school", "education_post_school", "education_post_school_b",
   "children_in_house", "adults_in_house", "total_in_household",
 
-  # NEW: HLE derived vars
+  # HLE derived vars
   "hla_frequency1", "num_caregivers_clean", "books_toys_total1", "time_total1"
 )
 
@@ -525,105 +547,92 @@ id_vars <- c(
 )
 
 sa_subset_long <- sa_data %>%
-  select(any_of(c(id_vars, ses_vars, eyt_vars))) %>%
-  distinct(caregiver_child_studyid, redcap_event_name, .keep_all = TRUE)
+  dplyr::select(dplyr::any_of(c(id_vars, ses_vars, eyt_vars))) %>%
+  dplyr::distinct(caregiver_child_studyid, redcap_event_name, .keep_all = TRUE)
 
 ef_sa <- c("ef_inhibition", "ef_cogflex", "ef_workingmem")
 
-# native anchor (event + child)
+# Anchor: child×event where ANY EF node observed
 sa_any_ef_ids_by_tp <- sa_subset_long %>%
-  filter(if_any(all_of(ef_sa), ~ !is.na(.x))) %>%
-  distinct(redcap_event_name, caregiver_child_studyid)
+  dplyr::filter(dplyr::if_any(dplyr::all_of(ef_sa), ~ !is.na(.x))) %>%
+  dplyr::distinct(redcap_event_name, caregiver_child_studyid)
 
-# event -> timepoint map (single source of truth)
-if ("interview_date" %in% names(sa_subset_long)) {
-  sa_tp_map_tmp <- sa_subset_long %>%
-    distinct(redcap_event_name, interview_date) %>%
-    mutate(interview_date = suppressWarnings(as.Date(interview_date))) %>%
-    group_by(redcap_event_name) %>%
-    summarise(first_date = suppressWarnings(min(interview_date, na.rm = TRUE)), .groups = "drop") %>%
-    mutate(first_date = ifelse(is.infinite(first_date), as.Date(NA), as.Date(first_date)))
+sa_tp_map <- sa_subset_long %>%
+  dplyr::distinct(redcap_event_name) %>%
+  dplyr::mutate(
+    timepoint = dplyr::case_when(
+      redcap_event_name == "data_collection_20_arm_1"  ~ "T1",
+      redcap_event_name == "data_collection_20_arm_1b" ~ "T2",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  dplyr::filter(!is.na(timepoint)) %>%
+  dplyr::select(redcap_event_name, timepoint)
 
-  use_dates <- any(!is.na(sa_tp_map_tmp$first_date))
+# optional: assert you got exactly 2 timepoints
+stopifnot(nrow(sa_tp_map) == 2)
+stopifnot(all(c("T1","T2") %in% sa_tp_map$timepoint))
 
-  sa_tp_map <- if (use_dates) {
-    sa_tp_map_tmp %>%
-      inner_join(distinct(sa_any_ef_ids_by_tp, redcap_event_name), by = "redcap_event_name") %>%
-      arrange(first_date, redcap_event_name) %>%
-      mutate(timepoint = paste0("T", row_number())) %>%
-      select(redcap_event_name, timepoint)
-  } else {
-    sa_any_ef_ids_by_tp %>%
-      distinct(redcap_event_name) %>%
-      arrange(redcap_event_name) %>%
-      mutate(timepoint = paste0("T", row_number()))
-  }
-} else {
-  sa_tp_map <- sa_any_ef_ids_by_tp %>%
-    distinct(redcap_event_name) %>%
-    arrange(redcap_event_name) %>%
-    mutate(timepoint = paste0("T", row_number()))
-}
-
+# Sex long (wave-level)
 sa_sex_long <- sa_subset_long %>%
-  left_join(sa_tp_map, by = "redcap_event_name") %>%
-  transmute(
+  dplyr::left_join(sa_tp_map, by = "redcap_event_name") %>%
+  dplyr::transmute(
     country   = "SA",
     timepoint = timepoint,
     id        = caregiver_child_studyid,
     sex       = harmonise_sex_sa(child_sex)
   )
 
-# standardised anchor ids: country,timepoint,id
+# Standardised anchor ids: country,timepoint,id (EF-anchored)
 sa_any_ids <- sa_any_ef_ids_by_tp %>%
-  left_join(sa_tp_map, by = "redcap_event_name") %>%
-  transmute(country = "SA", timepoint, id = caregiver_child_studyid)
+  dplyr::left_join(sa_tp_map, by = "redcap_event_name") %>%
+  dplyr::transmute(country = "SA", timepoint, id = caregiver_child_studyid)
 
-# SA EF long (standard)
+# SA EF long (standard; EF-anchored)
 sa_ef_long <- sa_subset_long %>%
-  inner_join(sa_any_ef_ids_by_tp, by = c("redcap_event_name","caregiver_child_studyid")) %>%
-  left_join(sa_tp_map, by = "redcap_event_name") %>%
-  transmute(
+  dplyr::inner_join(sa_any_ef_ids_by_tp, by = c("redcap_event_name","caregiver_child_studyid")) %>%
+  dplyr::left_join(sa_tp_map, by = "redcap_event_name") %>%
+  dplyr::transmute(
     country   = "SA",
     timepoint = timepoint,
     id        = caregiver_child_studyid,
-    across(all_of(ef_sa), as.numeric)
+    dplyr::across(dplyr::all_of(ef_sa), as.numeric)
   ) %>%
-  pivot_longer(cols = all_of(ef_sa), names_to = "variable", values_to = "value") %>%
-  select(country, timepoint, id, variable, value)
+  tidyr::pivot_longer(cols = dplyr::all_of(ef_sa), names_to = "variable", values_to = "value") %>%
+  dplyr::select(country, timepoint, id, variable, value)
 
-# SA age long (standard; anchoring happens later)
+# SA age long (standard; NOT EF-anchored here)
 sa_age_long <- sa_subset_long %>%
-  left_join(sa_tp_map, by = "redcap_event_name") %>%
-  transmute(
+  dplyr::left_join(sa_tp_map, by = "redcap_event_name") %>%
+  dplyr::transmute(
     country   = "SA",
     timepoint = timepoint,
     id        = caregiver_child_studyid,
     age       = as.numeric(child_age)
   )
 
-# SA SES (standard; NO harmonising; anchoring happens later)
+# SA SES long (standard; NOT EF-anchored here)
 sa_ses <- sa_subset_long %>%
-  left_join(sa_tp_map, by = "redcap_event_name") %>%
-  transmute(
+  dplyr::left_join(sa_tp_map, by = "redcap_event_name") %>%
+  dplyr::transmute(
     country   = "SA",
     timepoint = timepoint,
     id        = caregiver_child_studyid,
 
-    # caregiver education
-    edu_sa    = if_else(education_post_school == 1,
-                        as.integer(education_post_school_b),
-                        NA_integer_),
+    edu_sa = dplyr::if_else(
+      education_post_school == 1,
+      as.integer(education_post_school_b),
+      NA_integer_
+    ),
 
-    # "income derived from NIDS" (assets score)
     nids_assets_sa = as.numeric(household_items_score_repl),
 
-    # HLE
     hla_frequency1       = as.numeric(hla_frequency1),
     num_caregivers_clean = as.numeric(num_caregivers_clean),
     books_toys_total1    = as.numeric(books_toys_total1),
     time_total1          = as.numeric(time_total1)
   )
+
 
 # AUS: wide -> standard EF long + anchors + age + SES
 id_var <- if ("CID" %in% names(aus_data)) "CID" else "ServiceID"
@@ -636,48 +645,46 @@ ef_vars <- c(t1_vars, t2_vars, t3_vars)
 stopifnot(all(ef_vars %in% names(aus_data)))
 
 aus_ef_long <- aus_data %>%
-  mutate(id = as.character(.data[[id_var]])) %>%
-  filter(!is.na(id)) %>%
-  select(id, all_of(ef_vars)) %>%
-  pivot_longer(
+  dplyr::mutate(id = as.character(.data[[id_var]])) %>%
+  dplyr::filter(!is.na(id)) %>%
+  dplyr::select(id, dplyr::all_of(ef_vars)) %>%
+  tidyr::pivot_longer(
     cols = -id,
     names_to = c("measure", "wave"),
     names_pattern = "^(.*)_T([123])$",
     values_to = "value"
   ) %>%
-  mutate(
-    country   = "Australia",
+  dplyr::mutate(
+    country   = "AU",
     timepoint = paste0("T", wave),
-    variable  = recode(measure,
+    variable  = dplyr::recode(measure,
       "MrAnt_Pt" = "ef_workingmem",
       "GNG_IC"   = "ef_inhibition",
       "CS_SwAcc" = "ef_cogflex"
     ),
     value = as.numeric(value)
   ) %>%
-  select(country, timepoint, id, variable, value)
+  dplyr::select(country, timepoint, id, variable, value)
 
 aus_any_ids <- aus_ef_long %>%
-  group_by(country, timepoint, id) %>%
-  summarise(any_ef = any(!is.na(value)), .groups = "drop") %>%
-  filter(any_ef) %>%
-  select(country, timepoint, id)
+  dplyr::group_by(country, timepoint, id) %>%
+  dplyr::summarise(any_ef = any(!is.na(value)), .groups = "drop") %>%
+  dplyr::filter(any_ef) %>%
+  dplyr::select(country, timepoint, id)
 
 stopifnot(all(c("Age_T1","Age_T2","Age_T3") %in% names(aus_data)))
 
 aus_age_long <- aus_data %>%
-  mutate(id = as.character(.data[[id_var]])) %>%
-  filter(!is.na(id)) %>%
-  select(id, Age_T1, Age_T2, Age_T3) %>%
-  pivot_longer(cols = starts_with("Age_T"), names_to = "timepoint", values_to = "age") %>%
-  mutate(
-    country   = "Australia",
+  dplyr::mutate(id = as.character(.data[[id_var]])) %>%
+  dplyr::filter(!is.na(id)) %>%
+  dplyr::select(id, Age_T1, Age_T2, Age_T3) %>%
+  tidyr::pivot_longer(cols = dplyr::starts_with("Age_T"), names_to = "timepoint", values_to = "age") %>%
+  dplyr::mutate(
+    country   = "AU",
     timepoint = gsub("^Age_", "", timepoint),
     age       = as.numeric(age)
   ) %>%
-  select(country, timepoint, id, age)
-
-stopifnot(all(c("A2_MatEdu","A3_FamIncome") %in% names(aus_data)))
+  dplyr::select(country, timepoint, id, age)
 
 # Sex
 sex_var_aus <- if ("Sex" %in% names(aus_data)) {
@@ -688,742 +695,123 @@ sex_var_aus <- if ("Sex" %in% names(aus_data)) {
   stop("Couldn't find sex variable in aus_data (expected sex or Sex).")
 }
 
-
 aus_sex_child <- aus_data %>%
-  mutate(id = as.character(.data[[id_var]])) %>%
-  filter(!is.na(id)) %>%
-  distinct(id, .keep_all = TRUE) %>%
-  transmute(
-    country = "Australia",
+  dplyr::mutate(id = as.character(.data[[id_var]])) %>%
+  dplyr::filter(!is.na(id)) %>%
+  dplyr::distinct(id, .keep_all = TRUE) %>%
+  dplyr::transmute(
+    country = "AU",
     id,
     sex = harmonise_sex_aus(.data[[sex_var_aus]])
   )
 
-aus_sex_tp <- aus_any_ids %>%
-  left_join(aus_sex_child, by = c("country","id"))
+table(sa_data$child_sex, useNA="ifany")
+table(harmonise_sex_sa(sa_data$child_sex), useNA="ifany")
 
-# child-level SES + HLE 
+table(aus_data[[sex_var_aus]], useNA="ifany")
+table(harmonise_sex_aus(aus_data[[sex_var_aus]]), useNA="ifany")
+
+aus_sex_tp <- aus_any_ids %>%
+  dplyr::left_join(aus_sex_child, by = c("country","id"))
+
+# child-level SES + HLE
+stopifnot(all(c("A2_MatEdu","A3_FamIncome") %in% names(aus_data)))
+
 aus_ses_child <- aus_data %>%
-  mutate(id = as.character(.data[[id_var]])) %>%   # make id consistent
-  filter(!is.na(id)) %>%
-  distinct(id, .keep_all = TRUE) %>%
-  transmute(
-    country    = "Australia",
+  dplyr::mutate(id = as.character(.data[[id_var]])) %>%
+  dplyr::filter(!is.na(id)) %>%
+  dplyr::distinct(id, .keep_all = TRUE) %>%
+  dplyr::transmute(
+    country    = "AU",
     id,
-    edu_aus    = as.integer(A2_MatEdu),# 1–5
-    income_aus = as.character(A3_FamIncome), # 1–3
+    edu_aus    = as.integer(A2_MatEdu),
+    income_aus = as.character(A3_FamIncome),
     hle_aus    = as.numeric(HLE_Index)
   )
 
-# expand across anchored timepoints
+# expand across EF-anchored timepoints
 aus_ses_tp <- aus_any_ids %>%
-  left_join(aus_ses_child, by = c("country","id"))
+  dplyr::left_join(aus_ses_child, by = c("country","id"))
+
 ```
 
 ```{r}
-#| label: summarise-table1-components
+#| label: build-ef-age-objects
 #| include: false
-
-ef_labels <- c(
-  ef_inhibition = "Inhibition",
-  ef_cogflex    = "Cognitive flexibility",
-  ef_workingmem = "Working memory"
-)
-
-tp_age <- bind_rows(
-  summ_age_long(sa_age_long,  sa_any_ids),
-  summ_age_long(aus_age_long, aus_any_ids)
-) %>% arrange(country, timepoint)
-
-tp_sex <- bind_rows(
-  desc_cat_tp(sa_sex_long, "sex", sa_any_ids, variable_label = "Sex"),
-  desc_cat_tp(aus_sex_tp,  "sex", aus_any_ids, variable_label = "Sex")
-) %>%
-  arrange(match(country, c("SA","Australia")), timepoint, level)
-
-tp_ef_desc <- bind_rows(
-  summ_ef_desc(sa_ef_long,  sa_any_ids),
-  summ_ef_desc(aus_ef_long, aus_any_ids)
-) %>% arrange(country, timepoint, variable)
-
-```
-
-::: {.landscape}
-```{r}
-#| label: render-table1
-#| include: true
-#| ft.arraystretch: 1
-
-group_levels <- bind_rows(
-  tp_age %>% distinct(country, timepoint),
-  tp_ef_desc %>% distinct(country, timepoint),
-  tp_sex %>% distinct(country, timepoint)
-) %>%
-  distinct(country, timepoint) %>%
-  mutate(
-    timepoint = factor(timepoint, levels = paste0("T", 1:10)),
-    group = paste(country, timepoint, sep = " — ")
-  ) %>%
-  arrange(match(country, c("SA","Australia")), timepoint) %>%
-  pull(group)
-
-metrics1_long <- bind_rows(
-  # EF 
-  tp_ef_desc %>%
-    mutate(group = paste(country, timepoint, sep = " — "),
-           domain = unname(ef_labels[as.character(variable)])) %>%
-    transmute(section = "Executive function", row = paste0(domain, ", n"), group,
-              value = as.character(n)),
-
-  tp_ef_desc %>%
-    mutate(group = paste(country, timepoint, sep = " — "),
-           domain = unname(ef_labels[as.character(variable)])) %>%
-    transmute(section = "Executive function", row = paste0(domain, ", Mean (SD)"), group,
-              value = fmt_mean_sd(mean, sd, digits = 2)),
-
-  # Age
-  tp_age %>%
-    mutate(group = paste(country, timepoint, sep = " — ")) %>%
-    transmute(section = "Age", row = "Age (years), Mean (SD)", group,
-              value = fmt_mean_sd(age_mean, age_sd, digits = 2)),
-
-  tp_age %>%
-    mutate(group = paste(country, timepoint, sep = " — ")) %>%
-    transmute(section = "Age", row = "Age (years), Median [min, max]", group,
-              value = fmt_med_rng(age_median, age_min, age_max, digits = 2)),
-
-  # Sex
-  tp_sex %>%
-    mutate(group = paste(country, timepoint, sep = " — ")) %>%
-    transmute(section = "Sex",
-              row     = paste0(level, ", n (%)"),
-              group,
-              value   = cell)
-)
-
-metrics1_long <- metrics1_long %>%
-  mutate(section = factor(section, levels = c("Executive function", "Age", "Sex")))
-
-
-paper_table1 <- metrics1_long %>%
-  mutate(group = factor(group, levels = group_levels)) %>%
-  select(section, row, group, value) %>%
-  tidyr::pivot_wider(names_from = group, values_from = value) %>%
-  arrange(section, row)
-
-gt1 <- paper_table1 %>%
-  gt(groupname_col = "section", rowname_col = "row") %>%
-  tab_header(
-    title = "Table 1. Age and executive function by country and timepoint",
-    subtitle = "All summaries are anchored to children with any EF observed at that timepoint (partial EF allowed)."
-  ) %>%
-  cols_align(align = "center") %>%
-  tab_options(
-    table.width = pct(100),
-    row_group.as_column = TRUE,
-    table.font.size = px(11)
-  ) %>%
-  tab_style(
-    style = cell_text(weight = "bold"),
-    locations = cells_row_groups()
-  )
-
-gt1
-```
-:::
-
-```{r}
-#| label: summarise-table2-components
-#| include: false
-
-# Categorical
-sa_edu_tp     <- desc_cat_tp(sa_ses,     "edu_sa",     sa_any_ids,  "Caregiver education (SA)")
-aus_edu_tp    <- desc_cat_tp(aus_ses_tp, "edu_aus",    aus_any_ids, "Caregiver education (AUS)")
-aus_income_tp <- desc_cat_tp(aus_ses_tp, "income_aus", aus_any_ids, "Household income (AUS)")
-
-ses_tp_long2 <- bind_rows(sa_edu_tp, aus_edu_tp, aus_income_tp) %>%
-  arrange(country, timepoint, variable, level)
-
-# Continuous
-# SA income derived from NIDS assets score
-tp_income_sa <- summ_cont_tp(sa_ses, "nids_assets_sa", sa_any_ids, "Household income (SA)")
-
-# SA HLE
-tp_hle_sa <- bind_rows(
-  summ_cont_tp(sa_ses, "hla_frequency1",       sa_any_ids, "HLE activity frequency (sum)"),
-  summ_cont_tp(sa_ses, "num_caregivers_clean", sa_any_ids, "HLE: unique caregiver types involved"),
-  summ_cont_tp(sa_ses, "books_toys_total1",    sa_any_ids, "HLE: books/toys total"),
-  summ_cont_tp(sa_ses, "time_total1",          sa_any_ids, "HLE: time total")
-) %>% arrange(country, timepoint, variable)
-
-# AUS HLE index (note: this will repeat across timepoints because it's child-level)
-tp_hle_aus <- summ_cont_tp(aus_ses_tp, "hle_aus", aus_any_ids, "Home learning environment (AUS; HLE Index)")
-```
-
-::: {.landscape}
-```{r}
-#| label: render-table2
-#| include: true
-
-group_levels <- bind_rows(
-  ses_tp_long2 %>% distinct(country, timepoint),
-  tp_income_sa %>% distinct(country, timepoint),
-  tp_hle_sa %>% distinct(country, timepoint),
-  tp_hle_aus %>% distinct(country, timepoint)
-) %>%
-  distinct(country, timepoint) %>%
-  mutate(
-    timepoint = factor(timepoint, levels = paste0("T", 1:10)),
-    group = paste(country, timepoint, sep = " — ")
-  ) %>%
-  arrange(match(country, c("Australia","SA")), timepoint) %>%  # <-- Australia first
-  pull(group)
-
-# SA income (continuous)
-income2_long <- bind_rows(
-  tp_income_sa %>%
-    mutate(group = paste(country, timepoint, sep = " — ")) %>%
-    transmute(section = "Household income (SA)",
-              row = paste0(variable, ", n"),
-              group, value = as.character(n)),
-  tp_income_sa %>%
-    mutate(group = paste(country, timepoint, sep = " — ")) %>%
-    transmute(section = "Household income (SA)",
-              row = paste0(variable, ", Mean (SD)"),
-              group, value = fmt_mean_sd(mean, sd, digits = 2))
-)
-
-income2_wide <- income2_long %>%
-  mutate(group = factor(group, levels = group_levels)) %>%
-  select(section, row, group, value) %>%
-  tidyr::pivot_wider(names_from = group, values_from = value) %>%
-  arrange(section, row)
-
-# SA HLE (continuous)
-hle_sa_long <- bind_rows(
-  tp_hle_sa %>%
-    mutate(group = paste(country, timepoint, sep = " — ")) %>%
-    transmute(section = "Home learning environment (SA)",
-              row = paste0(variable, ", n"),
-              group, value = as.character(n)),
-  tp_hle_sa %>%
-    mutate(group = paste(country, timepoint, sep = " — ")) %>%
-    transmute(section = "Home learning environment (SA)",
-              row = paste0(variable, ", Mean (SD)"),
-              group, value = fmt_mean_sd(mean, sd, digits = 2))
-)
-
-hle_sa_wide <- hle_sa_long %>%
-  mutate(group = factor(group, levels = group_levels)) %>%
-  select(section, row, group, value) %>%
-  tidyr::pivot_wider(names_from = group, values_from = value) %>%
-  arrange(section, row)
-
-# AUS HLE index (continuous) 
-hle_aus_long <- bind_rows(
-  tp_hle_aus %>%
-    mutate(group = paste(country, timepoint, sep = " — ")) %>%
-    transmute(section = "Home learning environment (AUS)",
-              row = paste0(variable, ", n"),
-              group, value = as.character(n)),
-  tp_hle_aus %>%
-    mutate(group = paste(country, timepoint, sep = " — ")) %>%
-    transmute(section = "Home learning environment (AUS)",
-              row = paste0(variable, ", Mean (SD)"),
-              group, value = fmt_mean_sd(mean, sd, digits = 2))
-)
-
-hle_aus_wide <- hle_aus_long %>%
-  mutate(group = factor(group, levels = group_levels)) %>%
-  select(section, row, group, value) %>%
-  tidyr::pivot_wider(names_from = group, values_from = value) %>%
-  arrange(section, row)
-
-# Categorical block (education SA/AUS + income AUS)
-ses2_wide <- ses_tp_long2 %>%
-  mutate(group = paste(country, timepoint, sep = " — "),
-         group = factor(group, levels = group_levels)) %>%
-  transmute(section = variable, row = level, group, value = cell) %>%
-  tidyr::pivot_wider(names_from = group, values_from = value) %>%
-  arrange(section, row)
-
-paper_table2 <- bind_rows(ses2_wide, income2_wide, hle_aus_wide, hle_sa_wide) %>%
-  mutate(section = factor(section, levels = c(
-    "Caregiver education (AUS)",
-    "Caregiver education (SA)",
-    "Household income (AUS)",
-    "Household income (SA)",
-    "Home learning environment (AUS)",
-    "Home learning environment (SA)"
-  ))) %>%
-  arrange(section, row)
-
-gt2 <- paper_table2 %>%
-  gt(groupname_col = "section", rowname_col = "row") %>%
-  tab_header(
-    title = "Table 2. Socioeconomic status and home learning environment by country and timepoint"
-  ) %>%
-  tab_source_note(
-    source_note = md("**Note.** Summaries are restricted to children with any EF data at each wave (partial EF allowed). In Australia, caregiver education, household income, and the HLE Index are measured once per child and carried across waves; *n* and summary statistics may still differ across T1–T3 because the EF-available sample varies by wave (attrition/partial EF). In South Africa, caregiver education, income, and HLE measures are recorded by wave and summarised only where collected (later-wave cells are NA if not assessed).")
-  ) %>%
-  cols_align(align = "center") %>%
-  tab_options(
-    table.width = pct(100),
-    row_group.as_column = TRUE,
-    table.font.size = px(11)
-  ) %>%
-  tab_style(
-    style = cell_text(weight = "bold"),
-    locations = cells_row_groups()
-  )
-
-gt2
-```
-:::
-
-```{r}
-#| label: graph-prep
-#| include: false
-
-# EF longitudinal exploration
 
 stopifnot(exists("sa_ef_long"), exists("aus_ef_long"))
 stopifnot(exists("sa_age_long"), exists("aus_age_long"))
+stopifnot(exists("sa_sex_long"), exists("aus_sex_tp"))
 
 time_levels <- c("T1","T2","T3")
-ef_levels   <- c("ef_inhibition","ef_cogflex","ef_workingmem")
+nodes <- c("ef_inhibition","ef_cogflex","ef_workingmem")
 
-ef_labels <- c(
-  ef_inhibition = "Inhibition",
-  ef_cogflex    = "Cognitive flexibility",
-  ef_workingmem = "Working memory"
-)
-
-# Combine EF + age
-
-ef_all <- bind_rows(
-  sa_ef_long  %>% mutate(id = as.character(id)),
-  aus_ef_long %>% mutate(id = as.character(id))
-) %>%
-  mutate(
-    timepoint = factor(timepoint, levels = time_levels, ordered = TRUE),
-    variable  = factor(variable,  levels = ef_levels)
-  )
-
-age_all <- bind_rows(
-  sa_age_long  %>% mutate(id = as.character(id)),
-  aus_age_long %>% mutate(id = as.character(id))
-) %>%
-  mutate(timepoint = factor(timepoint, levels = time_levels, ordered = TRUE))
-```
-
-```{r}
-#| label: standardize
-#| include: false
-
-# pretty labels (define once)
-ef_labels_pretty <- c(
-  ef_inhibition = "Inhibition",
-  ef_cogflex    = "Cognitive flexibility",
-  ef_workingmem = "Working memory"
-)
-
-ef_std <- ef_all %>%
-  dplyr::group_by(variable) %>%
-  dplyr::mutate(value_z = as.numeric(scale(value))) %>%
-  dplyr::ungroup() %>%
-  dplyr::left_join(
-    age_all %>% dplyr::select(country, timepoint, id, age),
-    by = c("country", "timepoint", "id")
-  ) %>%
-  dplyr::mutate(
-    country = dplyr::recode(country, SA = "South Africa"),
-    country = factor(country, levels = c("Australia", "South Africa")),
-
-    # derive task from VARIABLE (not from the existing label)
-    task = factor(
-      as.character(variable),
-      levels = ef_levels,
-      labels = unname(ef_labels_pretty[ef_levels])
-    )
-  )
-
-```
-
-```{r}
-#| label: test-re-test
-#| include: false
-
-# keep only children who have >1 wave for a given task (within country)
-ef_retest_scores <- ef_std %>%
-  group_by(country, id, task) %>%
-  arrange(country, id, task, timepoint) %>%
-  filter(n_distinct(timepoint) > 1) %>%
-  ungroup()
-
-# wide format: one row per child × task (within country), columns per wave
-# (also widens age so we can compute age gaps)
-retest_wide <- ef_retest_scores %>%
-  # if you *ever* have duplicates within a wave, this collapses safely
-  group_by(country, id, task, timepoint) %>%
-  summarise(
-    value_z = mean(value_z, na.rm = TRUE),
-    age     = mean(age,     na.rm = TRUE),
-    .groups = "drop"
-  ) %>%
-  tidyr::pivot_wider(
-    id_cols     = c(country, id, task),
-    names_from  = timepoint,
-    values_from = c(value_z, age),
-    names_sep   = "_"
-  ) %>%
-  mutate(
-    mean_age      = rowMeans(dplyr::select(., dplyr::starts_with("age_")), na.rm = TRUE),
-    age_gap_T12_y = age_T2 - age_T1,
-    age_gap_T23_y = age_T3 - age_T2
-  ) %>%
-  select(
-    country, id, task,
-    mean_age,
-    age_gap_T12_y, age_gap_T23_y,
-    value_z_T1, value_z_T2, value_z_T3
-  )
-
-# helper: only compute r if there are enough complete pairs
-safe_cor <- function(a, b, min_n = 3) {
-  n <- sum(stats::complete.cases(a, b))
-  if (n < min_n) return(NA_real_)
-  suppressWarnings(stats::cor(a, b, use = "complete.obs"))
+# helper: keep timepoints by country (SA only T1/T2; AU T1/T2/T3)
+keep_ct_tp <- function(country, timepoint) {
+  (country == "SA" & timepoint %in% c("T1","T2")) |
+  (country == "AU" & timepoint %in% c("T1","T2","T3"))
 }
 
-# 3) test–retest correlations by country × task
-trt <- retest_wide %>%
-  group_by(country, task) %>%
-  summarise(
-    r_T12   = safe_cor(value_z_T1, value_z_T2),
-    n_T12   = sum(complete.cases(value_z_T1, value_z_T2)),
-    gap_T12 = mean(age_gap_T12_y, na.rm = TRUE) * 12,  # months
-
-    r_T23   = safe_cor(value_z_T2, value_z_T3),
-    n_T23   = sum(complete.cases(value_z_T2, value_z_T3)),
-    gap_T23 = mean(age_gap_T23_y, na.rm = TRUE) * 12,  # months
-    .groups = "drop"
-  ) %>%
-  arrange(task, country)
-
-trt
-```
-
-```{r}
-#| label: test-re-test-plot
-#| fig-cap: "Executive Function associations across waves. Note: Standardised scores (z); colour indicates mean age across available waves"
-#| include: true
-#| fig-align: center
-#| fig-width: 8
-#| fig-height: 8
-
-# From retest_wide -> one row per child × task × pair (T1–T2 and T2–T3), then build a single row facet that only includes observed combos.
-
-retest_long_pairs <- dplyr::bind_rows(
-  retest_wide %>%
-    dplyr::transmute(
-      country, id, task, mean_age,
-      pair = "T1–T2",
-      x = value_z_T1, y = value_z_T2
-    ),
-  retest_wide %>%
-    dplyr::transmute(
-      country, id, task, mean_age,
-      pair = "T2–T3",
-      x = value_z_T2, y = value_z_T3
-    )
+# EF long combined
+ef_all <- dplyr::bind_rows(
+  sa_ef_long  %>% dplyr::mutate(id = as.character(id)),
+  aus_ef_long %>% dplyr::mutate(id = as.character(id))
 ) %>%
-  dplyr::filter(!is.na(x) & !is.na(y)) %>%
   dplyr::mutate(
-    pair = factor(pair, levels = c("T1–T2", "T2–T3")),
-    row_facet = paste(country, pair, sep = "\n")
-  ) %>%
-  dplyr::mutate(
-    row_facet = factor(
-      row_facet,
-      levels = c(
-        "Australia\nT1–T2",
-        "Australia\nT2–T3",
-        "South Africa\nT1–T2"
-      )
-    )
+    timepoint = factor(as.character(timepoint), levels = time_levels, ordered = TRUE),
+    variable  = factor(as.character(variable),  levels = nodes)
   )
 
-# Panel stats (r + N), using the same "safe" logic as above
-pair_stats <- retest_long_pairs %>%
-  dplyr::group_by(country, task, pair, row_facet) %>%
-  dplyr::summarise(
-    n = sum(stats::complete.cases(x, y)),
-    r = safe_cor(x, y, min_n = 3),
-    .groups = "drop"
-  ) %>%
+# Age long combined
+age_all <- dplyr::bind_rows(
+  sa_age_long  %>% dplyr::mutate(id = as.character(id)),
+  aus_age_long %>% dplyr::mutate(id = as.character(id))
+) %>%
   dplyr::mutate(
-    label = ifelse(
-      is.na(r),
-      paste0("r = NA\nN = ", n),
-      paste0("r = ", sprintf("%.2f", r), "\nN = ", n)
-    )
+    timepoint = factor(as.character(timepoint), levels = time_levels, ordered = TRUE),
+    age       = as.numeric(age)
   )
 
-# Plot
-p_retest_simple <- ggplot(retest_long_pairs, aes(x = x, y = y)) +
-  geom_abline(slope = 1, intercept = 0, linetype = "dotted", alpha = 0.6) +
-  geom_point(aes(colour = mean_age), alpha = 0.5, size = 1.4) +
-  geom_smooth(method = "lm", formula = y ~ x, se = TRUE) +
-  geom_text(
-    data = pair_stats,
-    aes(label = label),
-    x = -Inf, y = Inf,
-    inherit.aes = FALSE,
-    hjust = -0.05, vjust = 1.1, size = 3.5
-  ) +
-  facet_grid(row_facet ~ task) +
-  labs(
-    x = "Earlier wave (z)",
-    y = "Later wave (z)",
-    colour = "Mean age (years)"
-  ) +
-  theme(legend.position = "bottom")
+# sex combined (already wave-level in your pipeline)
+sex_all_tp <- dplyr::bind_rows(
+  sa_sex_long %>% dplyr::select(country, timepoint, id, sex),
+  aus_sex_tp  %>% dplyr::select(country, timepoint, id, sex)
+) %>%
+  dplyr::mutate(
+    timepoint = factor(as.character(timepoint), levels = time_levels, ordered = TRUE),
+    id        = as.character(id)
+  )
 
-p_retest_simple
-```
+# apply country-specific timepoint rule
+ef_all_keep <- ef_all %>%
+  dplyr::filter(keep_ct_tp(country, timepoint))
 
-```{r}
-#| label: age-ef-wave
-#| fig-cap: "Executive Function by age across waves (z-scored within EF task). Note: Points jittered + transparent; lines are linear fits with 95% CI"
-#| include: true
-#| fig-align: center
-#| fig-width: 6
-#| fig-height: 6
+age_all_keep <- age_all %>%
+  dplyr::filter(keep_ct_tp(country, timepoint))
 
-# Age x EF x wave (standardized)
-p_age_by_wave <- ggplot(
-  ef_std %>% dplyr::filter(!is.na(age), !is.na(value_z)),
-  aes(x = age, y = value_z, colour = country)
-) +
-  geom_point(
-    alpha = 0.15, size = 1,
-    position = position_jitter(width = 0.03, height = 0.03)
-  ) +
-  geom_smooth(
-    method = "lm", formula = y ~ x, se = TRUE, linewidth = 1
-  ) +
-  facet_grid(timepoint ~ task, scales = "fixed") +
-  labs(
-    #title = "EF by age across waves (z-scored within EF task)",
-    #subtitle = "Points jittered + transparent; lines are linear fits with 95% CI",
-    x = "Age (years)",
-    y = "EF (z-score within task)",
-    colour = "Country"
-  ) +
-  .scale_colour_country() +
-  theme(legend.position = "bottom")
+sex_all_tp_keep <- sex_all_tp %>%
+  dplyr::filter(keep_ct_tp(country, timepoint))
 
-p_age_by_wave
+#  check
+stopifnot(all(levels(ef_all_keep$variable) == nodes))
 
 ```
-
-```{r}
-#| label: restricted-sample
-#| include: false
-
-# restricted to at least 2 waves sample
-# SA: EF at T1 and T2
-# Aus: strict (T1+T2+T3) or lenient (T1+T2)
-
-# Wave-level EF presence flag: "any EF observed at this wave"
-flags <- ef_std %>%
-  dplyr::mutate(
-    country = dplyr::recode(as.character(country), SA = "South Africa"),
-    id      = as.character(id)
-  ) %>%
-  dplyr::group_by(country, id, timepoint) %>%
-  dplyr::summarise(any_ef = any(!is.na(value_z)), .groups = "drop")
-
-# SA keep: must have T1 & T2
-sa_keep_ids <- flags %>%
-  dplyr::filter(country == "South Africa", timepoint %in% c("T1","T2")) %>%
-  dplyr::group_by(country, id) %>%
-  dplyr::summarise(
-    has_T1 = any(timepoint == "T1" & any_ef),
-    has_T2 = any(timepoint == "T2" & any_ef),
-    .groups = "drop"
-  ) %>%
-  dplyr::filter(has_T1 & has_T2) %>%
-  dplyr::select(country, id)
-
-# AUS keep: strict vs lenient
-aus_keep_ids_strict <- flags %>%
-  dplyr::filter(country == "Australia", timepoint %in% c("T1","T2","T3")) %>%
-  dplyr::group_by(country, id) %>%
-  dplyr::summarise(
-    has_T1 = any(timepoint == "T1" & any_ef),
-    has_T2 = any(timepoint == "T2" & any_ef),
-    has_T3 = any(timepoint == "T3" & any_ef),
-    .groups = "drop"
-  ) %>%
-  dplyr::filter(has_T1 & has_T2 & has_T3) %>%
-  dplyr::select(country, id)
-
-aus_keep_ids_t12 <- flags %>%
-  dplyr::filter(country == "Australia", timepoint %in% c("T1","T2")) %>%
-  dplyr::group_by(country, id) %>%
-  dplyr::summarise(
-    has_T1 = any(timepoint == "T1" & any_ef),
-    has_T2 = any(timepoint == "T2" & any_ef),
-    .groups = "drop"
-  ) %>%
-  dplyr::filter(has_T1 & has_T2) %>%
-  dplyr::select(country, id)
-
-aus_restriction <- "strict"  # "strict" or "t12"
-aus_keep_ids <- if (aus_restriction == "strict") aus_keep_ids_strict else aus_keep_ids_t12
-
-keep_ids_all <- dplyr::bind_rows(sa_keep_ids, aus_keep_ids)
-
-ef_restricted <- ef_std %>%
-  dplyr::mutate(
-    country = dplyr::recode(as.character(country), SA = "South Africa"),
-    id      = as.character(id)
-  ) %>%
-  dplyr::inner_join(keep_ids_all, by = c("country","id"))
-
-```
-
-```{r}
-#| label: mean-trend
-#| include: true
-#| fig-align: center
-#| fig-width: 8
-#| fig-height: 8
-#| fig-cap: |
-#|   **Mean EF scores over time (children with repeated EF data).**  
-#|   *Note.* “EF observed” at a wave means at least one EF task score is non-missing. The analytic sample includes only children meeting the wave-coverage rule: South Africa = EF observed at both T1 and T2; Australia = EF observed at T1–T3 (“strict”) or at T1 and T2 (“t12”)."
-
-# Mean trend over time (standardised, restricted sample)
-mean_df <- ef_restricted %>%
-  dplyr::mutate(
-    task = factor(as.character(variable),
-                  levels = ef_levels,
-                  labels = ef_labels_pretty[ef_levels]),
-    country = factor(country, levels = c("Australia", "South Africa")),
-    timepoint = factor(timepoint, levels = c("T1","T2","T3"))
-  ) %>%
-  dplyr::group_by(country, task, timepoint) %>%
-  dplyr::summarise(
-    n  = sum(!is.na(value_z)),
-    m  = mean(value_z, na.rm = TRUE),
-    se = sd(value_z, na.rm = TRUE) / sqrt(n),
-    lo = m - 1.96 * se,
-    hi = m + 1.96 * se,
-    .groups = "drop"
-  )
-
-p_mean_trend <- ggplot(mean_df, aes(x = timepoint, y = m, group = 1)) +
-  geom_line(linewidth = 1) +
-  geom_point(size = 2.2) +
-  geom_errorbar(aes(ymin = lo, ymax = hi), width = 0.10) +
-  facet_grid(country ~ task) +
-  labs(
-    x = "Timepoint",
-    y = "Mean EF (z-score)"
-  )
-
-p_mean_trend
-
-```
-
-```{r}
-#| label: spaghetti-plot
-#| include: true
-#| fig-align: center
-#| fig-width: 8
-#| fig-height: 8
-#| fig-cap: |
-#|   **Individual EF trajectories over time (children with repeated EF data).**  
-#|   *Note.* “EF observed” at a wave means at least one EF task score is non-missing. The analytic sample includes only children meeting the wave-coverage rule: South Africa = EF observed at both T1 and T2; Australia = EF observed at T1–T3 (“strict”) or at T1 and T2 (“t12”). Mean ± 95% CI is overlaid. EF scores are z-scored within task (pooled).
-
-# Standardize labels in ef_restricted
-ef_restricted_lab <- ef_restricted %>%
-  dplyr::mutate(
-    country  = dplyr::recode(as.character(country), SA = "South Africa"),
-    country  = factor(country, levels = c("Australia", "South Africa")),
-    # safest: derive EF domain from the variable code
-    task     = factor(as.character(variable),
-                      levels = ef_levels,
-                      labels = ef_labels_pretty[ef_levels]),
-    timepoint = factor(timepoint, levels = c("T1", "T2", "T3")),
-    id       = as.character(id)
-  )
-
-# Make sure mean_df has the same factor structure
-mean_df_lab <- mean_df %>%
-  dplyr::mutate(
-    country  = dplyr::recode(as.character(country), SA = "South Africa"),
-    country  = factor(country, levels = c("Australia", "South Africa")),
-    task     = factor(as.character(task),
-                      levels = ef_labels_pretty[ef_levels]),  # because mean_df already has pretty labels
-    timepoint = factor(timepoint, levels = c("T1", "T2", "T3"))
-  )
-
-# plot (no downsampling)
-p_spaghetti <- ggplot(ef_restricted_lab, aes(x = timepoint, y = value_z, group = id)) +
-  geom_line(alpha = 0.08) +
-  geom_point(alpha = 0.08, size = 0.7) +
-  geom_line(
-    data = mean_df_lab,
-    aes(x = timepoint, y = m, group = 1),
-    inherit.aes = FALSE,
-    linewidth = 1.0
-  ) +
-  geom_point(
-    data = mean_df_lab,
-    aes(x = timepoint, y = m),
-    inherit.aes = FALSE,
-    size = 2.2
-  ) +
-  geom_errorbar(
-    data = mean_df_lab,
-    aes(x = timepoint, ymin = lo, ymax = hi),
-    inherit.aes = FALSE,
-    width = 0.10
-  ) +
-  facet_grid(country ~ task) +
-  labs(
-    x = "Timepoint",
-    y = "EF (z-score)"
-  ) +
-  theme(legend.position = "none")
-p_spaghetti
-```
-\clearpage
 
 ```{r}
 #| label: step0-data-prep
 #| include: false
 
-# EF-complete per wave 
-ef_complete_ids <- ef_all %>%
-  dplyr::group_by(country, timepoint, id) %>%
-  dplyr::summarise(
-    n_nodes = dplyr::n_distinct(variable[!is.na(value)]),
-    .groups = "drop"
-  ) %>%
-  dplyr::filter(n_nodes == length(ef_levels)) %>%
-  dplyr::select(country, timepoint, id)
+# Prepare EF node data for BGGM:
+# - keep partial EF (no complete-case filtering)
+# - drop cohort×wave IDs with all 3 nodes missing
+# - residualise each node for age + sex within cohort×wave
+# - z-score residuals within cohort×wave×node
+# - pivot wide for BGGM
 
-# sex
-sex_all_tp <- dplyr::bind_rows(
-  sa_sex_long %>% dplyr::select(country, timepoint, id, sex),
-  aus_sex_tp  %>% dplyr::select(country, timepoint, id, sex)
-)
+stopifnot(exists("ef_all_keep"), exists("age_all_keep"), exists("sex_all_tp_keep"))
+stopifnot(exists("nodes"))
 
-# helper for within-group z
+# helper for within-group z-score
 z_within <- function(x) {
   m <- mean(x, na.rm = TRUE)
   s <- stats::sd(x, na.rm = TRUE)
@@ -1431,101 +819,383 @@ z_within <- function(x) {
   (x - m) / s
 }
 
-# residualize within wave + z-score within cohort×wave×node
-ef_net <- ef_all %>%
-  dplyr::inner_join(ef_complete_ids, by = c("country","timepoint","id")) %>%
-  dplyr::left_join(age_all %>% dplyr::select(country, timepoint, id, age),
-                   by = c("country","timepoint","id")) %>%
-  dplyr::left_join(sex_all_tp, by = c("country","timepoint","id")) %>%
-  dplyr::filter(!is.na(age), !is.na(sex)) %>%  # decision: require both for residualisation
+# join covariates + restrict to EF nodes
+ef_net0 <- ef_all_keep %>%
+  dplyr::filter(as.character(variable) %in% nodes) %>%
+  dplyr::left_join(
+    age_all_keep %>% dplyr::select(country, timepoint, id, age),
+    by = c("country","timepoint","id")
+  ) %>%
+  dplyr::left_join(
+    sex_all_tp_keep,
+    by = c("country","timepoint","id")
+  ) %>%
+  dplyr::mutate(
+    id    = as.character(id),
+    sex   = droplevels(sex),
+    age   = as.numeric(age),
+    value = as.numeric(value)
+  ) %>%
+  # Restrict residualisation to stable binary sex only
+  dplyr::filter(!is.na(age), sex %in% c("Female","Male"))
+
+# check duplicates before pivot_wider() 
+dup_check <- ef_net0 %>%
+  dplyr::count(country, timepoint, id, variable, name = "n") %>%
+  dplyr::filter(n > 1)
+
+stopifnot(nrow(dup_check) == 0)
+
+# drop cohort×wave IDs with all three nodes missing
+ef_any_ids <- ef_net0 %>%
+  dplyr::group_by(country, timepoint, id) %>%
+  dplyr::summarise(any_node_observed = any(!is.na(value)), .groups = "drop") %>%
+  dplyr::filter(any_node_observed) %>%
+  dplyr::select(country, timepoint, id)
+
+ef_net0 <- ef_net0 %>%
+  dplyr::inner_join(ef_any_ids, by = c("country","timepoint","id"))
+
+# residualise within cohort×wave×node (observed values only), then z-score residuals
+residise_one <- function(d) {
+  d <- dplyr::mutate(d, .rid = dplyr::row_number())
+  obs <- dplyr::filter(d, !is.na(value))
+
+  if (nrow(obs) < 10) {
+    d$resid <- NA_real_
+    return(dplyr::select(d, -.rid))
+  }
+
+  fit <- stats::lm(value ~ age + sex, data = obs)
+  obs <- dplyr::mutate(obs, resid = stats::residuals(fit))
+
+  d <- dplyr::left_join(d, dplyr::select(obs, .rid, resid), by = ".rid")
+  dplyr::select(d, -.rid)
+}
+
+ef_net <- ef_net0 %>%
   dplyr::group_by(country, timepoint, variable) %>%
-  dplyr::group_modify(~{
-    d <- .x
-    fit <- stats::lm(value ~ age + sex, data = d)
-    d$resid <- stats::residuals(fit)
-    d
-  }) %>%
+  dplyr::group_modify(~ residise_one(.x)) %>%
   dplyr::ungroup() %>%
   dplyr::group_by(country, timepoint, variable) %>%
-  dplyr::mutate(node = z_within(resid)) %>%
+  dplyr::mutate(node = ifelse(is.na(resid), NA_real_, z_within(resid))) %>%
   dplyr::ungroup()
 
-# wide, ready for BGGM per cohort×wave
+# check if residualisation wiped an entire node within cohort×wave
+node_obs_check <- ef_net %>%
+  dplyr::group_by(country, timepoint, variable) %>%
+  dplyr::summarise(n_obs = sum(!is.na(node)), .groups = "drop")
+
+stopifnot(all(node_obs_check$n_obs > 0))
+
+# wide matrix per cohort×wave for BGGM
 ef_net_wide <- ef_net %>%
   dplyr::select(country, timepoint, id, variable, node) %>%
-  tidyr::pivot_wider(names_from = variable, values_from = node) %>%
-  dplyr::filter(dplyr::if_all(dplyr::all_of(ef_levels), ~ !is.na(.)))
+  tidyr::pivot_wider(
+    names_from = variable,
+    values_from = node
+    # if you ever decide not to hard-fail on duplicates, add:
+    # , values_fn = mean
+  ) %>%
+  dplyr::filter(!dplyr::if_all(dplyr::all_of(nodes), ~ is.na(.)))
+
+# within-wave missingness vs attrition diagnostics
+missingness_ct <- ef_net_wide %>%
+  dplyr::group_by(country, timepoint) %>%
+  dplyr::summarise(
+    n          = dplyr::n(),
+    missing_cells = sum(is.na(as.matrix(dplyr::pick(dplyr::all_of(nodes))))),
+    total_cells   = dplyr::n() * length(nodes),
+    pct_missing   = 100 * missing_cells / total_cells,
+    .groups = "drop"
+  )
+
+# align draws helper (if you use it later)
+align_draws <- function(x, y, keep = c("last","first")) {
+  keep <- match.arg(keep)
+  n <- min(length(x), length(y))
+  if (keep == "last") list(x = tail(x, n), y = tail(y, n))
+  else                list(x = head(x, n), y = head(y, n))
+}
+
+
 ```
 
 ```{r}
 #| label: step_1a-fit-bggm
 #| include: false
 
-nodes <- c("ef_inhibition", "ef_cogflex", "ef_workingmem")
-
-# checks
 stopifnot(exists("ef_net_wide"))
 stopifnot(all(c("country","timepoint","id", nodes) %in% names(ef_net_wide)))
 
-# split data by cohort × wave
+bggm_post   <- 5000
+bggm_burnin <- 50
+bggm_iter   <- bggm_post + bggm_burnin
+bggm_chains <- 1
+
 dat_split <- ef_net_wide %>%
-  select(country, timepoint, id, all_of(nodes)) %>%
-  group_by(country, timepoint) %>%
-  group_split()
+  dplyr::select(country, timepoint, id, dplyr::all_of(nodes)) %>%
+  dplyr::group_by(country, timepoint) %>%
+  dplyr::group_split()
 
 keys <- ef_net_wide %>%
-  distinct(country, timepoint) %>%
-  arrange(country, timepoint)
-
-# BGGM settings
-bggm_iter   <- 12000
-bggm_burnin <- 6000
-bggm_chains <- 4
+  dplyr::distinct(country, timepoint) %>%
+  dplyr::arrange(country, timepoint)
 
 fit_one <- function(df) {
+
   Y <- df %>%
-    dplyr::select(all_of(nodes)) %>%
+    dplyr::select(dplyr::all_of(nodes)) %>%
     dplyr::mutate(dplyr::across(dplyr::everything(), as.numeric)) %>%
     as.matrix()
 
-  Y <- Y[stats::complete.cases(Y), , drop = FALSE]
+  n <- nrow(Y)
+  p <- ncol(Y)
+  miss_cells <- sum(is.na(Y))
+  total_cells <- length(Y)
+  pct_missing <- 100 * miss_cells / total_cells
 
-  if (nrow(Y) < 10) return(NULL)
+  # if too small for the model, return NULL fit but keep diagnostics
+  if (n < 10) {
+    return(list(
+      fit = NULL,
+      n = n,
+      missing_cells = miss_cells,
+      total_cells = total_cells,
+      pct_missing = pct_missing
+    ))
+  }
 
-  BGGM::estimate(
+  fit <- BGGM::estimate(
     Y,
     type   = "continuous",
     iter   = bggm_iter,
     burnin = bggm_burnin,
     chains = bggm_chains,
-    save   = TRUE 
+    impute = TRUE,
+    save   = TRUE
+  )
+
+  list(
+    fit = fit,
+    n = n,
+    missing_cells = miss_cells,
+    total_cells = total_cells,
+    pct_missing = pct_missing
   )
 }
 
 ggm_fits_step1 <- purrr::map(dat_split, fit_one)
 
-# keep these objects explicit for Step 1C
 fit_tbl <- keys %>%
-  mutate(fit = ggm_fits_step1)
+  dplyr::mutate(res = ggm_fits_step1) %>%
+  tidyr::unnest_wider(res)
 
-# n used per cohort × wave in EF-complete network-estimation sample
-n_by_ct <- ef_net_wide %>%
-  dplyr::group_by(country, timepoint) %>%
-  dplyr::summarise(n = sum(if_all(all_of(nodes), ~ !is.na(.))), .groups = "drop")
+# check fit
+fit_tbl %>%
+  dplyr::mutate(ok = !purrr::map_lgl(fit, is.null)) %>%
+  dplyr::select(country, timepoint, n, missing_cells, total_cells, pct_missing, ok)
+fit_tbl
 
-sapply(ef_net_wide[, nodes], class)
 ```
 
+```{r}
+#| label: report-edge-summaries
+#| include: false
+
+edge_summaries <- function(fit, probs = c(.025, .5, .975)) {
+  A <- fit$post_samp$pcors  # [p x p x S]
+  p <- dim(A)[1]
+
+  # upper-triangle indices (unique undirected edges)
+  idx <- which(upper.tri(matrix(FALSE, p, p)), arr.ind = TRUE)
+
+  # safe names
+  nm <- dimnames(A)[[1]]
+  if (is.null(nm)) nm <- paste0("V", seq_len(p))
+
+  purrr::map_dfr(seq_len(nrow(idx)), function(i) {
+    a <- idx[i, 1]; b <- idx[i, 2]
+    draws <- A[a, b, ]
+    qs <- stats::quantile(draws, probs = probs, na.rm = TRUE)
+
+    tibble::tibble(
+      node1 = nm[a],
+      node2 = nm[b],
+      q025  = unname(qs[1]),
+      q50   = unname(qs[2]),
+      q975  = unname(qs[3]),
+      ci_excludes_0 = !(q025 <= 0 & q975 >= 0)
+    )
+  })
+}
+
+edge_tbl <- fit_tbl %>%
+  dplyr::filter(!purrr::map_lgl(fit, is.null)) %>%
+  dplyr::mutate(edges = purrr::map(fit, edge_summaries)) %>%
+  tidyr::unnest(edges) %>%
+  dplyr::mutate(edge = paste(node1, node2, sep = " — "))
+
+```
+
+```{r}
+#| label: report-global-strength
+#| include: false
+
+global_strength_draws <- function(fit, absolute = TRUE) {
+  A <- fit$post_samp$pcors  # [p x p x S]
+  p <- dim(A)[1]
+  S <- dim(A)[3]
+  ut <- upper.tri(matrix(FALSE, p, p))
+
+  sapply(seq_len(S), function(s) {
+    M <- A[, , s]
+    if (absolute) M <- abs(M)
+    sum(M[ut])
+  })
+}
+
+gs_tbl <- fit_tbl %>%
+  dplyr::filter(!purrr::map_lgl(fit, is.null)) %>%
+  dplyr::mutate(
+    gs_draws = purrr::map(fit, global_strength_draws),
+    q025 = purrr::map_dbl(gs_draws, ~ stats::quantile(.x, .025, na.rm = TRUE)),
+    q50  = purrr::map_dbl(gs_draws, ~ stats::quantile(.x, .50,  na.rm = TRUE)),
+    q975 = purrr::map_dbl(gs_draws, ~ stats::quantile(.x, .975, na.rm = TRUE))
+  ) %>%
+  dplyr::select(country, timepoint, q025, q50, q975)
+
+
+```
+
+```{r}
+#| label: report-posterior-difference-scores
+#| include: false
+
+edge_diff <- function(fit_A, fit_B) {
+  A <- fit_A$post_samp$pcors
+  B <- fit_B$post_samp$pcors
+
+  # align draw counts if needed
+  S <- min(dim(A)[3], dim(B)[3])
+  A <- A[, , (dim(A)[3] - S + 1):dim(A)[3], drop = FALSE]
+  B <- B[, , (dim(B)[3] - S + 1):dim(B)[3], drop = FALSE]
+
+  D <- A - B  # posterior draws of differences
+
+  p <- dim(D)[1]
+  edges <- which(upper.tri(matrix(NA, p, p)), arr.ind = TRUE)
+
+  purrr::map_dfr(seq_len(nrow(edges)), function(i) {
+    a <- edges[i, 1]; b <- edges[i, 2]
+    draws <- D[a, b, ]
+    qs <- quantile(draws, c(.025, .5, .975), na.rm = TRUE)
+    tibble::tibble(
+      node1 = dimnames(D)[[1]][a],
+      node2 = dimnames(D)[[2]][b],
+      diff_q025 = unname(qs[1]),
+      diff_q50  = unname(qs[2]),
+      diff_q975 = unname(qs[3]),
+      diff_sig  = !(qs[1] <= 0 && qs[3] >= 0)  # CI excludes 0
+    )
+  })
+}
+
+fit_AU_T1 <- fit_tbl %>% dplyr::filter(country=="AU", timepoint=="T1") %>% dplyr::pull(fit) %>% .[[1]]
+fit_SA_T1 <- fit_tbl %>% dplyr::filter(country=="SA", timepoint=="T1") %>% dplyr::pull(fit) %>% .[[1]]
+
+edge_diff_AUvsSA_T1 <- edge_diff(fit_AU_T1, fit_SA_T1)
+```
+
+```{r}
+#| label: report-global-strength-difference-scores
+#| include: false
+
+gs_diff <- function(fit_A, fit_B) {
+  gsA <- global_strength_draws(fit_A)
+  gsB <- global_strength_draws(fit_B)
+  S <- min(length(gsA), length(gsB))
+  gsA <- tail(gsA, S); gsB <- tail(gsB, S)
+  d <- gsA - gsB
+  tibble::tibble(
+    diff_mean = mean(d),
+    diff_q025 = quantile(d, .025),
+    diff_q975 = quantile(d, .975),
+    diff_sig  = !(quantile(d, .025) <= 0 && quantile(d, .975) >= 0)
+  )
+}
+
+```
+
+```{r}
+#| label: report-missingness
+#| include: false
+
+missingness_ct <- purrr::map2_dfr(dat_split, keys$country, function(df, cc) {
+  # (cc unused; keys handles labels)
+  NULL
+})
+
+missingness_ct <- purrr::map2_dfr(dat_split, seq_len(nrow(keys)), function(df, i) {
+  Y <- df %>%
+    dplyr::select(dplyr::all_of(nodes)) %>%
+    dplyr::mutate(dplyr::across(dplyr::everything(), as.numeric)) %>%
+    as.matrix()
+
+  tibble::tibble(
+    country       = keys$country[i],
+    timepoint     = keys$timepoint[i],
+    n             = nrow(Y),
+    missing_cells = sum(is.na(Y)),
+    total_cells   = length(Y),
+    pct_missing   = 100 * sum(is.na(Y)) / length(Y)
+  )
+})
+
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+# old
 ```{r}
 #| label: step1b-extract-pcor
 #| include: false
 
-nodes <- c("ef_inhibition", "ef_cogflex", "ef_workingmem")
+p <- length(nodes)
 
+stopifnot(exists("fit_tbl"))
+stopifnot(all(c("country","timepoint","fit") %in% names(fit_tbl)))
+
+# helpers: find posterior pcor draws
 find_big_pcor <- function(x, p, min_iter = 1000) {
-  # Return the first "big" posterior pcor object found (array or matrix), else NULL
+  # Return the first "big" posterior pcor-like object found (array or matrix), else NULL
+
   if (is.array(x) && is.numeric(x) && length(dim(x)) == 3) {
     d <- dim(x)
+
     # iter × p × p
     if (d[1] >= min_iter && d[2] == p && d[3] == p) return(list(obj = x, kind = "iter_pp"))
     # p × p × iter
@@ -1549,100 +1219,228 @@ find_big_pcor <- function(x, p, min_iter = 1000) {
 
 as_iter_pp <- function(found, p) {
   obj <- found$obj
+
   if (found$kind == "iter_pp") return(obj)
-  if (found$kind == "pp_iter") return(aperm(obj, c(3,1,2)))
+  if (found$kind == "pp_iter") return(aperm(obj, c(3, 1, 2)))
 
   # iter × edges (vech): fill into iter × p × p
   if (found$kind == "iter_edges") {
     it <- nrow(obj)
     A  <- array(NA_real_, dim = c(it, p, p))
     cmb <- combn(p, 2)
+
     for (e in seq_len(ncol(cmb))) {
       i <- cmb[1, e]; j <- cmb[2, e]
       A[, i, j] <- obj[, e]
       A[, j, i] <- obj[, e]
     }
-    for (i in 1:p) A[, i, i] <- 1
+    for (i in seq_len(p)) A[, i, i] <- 1
     return(A)
   }
 
   stop("Unhandled object kind.")
 }
 
-get_pcor_draws <- function(fit, nodes = nodes, min_iter = 5000) {
-  p <- length(nodes)  # <-- ADD THIS LINE (this is what your error is about)
+get_pcor_draws <- function(fit, nodes, min_iter = 1000) {
+  p <- length(nodes)
 
-  # 1) search inside fit
-  found <- find_big_pcor(fit, p = p, min_iter = min_iter)
-  if (!is.null(found)) return(as_iter_pp(found, p))
-
-  # 2) search inside BGGM::pcor(fit)
-  pc_try <- try(BGGM::pcor(fit), silent = TRUE)
-  if (!inherits(pc_try, "try-error")) {
-    found <- find_big_pcor(pc_try, p = p, min_iter = min_iter)
+  # prefer searching inside BGGM::pcor(fit) first (more specific than scanning the whole fit object)
+  pc_obj <- try(BGGM::pcor(fit), silent = TRUE)
+  if (!inherits(pc_obj, "try-error")) {
+    found <- find_big_pcor(pc_obj, p = p, min_iter = min_iter)
     if (!is.null(found)) return(as_iter_pp(found, p))
   }
 
-  stop("Could not locate a large posterior sample of partial correlations. Inspect with: str(fit, max.level=3); str(BGGM::pcor(fit), max.level=3)")
+  # back-up: search inside fit
+  found <- find_big_pcor(fit, p = p, min_iter = min_iter)
+  if (!is.null(found)) return(as_iter_pp(found, p))
+
+  stop("Could not locate posterior draws of partial correlations.")
 }
-dim(get_pcor_draws(fit_tbl$fit[[1]], nodes))
+
+# posteriors
+edges_from_pcor <- function(A) {
+  stopifnot(is.array(A), length(dim(A)) == 3)
+  it <- dim(A)[1]
+  p  <- dim(A)[2]
+  stopifnot(dim(A)[3] == p)
+
+  cmb <- combn(p, 2)
+  ne  <- ncol(cmb)
+
+  E <- matrix(NA_real_, nrow = it, ncol = ne)
+  for (e in seq_len(ne)) {
+    i <- cmb[1, e]; j <- cmb[2, e]
+    E[, e] <- A[, i, j]
+  }
+  E
+}
+
+# global strength per draw: sum_{i<j} |w_ij|
+gs_from_pcor <- function(A) {
+  E <- edges_from_pcor(A) # iter × edges
+  rowSums(abs(E))
+}
+
+# expected influence per draw per node: sum of signed incident edges
+ei_from_pcor <- function(A, nodes) {
+  stopifnot(is.array(A), length(dim(A)) == 3)
+  it <- dim(A)[1]
+  p  <- dim(A)[2]
+  stopifnot(dim(A)[3] == p)
+
+  out <- matrix(NA_real_, nrow = it, ncol = p)
+  colnames(out) <- nodes
+
+  for (j in seq_len(p)) {
+    others <- setdiff(seq_len(p), j)
+    M <- sapply(others, function(k) A[, j, k]) # build an iter × (p-1) matrix
+    if (is.null(dim(M))) M <- matrix(M, nrow = it)
+    out[, j] <- rowSums(M)
+  }
+  out
+}
+
+# check
+first_fit <- purrr::detect(fit_tbl$fit, ~ !is.null(.x))
+A <- get_pcor_draws(first_fit, nodes, min_iter = 1000)
+
+dim(A) # should be S × 3 × 3
+head(gs_from_pcor(A)) # should be a numeric vector length S
+dim(ei_from_pcor(A, nodes)) # should be S × 3
+
+
+# compute draws + summaries for every cohort × wave
+post_tbl <- fit_tbl %>%
+  dplyr::mutate(
+    pcor_draws = purrr::map(fit, ~ if (is.null(.x)) NULL else get_pcor_draws(.x, nodes, min_iter = 1000)),
+    S          = purrr::map_int(pcor_draws, ~ if (is.null(.x)) NA_integer_ else dim(.x)[1]),
+    gs_draws   = purrr::map(pcor_draws, ~ if (is.null(.x)) NULL else gs_from_pcor(.x)),
+    ei_draws   = purrr::map(pcor_draws, ~ if (is.null(.x)) NULL else ei_from_pcor(.x, nodes))
+  )
+
+# network summary: global strength
+gs_summary <- post_tbl %>%
+  dplyr::transmute(
+    country, timepoint, S,
+    gs_mean = purrr::map_dbl(gs_draws, ~ if (is.null(.x)) NA_real_ else mean(.x)),
+    gs_l95  = purrr::map_dbl(gs_draws, ~ if (is.null(.x)) NA_real_ else unname(stats::quantile(.x, 0.025))),
+    gs_u95  = purrr::map_dbl(gs_draws, ~ if (is.null(.x)) NA_real_ else unname(stats::quantile(.x, 0.975)))
+  )
+
+# node summary: expected influence
+ei_summary <- purrr::pmap_dfr(
+  list(post_tbl$country, post_tbl$timepoint, post_tbl$S, post_tbl$ei_draws),
+  function(country, timepoint, S, ei_mat) {
+    if (is.null(ei_mat)) {
+      return(tibble::tibble(
+        country = character(), timepoint = character(), S = integer(),
+        node = character(), ei_mean = numeric(), ei_l95 = numeric(), ei_u95 = numeric()
+      ))
+    }
+
+    tibble::tibble(
+      country  = country,
+      timepoint = timepoint,
+      S        = S,
+      node     = colnames(ei_mat),
+      ei_mean  = colMeans(ei_mat),
+      ei_l95   = apply(ei_mat, 2, stats::quantile, 0.025),
+      ei_u95   = apply(ei_mat, 2, stats::quantile, 0.975)
+    )
+  }
+)
+
+# check
+S_check <- post_tbl %>%
+  dplyr::filter(!is.na(S)) %>%
+  dplyr::count(S)
+S_check
+
+# which cohort×wave rows are included?
+post_tbl %>%
+  dplyr::select(country, timepoint, S) %>%
+  dplyr::arrange(country, timepoint)
+
+# did any fits fail / produce NULL draws?
+post_tbl %>%
+  dplyr::mutate(has_draws = !purrr::map_lgl(pcor_draws, is.null)) %>%
+  dplyr::count(has_draws)
 
 ```
 
 ```{r}
-#| label: step1c-edge-summary
+#| label: step1c-summarise-edges
 #| include: false
 
-edge_pairs <- tibble::tribble(
-  ~i, ~j, ~edge_id,                 ~edge,
-  1, 2, "ef_inhibition__ef_cogflex", "Inhibition – Cognitive flexibility",
-  1, 3, "ef_inhibition__ef_workingmem", "Inhibition – Working memory",
-  2, 3, "ef_cogflex__ef_workingmem", "Cognitive flexibility – Working memory"
-)
-
-summ_edge <- function(draws, rope = 0.10) {
-  purrr::pmap_dfr(edge_pairs, function(i, j, edge_id, edge) {
-    samp <- draws[, i, j]
-    tibble::tibble(
-      edge_id   = edge_id,
-      edge      = edge,
-      median    = median(samp),
-      crI_low   = unname(quantile(samp, 0.025)),
-      crI_high  = unname(quantile(samp, 0.975)),
-      p_abs_gt_0.10 = mean(abs(samp) > rope),
-      p_abs_lt_0.10 = mean(abs(samp) < rope)
-    )
-  })
-}
-
-
-edges_step1 <- fit_tbl %>%
-  mutate(
-    draws = purrr::map(fit, ~ get_pcor_draws(.x, nodes)),
-    out   = purrr::map(draws, ~ summ_edge(.x, rope = 0.10))
+summ_draws <- function(x, probs = c(.025, .975)) {
+  tibble::tibble(
+    mean = mean(x),
+    l95  = stats::quantile(x, probs[1]),
+    u95  = stats::quantile(x, probs[2])
   )
-
-# NEW: sanity check (must be lots of posterior draws)
-draw_sizes <- purrr::map_int(edges_step1$draws, ~ dim(.x)[1])
-if (any(draw_sizes < 1000)) {
-  stop("Posterior draw extraction failed (too few draws). Inspect: str(fit_tbl$fit[[which.min(draw_sizes)]], max.level=3)")
 }
 
-edges_step1 <- edges_step1 %>%
-  tidyr::unnest(out) %>%
-  left_join(n_by_ct, by = c("country","timepoint")) %>%
-  arrange(country, timepoint, edge)
+edges_from_pcor <- function(A, nodes) {
+  # A: S x p x p
+  p <- length(nodes)
+  cmb <- utils::combn(p, 2)
+  tibble::tibble(
+    node1 = nodes[cmb[1, ]],
+    node2 = nodes[cmb[2, ]],
+    draws = purrr::map2(cmb[1, ], cmb[2, ], ~ A[, .x, .y])
+  ) %>%
+    dplyr::mutate(summ = purrr::map(draws, summ_draws)) %>%
+    tidyr::unnest(summ) %>%
+    dplyr::select(-draws)
+}
 
-edges_step1
+edge_summ_tbl <- post_tbl %>%
+  dplyr::filter(!is.null(pcor_draws)) %>%
+  dplyr::mutate(edge_summ = purrr::map(pcor_draws, edges_from_pcor, nodes = nodes)) %>%
+  tidyr::unnest(edge_summ) %>%
+  dplyr::arrange(country, timepoint, node1, node2)
 
-edges_step1 %>%
-  select(country, timepoint, edge, n, median, crI_low, crI_high, p_abs_gt_0.10, p_abs_lt_0.10) %>%
-  arrange(country, timepoint, edge)
+edge_summ_tbl
+```
 
-# flag meaningful edges
-edges_step1 %>%
-  mutate(meaningful = p_abs_gt_0.10 > 0.95) %>%
-  select(country, timepoint, edge, median, crI_low, crI_high, p_abs_gt_0.10, meaningful)
+```{r}
+#| label: step1c-summarise-global-strength
+#| include: false
+gs_summ_tbl <- post_tbl %>%
+  dplyr::filter(!is.null(gs_draws)) %>%
+  dplyr::mutate(gs_summ = purrr::map(gs_draws, summ_draws)) %>%
+  tidyr::unnest(gs_summ) %>%
+  dplyr::select(country, timepoint, mean, l95, u95)
+
+gs_summ_tbl
+```
+
+```{r}
+#| label: step1c-summarise-expected-influence
+#| include: false
+
+ei_summ_tbl <- post_tbl %>%
+  dplyr::filter(!is.null(ei_draws)) %>%
+  dplyr::mutate(
+    ei_summ = purrr::map(ei_draws, ~ {
+      # .x is S x p
+      tibble::as_tibble(.x, .name_repair = "minimal") %>%
+        rlang::set_names(nodes) %>%
+        tidyr::pivot_longer(cols = dplyr::everything(), names_to = "node", values_to = "draw") %>%
+        dplyr::group_by(node) %>%
+        dplyr::summarise(
+          mean = mean(draw),
+          l95  = stats::quantile(draw, .025),
+          u95  = stats::quantile(draw, .975),
+          .groups = "drop"
+        )
+    })
+  ) %>%
+  tidyr::unnest(ei_summ) %>%
+  dplyr::arrange(country, timepoint, node)
+
+ei_summ_tbl
 ```
 
 ```{r}
@@ -1824,8 +1622,6 @@ stopifnot(exists("fit_tbl"))
 stopifnot(exists("n_by_ct"))
 stopifnot(exists("get_pcor_draws"))
 stopifnot(exists("edge_pairs"))
-
-nodes <- c("ef_inhibition", "ef_cogflex", "ef_workingmem")
 
 # Quick diagnostic: which cohort×wave fits are missing?
 fit_status <- fit_tbl %>%
@@ -2039,7 +1835,6 @@ pd <- position_dodge(width = 0.45)
 
 ggplot(delta_plot_df, aes(x = contrast, y = median, group = cohort)) +
 
-  # ---- Reference lines (explained in legend) ----
   # Solid line at 0 = no change in the edge between waves
   geom_hline(aes(yintercept = 0,     linetype = "No change (Δr = 0)"), alpha = 0.45) +
   # Dashed lines at ±0.10 = ROPE bounds for practically meaningful change
@@ -2104,7 +1899,6 @@ stopifnot(exists("edge_pairs"))
 stopifnot(exists("norm_country"))
 stopifnot(exists("safe_get_draws"))  # from your Step 2 chunk (purrr::possibly wrapper)
 
-nodes <- c("ef_inhibition", "ef_cogflex", "ef_workingmem")
 rope  <- 0.10
 
 # helpers: extract draws + summarize edge contrasts
@@ -2360,6 +2154,845 @@ if (exists("did_step3")) {
 At T1, AU–SA differences were: inhibition–working memory (`r cross_report("AU – SA at T1", "Inhibition – Working memory")`), inhibition–cognitive flexibility (`r cross_report("AU – SA at T1", "Inhibition – Cognitive flexibility")`), and cognitive flexibility–working memory (`r cross_report("AU – SA at T1", "Cognitive flexibility – Working memory")`).
 
 At T2, AU–SA differences were: inhibition–working memory (`r cross_report("AU – SA at T2", "Inhibition – Working memory")`), inhibition–cognitive flexibility (`r cross_report("AU – SA at T2", "Inhibition – Cognitive flexibility")`), and cognitive flexibility–working memory (`r cross_report("AU – SA at T2", "Cognitive flexibility – Working memory")`).
+
+```{r}
+#| label: fig-step3-cross-cohort
+#| fig-cap: "RQ3 (cross-cohort): Australia minus South Africa at matched waves. Points show posterior median Δr (AU − SA); whiskers show 95% credible intervals. Solid line = no difference (Δr=0); dashed lines = ROPE bounds (±0.10). Labels show P(|Δr| > 0.10)."
+#| fig-width: 8.5
+#| fig-height: 6
+
+stopifnot(exists("cross_wave_step3"))
+
+cross_plot_df <- cross_wave_step3 %>%
+  dplyr::mutate(
+    # make sure contrast labels are consistent
+    time_contrast = as.character(time_contrast),
+    wave = dplyr::case_when(
+      grepl("T1\\s*$", time_contrast) ~ "T1",
+      grepl("T2\\s*$", time_contrast) ~ "T2",
+      TRUE ~ time_contrast
+    ),
+    wave = factor(wave, levels = c("T1","T2")),
+    edge = factor(edge, levels = c(
+      "Inhibition – Cognitive flexibility",
+      "Inhibition – Working memory",
+      "Cognitive flexibility – Working memory"
+    )),
+    p_label = sprintf("P=%.2f", p_abs_gt_rope)
+  )
+
+ggplot(cross_plot_df, aes(x = wave, y = median)) +
+
+  # reference lines
+  geom_hline(aes(yintercept = 0,     linetype = "No difference (Δr = 0)"), alpha = 0.45) +
+  geom_hline(aes(yintercept = 0.10,  linetype = "ROPE bounds (±0.10)"),    alpha = 0.45) +
+  geom_hline(aes(yintercept = -0.10, linetype = "ROPE bounds (±0.10)"),    alpha = 0.45) +
+
+  scale_linetype_manual(
+    name   = "Reference lines",
+    breaks = c("No difference (Δr = 0)", "ROPE bounds (±0.10)"),
+    values = c("No difference (Δr = 0)" = "solid", "ROPE bounds (±0.10)" = "dashed")
+  ) +
+
+  # estimates + uncertainty
+  geom_errorbar(
+    aes(ymin = crI_low, ymax = crI_high, colour = wave),
+    width = 0.10, linewidth = 0.6
+  ) +
+  geom_point(
+    aes(colour = wave, shape = wave),
+    size = 2.6
+  ) +
+
+  # ROPE probability annotation
+  geom_label(
+    aes(label = p_label, colour = wave),
+    nudge_y = 0.06,
+    size = 3,
+    label.size = 0,
+    fill = "white",
+    show.legend = FALSE,
+    na.rm = TRUE
+  ) +
+
+  facet_wrap(~ edge, ncol = 1) +
+  labs(
+    x = "Matched wave",
+    y = expression(Delta * " partial correlation (AU − SA; median ± 95% CrI)"),
+    colour = "Wave",
+    shape  = "Wave"
+  ) +
+  guides(
+    linetype = guide_legend(order = 1),
+    colour   = guide_legend(order = 2),
+    shape    = guide_legend(order = 2)
+  ) +
+  theme(
+    legend.position = "bottom",
+    legend.box = "vertical"
+  )
+
+
+
+
+```
+
+```{r}
+#| label: fig-step3-did
+#| fig-cap: "RQ3 (difference-in-differences): Cohort difference in change from T1→T2. Points show posterior median DID = (T2−T1)AU − (T2−T1)SA; whiskers show 95% credible intervals. Solid line = no difference (DID=0); dashed lines = ROPE bounds (±0.10). Labels show P(|DID| > 0.10)."
+#| fig-width: 8.5
+#| fig-height: 6
+
+stopifnot(exists("did_step3"))
+
+did_plot_df <- did_step3 %>%
+  dplyr::mutate(
+    contrast = factor("DID: (T2−T1)AU − (T2−T1)SA",
+                      levels = "DID: (T2−T1)AU − (T2−T1)SA"),
+    edge = factor(edge, levels = c(
+      "Inhibition – Cognitive flexibility",
+      "Inhibition – Working memory",
+      "Cognitive flexibility – Working memory"
+    )),
+    contrast_family = factor("Difference-in-differences"),
+    p_label = sprintf("P=%.2f", p_abs_gt_rope)
+  )
+
+ggplot(did_plot_df, aes(x = contrast, y = median)) +
+
+  # reference lines
+  geom_hline(aes(yintercept = 0,     linetype = "No difference (DID = 0)"), alpha = 0.45) +
+  geom_hline(aes(yintercept = 0.10,  linetype = "ROPE bounds (±0.10)"),      alpha = 0.45) +
+  geom_hline(aes(yintercept = -0.10, linetype = "ROPE bounds (±0.10)"),      alpha = 0.45) +
+
+  scale_linetype_manual(
+    name   = "Reference lines",
+    breaks = c("No difference (DID = 0)", "ROPE bounds (±0.10)"),
+    values = c("No difference (DID = 0)" = "solid", "ROPE bounds (±0.10)" = "dashed")
+  ) +
+
+  # estimates + uncertainty (colour/shape just to match your other plots)
+  geom_errorbar(
+    aes(ymin = crI_low, ymax = crI_high, colour = contrast_family),
+    width = 0.10, linewidth = 0.6
+  ) +
+  geom_point(
+    aes(colour = contrast_family, shape = contrast_family),
+    size = 2.8
+  ) +
+
+  geom_label(
+    aes(label = p_label, colour = contrast_family),
+    nudge_y = 0.06,
+    size = 3,
+    label.size = 0,
+    fill = "white",
+    show.legend = FALSE,
+    na.rm = TRUE
+  ) +
+
+  facet_wrap(~ edge, ncol = 1) +
+  labs(
+    x = NULL,
+    y = expression("Difference-in-differences (median ± 95% CrI)"),
+    colour = "Contrast family",
+    shape  = "Contrast family"
+  ) +
+  guides(
+    linetype = guide_legend(order = 1),
+    colour   = guide_legend(order = 2),
+    shape    = guide_legend(order = 2)
+  ) +
+  theme(
+    legend.position = "bottom",
+    legend.box = "vertical"
+  )
+
+
+```
+```{r}
+#| label: summarise-table1-components
+#| include: false
+
+ef_labels <- c(
+  ef_inhibition = "Inhibition",
+  ef_cogflex    = "Cognitive flexibility",
+  ef_workingmem = "Working memory"
+)
+
+tp_age <- bind_rows(
+  summ_age_long(sa_age_long,  sa_any_ids),
+  summ_age_long(aus_age_long, aus_any_ids)
+) %>% arrange(country, timepoint)
+
+tp_sex <- bind_rows(
+  desc_cat_tp(sa_sex_long, "sex", sa_any_ids, variable_label = "Sex"),
+  desc_cat_tp(aus_sex_tp,  "sex", aus_any_ids, variable_label = "Sex")
+) %>%
+  arrange(match(country, c("SA","Australia")), timepoint, level)
+
+tp_ef_desc <- bind_rows(
+  summ_ef_desc(sa_ef_long,  sa_any_ids),
+  summ_ef_desc(aus_ef_long, aus_any_ids)
+) %>% arrange(country, timepoint, variable)
+
+```
+
+\newpage
+
+# References
+
+::: {#refs}
+:::
+
+# Demographics {.appendix #render-table1}
+
+::: {.landscape}
+```{r}
+#| label: render-table1
+#| include: true
+#| ft.arraystretch: 1
+
+group_levels <- bind_rows(
+  tp_age %>% distinct(country, timepoint),
+  tp_ef_desc %>% distinct(country, timepoint),
+  tp_sex %>% distinct(country, timepoint)
+) %>%
+  distinct(country, timepoint) %>%
+  mutate(
+    timepoint = factor(timepoint, levels = paste0("T", 1:10)),
+    group = paste(country, timepoint, sep = " — ")
+  ) %>%
+  arrange(match(country, c("Australia","SA")), timepoint) %>%
+  pull(group)
+
+metrics1_long <- bind_rows(
+  # EF 
+  tp_ef_desc %>%
+    mutate(group = paste(country, timepoint, sep = " — "),
+           domain = unname(ef_labels[as.character(variable)])) %>%
+    transmute(section = "Executive function", row = paste0(domain, ", n"), group,
+              value = as.character(n)),
+
+  tp_ef_desc %>%
+    mutate(group = paste(country, timepoint, sep = " — "),
+           domain = unname(ef_labels[as.character(variable)])) %>%
+    transmute(section = "Executive function", row = paste0(domain, ", Mean (SD)"), group,
+              value = fmt_mean_sd(mean, sd, digits = 2)),
+
+  # Age
+  tp_age %>%
+    mutate(group = paste(country, timepoint, sep = " — ")) %>%
+    transmute(section = "Age", row = "Age (years), Mean (SD)", group,
+              value = fmt_mean_sd(age_mean, age_sd, digits = 2)),
+
+  tp_age %>%
+    mutate(group = paste(country, timepoint, sep = " — ")) %>%
+    transmute(section = "Age", row = "Age (years), Median [min, max]", group,
+              value = fmt_med_rng(age_median, age_min, age_max, digits = 2)),
+
+  # Sex
+  tp_sex %>%
+    mutate(group = paste(country, timepoint, sep = " — ")) %>%
+    transmute(section = "Sex",
+              row     = paste0(level, ", n (%)"),
+              group,
+              value   = cell)
+)
+
+metrics1_long <- metrics1_long %>%
+  mutate(section = factor(section, levels = c("Executive function", "Age", "Sex")))
+
+
+paper_table1 <- metrics1_long %>%
+  mutate(group = factor(group, levels = group_levels)) %>%
+  select(section, row, group, value) %>%
+  tidyr::pivot_wider(names_from = group, values_from = value) %>%
+  arrange(section, row)
+
+gt1 <- paper_table1 %>%
+  gt(groupname_col = "section", rowname_col = "row") %>%
+  tab_header(
+    title = "Table 1. Age and executive function by country and timepoint",
+    subtitle = "All summaries are anchored to children with any EF observed at that timepoint (partial EF allowed)."
+  ) %>%
+  cols_align(align = "center") %>%
+  tab_options(
+    table.width = pct(100),
+    row_group.as_column = TRUE,
+    table.font.size = px(11)
+  ) %>%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_row_groups()
+  )
+
+gt1
+```
+:::
+
+```{r}
+#| label: summarise-table2-components
+#| include: false
+
+# Categorical
+sa_edu_tp     <- desc_cat_tp(sa_ses,     "edu_sa",     sa_any_ids,  "Caregiver education (SA)")
+aus_edu_tp    <- desc_cat_tp(aus_ses_tp, "edu_aus",    aus_any_ids, "Caregiver education (AUS)")
+aus_income_tp <- desc_cat_tp(aus_ses_tp, "income_aus", aus_any_ids, "Household income (AUS)")
+
+ses_tp_long2 <- bind_rows(sa_edu_tp, aus_edu_tp, aus_income_tp) %>%
+  arrange(country, timepoint, variable, level)
+
+# Continuous
+# SA income derived from NIDS assets score
+tp_income_sa <- summ_cont_tp(sa_ses, "nids_assets_sa", sa_any_ids, "Household income (SA)")
+
+# SA HLE
+tp_hle_sa <- bind_rows(
+  summ_cont_tp(sa_ses, "hla_frequency1",       sa_any_ids, "HLE activity frequency (sum)"),
+  summ_cont_tp(sa_ses, "num_caregivers_clean", sa_any_ids, "HLE: unique caregiver types involved"),
+  summ_cont_tp(sa_ses, "books_toys_total1",    sa_any_ids, "HLE: books/toys total"),
+  summ_cont_tp(sa_ses, "time_total1",          sa_any_ids, "HLE: time total")
+) %>% arrange(country, timepoint, variable)
+
+# AUS HLE index (note: this will repeat across timepoints because it's child-level)
+tp_hle_aus <- summ_cont_tp(aus_ses_tp, "hle_aus", aus_any_ids, "Home learning environment (AUS; HLE Index)")
+```
+
+# Demographics {.appendix #render-table2}
+
+::: {.landscape}
+```{r}
+#| label: render-table2
+#| include: true
+
+group_levels <- bind_rows(
+  ses_tp_long2 %>% distinct(country, timepoint),
+  tp_income_sa %>% distinct(country, timepoint),
+  tp_hle_sa %>% distinct(country, timepoint),
+  tp_hle_aus %>% distinct(country, timepoint)
+) %>%
+  distinct(country, timepoint) %>%
+  mutate(
+    timepoint = factor(timepoint, levels = paste0("T", 1:10)),
+    group = paste(country, timepoint, sep = " — ")
+  ) %>%
+  arrange(match(country, c("Australia","SA")), timepoint) %>%  # <-- Australia first
+  pull(group)
+
+# SA income (continuous)
+income2_long <- bind_rows(
+  tp_income_sa %>%
+    mutate(group = paste(country, timepoint, sep = " — ")) %>%
+    transmute(section = "Household income (SA)",
+              row = paste0(variable, ", n"),
+              group, value = as.character(n)),
+  tp_income_sa %>%
+    mutate(group = paste(country, timepoint, sep = " — ")) %>%
+    transmute(section = "Household income (SA)",
+              row = paste0(variable, ", Mean (SD)"),
+              group, value = fmt_mean_sd(mean, sd, digits = 2))
+)
+
+income2_wide <- income2_long %>%
+  mutate(group = factor(group, levels = group_levels)) %>%
+  select(section, row, group, value) %>%
+  tidyr::pivot_wider(names_from = group, values_from = value) %>%
+  arrange(section, row)
+
+# SA HLE (continuous)
+hle_sa_long <- bind_rows(
+  tp_hle_sa %>%
+    mutate(group = paste(country, timepoint, sep = " — ")) %>%
+    transmute(section = "Home learning environment (SA)",
+              row = paste0(variable, ", n"),
+              group, value = as.character(n)),
+  tp_hle_sa %>%
+    mutate(group = paste(country, timepoint, sep = " — ")) %>%
+    transmute(section = "Home learning environment (SA)",
+              row = paste0(variable, ", Mean (SD)"),
+              group, value = fmt_mean_sd(mean, sd, digits = 2))
+)
+
+hle_sa_wide <- hle_sa_long %>%
+  mutate(group = factor(group, levels = group_levels)) %>%
+  select(section, row, group, value) %>%
+  tidyr::pivot_wider(names_from = group, values_from = value) %>%
+  arrange(section, row)
+
+# AUS HLE index (continuous) 
+hle_aus_long <- bind_rows(
+  tp_hle_aus %>%
+    mutate(group = paste(country, timepoint, sep = " — ")) %>%
+    transmute(section = "Home learning environment (AUS)",
+              row = paste0(variable, ", n"),
+              group, value = as.character(n)),
+  tp_hle_aus %>%
+    mutate(group = paste(country, timepoint, sep = " — ")) %>%
+    transmute(section = "Home learning environment (AUS)",
+              row = paste0(variable, ", Mean (SD)"),
+              group, value = fmt_mean_sd(mean, sd, digits = 2))
+)
+
+hle_aus_wide <- hle_aus_long %>%
+  mutate(group = factor(group, levels = group_levels)) %>%
+  select(section, row, group, value) %>%
+  tidyr::pivot_wider(names_from = group, values_from = value) %>%
+  arrange(section, row)
+
+# Categorical block (education SA/AUS + income AUS)
+ses2_wide <- ses_tp_long2 %>%
+  mutate(group = paste(country, timepoint, sep = " — "),
+         group = factor(group, levels = group_levels)) %>%
+  transmute(section = variable, row = level, group, value = cell) %>%
+  tidyr::pivot_wider(names_from = group, values_from = value) %>%
+  arrange(section, row)
+
+paper_table2 <- bind_rows(ses2_wide, income2_wide, hle_aus_wide, hle_sa_wide) %>%
+  mutate(section = factor(section, levels = c(
+    "Caregiver education (AUS)",
+    "Caregiver education (SA)",
+    "Household income (AUS)",
+    "Household income (SA)",
+    "Home learning environment (AUS)",
+    "Home learning environment (SA)"
+  ))) %>%
+  arrange(section, row)
+
+gt2 <- paper_table2 %>%
+  gt(groupname_col = "section", rowname_col = "row") %>%
+  tab_header(
+    title = "Table 2. Socioeconomic status and home learning environment by country and timepoint"
+  ) %>%
+  tab_source_note(
+    source_note = md("**Note.** Summaries are restricted to children with any EF data at each wave (partial EF allowed). In Australia, caregiver education, household income, and the HLE Index are measured once per child and carried across waves; *n* and summary statistics may still differ across T1–T3 because the EF-available sample varies by wave (attrition/partial EF). In South Africa, caregiver education, income, and HLE measures are recorded by wave and summarised only where collected (later-wave cells are NA if not assessed).")
+  ) %>%
+  cols_align(align = "center") %>%
+  tab_options(
+    table.width = pct(100),
+    row_group.as_column = TRUE,
+    table.font.size = px(11)
+  ) %>%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_row_groups()
+  )
+
+gt2
+```
+:::
+
+```{r}
+#| label: graph-prep
+#| include: false
+
+
+```
+
+```{r}
+#| label: standardize
+#| include: false
+
+# EF longitudinal exploration
+
+stopifnot(exists("sa_ef_long"), exists("aus_ef_long"))
+stopifnot(exists("sa_age_long"), exists("aus_age_long"))
+
+time_levels <- c("T1","T2","T3")
+nodes   <- c("ef_inhibition","ef_cogflex","ef_workingmem")
+
+ef_labels <- c(
+  ef_inhibition = "Inhibition",
+  ef_cogflex    = "Cognitive flexibility",
+  ef_workingmem = "Working memory"
+)
+
+ef_std <- ef_all %>%
+  dplyr::group_by(variable) %>%
+  dplyr::mutate(value_z = as.numeric(scale(value))) %>%
+  dplyr::ungroup() %>%
+  dplyr::left_join(
+    age_all %>% dplyr::select(country, timepoint, id, age),
+    by = c("country", "timepoint", "id")
+  ) %>%
+  dplyr::mutate(
+    country = dplyr::recode(country, SA = "South Africa"),
+    country = factor(country, levels = c("Australia", "South Africa")),
+
+    # derive task from VARIABLE (not from the existing label)
+    task = factor(
+      as.character(variable),
+      levels = nodes,
+      labels = unname(ef_labels[nodes])
+    )
+  )
+
+```
+
+```{r}
+#| label: test-re-test
+#| include: false
+
+# keep only children who have >1 wave for a given task (within country)
+ef_retest_scores <- ef_std %>%
+  group_by(country, id, task) %>%
+  arrange(country, id, task, timepoint) %>%
+  filter(n_distinct(timepoint) > 1) %>%
+  ungroup()
+
+# wide format: one row per child × task (within country), columns per wave
+# (also widens age so we can compute age gaps)
+retest_wide <- ef_retest_scores %>%
+  # if you *ever* have duplicates within a wave, this collapses safely
+  group_by(country, id, task, timepoint) %>%
+  summarise(
+    value_z = mean(value_z, na.rm = TRUE),
+    age     = mean(age,     na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  tidyr::pivot_wider(
+    id_cols     = c(country, id, task),
+    names_from  = timepoint,
+    values_from = c(value_z, age),
+    names_sep   = "_"
+  ) %>%
+  mutate(
+    mean_age      = rowMeans(dplyr::select(., dplyr::starts_with("age_")), na.rm = TRUE),
+    age_gap_T12_y = age_T2 - age_T1,
+    age_gap_T23_y = age_T3 - age_T2
+  ) %>%
+  select(
+    country, id, task,
+    mean_age,
+    age_gap_T12_y, age_gap_T23_y,
+    value_z_T1, value_z_T2, value_z_T3
+  )
+
+# helper: only compute r if there are enough complete pairs
+safe_cor <- function(a, b, min_n = 3) {
+  n <- sum(stats::complete.cases(a, b))
+  if (n < min_n) return(NA_real_)
+  suppressWarnings(stats::cor(a, b, use = "complete.obs"))
+}
+
+# 3) test–retest correlations by country × task
+trt <- retest_wide %>%
+  group_by(country, task) %>%
+  summarise(
+    r_T12   = safe_cor(value_z_T1, value_z_T2),
+    n_T12   = sum(complete.cases(value_z_T1, value_z_T2)),
+    gap_T12 = mean(age_gap_T12_y, na.rm = TRUE) * 12,  # months
+
+    r_T23   = safe_cor(value_z_T2, value_z_T3),
+    n_T23   = sum(complete.cases(value_z_T2, value_z_T3)),
+    gap_T23 = mean(age_gap_T23_y, na.rm = TRUE) * 12,  # months
+    .groups = "drop"
+  ) %>%
+  arrange(task, country)
+
+trt
+```
+
+# Age associations {.appendix #render-test-re-test-plot}
+
+```{r}
+#| label: test-re-test-plot
+#| fig-cap: "Executive Function associations across waves. Note: Standardised scores (z); colour indicates mean age across available waves"
+#| include: true
+#| fig-align: center
+#| fig-width: 8
+#| fig-height: 8
+
+# From retest_wide -> one row per child × task × pair (T1–T2 and T2–T3), then build a single row facet that only includes observed combos.
+
+retest_long_pairs <- dplyr::bind_rows(
+  retest_wide %>%
+    dplyr::transmute(
+      country, id, task, mean_age,
+      pair = "T1–T2",
+      x = value_z_T1, y = value_z_T2
+    ),
+  retest_wide %>%
+    dplyr::transmute(
+      country, id, task, mean_age,
+      pair = "T2–T3",
+      x = value_z_T2, y = value_z_T3
+    )
+) %>%
+  dplyr::filter(!is.na(x) & !is.na(y)) %>%
+  dplyr::mutate(
+    pair = factor(pair, levels = c("T1–T2", "T2–T3")),
+    row_facet = paste(country, pair, sep = "\n")
+  ) %>%
+  dplyr::mutate(
+    row_facet = factor(
+      row_facet,
+      levels = c(
+        "Australia\nT1–T2",
+        "Australia\nT2–T3",
+        "South Africa\nT1–T2"
+      )
+    )
+  )
+
+# Panel stats (r + N), using the same "safe" logic as above
+pair_stats <- retest_long_pairs %>%
+  dplyr::group_by(country, task, pair, row_facet) %>%
+  dplyr::summarise(
+    n = sum(stats::complete.cases(x, y)),
+    r = safe_cor(x, y, min_n = 3),
+    .groups = "drop"
+  ) %>%
+  dplyr::mutate(
+    label = ifelse(
+      is.na(r),
+      paste0("r = NA\nN = ", n),
+      paste0("r = ", sprintf("%.2f", r), "\nN = ", n)
+    )
+  )
+
+# Plot
+p_retest_simple <- ggplot(retest_long_pairs, aes(x = x, y = y)) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dotted", alpha = 0.6) +
+  geom_point(aes(colour = mean_age), alpha = 0.5, size = 1.4) +
+  geom_smooth(method = "lm", formula = y ~ x, se = TRUE) +
+  geom_text(
+    data = pair_stats,
+    aes(label = label),
+    x = -Inf, y = Inf,
+    inherit.aes = FALSE,
+    hjust = -0.05, vjust = 1.1, size = 3.5
+  ) +
+  facet_grid(row_facet ~ task) +
+  labs(
+    x = "Earlier wave (z)",
+    y = "Later wave (z)",
+    colour = "Mean age (years)"
+  ) +
+  theme(legend.position = "bottom")
+
+p_retest_simple
+```
+
+# Executive Function across waves {.appendix #age-ef-wave}
+
+```{r}
+#| label: age-ef-wave
+#| fig-cap: "Executive Function by age across waves (z-scored within EF task). Note: Points jittered + transparent; lines are linear fits with 95% CI"
+#| include: true
+#| fig-align: center
+#| fig-width: 6
+#| fig-height: 6
+
+# set up plot scales
+.scale_colour_country <- function() {
+  scale_colour_discrete()
+}
+
+# Age x EF x wave (standardized)
+p_age_by_wave <- ggplot(
+  ef_std %>% dplyr::filter(!is.na(age), !is.na(value_z)),
+  aes(x = age, y = value_z, colour = country)
+) +
+  geom_point(
+    alpha = 0.15, size = 1,
+    position = position_jitter(width = 0.03, height = 0.03)
+  ) +
+  geom_smooth(
+    method = "lm", formula = y ~ x, se = TRUE, linewidth = 1
+  ) +
+  facet_grid(timepoint ~ task, scales = "fixed") +
+  labs(
+    #title = "EF by age across waves (z-scored within EF task)",
+    #subtitle = "Points jittered + transparent; lines are linear fits with 95% CI",
+    x = "Age (years)",
+    y = "EF (z-score within task)",
+    colour = "Country"
+  ) +
+  .scale_colour_country() +
+  theme(legend.position = "bottom")
+
+p_age_by_wave
+
+```
+
+```{r}
+#| label: restricted-sample
+#| include: false
+
+# restricted to at least 2 waves sample
+# SA: EF at T1 and T2
+# Aus: strict (T1+T2+T3) or lenient (T1+T2)
+
+# Wave-level EF presence flag: "any EF observed at this wave"
+flags <- ef_std %>%
+  dplyr::mutate(
+    country = dplyr::recode(as.character(country), SA = "South Africa"),
+    id      = as.character(id)
+  ) %>%
+  dplyr::group_by(country, id, timepoint) %>%
+  dplyr::summarise(any_ef = any(!is.na(value_z)), .groups = "drop")
+
+# SA keep: must have T1 & T2
+sa_keep_ids <- flags %>%
+  dplyr::filter(country == "South Africa", timepoint %in% c("T1","T2")) %>%
+  dplyr::group_by(country, id) %>%
+  dplyr::summarise(
+    has_T1 = any(timepoint == "T1" & any_ef),
+    has_T2 = any(timepoint == "T2" & any_ef),
+    .groups = "drop"
+  ) %>%
+  dplyr::filter(has_T1 & has_T2) %>%
+  dplyr::select(country, id)
+
+# AUS keep: strict vs lenient
+aus_keep_ids_strict <- flags %>%
+  dplyr::filter(country == "Australia", timepoint %in% c("T1","T2","T3")) %>%
+  dplyr::group_by(country, id) %>%
+  dplyr::summarise(
+    has_T1 = any(timepoint == "T1" & any_ef),
+    has_T2 = any(timepoint == "T2" & any_ef),
+    has_T3 = any(timepoint == "T3" & any_ef),
+    .groups = "drop"
+  ) %>%
+  dplyr::filter(has_T1 & has_T2 & has_T3) %>%
+  dplyr::select(country, id)
+
+aus_keep_ids_t12 <- flags %>%
+  dplyr::filter(country == "Australia", timepoint %in% c("T1","T2")) %>%
+  dplyr::group_by(country, id) %>%
+  dplyr::summarise(
+    has_T1 = any(timepoint == "T1" & any_ef),
+    has_T2 = any(timepoint == "T2" & any_ef),
+    .groups = "drop"
+  ) %>%
+  dplyr::filter(has_T1 & has_T2) %>%
+  dplyr::select(country, id)
+
+aus_restriction <- "strict"  # "strict" or "t12"
+aus_keep_ids <- if (aus_restriction == "strict") aus_keep_ids_strict else aus_keep_ids_t12
+
+keep_ids_all <- dplyr::bind_rows(sa_keep_ids, aus_keep_ids)
+
+ef_restricted <- ef_std %>%
+  dplyr::mutate(
+    country = dplyr::recode(as.character(country), SA = "South Africa"),
+    id      = as.character(id)
+  ) %>%
+  dplyr::inner_join(keep_ids_all, by = c("country","id"))
+
+```
+
+# Executive Function scores over time {.appendix #mean-trend}
+
+```{r}
+#| label: mean-trend
+#| include: true
+#| fig-align: center
+#| fig-width: 8
+#| fig-height: 8
+#| fig-cap: |
+#|   **Mean EF scores over time (children with repeated EF data).**  
+#|   *Note.* “EF observed” at a wave means at least one EF task score is non-missing. The analytic sample includes only children meeting the wave-coverage rule: South Africa = EF observed at both T1 and T2; Australia = EF observed at T1–T3 (“strict”) or at T1 and T2 (“t12”)."
+
+# Mean trend over time (standardised, restricted sample)
+mean_df <- ef_restricted %>%
+  dplyr::mutate(
+    task = factor(as.character(variable),
+                  levels = nodes,
+                  labels = ef_labels_pretty[nodes]),
+    country = factor(country, levels = c("Australia", "South Africa")),
+    timepoint = factor(timepoint, levels = c("T1","T2","T3"))
+  ) %>%
+  dplyr::group_by(country, task, timepoint) %>%
+  dplyr::summarise(
+    n  = sum(!is.na(value_z)),
+    m  = mean(value_z, na.rm = TRUE),
+    se = sd(value_z, na.rm = TRUE) / sqrt(n),
+    lo = m - 1.96 * se,
+    hi = m + 1.96 * se,
+    .groups = "drop"
+  )
+
+p_mean_trend <- ggplot(mean_df, aes(x = timepoint, y = m, group = 1)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2.2) +
+  geom_errorbar(aes(ymin = lo, ymax = hi), width = 0.10) +
+  facet_grid(country ~ task) +
+  labs(
+    x = "Timepoint",
+    y = "Mean EF (z-score)"
+  )
+
+p_mean_trend
+
+```
+
+# Executive Function individual trajectories {.appendix #spaghetti-plot}
+
+```{r}
+#| label: spaghetti-plot
+#| include: true
+#| fig-align: center
+#| fig-width: 8
+#| fig-height: 8
+#| fig-cap: |
+#|   **Individual EF trajectories over time (children with repeated EF data).**  
+#|   *Note.* “EF observed” at a wave means at least one EF task score is non-missing. The analytic sample includes only children meeting the wave-coverage rule: South Africa = EF observed at both T1 and T2; Australia = EF observed at T1–T3 (“strict”) or at T1 and T2 (“t12”). Mean ± 95% CI is overlaid. EF scores are z-scored within task (pooled).
+
+# Standardize labels in ef_restricted
+ef_restricted_lab <- ef_restricted %>%
+  dplyr::mutate(
+    country  = dplyr::recode(as.character(country), SA = "South Africa"),
+    country  = factor(country, levels = c("Australia", "South Africa")),
+    # safest: derive EF domain from the variable code
+    task     = factor(as.character(variable),
+                      levels = nodes,
+                      labels = ef_labels_pretty[nodes]),
+    timepoint = factor(timepoint, levels = c("T1", "T2", "T3")),
+    id       = as.character(id)
+  )
+
+# Make sure mean_df has the same factor structure
+mean_df_lab <- mean_df %>%
+  dplyr::mutate(
+    country  = dplyr::recode(as.character(country), SA = "South Africa"),
+    country  = factor(country, levels = c("Australia", "South Africa")),
+    task     = factor(as.character(task),
+                      levels = ef_labels_pretty[nodes]),  # because mean_df already has pretty labels
+    timepoint = factor(timepoint, levels = c("T1", "T2", "T3"))
+  )
+
+# plot (no downsampling)
+p_spaghetti <- ggplot(ef_restricted_lab, aes(x = timepoint, y = value_z, group = id)) +
+  geom_line(alpha = 0.08) +
+  geom_point(alpha = 0.08, size = 0.7) +
+  geom_line(
+    data = mean_df_lab,
+    aes(x = timepoint, y = m, group = 1),
+    inherit.aes = FALSE,
+    linewidth = 1.0
+  ) +
+  geom_point(
+    data = mean_df_lab,
+    aes(x = timepoint, y = m),
+    inherit.aes = FALSE,
+    size = 2.2
+  ) +
+  geom_errorbar(
+    data = mean_df_lab,
+    aes(x = timepoint, ymin = lo, ymax = hi),
+    inherit.aes = FALSE,
+    width = 0.10
+  ) +
+  facet_grid(country ~ task) +
+  labs(
+    x = "Timepoint",
+    y = "EF (z-score)"
+  ) +
+  theme(legend.position = "none")
+p_spaghetti
+```
 
 ```{r}
 #| label: excess-code
