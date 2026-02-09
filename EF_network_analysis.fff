@@ -1,0 +1,67 @@
+\efloatseparator
+ 
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+[H]
+
+\caption{Executive Function associations across waves. Note:
+Standardised scores (z); colour indicates mean age across available
+waves}
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{EF_network_analysis_files/figure-pdf/test-re-test-plot-1.png}}
+
+}
+
+\end{figure*}
+\efloatseparator
+ 
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+[H]
+
+\caption{Executive Function by age across waves (z-scored within EF
+task). Note: Points jittered + transparent; lines are linear fits with
+95\% CI}
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{EF_network_analysis_files/figure-pdf/age-ef-wave-1.png}}
+
+}
+
+\end{figure*}
+\efloatseparator
+ 
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+[H]
+
+\caption{\textbf{Mean EF scores over time (children with repeated EF
+data).}\\
+\emph{Note.} ``EF observed'' at a wave means at least one EF task score
+is non-missing. The analytic sample includes only children meeting the
+wave-coverage rule: SA = EF observed at both T1 and T2; AU = EF observed
+at T1--T3 (``strict'') or at T1 and T2 (``t12'').''}
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{EF_network_analysis_files/figure-pdf/mean-trend-1.png}}
+
+}
+
+\end{figure*}
+\efloatseparator
+ 
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+[H]
+
+\caption{\textbf{Individual EF trajectories over time (children with
+repeated EF data).}\\
+\emph{Note.} ``EF observed'' at a wave means at least one EF task score
+is non-missing. The analytic sample includes only children meeting the
+wave-coverage rule: SA = EF observed at both T1 and T2; AU = EF observed
+at T1--T3 (``strict'') or at T1 and T2 (``t12''). Mean ± 95\% CI is
+overlaid. EF scores are z-scored within task (pooled).}
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{EF_network_analysis_files/figure-pdf/spaghetti-plot-1.png}}
+
+}
+
+\end{figure*}

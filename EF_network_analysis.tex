@@ -100,6 +100,39 @@
 \makeatother
 
 
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 
 
 \usepackage[nolongtablepatch]{lineno}
@@ -116,8 +149,8 @@
 
 
 
-\title{Mapping the Structure of Executive Function in Early Childhood: A
-Network Analysis Approach}
+\title{Mapping the Structure of Executive Function in Early Childhood
+using Network Analysis}
 
 
 \shorttitle{Mapping Executive Function}
@@ -286,13 +319,869 @@ O'Reilly, Email: \href{mailto:fionnuala.oreilly@psy.ox.ac.uk}{fionnuala.oreilly@
 
 
 
+\section{Introduction}\label{introduction}
+
+\subsection{Research Questions}\label{research-questions}
+
+\textbf{RQ1 (Primary): EF Network Structure Within Cohorts} Within each
+cohort and wave, what is the age-adjusted EF network---defined by
+partial correlations among working memory, inhibition, and cognitive
+flexibility---and what do global strength and expected influence
+indicate about overall connectivity and node centrality?
+
+\textbf{RQ2 (Primary): Developmental Change Within Cohorts} RQ2a: Within
+each cohort, do the EF conditional associations (partial correlations)
+change across adjacent waves (AU: T1→T2→T3; SA: T1→T2), and if so, which
+specific edges strengthen or weaken over time?
+
+RQ2b: At the individual level, are gains in one EF component coupled
+with gains in other components (i.e., does change in one domain predict
+change in another), and does this coupling vary by baseline SES?
+
+\textbf{RQ3 (Secondary): Cross-Cohort Comparisons} At matched waves (T1
+and T2), do AU and SA differ in EF conditional associations, and do the
+cohorts show divergent developmental trajectories from T1 to T2
+(difference-in-differences)?
+
+\textbf{RQ4 (Exploratory): Socioeconomic Moderation of Network
+Structure} Within each cohort, does EF network structure differ between
+children from high versus low baseline (T1) household income and home
+learning environments? Specifically, are edges systematically stronger
+or weaker in high-SES groups across waves?
+
+\clearpage
+
+\section{Methods}\label{methods}
+
+\subsection{Participants}\label{participants}
+
+To be added.
+
+\subsection{Measures}\label{measures}
+
+To be added.
+
+\subsection{Statistical Analysis}\label{statistical-analysis}
+
+\subsubsection{Network Estimation}\label{network-estimation}
+
+We estimated EF network structure using Bayesian Gaussian Graphical
+Models (BGGM) (\citeproc{ref-williams2020bayesian}{Williams \& Mulder,
+2020a}, \citeproc{ref-williams2020bggm}{2020b}) implemented in the BGGM
+R package (\citeproc{ref-BGGM}{Williams et al., 2025}). For each
+cohort×wave combination, we fit a separate network model to capture the
+conditional relationships between the three EF components (inhibition,
+cognitive flexibility, and working memory) after controlling for age. We
+used default priors and ran MCMC sampling for 5,050 iterations (5,000
+posterior samples after 50 burn-in iterations).
+
+\subsubsection{Edge Weights}\label{edge-weights}
+
+Edges represent the conditional associations between pairs of EF
+components. Technically, edge weights are partial correlations: the
+correlation between two components after controlling for all other
+components in the network and age. A positive edge indicates that two EF
+components tend to covary (e.g., children with higher working memory
+also tend to have higher inhibition, beyond what age would predict),
+while a negative edge would indicate an inverse relationship. Edge
+weights range from −1 to +1, with values closer to 0 indicating weaker
+associations.
+
+For each edge, we report the posterior median (a point estimate of the
+edge strength) and the 95\% credible interval (CrI), which contains the
+true edge weight with 95\% probability given the data and model. Unlike
+frequentist confidence intervals, credible intervals can be directly
+interpreted as probability statements about the parameter.
+
+\subsubsection{Meaningfulness Threshold}\label{meaningfulness-threshold}
+
+To distinguish meaningful edges from those that are small or negligible,
+we adopted a Region of Practical Equivalence (ROPE) approach
+(\citeproc{ref-kruschke2018rejecting}{Kruschke, 2018}). We defined the
+ROPE as \textbar r\textbar{} ≤ 0.10, such that edge weights falling
+within ±0.10 were considered practically equivalent to zero. For each
+edge, we computed P(\textbar r\textbar{} \textgreater{} 0.10): the
+posterior probability that the edge weight exceeds the ROPE threshold in
+absolute value. Values close to 1 (e.g., P \textgreater{} 0.90) indicate
+strong evidence that the edge is meaningfully different from zero, while
+values close to 0.5 indicate substantial uncertainty.
+
+This approach differs from traditional null hypothesis significance
+testing in two ways. First, it focuses on practical significance (is the
+effect large enough to matter?) rather than statistical significance (is
+the effect different from exactly zero?). Second, it quantifies evidence
+on a continuous scale rather than using a binary reject/fail-to-reject
+decision rule.
+
+\subsubsection{Global Strength}\label{global-strength}
+
+Global strength summarizes overall network connectivity by summing the
+absolute values of all unique edge weights. Higher global strength
+indicates a more densely connected network where EF components are more
+strongly coupled. We computed global strength for each posterior sample,
+yielding a posterior distribution that captures uncertainty in this
+summary metric.
+
+Formally, for a network with \emph{p} nodes, global strength is:
+
+\[
+GS = \sum_{i<j} |r_{ij}|
+\]
+
+where \emph{r\textsubscript{ij}} is the partial correlation between
+nodes \emph{i} and \emph{j}. For our three-node networks, global
+strength is simply \textbar r\textsubscript{inhib-cogflex}\textbar{} +
+\textbar r\textsubscript{inhib-WM}\textbar{} +
+\textbar r\textsubscript{cogflex-WM}\textbar.
+
+\subsubsection{Centrality (Expected
+Influence)}\label{centrality-expected-influence}
+
+Expected Influence (\citeproc{ref-robinaugh2016identifying}{Robinaugh et
+al., 2016}) quantifies the centrality of each node in the network---that
+is, how strongly connected it is to other nodes. Expected influence is
+computed as the sum of a node's edge weights to all other nodes (without
+taking absolute values), preserving the sign of the relationships. Nodes
+with higher expected influence are more central to the network and may
+play a more important role in the overall system.
+
+Formally, for node \emph{i}:
+
+\[
+EI_i = \sum_{j \neq i} r_{ij}
+\]
+
+Unlike older centrality metrics (e.g., betweenness, closeness), expected
+influence is appropriate for networks estimated from partial
+correlations and does not require thresholding edges or converting the
+network to a binary graph.
+
+We chose expected influence over strength (which uses absolute values)
+because it preserves directional information: a node can have high
+expected influence by being positively connected to many nodes, whereas
+strength would treat positive and negative edges equivalently. In EF
+networks where edges are predominantly positive, the two metrics
+converge, but expected influence provides a more nuanced picture if any
+negative edges emerge.
+
+\subsubsection{Change and Comparison
+Analyses}\label{change-and-comparison-analyses}
+
+To test for developmental change within cohorts (RQ2), we computed
+difference scores between adjacent waves (e.g., Δr = r\textsubscript{T2}
+− r\textsubscript{T1}) by subtracting posterior samples pairwise. This
+yields a posterior distribution of the change, from which we derived
+95\% credible intervals and ROPE probabilities for the difference
+(P(\textbar Δr\textbar{} \textgreater{} 0.10)).
+
+For cross-cohort comparisons (RQ3), we computed cohort difference scores
+(e.g., r\textsubscript{AU} − r\textsubscript{SA}) at matched waves. To
+account for the bounded nature of correlations, we also report
+differences on the Fisher z-scale (z = atanh(r)), which transforms
+correlations to an unbounded scale where differences are more symmetric.
+Results on both scales were substantively similar, indicating our
+findings are not artifacts of scale constraints.
+
+For difference-in-differences (DiD) contrasts, we tested whether cohorts
+showed divergent developmental trajectories by computing
+(Δr\textsubscript{T2-T1})\textsubscript{AU} −
+(Δr\textsubscript{T2-T1})\textsubscript{SA}. A meaningful DiD would
+indicate that one cohort changed more than the other over time.
+
+\subsubsection{Individual-Level Change
+Coupling}\label{individual-level-change-coupling}
+
+To test whether developmental changes across EF components were
+coordinated at the individual level (RQ2b), we computed change scores
+for each child (ΔEF = EF\textsubscript{T2} − EF\textsubscript{T1}) and
+regressed change in one component on change in another, controlling for
+baseline performance and age. Significant positive regression
+coefficients would indicate coupled development, where gains in one
+domain predict gains in another. We tested all pairwise relationships
+and examined whether SES moderated coupling strength.
+
+\subsubsection{Moderation Analyses}\label{moderation-analyses}
+
+To test whether socioeconomic factors moderate network structure (RQ4),
+we adopted a stratified approach. Within each cohort, we split children
+into High vs.~Low groups based on median splits of baseline (T1) income
+and home learning environment (HLE), then fit separate BGGM models for
+each group at each wave. We computed moderation effects as High − Low
+edge differences, with ROPE probabilities indicating the strength of
+evidence for moderation (P(\textbar High − Low\textbar{} \textgreater{}
+0.10)). This stratified approach is more robust than including SES as a
+continuous covariate in a single model, as it allows network structure
+to differ nonlinearly across SES groups and does not assume constant
+effects across the SES distribution.
+
+\subsubsection{Robustness check: Measurement
+Invariance}\label{robustness-check-measurement-invariance}
+
+We tested measurement invariance across cohorts using confirmatory
+factor analysis (CFA) in the lavaan R package
+(\citeproc{ref-rosseel2012lavaan}{Rosseel, 2012}). We fit a
+single-factor model with the three EF components as indicators and
+tested three levels of invariance:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Configural invariance}: The same factor structure (three
+  indicators loading on one factor) holds in both cohorts
+\item
+  \textbf{Metric invariance}: Factor loadings are equal across cohorts
+  (components relate to the latent construct equivalently)
+\item
+  \textbf{Scalar invariance}: Intercepts are equal across cohorts
+  (groups have the same baseline levels)
+\end{enumerate}
+
+We evaluated invariance using chi-square difference tests (Δχ²) and
+changes in fit indices (ΔCFI, ΔRMSEA), with ΔCFI \textless{} 0.01
+supporting invariance (\citeproc{ref-cheung2002evaluating}{Cheung \&
+Rensvold, 2002}). Metric invariance is a prerequisite for comparing
+relationships between variables across groups, while scalar invariance
+is required for comparing mean levels.
+
+\subsubsection{Software}\label{software}
+
+All analyses were conducted in R (version 4.5.0). Network models were
+fit using BGGM (version 2.1.5), measurement invariance tests used lavaan
+(version 0.6.19), and visualizations used ggplot2 (version 4.0.0).
+Analysis code is available at {[}include github url{]}.
+
+\clearpage
+
+\section{Results}\label{results}
+
+\textbf{RQ1 (Primary): EF Network Structure Within Cohorts}: Within each
+cohort and wave, what is the age-adjusted EF network---defined by
+partial correlations among working memory, inhibition, and cognitive
+flexibility---and what do global strength and expected influence
+indicate about overall connectivity and node centrality?
+
+\subsubsection{Edges}\label{edges}
+
+Within-wave age-adjusted partial correlations are summarized in
+Table~\ref{tbl-rq1-gt-all} and visualized in
+Figure~\ref{fig-rq1-edge-forest}. In Australia, edges involving working
+memory showed the clearest evidence of coupling across waves. The
+inhibition--working memory edge was consistently positive (T1: 0.27
+{[}0.15, 0.39{]}; T2: 0.32 {[}0.20, 0.44{]}; T3: 0.30 {[}0.12, 0.47{]})
+and reliably exceeded the meaningfulness threshold (T1:
+P(\textbar r\textbar\textgreater0.1)=1.00; T2:
+P(\textbar r\textbar\textgreater0.1)=1.00; T3:
+P(\textbar r\textbar\textgreater0.1)=0.98). The cognitive
+flexibility--working memory edge was also positive across waves (T1:
+0.25 {[}0.13, 0.37{]}; T2: 0.20 {[}0.06, 0.32{]}; T3: 0.13 {[}-0.06,
+0.32{]}) and exceeded the meaningfulness threshold (meaningfulness: T1:
+P(\textbar r\textbar\textgreater0.1)=0.99; T2:
+P(\textbar r\textbar\textgreater0.1)=0.92; T3:
+P(\textbar r\textbar\textgreater0.1)=0.63). In contrast, the cognitive
+flexibility--inhibition edge was weaker and more wave-dependent (T1:
+0.06 {[}-0.07, 0.19{]}; T2: 0.14 {[}0.01, 0.27{]}; T3: 0.19 {[}-0.00,
+0.36{]}), with less consistent evidence that it exceeded the
+meaningfulness threshold (T1: P(\textbar r\textbar\textgreater0.1)=0.28;
+T2: P(\textbar r\textbar\textgreater0.1)=0.75; T3:
+P(\textbar r\textbar\textgreater0.1)=0.83).
+
+In South Africa, the inhibition--working memory edge remained positive
+across waves (T1: 0.17 {[}0.03, 0.30{]}; T2: 0.19 {[}0.04, 0.33{]}) and
+met the meaningfulness criterion more consistently than the other edges
+(T1: P(\textbar r\textbar\textgreater0.1)=0.83; T2:
+P(\textbar r\textbar\textgreater0.1)=0.89). The cognitive
+flexibility--inhibition edge was stronger at T1 (0.21 {[}0.08, 0.34{]})
+but attenuated at T2 (0.10 {[}-0.04, 0.24{]}) and did not reliably
+exceed the meaningfulness threshold at T2 (T1:
+P(\textbar r\textbar\textgreater0.1)=0.95; T2:
+P(\textbar r\textbar\textgreater0.1)=0.51). In contrast to the
+Australian results, he cognitive flexibility--working memory edge was
+comparatively weaker and uncertain across waves (T1: 0.12 {[}-0.02,
+0.26{]}; T2: 0.12 {[}-0.03, 0.26{]}).
+
+\clearpage
+
+\begin{table}
+
+{\caption{{Age-adjusted EF network summaries by cohort×wave. Panels show
+edges, global strength, and expected influence (posterior median {[}95\%
+CrI{]}). For edges, cells also show
+\(P(|r| > r\text{ rope})\).}{\label{tbl-rq1-gt-all}}}
+\vspace{-20pt}}
+
+\caption*{
+{\fontsize{1}{1}\selectfont  \textbackslash{}vspace\{10pt\}\fontsize{8}{10}\selectfont }
+} 
+\fontsize{8.0pt}{10.0pt}\selectfont
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}l|cccccc}
+\toprule
+Measure & Cohort & Wave & N & \% missing cells & Median [95\% CrI] & P(|r|>0.1) \\ 
+\midrule\addlinespace[2.5pt]
+\multicolumn{7}{l}{Edges} \\[2.5pt] 
+\midrule\addlinespace[2.5pt]
+ef\_cogflex - ef\_inhibition & AU & T1 & 232 & 0.1 & 0.06 [-0.07, 0.19] & 0.28 \\ 
+ef\_cogflex - ef\_workingmem & AU & T1 & 232 & 0.1 & 0.25 [0.13, 0.37] & 0.99 \\ 
+ef\_inhibition - ef\_workingmem & AU & T1 & 232 & 0.1 & 0.27 [0.15, 0.39] & 1.00 \\ 
+ef\_cogflex - ef\_inhibition & AU & T2 & 217 & 0.8 & 0.14 [0.01, 0.27] & 0.75 \\ 
+ef\_cogflex - ef\_workingmem & AU & T2 & 217 & 0.8 & 0.20 [0.06, 0.32] & 0.92 \\ 
+ef\_inhibition - ef\_workingmem & AU & T2 & 217 & 0.8 & 0.32 [0.20, 0.44] & 1.00 \\ 
+ef\_cogflex - ef\_inhibition & AU & T3 & 105 & 0.0 & 0.19 [-0.00, 0.36] & 0.83 \\ 
+ef\_cogflex - ef\_workingmem & AU & T3 & 105 & 0.0 & 0.13 [-0.06, 0.32] & 0.63 \\ 
+ef\_inhibition - ef\_workingmem & AU & T3 & 105 & 0.0 & 0.30 [0.12, 0.47] & 0.98 \\ 
+ef\_cogflex - ef\_inhibition & SA & T1 & 217 & 2.0 & 0.21 [0.08, 0.34] & 0.95 \\ 
+ef\_cogflex - ef\_workingmem & SA & T1 & 217 & 2.0 & 0.12 [-0.02, 0.26] & 0.63 \\ 
+ef\_inhibition - ef\_workingmem & SA & T1 & 217 & 2.0 & 0.17 [0.03, 0.30] & 0.83 \\ 
+ef\_cogflex - ef\_inhibition & SA & T2 & 189 & 1.2 & 0.10 [-0.04, 0.24] & 0.51 \\ 
+ef\_cogflex - ef\_workingmem & SA & T2 & 189 & 1.2 & 0.12 [-0.03, 0.26] & 0.60 \\ 
+ef\_inhibition - ef\_workingmem & SA & T2 & 189 & 1.2 & 0.19 [0.04, 0.33] & 0.89 \\ 
+\midrule\addlinespace[2.5pt]
+\multicolumn{7}{l}{Global strength} \\[2.5pt] 
+\midrule\addlinespace[2.5pt]
+Global strength & AU & T1 & 232 & 0.1 & 0.60 [0.44, 0.76] &  \\ 
+Global strength & AU & T2 & 217 & 0.8 & 0.66 [0.50, 0.81] &  \\ 
+Global strength & AU & T3 & 105 & 0.0 & 0.63 [0.39, 0.84] &  \\ 
+Global strength & SA & T1 & 217 & 2.0 & 0.50 [0.32, 0.68] &  \\ 
+Global strength & SA & T2 & 189 & 1.2 & 0.42 [0.22, 0.61] &  \\ 
+\midrule\addlinespace[2.5pt]
+\multicolumn{7}{l}{Expected influence} \\[2.5pt] 
+\midrule\addlinespace[2.5pt]
+Cognitive flexibility & AU & T1 & 232 & 0.1 & 0.31 [0.16, 0.46] &  \\ 
+Inhibition & AU & T1 & 232 & 0.1 & 0.33 [0.18, 0.49] &  \\ 
+Working memory & AU & T1 & 232 & 0.1 & 0.52 [0.36, 0.68] &  \\ 
+Cognitive flexibility & AU & T2 & 217 & 0.8 & 0.34 [0.19, 0.49] &  \\ 
+Inhibition & AU & T2 & 217 & 0.8 & 0.47 [0.30, 0.62] &  \\ 
+Working memory & AU & T2 & 217 & 0.8 & 0.52 [0.36, 0.67] &  \\ 
+Cognitive flexibility & AU & T3 & 105 & 0.0 & 0.32 [0.10, 0.54] &  \\ 
+Inhibition & AU & T3 & 105 & 0.0 & 0.49 [0.26, 0.72] &  \\ 
+Working memory & AU & T3 & 105 & 0.0 & 0.44 [0.19, 0.65] &  \\ 
+Cognitive flexibility & SA & T1 & 217 & 2.0 & 0.34 [0.17, 0.50] &  \\ 
+Inhibition & SA & T1 & 217 & 2.0 & 0.38 [0.21, 0.54] &  \\ 
+Working memory & SA & T1 & 217 & 2.0 & 0.29 [0.12, 0.46] &  \\ 
+Cognitive flexibility & SA & T2 & 189 & 1.2 & 0.22 [0.04, 0.40] &  \\ 
+Inhibition & SA & T2 & 189 & 1.2 & 0.29 [0.10, 0.48] &  \\ 
+Working memory & SA & T2 & 189 & 1.2 & 0.31 [0.11, 0.49] &  \\ 
+\bottomrule
+\end{tabular*}
+
+\end{table}
+
+\begin{figure}
+
+\caption{\label{fig-rq1-edge-forest}\textbf{Within-wave EF coupling
+(posterior partial correlations).} Points show posterior medians; bars
+show 95\% credible intervals. Solid line = 0; dashed lines = ROPE
+(±0.10).}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{EF_network_analysis_files/figure-pdf/fig-rq1-edge-forest-1.png}}
+
+}
+
+\end{figure}%
+
+\clearpage
+
+\subsubsection{Global strength}\label{global-strength-1}
+
+Global strength estimates (sum of absolute partial correlations over
+unique edges) are reported in Table~\ref{tbl-rq1-gt-all} and visualized
+over time in Figure~\ref{fig-rq1-global-strength-trend}. Australia
+showed stable global strength across waves (T1: 0.60 {[}0.44, 0.76{]};
+T2: 0.66 {[}0.50, 0.81{]}; T3: 0.63 {[}0.39, 0.84{]}), whereas South
+Africa showed lower global strength and attenuation from T1 to T2 (T1:
+0.50 {[}0.32, 0.68{]}; T2: 0.42 {[}0.22, 0.61{]}).
+
+\begin{figure}
+
+\caption{\label{fig-rq1-global-strength-trend}Global strength over time
+by cohort. Points show posterior median; whiskers show 95\% credible
+intervals. Global strength is the sum of absolute partial correlations
+over unique edges.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{EF_network_analysis_files/figure-pdf/fig-rq1-global-strength-trend-1.png}}
+
+}
+
+\end{figure}%
+
+\clearpage
+
+\subsubsection{Centrality (Expected
+influence)}\label{centrality-expected-influence-1}
+
+Expected influence estimates (signed sum of incident partial
+correlations) are summarized in Table~\ref{tbl-rq1-gt-all} and
+visualized over time by node in Figure~\ref{fig-rq1-ei-trend-by-node-n}.
+In Australia, expected influence was consistently positive across nodes
+and waves, with working memory showing the highest expected influence
+across waves (T1: 0.52 {[}0.36, 0.68{]}; T2: 0.52 {[}0.36, 0.67{]}; T3:
+0.44 {[}0.19, 0.65{]}). Inhibition showed comparatively high expected
+influence from T2 onward (T1: 0.33 {[}0.18, 0.49{]}; T2: 0.47 {[}0.30,
+0.62{]}; T3: 0.49 {[}0.26, 0.72{]}), whereas cognitive flexibility was
+lower and more stable across waves (T1: 0.31 {[}0.16, 0.46{]}; T2: 0.34
+{[}0.19, 0.49{]}; T3: 0.32 {[}0.10, 0.54{]}). These patterns are evident
+in Figure~\ref{fig-rq1-ei-trend-by-node-n}, which shows sustained
+positive centrality for all three nodes in the Australian cohort, with
+working memory and inhibition contributing most strongly to within-wave
+coupling across time.
+
+In South Africa, expected influence was positive but generally lower,
+with attenuation from T1 to T2 for inhibition and cognitive flexibility
+(inhibition: T1: 0.38 {[}0.21, 0.54{]}; T2: 0.29 {[}0.10, 0.48{]};
+cognitive flexibility: T1: 0.34 {[}0.17, 0.50{]}; T2: 0.22 {[}0.04,
+0.40{]}). Working memory showed comparatively stable expected influence
+across waves (T1: 0.29 {[}0.12, 0.46{]}; T2: 0.31 {[}0.11, 0.49{]}).
+Figure~\ref{fig-rq1-ei-trend-by-node-n} shows a downward shift from T1
+to T2 for inhibition and cognitive flexibility in South Africa, while
+working memory remains comparatively steady. \clearpage
+
+\begin{figure}
+
+\caption{\label{fig-rq1-ei-trend-by-node-n}Expected influence over time
+by cohort and node. Points show posterior median; whiskers show 95\%
+credible intervals. N per wave is shown beneath the zero line within
+each panel.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{EF_network_analysis_files/figure-pdf/fig-rq1-ei-trend-by-node-n-1.png}}
+
+}
+
+\end{figure}%
+
+\clearpage
+
+\textbf{RQ2a (Primary): Developmental Change Within Cohorts}: Within
+each cohort, do the EF conditional associations (partial correlations)
+change across adjacent waves (AU: T1→T2→T3; SA: T1→T2), and if so, which
+specific edges strengthen or weaken over time?
+
+We found little evidence for meaningful change in EF network summaries
+across adjacent waves within either cohort (see
+Table~\ref{tbl-rq2-gt-all}). Posterior 95\% CrIs for all Δs included 0,
+and probabilities that edge changes exceeded the ROPE
+(\textbar Δr\textbar{} \textgreater{} 0.10) were modest (≈0.3--0.6),
+indicating substantial uncertainty and no clear support for meaningful
+change.
+
+\begin{table}
+
+{\caption{{Change in EF network summaries across adjacent waves within
+cohort. Cells show posterior median {[}95\% CrI{]} for Δ (later −
+earlier). For edges, cells also show
+\(P(|\Delta r| > 0.10)\).}{\label{tbl-rq2-gt-all}}}
+\vspace{-20pt}}
+
+\caption*{
+{\fontsize{1}{1}\selectfont  \textbackslash{}vspace\{10pt\}\fontsize{8}{10}\selectfont }
+} 
+\fontsize{8.0pt}{10.0pt}\selectfont
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}l|cccc}
+\toprule
+Measure & Cohort & Contrast & Median [95\% CrI] & P(|Δr|>0.1) \\ 
+\midrule\addlinespace[2.5pt]
+\multicolumn{5}{l}{Edges (Δr)} \\[2.5pt] 
+\midrule\addlinespace[2.5pt]
+ef\_cogflex - ef\_inhibition & AU & T2 − T1 & 0.08 [-0.10, 0.27] & 0.46 \\ 
+ef\_cogflex - ef\_workingmem & AU & T2 − T1 & -0.05 [-0.24, 0.12] & 0.35 \\ 
+ef\_inhibition - ef\_workingmem & AU & T2 − T1 & 0.05 [-0.12, 0.22] & 0.32 \\ 
+ef\_cogflex - ef\_inhibition & AU & T3 − T2 & 0.04 [-0.19, 0.27] & 0.42 \\ 
+ef\_cogflex - ef\_workingmem & AU & T3 − T2 & -0.06 [-0.30, 0.17] & 0.46 \\ 
+ef\_inhibition - ef\_workingmem & AU & T3 − T2 & -0.02 [-0.23, 0.19] & 0.36 \\ 
+ef\_cogflex - ef\_inhibition & SA & T2 − T1 & -0.11 [-0.30, 0.08] & 0.56 \\ 
+ef\_cogflex - ef\_workingmem & SA & T2 − T1 & -0.01 [-0.20, 0.19] & 0.32 \\ 
+ef\_inhibition - ef\_workingmem & SA & T2 − T1 & 0.02 [-0.17, 0.22] & 0.34 \\ 
+\midrule\addlinespace[2.5pt]
+\multicolumn{5}{l}{Global strength (Δ)} \\[2.5pt] 
+\midrule\addlinespace[2.5pt]
+Global strength & AU & T2 − T1 & 0.07 [-0.16, 0.28] &  \\ 
+Global strength & AU & T3 − T2 & -0.03 [-0.32, 0.24] &  \\ 
+Global strength & SA & T2 − T1 & -0.09 [-0.35, 0.18] &  \\ 
+\midrule\addlinespace[2.5pt]
+\multicolumn{5}{l}{Expected influence (Δ)} \\[2.5pt] 
+\midrule\addlinespace[2.5pt]
+Cognitive flexibility & AU & T2 − T1 & 0.03 [-0.19, 0.25] & 0.37 \\ 
+Inhibition & AU & T2 − T1 & 0.13 [-0.09, 0.35] & 0.64 \\ 
+Working memory & AU & T2 − T1 & -0.01 [-0.24, 0.22] & 0.38 \\ 
+Cognitive flexibility & AU & T3 − T2 & -0.02 [-0.29, 0.25] & 0.48 \\ 
+Inhibition & AU & T3 − T2 & 0.02 [-0.27, 0.29] & 0.50 \\ 
+Working memory & AU & T3 − T2 & -0.08 [-0.37, 0.20] & 0.55 \\ 
+Cognitive flexibility & SA & T2 − T1 & -0.12 [-0.37, 0.13] & 0.60 \\ 
+Inhibition & SA & T2 − T1 & -0.09 [-0.34, 0.16] & 0.53 \\ 
+Working memory & SA & T2 − T1 & 0.02 [-0.23, 0.27] & 0.44 \\ 
+\bottomrule
+\end{tabular*}
+
+\end{table}
+
+\clearpage
+
+\textbf{RQ2b: Individual Differences in Developmental Change}: At the
+individual level, are gains in one EF component coupled with gains in
+other components (i.e., does change in one domain predict change in
+another), and does this coupling vary by baseline SES?
+
+While group-level networks showed stability (RQ2a), we tested whether
+individual differences in EF developmental change showed coupling---that
+is, whether gains in one EF domain predicted gains in another. For each
+child with data at both T1 and T2 (Australia: n = 217; South Africa: n =
+189), we computed change scores (ΔEF = T2 − T1) and tested whether
+change in one component predicted change in another, controlling for
+baseline performance and age (see Table~\ref{tbl-rq2b-change-coupling}).
+
+We found little evidence for systematic coupling of developmental
+change. In Australia, all relationships between component changes were
+near zero (\textbar β\textbar{} ≤ 0.11, all \emph{p} \textgreater{}
+.10). Working memory gains did not reliably predict inhibition gains (β
+= -0.00 {[}-0.03, 0.02{]}, \emph{p} = 0.815) nor cognitive flexibility
+gains (β = -0.01 {[}-0.53, 0.50{]}, \emph{p} = 0.962). Similarly,
+inhibition and cognitive flexibility changes did not predict gains in
+other domains.
+
+In South Africa, the pattern was similar, with one marginal exception:
+working memory gains showed a tentative positive association with
+cognitive flexibility gains (β = 0.43 {[}-0.01, 0.87{]}, \emph{p} =
+0.060). All other relationships remained near zero (see
+Figure~\ref{fig-rq2b-scatter}), with substantial individual variability
+in change patterns but no systematic coupling across domains.
+
+These findings indicate that EF components develop independently at the
+individual level during this developmental window, with gains in one
+domain not systematically predicting gains in others. This lack of
+coupling validates the group-level stability finding (RQ2a): the
+stability we observed reflects genuine architectural stability rather
+than an artifact of averaging heterogeneous individual trajectories. The
+independence of developmental change supports models of EF as a set of
+related but dissociable capacities that mature through
+component-specific rather than domain-general processes during early
+childhood.
+
+\begin{table}
+
+{\caption{{Coupling of developmental change across EF domains. Each row
+shows whether change in one EF component (predictor) predicts change in
+another component (outcome), controlling for baseline performance and
+age. Standardized coefficients with 95\%
+CIs.}{\label{tbl-rq2b-change-coupling}}}
+\vspace{-20pt}}
+
+\caption*{
+{\fontsize{1}{1}\selectfont  \textbackslash{}vspace\{10pt\}\fontsize{8}{10}\selectfont }
+} 
+\fontsize{8.0pt}{10.0pt}\selectfont
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}llcc}
+\toprule
+Predictor & Outcome & Australia\textsuperscript{\textit{1}} & South Africa \\ 
+\midrule\addlinespace[2.5pt]
+ΔInhibition & ΔCogFlex & 0.03 [-2.62, 2.68] & -0.52 [-2.30, 1.25] \\ 
+ΔInhibition & ΔWorking Memory & 0.11 [-0.48, 0.70] & -0.35 [-0.83, 0.13] \\ 
+ΔCogFlex & ΔInhibition & 0.00 [-0.00, 0.01] & 0.00 [-0.01, 0.01] \\ 
+ΔCogFlex & ΔWorking Memory & 0.00 [-0.02, 0.03] & 0.02 [-0.01, 0.05] \\ 
+ΔWorking Memory & ΔInhibition & -0.00 [-0.03, 0.02] & 0.00 [-0.03, 0.03] \\ 
+ΔWorking Memory & ΔCogFlex & -0.01 [-0.53, 0.50] & 0.43 [-0.01, 0.87]† \\ 
+\bottomrule
+\end{tabular*}
+\begin{minipage}{\linewidth}
+\vspace{.05em}
+\textsuperscript{\textit{1}} † p<.10, * p<.05, ** p<.01, *** p<.001. Models control for baseline outcome and age.\\
+\end{minipage}
+
+\end{table}
+
+\begin{figure}
+
+\caption{\label{fig-rq2b-scatter}Individual-level coupling of
+developmental change. Points show individual children; lines show
+regression slopes. Strong positive slopes indicate that gains in one
+domain predict gains in another (coupled development).}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{EF_network_analysis_files/figure-pdf/fig-rq2b-scatter-1.png}}
+
+}
+
+\end{figure}%
+
+\clearpage
+
+\textbf{RQ3 (Secondary): Cross-Cohort Comparisons} At matched waves (T1
+and T2), do AU and SA differ in EF conditional associations, and do the
+cohorts show divergent developmental trajectories from T1 to T2
+(difference-in-differences)?
+
+At T1, posterior medians suggested a more negative CogFlex--Inhibition
+difference (AU−SA) and more positive working-memory edges
+(AU\textgreater SA), but uncertainty remains because the 95\% credible
+intervals for all between-cohort contrasts cross 0 ---i.e., the
+posterior still assigns non-trivial probability to both
+AU\textgreater SA and SA\textgreater AU. ROPE probabilities were
+nonetheless moderate (P(\textbar Δr\textbar\textgreater0.1)=0.53--0.72),
+reflecting that the posterior can place substantial mass beyond ±0.1
+while still spanning 0, so magnitude may be meaningful even when
+direction is not pinned down. At T2, cohort differences were smaller and
+mostly positive, but again CrIs overlapped 0. For DiD, two edges showed
+little evidence of cohort-divergent change (posteriors centered near 0),
+while CogFlex--Inhibition was most suggestive (median ≈0.20;
+P(\textbar DiD\textbar\textgreater0.1)=0.78) yet still crossed 0.
+Fisher-z results closely matched Δr, indicating the pattern is not an
+artifact of the bounded correlation scale.
+
+\begin{table}
+
+{\caption{{Between-cohort differences (edges only) at matched waves (AU
+− SA at T1/T2) and difference-in-differences for change from T1 to T2
+(ΔAU − ΔSA). Columns show posterior median {[}95\% CrI{]} on the raw
+partial-correlation scale (Δr) and Fisher-z scale (Δz = atanh(r)). ROPE
+probabilities are computed on Δr:
+\(P(|\Delta r| > 0.10)\).}{\label{tbl-rq3-gt-edges-dual}}}
+\vspace{-20pt}}
+
+\caption*{
+{\fontsize{1}{1}\selectfont  \textbackslash{}vspace\{10pt\}\fontsize{8}{10}\selectfont }
+} 
+\fontsize{8.0pt}{10.0pt}\selectfont
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}l|ccc}
+\toprule
+ & \multicolumn{2}{c}{Δr (raw partial correlation)} & \multicolumn{1}{c}{Δz (Fisher atanh scale)} \\ 
+\cmidrule(lr){2-3} \cmidrule(lr){4-4}
+Edge & Median [95\% CrI] & P(|Δr|>0.1) & Median [95\% CrI] \\ 
+\midrule\addlinespace[2.5pt]
+\multicolumn{4}{l}{Cohort difference (AU − SA) at T1} \\[2.5pt] 
+\midrule\addlinespace[2.5pt]
+ef\_cogflex - ef\_inhibition & -0.15 [-0.33, 0.03] & 0.72 & -0.16 [-0.34, 0.03] \\ 
+ef\_cogflex - ef\_workingmem & 0.13 [-0.06, 0.31] & 0.62 & 0.13 [-0.06, 0.32] \\ 
+ef\_inhibition - ef\_workingmem & 0.11 [-0.08, 0.29] & 0.55 & 0.11 [-0.08, 0.31] \\ 
+\midrule\addlinespace[2.5pt]
+\multicolumn{4}{l}{Cohort difference (AU − SA) at T2} \\[2.5pt] 
+\midrule\addlinespace[2.5pt]
+ef\_cogflex - ef\_inhibition & 0.04 [-0.15, 0.23] & 0.36 & 0.04 [-0.16, 0.24] \\ 
+ef\_cogflex - ef\_workingmem & 0.08 [-0.11, 0.27] & 0.44 & 0.08 [-0.12, 0.28] \\ 
+ef\_inhibition - ef\_workingmem & 0.13 [-0.06, 0.32] & 0.63 & 0.14 [-0.06, 0.34] \\ 
+\midrule\addlinespace[2.5pt]
+\multicolumn{4}{l}{Difference-in-differences (ΔAU − ΔSA)} \\[2.5pt] 
+\midrule\addlinespace[2.5pt]
+ef\_cogflex — ef\_workingmem & -0.05 [-0.31, 0.22] & 0.49 & -0.05 [-0.33, 0.22] \\ 
+ef\_inhibition — ef\_cogflex & 0.20 [-0.08, 0.47] & 0.78 & 0.20 [-0.08, 0.48] \\ 
+ef\_inhibition — ef\_workingmem & 0.03 [-0.24, 0.29] & 0.47 & 0.03 [-0.25, 0.31] \\ 
+\bottomrule
+\end{tabular*}
+
+\end{table}
+
+\clearpage
+
+\textbf{RQ4 (Exploratory): Socioeconomic Moderation of Network
+Structure}: Within each cohort, does EF network structure differ between
+children from high versus low baseline (T1) household income and home
+learning environments? Specifically, are edges systematically stronger
+or weaker in high-SES groups across waves?
+
+Exploratory moderation analyses revealed little consistent evidence that
+baseline income or HLE systematically altered EF network structure
+within cohorts. However, in Australia at T2, the cognitive
+flexibility--working memory edge was substantially weaker among children
+from high-income families (High−Low: −0.46 {[}−0.80, −0.11{]},
+P(\textbar Δ\textbar\textgreater0.1)=0.98), suggesting that
+socioeconomic advantage may be associated with more differentiated EF
+development. Conversely, HLE showed tentative positive moderation
+patterns (stronger coupling in enriched home environments), though
+credible intervals crossed zero.
+
+\begin{table}
+
+{\caption{{Within-cohort moderation of EF edges by baseline (T1) income
+and HLE. Cells show posterior median {[}95\% CrI{]} for the difference
+in edge strength between high vs low moderator groups (High − Low). ROPE
+probability indicates P(\textbar difference\textbar{} \textgreater{}
+0.10).}{\label{tbl-rq4-moderation}}}
+\vspace{-20pt}}
+
+\caption*{
+{\fontsize{1}{1}\selectfont  \textbackslash{}vspace\{10pt\}\fontsize{8}{10}\selectfont }
+} 
+\fontsize{8.0pt}{10.0pt}\selectfont
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}l|cccccc}
+\toprule
+Edge & Cohort & Wave & n (High) & n (Low) & Median [95\% CrI] & P(|Δ|>0.1) \\ 
+\midrule\addlinespace[2.5pt]
+\multicolumn{7}{l}{Income} \\[2.5pt] 
+\midrule\addlinespace[2.5pt]
+ef\_cogflex — ef\_workingmem & AU & T1 & 43 & 146 & -0.16 [-0.50, 0.16] & 0.70 \\ 
+ef\_inhibition — ef\_cogflex & AU & T1 & 43 & 146 & -0.15 [-0.50, 0.21] & 0.69 \\ 
+ef\_inhibition — ef\_workingmem & AU & T1 & 43 & 146 & -0.23 [-0.59, 0.11] & 0.80 \\ 
+ef\_cogflex — ef\_workingmem & AU & T2 & 43 & 136 & -0.46 [-0.80, -0.11] & 0.98 \\ 
+ef\_inhibition — ef\_cogflex & AU & T2 & 43 & 136 & 0.06 [-0.29, 0.39] & 0.60 \\ 
+ef\_inhibition — ef\_workingmem & AU & T2 & 43 & 136 & -0.07 [-0.41, 0.23] & 0.59 \\ 
+ef\_cogflex — ef\_workingmem & AU & T3 & 26 & 59 & 0.21 [-0.27, 0.66] & 0.78 \\ 
+ef\_inhibition — ef\_cogflex & AU & T3 & 26 & 59 & -0.19 [-0.66, 0.26] & 0.76 \\ 
+ef\_inhibition — ef\_workingmem & AU & T3 & 26 & 59 & -0.30 [-0.76, 0.16] & 0.85 \\ 
+ef\_cogflex — ef\_workingmem & SA & T1 & 53 & 158 & 0.10 [-0.23, 0.41] & 0.62 \\ 
+ef\_inhibition — ef\_cogflex & SA & T1 & 53 & 158 & 0.17 [-0.13, 0.44] & 0.72 \\ 
+ef\_inhibition — ef\_workingmem & SA & T1 & 53 & 158 & -0.24 [-0.59, 0.10] & 0.82 \\ 
+ef\_cogflex — ef\_workingmem & SA & T2 & 45 & 138 & -0.18 [-0.51, 0.17] & 0.72 \\ 
+ef\_inhibition — ef\_cogflex & SA & T2 & 45 & 138 & 0.01 [-0.33, 0.34] & 0.56 \\ 
+ef\_inhibition — ef\_workingmem & SA & T2 & 45 & 138 & 0.09 [-0.25, 0.40] & 0.62 \\ 
+\midrule\addlinespace[2.5pt]
+\multicolumn{7}{l}{HLE} \\[2.5pt] 
+\midrule\addlinespace[2.5pt]
+ef\_cogflex — ef\_workingmem & AU & T1 & 86 & 103 & -0.01 [-0.30, 0.25] & 0.47 \\ 
+ef\_inhibition — ef\_cogflex & AU & T1 & 86 & 103 & 0.11 [-0.17, 0.40] & 0.60 \\ 
+ef\_inhibition — ef\_workingmem & AU & T1 & 86 & 103 & -0.05 [-0.33, 0.22] & 0.52 \\ 
+ef\_cogflex — ef\_workingmem & AU & T2 & 82 & 97 & 0.24 [-0.04, 0.52] & 0.85 \\ 
+ef\_inhibition — ef\_cogflex & AU & T2 & 82 & 97 & 0.11 [-0.18, 0.41] & 0.61 \\ 
+ef\_inhibition — ef\_workingmem & AU & T2 & 82 & 97 & -0.01 [-0.28, 0.25] & 0.46 \\ 
+ef\_cogflex — ef\_workingmem & AU & T3 & 38 & 47 & 0.20 [-0.24, 0.62] & 0.77 \\ 
+ef\_inhibition — ef\_cogflex & AU & T3 & 38 & 47 & 0.30 [-0.11, 0.69] & 0.86 \\ 
+ef\_inhibition — ef\_workingmem & AU & T3 & 38 & 47 & 0.02 [-0.39, 0.43] & 0.65 \\ 
+ef\_cogflex — ef\_workingmem & SA & T1 & 77 & 134 & 0.02 [-0.27, 0.30] & 0.49 \\ 
+ef\_inhibition — ef\_cogflex & SA & T1 & 77 & 134 & -0.01 [-0.28, 0.27] & 0.49 \\ 
+ef\_inhibition — ef\_workingmem & SA & T1 & 77 & 134 & -0.03 [-0.33, 0.25] & 0.52 \\ 
+ef\_cogflex — ef\_workingmem & SA & T2 & 73 & 110 & 0.28 [-0.02, 0.56] & 0.89 \\ 
+ef\_inhibition — ef\_cogflex & SA & T2 & 73 & 110 & 0.10 [-0.21, 0.39] & 0.59 \\ 
+ef\_inhibition — ef\_workingmem & SA & T2 & 73 & 110 & 0.04 [-0.25, 0.34] & 0.54 \\ 
+\bottomrule
+\end{tabular*}
+
+\end{table}
+
+\clearpage
+
+\subsection{Robustness Check: Measurement
+Invariance}\label{robustness-check-measurement-invariance-1}
+
+To test whether EF network differences reflected genuine structural
+differences versus measurement artifacts, we conducted measurement
+invariance tests across cohorts at T1 and T2. At T1, metric invariance
+was not supported (Δχ² = 10.85, Δ\emph{df} = 2, \emph{p} =
+\textless.01), with model fit deteriorating from CFI = 1.000 to 0.780.
+This indicates that the factor loadings---the relationships between EF
+components and the underlying construct---differed significantly across
+cohorts at baseline, validating our RQ1 finding that network
+architectures are context-dependent. However, by T2, metric invariance
+was achieved (Δχ² = 1.03, \emph{p} = 0.596; CFI remained at 1.000),
+indicating that structural relationships had converged despite
+differences in baseline performance levels (scalar invariance: \emph{p}
+= \textless.001).
+
+\begin{table}
+
+{\caption{{Measurement invariance tests across cohorts. Models test
+whether the three-component EF structure is equivalent between Australia
+and South Africa.}{\label{tbl-measurement-invariance}}}
+\vspace{-20pt}}
+
+\caption*{
+{\fontsize{1}{1}\selectfont  \textbackslash{}vspace\{10pt\}\fontsize{8}{10}\selectfont }
+} 
+\fontsize{8.0pt}{10.0pt}\selectfont
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}llccccccc}
+\toprule
+{\bfseries Wave} & {\bfseries Model} & {\bfseries χ²} & {\bfseries \emph{df}} & {\bfseries \emph{p}} & {\bfseries CFI}\textsuperscript{\textit{1}} & {\bfseries TLI} & {\bfseries RMSEA [90\% CI]} & {\bfseries SRMR} \\ 
+\midrule\addlinespace[2.5pt]
+T1 & Configural & 0.00 & 0 & NA & 1.000 & 1.000 & NA [NA, NA] & 0.000 \\ 
+T1 & Metric & 20.61 & 2 & <.001 & 0.780 & 0.339 & 0.204 [0.000, 0.000] & 0.050 \\ 
+T1 & Scalar & 46.93 & 4 & <.001 & 0.492 & 0.237 & 0.219 [0.163, 0.280] & 0.102 \\ 
+T2 & Configural & 0.00 & 0 & NA & 1.000 & 1.000 & NA [NA, NA] & 0.000 \\ 
+T2 & Metric & 1.05 & 2 & 0.592 & 1.000 & 1.040 & 0.000 [0.000, 0.121] & 0.016 \\ 
+T2 & Scalar & 29.68 & 4 & <.001 & 0.644 & 0.466 & 0.178 [0.110, 0.254] & 0.069 \\ 
+\bottomrule
+\end{tabular*}
+\begin{minipage}{\linewidth}
+\vspace{.05em}
+\textsuperscript{\textit{1}} Good fit: CFI/TLI > .95, RMSEA < .06, SRMR < .08. Configural = same structure across groups; Metric = equal factor loadings; Scalar = equal loadings + intercepts.\\
+\end{minipage}
+
+\end{table}
+
+\begin{table}
+
+{\caption{{Model comparison tests for measurement invariance. Δχ² tests
+whether constraining parameters significantly worsens
+fit.}{\label{tbl-measurement-invariance-comparisons}}}
+\vspace{-20pt}}
+
+\caption*{
+{\fontsize{1}{1}\selectfont  \textbackslash{}vspace\{10pt\}\fontsize{8}{10}\selectfont }
+} 
+\fontsize{8.0pt}{10.0pt}\selectfont
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}clcccc}
+\toprule
+Wave & Comparison & Δχ² & Δ\emph{df} & \emph{p}\textsuperscript{\textit{1}} & Invariance \\ 
+\midrule\addlinespace[2.5pt]
+T1 & Configural vs Metric & 10.85 & 2 & <.01 & {\cellcolor[HTML]{F08080}{Rejected}} \\ 
+T1 & Metric vs Scalar & 29.88 & 2 & <.001 & {\cellcolor[HTML]{F08080}{Rejected}} \\ 
+T2 & Configural vs Metric & 1.03 & 2 & 0.596 & {\cellcolor[HTML]{90EE90}{Supported}} \\ 
+T2 & Metric vs Scalar & 19.11 & 2 & <.001 & {\cellcolor[HTML]{F08080}{Rejected}} \\ 
+\bottomrule
+\end{tabular*}
+\begin{minipage}{\linewidth}
+\vspace{.05em}
+\textsuperscript{\textit{1}} Non-significant p-value supports invariance (constraints do not significantly worsen fit).\\
+\end{minipage}
+
+\end{table}
+
+\newpage
+
+\section{References}\label{references}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-cheung2002evaluating}
+Cheung, G. W., \& Rensvold, R. B. (2002). Evaluating goodness-of-fit
+indexes for testing measurement invariance. \emph{Structural Equation
+Modeling}, \emph{9}(2), 233--255.
+
+\bibitem[\citeproctext]{ref-kruschke2018rejecting}
+Kruschke, J. (2018). \emph{Rejecting or accepting parameter values in
+bayesian estimation. Advances in methods and practices in psychological
+science, 1 (2), 270--280}.
+
+\bibitem[\citeproctext]{ref-robinaugh2016identifying}
+Robinaugh, D. J., Millner, A. J., \& McNally, R. J. (2016). Identifying
+highly influential nodes in the complicated grief network. \emph{Journal
+of Abnormal Psychology}, \emph{125}(6), 747.
+
+\bibitem[\citeproctext]{ref-rosseel2012lavaan}
+Rosseel, Y. (2012). Lavaan: An r package for structural equation
+modeling. \emph{Journal of Statistical Software}, \emph{48}(1), 1--36.
+
+\bibitem[\citeproctext]{ref-williams2020bayesian}
+Williams, D. R., \& Mulder, J. (2020a). Bayesian hypothesis testing for
+gaussian graphical models: Conditional independence and order
+constraints. \emph{Journal of Mathematical Psychology}, \emph{99},
+102441.
+
+\bibitem[\citeproctext]{ref-williams2020bggm}
+Williams, D. R., \& Mulder, J. (2020b). BGGM: Bayesian gaussian
+graphical models in r. \emph{The Journal of Open Source Software},
+\emph{5}(51), 2111.
+
+\bibitem[\citeproctext]{ref-BGGM}
+Williams, D. R., Mulder, J., \& Rast, P. (2025). \emph{BGGM: Bayesian
+gaussian graphical models} (R package version 2.1.6). The Comprehensive
+R Archive Network (CRAN).
+\url{https://doi.org/10.32614/CRAN.package.BGGM}
+
+\end{CSLReferences}
+
+\appendix
+
+\section{Demographics}\label{apx-render-table1}
+
 \begin{landscape}
 
 \begin{table}
-\caption*{
-{\fontsize{20}{25}\selectfont  Table 1. Age and executive function by country and timepoint\fontsize{8}{10}\selectfont } \\ 
-{\fontsize{14}{17}\selectfont  All summaries are anchored to children with any EF observed at that timepoint (partial EF allowed).\fontsize{8}{10}\selectfont }
-} 
+\caption{Age and executive function by country and timepoint. All summaries are
+anchored to children with any EF observed at that timepoint (partial EF
+allowed).}\tabularnewline
+
 \fontsize{8.0pt}{10.0pt}\selectfont
 \begin{tabular*}{1\linewidth}{@{\extracolsep{\fill}}l|l|ccccc}
 \toprule
@@ -305,12 +1194,12 @@ O'Reilly, Email: \href{mailto:fionnuala.oreilly@psy.ox.ac.uk}{fionnuala.oreilly@
  & Working memory, Mean (SD) & 1.50 (0.95) & 1.82 (0.89) & 2.56 (0.79) & 1.55 (0.81) & 2.00 (0.83) \\ 
  & Working memory, n & 232 & 215 & 105 & 211 & 188 \\ 
 \midrule\addlinespace[2.5pt]
-{\bfseries \multirow[t]{2}{*}{Age}} & Age (years), Mean (SD) & 4.43 (0.38) & 4.99 (0.38) & 5.92 (0.33) & 4.71 (0.59) & 5.35 (0.57) \\ 
- & Age (years), Median [min, max] & 4.44 [3.20, 5.24] & 4.99 [3.74, 5.88] & 5.90 [5.27, 6.59] & 4.68 [2.80, 5.89] & 5.36 [3.54, 6.55] \\ 
+{\bfseries \multirow[t]{2}{*}{Age}} & Age (years), Mean (SD) & 4.43 (0.38) & 4.99 (0.38) & 5.92 (0.33) & 4.70 (0.60) & 5.35 (0.57) \\ 
+ & Age (years), Median [min, max] & 4.44 [3.20, 5.24] & 4.99 [3.74, 5.88] & 5.90 [5.27, 6.59] & 4.68 [2.80, 5.89] & 5.37 [3.54, 6.55] \\ 
 \midrule\addlinespace[2.5pt]
-{\bfseries \multirow[t]{3}{*}{Sex}} & Female, n (\%) & 107 (46.1\%) & 101 (46.5\%) & 53 (50.0\%) & 103 (47.5\%) & 85 (44.7\%) \\ 
- & Male, n (\%) & 125 (53.9\%) & 116 (53.5\%) & 53 (50.0\%) & 114 (52.5\%) & 104 (54.7\%) \\ 
- & Missing, n (\%) & NA & NA & NA & NA & 1 (0.5\%) \\ 
+{\bfseries \multirow[t]{3}{*}{Sex}} & Female, n (\%) & 107 (46.1\%) & 101 (46.5\%) & 53 (50.0\%) & 117 (48.1\%) & 87 (35.8\%) \\ 
+ & Male, n (\%) & 125 (53.9\%) & 116 (53.5\%) & 53 (50.0\%) & 126 (51.9\%) & 105 (43.2\%) \\ 
+ & Missing, n (\%) & NA & NA & NA & NA & 51 (21.0\%) \\ 
 \bottomrule
 \end{tabular*}
 \end{table}
@@ -320,9 +1209,9 @@ O'Reilly, Email: \href{mailto:fionnuala.oreilly@psy.ox.ac.uk}{fionnuala.oreilly@
 \begin{landscape}
 
 \begin{table}
-\caption*{
-{\fontsize{20}{25}\selectfont  Table 2. Socioeconomic status and home learning environment by country and timepoint\fontsize{8}{10}\selectfont }
-} 
+\caption{Socioeconomic status and home learning environment by country and
+timepoint.}\tabularnewline
+
 \fontsize{8.0pt}{10.0pt}\selectfont
 \begin{tabular*}{1\linewidth}{@{\extracolsep{\fill}}l|l|ccccc}
 \toprule
@@ -345,20 +1234,20 @@ O'Reilly, Email: \href{mailto:fionnuala.oreilly@psy.ox.ac.uk}{fionnuala.oreilly@
  & 3 & 43 (18.5\%) & 43 (19.8\%) & 27 (25.5\%) & NA & NA \\ 
  & NA & 43 (18.5\%) & 38 (17.5\%) & 20 (18.9\%) & NA & NA \\ 
 \midrule\addlinespace[2.5pt]
-{\bfseries \multirow[t]{2}{*}{Household income (SA)}} & Household income (SA), Mean (SD) & NA & NA & NA & 7.80 (3.00) & 7.69 (3.07) \\ 
- & Household income (SA), n & NA & NA & NA & 217 & 190 \\ 
+{\bfseries \multirow[t]{2}{*}{Household income (SA)}} & Household income (SA), Mean (SD) & NA & NA & NA & 7.81 (3.02) & 7.77 (2.98) \\ 
+ & Household income (SA), n & NA & NA & NA & 214 & 188 \\ 
 \midrule\addlinespace[2.5pt]
 {\bfseries \multirow[t]{2}{*}{Home learning environment (AUS)}} & Home learning environment (AUS; HLE Index), Mean (SD) & 17.84 (10.71) & 17.83 (10.45) & 17.17 (11.35) & NA & NA \\ 
  & Home learning environment (AUS; HLE Index), n & 232 & 217 & 106 & NA & NA \\ 
 \midrule\addlinespace[2.5pt]
-{\bfseries \multirow[t]{8}{*}{Home learning environment (SA)}} & HLE activity frequency (sum), Mean (SD) & NA & NA & NA & 10.20 (3.03) & 12.45 (3.54) \\ 
- & HLE activity frequency (sum), n & NA & NA & NA & 214 & 183 \\ 
- & HLE: books/toys total, Mean (SD) & NA & NA & NA & 2.55 (1.00) & 2.59 (1.05) \\ 
- & HLE: books/toys total, n & NA & NA & NA & 215 & 184 \\ 
- & HLE: time total, Mean (SD) & NA & NA & NA & 4.00 (1.77) & 4.11 (1.83) \\ 
- & HLE: time total, n & NA & NA & NA & 217 & 186 \\ 
- & HLE: unique caregiver types involved, Mean (SD) & NA & NA & NA & 2.26 (1.14) & 1.67 (0.74) \\ 
- & HLE: unique caregiver types involved, n & NA & NA & NA & 214 & 105 \\ 
+{\bfseries \multirow[t]{8}{*}{Home learning environment (SA)}} & HLE activity frequency (sum), Mean (SD) & NA & NA & NA & 10.13 (3.06) & 12.48 (3.50) \\ 
+ & HLE activity frequency (sum), n & NA & NA & NA & 217 & 187 \\ 
+ & HLE: books/toys total, Mean (SD) & NA & NA & NA & 2.53 (1.01) & 2.57 (1.07) \\ 
+ & HLE: books/toys total, n & NA & NA & NA & 217 & 187 \\ 
+ & HLE: time total, Mean (SD) & NA & NA & NA & 4.00 (1.77) & 4.10 (1.84) \\ 
+ & HLE: time total, n & NA & NA & NA & 217 & 187 \\ 
+ & HLE: unique caregiver types involved, Mean (SD) & NA & NA & NA & 2.26 (1.14) & 1.62 (0.78) \\ 
+ & HLE: unique caregiver types involved, n & NA & NA & NA & 214 & 108 \\ 
 \bottomrule
 \end{tabular*}
 \begin{minipage}{\linewidth}
@@ -368,6 +1257,8 @@ O'Reilly, Email: \href{mailto:fionnuala.oreilly@psy.ox.ac.uk}{fionnuala.oreilly@
 \end{table}
 
 \end{landscape}
+
+\section{Age associations}\label{apx-render-test-re-test-plot}
 
 \begin{figure}[H]
 
@@ -381,6 +1272,8 @@ waves}
 
 \end{figure}%
 
+\section{Executive Function across waves}\label{apx-age-ef-wave}
+
 \begin{figure}[H]
 
 \caption{Executive Function by age across waves (z-scored within EF
@@ -393,15 +1286,16 @@ task). Note: Points jittered + transparent; lines are linear fits with
 
 \end{figure}%
 
+\section{Executive Function scores over time}\label{apx-mean-trend}
+
 \begin{figure}[H]
 
 \caption{\textbf{Mean EF scores over time (children with repeated EF
 data).}\\
 \emph{Note.} ``EF observed'' at a wave means at least one EF task score
 is non-missing. The analytic sample includes only children meeting the
-wave-coverage rule: South Africa = EF observed at both T1 and T2;
-Australia = EF observed at T1--T3 (``strict'') or at T1 and T2
-(``t12'').''}
+wave-coverage rule: SA = EF observed at both T1 and T2; AU = EF observed
+at T1--T3 (``strict'') or at T1 and T2 (``t12'').''}
 
 {\centering \pandocbounded{\includegraphics[keepaspectratio]{EF_network_analysis_files/figure-pdf/mean-trend-1.png}}
 
@@ -409,190 +1303,24 @@ Australia = EF observed at T1--T3 (``strict'') or at T1 and T2
 
 \end{figure}%
 
+\section{Executive Function individual
+trajectories}\label{apx-spaghetti-plot}
+
 \begin{figure}[H]
 
 \caption{\textbf{Individual EF trajectories over time (children with
 repeated EF data).}\\
 \emph{Note.} ``EF observed'' at a wave means at least one EF task score
 is non-missing. The analytic sample includes only children meeting the
-wave-coverage rule: South Africa = EF observed at both T1 and T2;
-Australia = EF observed at T1--T3 (``strict'') or at T1 and T2
-(``t12''). Mean ± 95\% CI is overlaid. EF scores are z-scored within
-task (pooled).}
+wave-coverage rule: SA = EF observed at both T1 and T2; AU = EF observed
+at T1--T3 (``strict'') or at T1 and T2 (``t12''). Mean ± 95\% CI is
+overlaid. EF scores are z-scored within task (pooled).}
 
 {\centering \pandocbounded{\includegraphics[keepaspectratio]{EF_network_analysis_files/figure-pdf/spaghetti-plot-1.png}}
 
 }
 
 \end{figure}%
-
-\clearpage
-
-To characterize within-wave coupling among executive function (EF)
-domains, we estimated cohort- and wave-specific Gaussian graphical
-models (GGMs) in a Bayesian framework. Networks were fitted separately
-for each cohort × wave using three EF nodes---inhibition, cognitive
-flexibility, and working memory---with edges interpreted as partial
-correlations (associations between two EF domains conditional on the
-third). Model estimation was restricted to EF-complete cases within each
-wave (all three EF nodes observed).
-
-Networks were estimated using BGGM::estimate for continuous-data GGMs
-(iter = 12,000; burn-in = 6,000; 4 chains) on EF node scores that were
-residualised for age and sex within each cohort × wave × node and then
-z-standardised within cohort × wave. For each cohort--wave model, we
-extracted posterior draws of the 3×3 partial-correlation matrix and
-summarised each edge using the posterior median and 95\% credible
-interval (CrI). To support inference about practical magnitude, we
-additionally computed a ROPE-style probability for each edge,
-P(\textbar r\textbar{} \textgreater{} 0.10), and defined edges as
-``meaningful'' where P(\textbar r\textbar{} \textgreater{} 0.10)
-\textgreater{} 0.95.
-
-In Australia, the inhibition--working memory edge was robust across
-waves (T1: median r = 0.27, 95\% CrI {[}0.15, 0.39{]},
-P(\textbar r\textbar{} \textgreater{} 0.1) = 0.998; T2: median r = 0.31,
-95\% CrI {[}0.18, 0.42{]}, P(\textbar r\textbar{} \textgreater{} 0.1) =
-1.000; T3: median r = 0.30, 95\% CrI {[}0.12, 0.47{]},
-P(\textbar r\textbar{} \textgreater{} 0.1) = 0.985) and met the
-predefined meaningfulness criterion at each wave (T1: TRUE; T2: TRUE;
-T3: TRUE). The cognitive flexibility--working memory edge was strongest
-at T1 (median r = 0.25, 95\% CrI {[}0.13, 0.37{]},
-P(\textbar r\textbar{} \textgreater{} 0.1) = 0.993) and remained
-positive at later waves (T2: median r = 0.19, 95\% CrI {[}0.06, 0.32{]},
-P(\textbar r\textbar{} \textgreater{} 0.1) = 0.910; T3: median r = 0.16,
-95\% CrI {[}-0.04, 0.34{]}, P(\textbar r\textbar{} \textgreater{} 0.1) =
-0.718), but did not consistently exceed the meaningfulness threshold at
-T2--T3. The inhibition--cognitive flexibility edge was comparatively
-weaker and more uncertain across waves (T1: median r = 0.05, 95\% CrI
-{[}-0.08, 0.18{]}, P(\textbar r\textbar{} \textgreater{} 0.1) = 0.248;
-T2: median r = 0.15, 95\% CrI {[}0.01, 0.28{]}, P(\textbar r\textbar{}
-\textgreater{} 0.1) = 0.762; T3: median r = 0.18, 95\% CrI {[}-0.01,
-0.37{]}, P(\textbar r\textbar{} \textgreater{} 0.1) = 0.810).
-
-In South Africa, posterior medians were generally small-to-moderate and
-positive across T1--T2 (T1: median r = 0.19, 95\% CrI {[}0.06, 0.32{]},
-P(\textbar r\textbar{} \textgreater{} 0.1) = 0.910, median r = 0.15,
-95\% CrI {[}0.02, 0.28{]}, P(\textbar r\textbar{} \textgreater{} 0.1) =
-0.769, median r = 0.12, 95\% CrI {[}-0.01, 0.26{]},
-P(\textbar r\textbar{} \textgreater{} 0.1) = 0.640; T2: median r = 0.10,
-95\% CrI {[}-0.04, 0.24{]}, P(\textbar r\textbar{} \textgreater{} 0.1) =
-0.509, median r = 0.19, 95\% CrI {[}0.04, 0.32{]},
-P(\textbar r\textbar{} \textgreater{} 0.1) = 0.876, median r = 0.11,
-95\% CrI {[}-0.04, 0.25{]}, P(\textbar r\textbar{} \textgreater{} 0.1) =
-0.568). However, no South Africa edge met the meaningfulness criterion
-(P(\textbar r\textbar{} \textgreater{} 0.10) \textgreater{} 0.95) at
-either wave. See Figure~\ref{fig-step1-edges-by-edge} for graphical
-representation.
-
-Overall, Step 1 indicates stronger and more consistent within-wave EF
-coupling in Australia---driven primarily by stable inhibition--working
-memory coupling---whereas South Africa shows weaker and/or less certain
-within-wave coupling under the ROPE decision rule.
-
-\begin{figure}
-
-\caption{\label{fig-step1-edges-by-edge}Within-wave EF partial
-correlations by edge across time. Points show posterior medians;
-whiskers show 95\% credible intervals. Solid line = 0; dashed lines =
-ROPE bounds (±0.10). Labels show P(\textbar r\textbar{} \textgreater{}
-0.10).}
-
-\centering{
-
-\pandocbounded{\includegraphics[keepaspectratio]{EF_network_analysis_files/figure-pdf/fig-step1-edges-by-edge-1.png}}
-
-}
-
-\end{figure}%
-
-\clearpage
-
-To evaluate whether within-wave EF coupling changed over time within
-each cohort (RQ2), we quantified posterior changes in each edge between
-adjacent waves, defining Δr = r(tp2) − r(tp1). For each cohort ×
-contrast, we summarized Δr using the posterior median and 95\% credible
-interval (CrI), and computed a ROPE-style probability
-P(\textbar Δr\textbar{} \textgreater{} 0.10); changes were classified as
-meaningful where P(\textbar Δr\textbar{} \textgreater{} 0.10)
-\textgreater{} 0.95.
-
-In Australia, edge changes from T1 to T2 were modest and uncertain
-(inhibition--working memory: Δmedian r = 0.03, 95\% CrI {[}-0.14,
-0.21{]}, P(\textbar Δr\textbar{} \textgreater{} 0.1) = 0.294, P(Δr
-\textgreater{} 0) = 0.656 (n: 231→213); inhibition--cognitive
-flexibility: Δmedian r = 0.10, 95\% CrI {[}-0.09, 0.28{]},
-P(\textbar Δr\textbar{} \textgreater{} 0.1) = 0.503, P(Δr \textgreater{}
-0) = 0.847 (n: 231→213); cognitive flexibility--working memory: Δmedian
-r = -0.06, 95\% CrI {[}-0.24, 0.12{]}, P(\textbar Δr\textbar{}
-\textgreater{} 0.1) = 0.381, P(Δr \textgreater{} 0) = 0.249 (n:
-231→213)) and none met the predefined meaningful-change criterion
-(inhibition--working memory: FALSE; inhibition--cognitive flexibility:
-FALSE; cognitive flexibility--working memory: FALSE). From T2 to T3,
-changes remained small-to-moderate with credible intervals overlapping
-zero (inhibition--working memory: Δmedian r = -0.00, 95\% CrI {[}-0.22,
-0.20{]}, P(\textbar Δr\textbar{} \textgreater{} 0.1) = 0.365, P(Δr
-\textgreater{} 0) = 0.482 (n: 213→105); inhibition--cognitive
-flexibility: Δmedian r = 0.03, 95\% CrI {[}-0.20, 0.26{]},
-P(\textbar Δr\textbar{} \textgreater{} 0.1) = 0.411, P(Δr \textgreater{}
-0) = 0.615 (n: 213→105); cognitive flexibility--working memory: Δmedian
-r = -0.04, 95\% CrI {[}-0.27, 0.19{]}, P(\textbar Δr\textbar{}
-\textgreater{} 0.1) = 0.414, P(Δr \textgreater{} 0) = 0.377 (n:
-213→105)), and again no edge exceeded the meaningful-change threshold
-(inhibition--working memory: FALSE; inhibition--cognitive flexibility:
-FALSE; cognitive flexibility--working memory: FALSE).
-
-In South Africa (T2-T1), posterior changes were similarly small and
-uncertain (inhibition--working memory: Δmedian r = 0.03, 95\% CrI
-{[}-0.16, 0.23{]}, P(\textbar Δr\textbar{} \textgreater{} 0.1) = 0.340,
-P(Δr \textgreater{} 0) = 0.631 (n: 205→185); inhibition--cognitive
-flexibility: Δmedian r = -0.09, 95\% CrI {[}-0.29, 0.11{]},
-P(\textbar Δr\textbar{} \textgreater{} 0.1) = 0.493, P(Δr \textgreater{}
-0) = 0.178 (n: 205→185); cognitive flexibility--working memory: Δmedian
-r = -0.01, 95\% CrI {[}-0.21, 0.19{]}, P(\textbar Δr\textbar{}
-\textgreater{} 0.1) = 0.341, P(Δr \textgreater{} 0) = 0.452 (n:
-205→185)) and none met the meaningful-change criterion
-(inhibition--working memory: FALSE; inhibition--cognitive flexibility:
-FALSE; cognitive flexibility--working memory: FALSE). Overall, RQ2
-provides little evidence for practically meaningful within-cohort
-changes in EF coupling across waves under the ROPE decision rule. Refer
-to Figure~\ref{fig-step2-delta-edges} for graphical representation.
-
-\begin{figure}
-
-\caption{\label{fig-step2-delta-edges}RQ2: Change in within-wave EF
-coupling across adjacent waves. Points show posterior median Δr (tp2 −
-tp1); whiskers show 95\% credible intervals. Solid line = no change
-(Δr=0); dashed lines = ROPE bounds (±0.10). Labels show
-P(\textbar Δr\textbar{} \textgreater{} 0.10).}
-
-\centering{
-
-\pandocbounded{\includegraphics[keepaspectratio]{EF_network_analysis_files/figure-pdf/fig-step2-delta-edges-1.png}}
-
-}
-
-\end{figure}%
-
-\clearpage
-
-At T1, AU--SA differences were: inhibition--working memory (Δmedian r =
-0.12, 95\% CrI {[}-0.06, 0.30{]}, P(\textbar Δr\textbar{} \textgreater{}
-0.1) = 0.595, P(Δr \textgreater{} 0) = 0.906), inhibition--cognitive
-flexibility (Δmedian r = -0.14, 95\% CrI {[}-0.32, 0.05{]},
-P(\textbar Δr\textbar{} \textgreater{} 0.1) = 0.660, P(Δr \textgreater{}
-0) = 0.070), and cognitive flexibility--working memory (Δmedian r =
-0.13, 95\% CrI {[}-0.05, 0.31{]}, P(\textbar Δr\textbar{} \textgreater{}
-0.1) = 0.629, P(Δr \textgreater{} 0) = 0.918).
-
-At T2, AU--SA differences were: inhibition--working memory (Δmedian r =
-0.12, 95\% CrI {[}-0.07, 0.31{]}, P(\textbar Δr\textbar{} \textgreater{}
-0.1) = 0.599, P(Δr \textgreater{} 0) = 0.897), inhibition--cognitive
-flexibility (Δmedian r = 0.05, 95\% CrI {[}-0.15, 0.25{]},
-P(\textbar Δr\textbar{} \textgreater{} 0.1) = 0.378, P(Δr \textgreater{}
-0) = 0.686), and cognitive flexibility--working memory (Δmedian r =
-0.08, 95\% CrI {[}-0.12, 0.27{]}, P(\textbar Δr\textbar{} \textgreater{}
-0.1) = 0.455, P(Δr \textgreater{} 0) = 0.788).
 
 
 

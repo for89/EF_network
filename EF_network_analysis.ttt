@@ -1,0 +1,51 @@
+\efloatseparator
+ 
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\caption{Socioeconomic status and home learning environment by country and
+timepoint.}\tabularnewline
+
+\fontsize{8.0pt}{10.0pt}\selectfont
+\begin{tabular*}{1\linewidth}{@{\extracolsep{\fill}}l|l|ccccc}
+\toprule
+\multicolumn{2}{c}{} & Australia — T1 & Australia — T2 & Australia — T3 & SA — T1 & SA — T2 \\
+\midrule\addlinespace[2.5pt]
+{\bfseries \multirow[t]{6}{*}{Caregiver education (AUS)}} & 1 & 18 (7.8\%) & 17 (7.8\%) & 8 (7.5\%) & NA & NA \\
+ & 2 & 16 (6.9\%) & 15 (6.9\%) & 6 (5.7\%) & NA & NA \\
+ & 3 & 61 (26.3\%) & 56 (25.8\%) & 24 (22.6\%) & NA & NA \\
+ & 4 & 68 (29.3\%) & 65 (30.0\%) & 34 (32.1\%) & NA & NA \\
+ & 5 & 35 (15.1\%) & 34 (15.7\%) & 16 (15.1\%) & NA & NA \\
+ & NA & 34 (14.7\%) & 30 (13.8\%) & 18 (17.0\%) & NA & NA \\
+\midrule\addlinespace[2.5pt]
+{\bfseries \multirow[t]{4}{*}{Caregiver education (SA)}} & 1 & NA & NA & NA & 30 (13.8\%) & 30 (15.8\%) \\
+ & 2 & NA & NA & NA & 5 (2.3\%) & 5 (2.6\%) \\
+ & 3 & NA & NA & NA & 1 (0.5\%) & 1 (0.5\%) \\
+ & NA & NA & NA & NA & 181 (83.4\%) & 154 (81.1\%) \\
+\midrule\addlinespace[2.5pt]
+{\bfseries \multirow[t]{4}{*}{Household income (AUS)}} & 1 & 20 (8.6\%) & 19 (8.8\%) & 8 (7.5\%) & NA & NA \\
+ & 2 & 126 (54.3\%) & 117 (53.9\%) & 51 (48.1\%) & NA & NA \\
+ & 3 & 43 (18.5\%) & 43 (19.8\%) & 27 (25.5\%) & NA & NA \\
+ & NA & 43 (18.5\%) & 38 (17.5\%) & 20 (18.9\%) & NA & NA \\
+\midrule\addlinespace[2.5pt]
+{\bfseries \multirow[t]{2}{*}{Household income (SA)}} & Household income (SA), Mean (SD) & NA & NA & NA & 7.81 (3.02) & 7.77 (2.98) \\
+ & Household income (SA), n & NA & NA & NA & 214 & 188 \\
+\midrule\addlinespace[2.5pt]
+{\bfseries \multirow[t]{2}{*}{Home learning environment (AUS)}} & Home learning environment (AUS; HLE Index), Mean (SD) & 17.84 (10.71) & 17.83 (10.45) & 17.17 (11.35) & NA & NA \\
+ & Home learning environment (AUS; HLE Index), n & 232 & 217 & 106 & NA & NA \\
+\midrule\addlinespace[2.5pt]
+{\bfseries \multirow[t]{8}{*}{Home learning environment (SA)}} & HLE activity frequency (sum), Mean (SD) & NA & NA & NA & 10.13 (3.06) & 12.48 (3.50) \\
+ & HLE activity frequency (sum), n & NA & NA & NA & 217 & 187 \\
+ & HLE: books/toys total, Mean (SD) & NA & NA & NA & 2.53 (1.01) & 2.57 (1.07) \\
+ & HLE: books/toys total, n & NA & NA & NA & 217 & 187 \\
+ & HLE: time total, Mean (SD) & NA & NA & NA & 4.00 (1.77) & 4.10 (1.84) \\
+ & HLE: time total, n & NA & NA & NA & 217 & 187 \\
+ & HLE: unique caregiver types involved, Mean (SD) & NA & NA & NA & 2.26 (1.14) & 1.62 (0.78) \\
+ & HLE: unique caregiver types involved, n & NA & NA & NA & 214 & 108 \\
+\bottomrule
+\end{tabular*}
+\begin{minipage}{\linewidth}
+\vspace{.05em}
+\textbf{Note.} Summaries are restricted to children with any EF data at each wave (partial EF allowed). In Australia, caregiver education, household income, and the HLE Index are measured once per child and carried across waves; \emph{n} and summary statistics may still differ across T1--T3 because the EF-available sample varies by wave (attrition/partial EF). In South Africa, caregiver education, income, and HLE measures are recorded by wave and summarised only where collected (later-wave cells are NA if not assessed).\\
+\end{minipage}
+\end{table*}
