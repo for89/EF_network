@@ -337,7 +337,7 @@ books_toys_vars <- c(
 # (4) Time total: week + weekend (each 1..3) 
 time_vars <- c("hle_time_week", "hle_time_weekend")
 
-# derive 1, 3 and 4 (NA only if ALL items missing; otherwise sum observed)
+# derive 1, 3 and 4 (NA only if all items missing; otherwise sum observed)
 sa_data <- sa_data %>%
   dplyr::mutate(
     hla_frequency1 = dplyr::if_else(
@@ -428,10 +428,10 @@ sa_data <- sa_data %>%
       ~ dplyr::if_else(.x %in% c(3L, 4L), NA_integer_, as.integer(.x))
     ),
 
-    # diagnostics: number answered (non-missing) across the 26 items
+    # number answered (non-missing) across the 26 items
     n_assets_answered = rowSums(!is.na(as.matrix(dplyr::pick(dplyr::all_of(asset_vars))))),
 
-    # score: count "Yes" (== 1) across items, but only if >= 20 answered
+    # count "Yes" (== 1) across items, but only if >= 20 answered
     household_items_score_repl = dplyr::if_else(
       n_assets_answered < 20,
       NA_real_,
@@ -439,14 +439,13 @@ sa_data <- sa_data %>%
     )
   )
 
-# quick check vs existing score (if present)
 cor(sa_data$household_items_score, sa_data$household_items_score_repl,
     use = "pairwise.complete.obs")
 
 sum(!is.na(sa_data$household_items_score) & !is.na(sa_data$household_items_score_repl) &
       sa_data$household_items_score != sa_data$household_items_score_repl)
 
-# optional: inspect threshold behaviour
+# optional: inspect threshold behavior
 table(sa_data$n_assets_answered < 20, useNA = "ifany")
 summary(sa_data$household_items_score_repl)
 
@@ -458,7 +457,7 @@ summary(sa_data$household_items_score_repl)
 #| include: false
 
 library(gt)
-# Formatting helpers
+# formatting helpers
 fmt_mean_sd <- function(mean, sd, digits = 2) {
   ifelse(
     is.na(mean) | is.na(sd),
@@ -476,7 +475,7 @@ fmt_med_rng <- function(median, min, max, digits = 2) {
   )
 }
 
-# Continuous descriptives within EF-anchored sample (generic)
+# Continuous descriptives within EF-anchored sample
 summ_cont_tp <- function(df, var, any_ids, variable_label) {
   stopifnot(all(c("country","timepoint","id") %in% names(df)))
   stopifnot(all(c("country","timepoint","id") %in% names(any_ids)))
@@ -500,7 +499,7 @@ summ_cont_tp <- function(df, var, any_ids, variable_label) {
 }
 
 # Table helper 
-# EF descriptives (expects standard long format)
+# EF descriptives
 # ef_long: country, timepoint, id, variable, value
 # any_ids: country, timepoint, id
 summ_ef_desc <- function(ef_long, any_ids) {
@@ -522,7 +521,7 @@ summ_ef_desc <- function(ef_long, any_ids) {
     )
 }
 
-# Sample sizes + EF completeness within anchored sample
+# Sample sizes + EF completeness within EF-anchored sample
 summ_sizes <- function(ef_long, any_ids, n_measures_complete = 3) {
   stopifnot(all(c("country","timepoint","id") %in% names(any_ids)))
   stopifnot(all(c("country","timepoint","id","variable","value") %in% names(ef_long)))
@@ -546,7 +545,7 @@ summ_sizes <- function(ef_long, any_ids, n_measures_complete = 3) {
     )
 }
 
-# Age descriptives within EF-anchored sample
+# age descriptives within EF-anchored sample
 summ_age_long <- function(age_long, any_ids) {
   stopifnot(all(c("country","timepoint","id") %in% names(any_ids)))
   stopifnot(all(c("country","timepoint","id","age") %in% names(age_long)))
@@ -567,7 +566,7 @@ summ_age_long <- function(age_long, any_ids) {
     )
 }
 
-# categorical descriptives by timepoint (those with any EF data)
+# categorical descriptives by timepoint (EF-anchored)
 desc_cat_tp <- function(df, var, any_ids, variable_label) {
   stopifnot(all(c("country","timepoint","id") %in% names(df)))
   stopifnot(all(c("country","timepoint","id") %in% names(any_ids)))
@@ -619,7 +618,6 @@ harmonise_sex_aus <- function(x) {
 #| label: build-sa-aus-objects
 #| include: false
 
-# SA: subset -> long -> anchor -> standard long objects
 eyt_vars <- c(
   "date_of_eyt", "eyt_child_age_at_testing", "eyt2_ageinmonths", "time_btwn_testing",
   "ef_inhibition", "ef_cogflex", "ef_workingmem",
@@ -627,7 +625,7 @@ eyt_vars <- c(
 )
 
 ses_vars <- c(
-  # NIDS / income-related
+  # NIDS & income range
   "nids_income_1", "nids_income_2", "nids_income_3",
   "nids_income_4", "nids_income_5", "nids_income_6",
   "income_range", "monthly_income_given",
@@ -635,7 +633,7 @@ ses_vars <- c(
   # NIDS assets-derived score
   "household_items_score_repl",
 
-  # education etc
+  # education etc.
   "marital_status", "education_school", "education_post_school", "education_post_school_b",
   "children_in_house", "adults_in_house", "total_in_household",
 
@@ -657,7 +655,7 @@ sa_subset_long <- sa_data %>%
 
 ef_sa <- c("ef_inhibition", "ef_cogflex", "ef_workingmem")
 
-# Anchor: child×event where ANY EF node observed
+# child×event where any EF node observed
 sa_any_ef_ids_by_tp <- sa_subset_long %>%
   dplyr::filter(dplyr::if_any(dplyr::all_of(ef_sa), ~ !is.na(.x))) %>%
   dplyr::distinct(redcap_event_name, caregiver_child_studyid)
@@ -674,7 +672,7 @@ sa_tp_map <- sa_subset_long %>%
   dplyr::filter(!is.na(timepoint)) %>%
   dplyr::select(redcap_event_name, timepoint)
 
-# optional: assert you got exactly 2 timepoints
+# exactly 2 timepoints
 stopifnot(nrow(sa_tp_map) == 2)
 stopifnot(all(c("T1","T2") %in% sa_tp_map$timepoint))
 
@@ -738,7 +736,7 @@ sa_ses <- sa_subset_long %>%
     time_total1          = as.numeric(time_total1)
   )
 
-# AUS: wide -> standard EF long + anchors + age + SES
+# AU: wide -> standard EF long + anchors + age + SES
 id_var <- if ("CID" %in% names(aus_data)) "CID" else "ServiceID"
 
 t1_vars <- c("MrAnt_Pt_T1","GNG_IC_T1","CS_SwAcc_T1")
@@ -906,8 +904,6 @@ stopifnot(all(levels(ef_all_keep$variable) == nodes))
 #| label: prepare-moderators
 #| include: false
 
-# Create T1 moderators early so they're available for RQ2b and RQ4
-
 # SA moderators at T1
 sa_mods_t1 <- sa_ses %>%
   dplyr::filter(timepoint == "T1") %>%
@@ -951,7 +947,7 @@ mods_t1 <- dplyr::bind_rows(sa_mods_t1, au_mods_t1)
 #| include: false
 
 # Prepare EF node data for BGGM:
-# - keep partial EF (no complete-case filtering)
+# - keep partial EF
 # - drop cohort×wave IDs with all 3 nodes missing
 # - residualize each node for age within cohort×wave
 # - z-score residuals within cohort×wave×node
@@ -1381,7 +1377,7 @@ summ_draws <- function(draws, rope = 0.10) {
   )
 }
 
-# guardrails: ensure you're not silently relying on deleted duplicates
+# checks
 stopifnot(exists("edge_draws_list"))
 stopifnot(exists("global_strength_draws"))
 stopifnot(exists("ei_summaries"))
@@ -1441,7 +1437,7 @@ rq1_table_A <- dplyr::bind_rows(rq1_gs, rq1_edges) %>%
   ) %>%
   dplyr::arrange(country, timepoint, dplyr::desc(edge == "Global strength"), edge)
 
-# hard check: 4 rows per cohort×wave (3 edges + global strength)
+# check: 4 rows per cohort×wave (3 edges + global strength)
 stopifnot(all((rq1_table_A %>% dplyr::count(country, timepoint) %>% dplyr::pull(n)) == 4))
 
 # expected influence (node-level)
@@ -1577,14 +1573,14 @@ In South Africa, the inhibition–working memory edge remained positive across w
 # labels for EI rows
 node_to_label <- setNames(names(node_label_map), node_label_map)
 
-# Build combined RQ1 table (Edges + Global strength + Expected influence)
+# Build combined RQ1 table (edges, global strength and expected influence)
 rq1_table_all <- dplyr::bind_rows(
   # Edges panel
   rq1_edges %>%
     dplyr::transmute(
-      panel       = "Edges",
+      panel = "Edges",
       country, timepoint, n, pct_missing,
-      term        = edge,
+      term = edge,
       estimate,
       rope_p
     ),
@@ -1592,49 +1588,49 @@ rq1_table_all <- dplyr::bind_rows(
   # Global strength panel
   rq1_gs %>%
     dplyr::transmute(
-      panel       = "Global strength",
+      panel = "Global strength",
       country, timepoint, n, pct_missing,
-      term        = edge,     # "Global strength"
+      term = edge,     
       estimate,
-      rope_p      = ""        # blank
+      rope_p = ""       
     ),
 
   # Expected influence panel
   rq1_table_B %>%
     dplyr::transmute(
-      panel       = "Expected influence",
+      panel = "Expected influence",
       country, timepoint, n, pct_missing,
-      term        = unname(node_to_label[node]),  # ef_* -> readable label
+      term = unname(node_to_label[node]), 
       estimate,
-      rope_p      = ""                            # blank
+      rope_p = ""                            
     )
 ) %>%
   dplyr::mutate(
-    panel       = factor(panel, levels = c("Edges", "Global strength", "Expected influence")),
+    panel = factor(panel, levels = c("Edges", "Global strength", "Expected influence")),
     pct_missing = round(pct_missing, 1),
-    n           = as.integer(n)
+    n = as.integer(n)
   ) %>%
   dplyr::arrange(panel, country, timepoint, term)
 
-# GT table (same formatting/padding as before)
+# GT table
 gt_rq1_all <- rq1_table_all %>%
   gt::gt(
-    rowname_col   = "term",
+    rowname_col = "term",
     groupname_col = "panel"
   ) %>%
-  # add LaTeX vertical space between caption and header in PDF
+  # add vertical space between caption and header in PDF
   gt::tab_header(title = gt::md("\\vspace{10pt}")) %>%
   gt::tab_stubhead(label = "Measure") %>%
   gt::cols_label(
-    country     = "Cohort",
-    timepoint   = "Wave",
-    estimate    = "Median [95% CrI]",
-    rope_p      = paste0("P(|r|>", rope, ")"),
-    n           = "N",
+    country = "Cohort",
+    timepoint = "Wave",
+    estimate = "Median [95% CrI]",
+    rope_p = paste0("P(|r|>", rope, ")"),
+    n = "N",
     pct_missing = "% missing cells"
   ) %>%
   gt::cols_align(
-    align   = "center",
+    align = "center",
     columns = c(country, timepoint, estimate, rope_p, n, pct_missing)
   ) %>%
   gt::sub_missing(columns = "rope_p", missing_text = "") %>%
@@ -1659,9 +1655,9 @@ rope <- 0.10
 edges_df2 <- edge_tbl %>%
   dplyr::mutate(
     timepoint = factor(timepoint, levels = c("T1","T2","T3")),
-    country   = factor(country, levels = c("AU","SA")),
+    country = factor(country, levels = c("AU","SA")),
 
-    # canonical edge key from node columns (order-invariant, delimiter-stable)
+    # canonical edge key from node columns
     edge_key = paste(pmin(node1, node2), pmax(node1, node2), sep = " — ")
   ) %>%
   # keep only the 3 EF edges
@@ -1789,14 +1785,14 @@ rq1_ei <- fit_tbl_uniq %>%
 
 node_labels <- c(
   ef_inhibition = "Inhibition",
-  ef_cogflex    = "Cognitive flexibility",
+  ef_cogflex = "Cognitive flexibility",
   ef_workingmem = "Working memory"
 )
 
 # N labels replicated into each node panel
 n_lab <- fit_tbl_uniq %>%
   transmute(
-    country   = factor(country, levels = c("AU","SA")),
+    country = factor(country, levels = c("AU","SA")),
     timepoint = factor(timepoint, levels = c("T1","T2","T3")),
     n
   ) %>%
@@ -1837,7 +1833,7 @@ ggplot(rq1_ei, aes(x = timepoint, y = q50, group = 1)) +
     aes(x = timepoint, y = y_n, label = label),
     inherit.aes = FALSE,
     size = 3.1,
-    label.size = 0,        # no border
+    label.size = 0,        
     label.padding = unit(0.12, "lines"),
     fill = "white",
     colour = "black",
@@ -1883,7 +1879,7 @@ summ_draws_delta <- function(draws, rope = rope_delta) {
   )
 }
 
-# Get a fit object for a specific country×timepoint
+# Get fit object for a specific country×timepoint
 get_fit <- function(country, tp, fit_tbl_uniq) {
   out <- fit_tbl_uniq %>%
     dplyr::filter(country == !!country, timepoint == !!tp) %>%
@@ -1959,7 +1955,7 @@ ei_delta_summaries <- function(fit_A, fit_B,
 
   EI <- ei_delta_draws(fit_A, fit_B, node_names = node_names)  # S x p
 
-  # guardrail: enforce colnames
+  # enforce colnames
   if (is.null(colnames(EI))) colnames(EI) <- node_names
 
   out <- tibble::tibble(
@@ -1985,7 +1981,7 @@ ei_delta_summaries <- function(fit_A, fit_B,
 #| label: rq2-build-delta-tables
 #| include: false
 
-# Use the same unique fit table you built for RQ1
+# Use the samefit table as for RQ1
 fit_tbl_uniq <- fit_tbl %>%
   dplyr::filter(!purrr::map_lgl(fit, is.null)) %>%
   dplyr::arrange(country, timepoint) %>%
@@ -2147,8 +2143,7 @@ rq2_ei_meaningful    <- function(country, tp2, tp1, node) rq2_cell("Expected inf
 #| include: false
 
 # Prepare individual-level change scores
-# We'll compute changes in raw EF scores and test whether changes in one domain
-# predict changes in another (coupling of developmental change)
+# Compute changes in raw EF scores and test whether changes in one domain predict changes in another (coupling of developmental change)
 
 # Step 1: Get raw EF scores at T1 and T2 for each person
 # Use ef_all (raw scores before residualization)
@@ -2172,7 +2167,7 @@ ef_change_data <- ef_all %>%
     baseline_cogflex    = ef_cogflex_T1,
     baseline_workingmem = ef_workingmem_T1
   ) %>%
-  # Add age and SES info
+  # add age
   dplyr::left_join(
     age_all %>% 
       dplyr::filter(timepoint == "T1") %>% 
@@ -2205,7 +2200,6 @@ ef_change_data %>%
 #| include: false
 
 # Test whether changes in one EF domain predict changes in another
-# This tests "coupling of developmental change"
 
 # Function to run change-on-change regression
 test_change_coupling <- function(data, outcome_var, predictor_var, 
@@ -2251,7 +2245,7 @@ change_pairs <- expand.grid(
 ) %>%
   dplyr::filter(outcome != predictor)  # Don't predict variable from itself
 
-# Test in Australia
+# Test in AU
 au_change_coupling <- change_pairs %>%
   dplyr::rowwise() %>%
   dplyr::mutate(
@@ -2267,7 +2261,7 @@ au_change_coupling <- change_pairs %>%
   dplyr::mutate(country = "AU") %>%
   dplyr::select(country, outcome, predictor, beta, se, ci_lower, ci_upper, t, p)
 
-# Test in South Africa
+# Test in SA
 sa_change_coupling <- change_pairs %>%
   dplyr::rowwise() %>%
   dplyr::mutate(
@@ -2303,7 +2297,6 @@ rq2b_change_coupling <- dplyr::bind_rows(au_change_coupling, sa_change_coupling)
 # Test whether SES predicts patterns of change
 # Does baseline income/HLE predict EF change?
 
-# Model: Does baseline SES predict EF change?
 test_ses_predicts_change <- function(data, outcome_var, ses_var, 
                                      baseline_var, covariates = c("age_t1")) {
   
@@ -2345,7 +2338,7 @@ ses_pred_grid <- expand.grid(
   stringsAsFactors = FALSE
 )
 
-# Australia
+# AU
 au_ses_predicts_change <- ses_pred_grid %>%
   dplyr::rowwise() %>%
   dplyr::mutate(
@@ -2360,7 +2353,7 @@ au_ses_predicts_change <- ses_pred_grid %>%
   tidyr::unnest(result) %>%
   dplyr::mutate(country = "AU")
 
-# South Africa
+# SA
 sa_ses_predicts_change <- ses_pred_grid %>%
   dplyr::rowwise() %>%
   dplyr::mutate(
@@ -2405,7 +2398,7 @@ test_ses_moderates_coupling <- function(data, outcome_var, predictor_var,
   predictor_col <- paste0("delta_", predictor_var)
   baseline_col <- paste0("baseline_", outcome_var)
   
-  # Interaction model
+  # interaction model
   formula_str <- paste0(
     outcome_col, " ~ ", 
     predictor_col, " * ", moderator_var, " + ",
@@ -2415,7 +2408,7 @@ test_ses_moderates_coupling <- function(data, outcome_var, predictor_var,
   fit <- lm(as.formula(formula_str), data = data)
   coef_summary <- summary(fit)$coefficients
   
-  # Extract interaction term
+  # extract interaction term
   interaction_term <- paste0(predictor_col, ":", moderator_var)
   
   if (interaction_term %in% rownames(coef_summary)) {
@@ -2436,7 +2429,7 @@ test_ses_moderates_coupling <- function(data, outcome_var, predictor_var,
   }
 }
 
-# Test key interactions (focus on theoretically motivated ones)
+# Test interactions 
 # WM predicting other domains, moderated by SES
 mod_grid <- expand.grid(
   outcome = c("inhibition", "cogflex"),  # WM predicting these
@@ -2445,7 +2438,7 @@ mod_grid <- expand.grid(
   stringsAsFactors = FALSE
 )
 
-# Australia
+# AU
 au_moderation <- mod_grid %>%
   dplyr::rowwise() %>%
   dplyr::mutate(
@@ -2461,7 +2454,7 @@ au_moderation <- mod_grid %>%
   tidyr::unnest(result) %>%
   dplyr::mutate(country = "AU")
 
-# South Africa
+# SA
 sa_moderation <- mod_grid %>%
   dplyr::rowwise() %>%
   dplyr::mutate(
@@ -2495,7 +2488,6 @@ rq2b_ses_moderation <- dplyr::bind_rows(au_moderation, sa_moderation) %>%
 #| include: false
 
 # Helper functions for inline reporting
-
 rq2b_coupling_beta <- function(country, predictor, outcome) {
   val <- rq2b_change_coupling %>%
     dplyr::filter(country == !!country, 
@@ -2625,7 +2617,6 @@ gt_rq2b
 
 library(ggplot2)
 
-# Focus on key relationships: WM change predicting other changes
 plot_data <- ef_change_data %>%
   dplyr::select(country, id, delta_inhibition, delta_cogflex, delta_workingmem) %>%
   tidyr::pivot_longer(
@@ -2744,7 +2735,7 @@ edge_did_draws_rz <- function(fit_AU_T1, fit_AU_T2, fit_SA_T1, fit_SA_T2,
     dAU_z <- fisher_z(al_AU$x) - fisher_z(al_AU$y)
     dSA_z <- fisher_z(al_SA$x) - fisher_z(al_SA$y)
 
-    # now align AU and SA delta vectors to same length
+    # align AU and SA delta vectors to same length
     al_dr <- align_draws(dAU_r, dSA_r, keep = keep)
     al_dz <- align_draws(dAU_z, dSA_z, keep = keep)
 
@@ -2764,7 +2755,7 @@ edge_did_draws_rz <- function(fit_AU_T1, fit_AU_T2, fit_SA_T1, fit_SA_T2,
 #| label: rq3-build-fisher-tables
 #| include: false
 
-# Unique fits table (as you already do)
+# unique fits table
 fit_tbl_uniq <- fit_tbl %>%
   dplyr::filter(!purrr::map_lgl(fit, is.null)) %>%
   dplyr::arrange(country, timepoint) %>%
@@ -2778,7 +2769,7 @@ fit_AU_T2 <- get_fit("AU", "T2", fit_tbl_uniq)
 fit_SA_T1 <- get_fit("SA", "T1", fit_tbl_uniq)
 fit_SA_T2 <- get_fit("SA", "T2", fit_tbl_uniq)
 
-# ---- Cohort differences at matched waves (AU - SA), EDGES ONLY: Δr and Δz ----
+# cohort differences at matched waves (AU - SA), edges only: Δr and Δz
 rq3_wave_edges_rz <- tibble::tibble(wave = c("T1","T2")) %>%
   dplyr::mutate(
     fit_AU   = purrr::map(wave, ~ get_fit("AU", .x, fit_tbl_uniq)),
@@ -2788,7 +2779,7 @@ rq3_wave_edges_rz <- tibble::tibble(wave = c("T1","T2")) %>%
   dplyr::select(wave, diff_rz) %>%
   tidyr::unnest_longer(diff_rz, values_to = "rz", indices_to = "edge_raw") %>%
   dplyr::mutate(
-    # canonical edge key (order invariant) matching your other tables
+    # canonical edge key
     term = vapply(
       strsplit(edge_raw, " — ", fixed = TRUE),
       function(z) paste(sort(z), collapse = " - "),
@@ -2805,7 +2796,7 @@ rq3_wave_edges_rz <- tibble::tibble(wave = c("T1","T2")) %>%
     rope_p_r   = fmt_p(p_outside_rope_r, digits = 2)
   )
 
-# ---- DiD (ΔAU - ΔSA), EDGES ONLY: Δr and Δz ----
+# DiD (ΔAU - ΔSA), edges only
 rq3_did_edges_rz <- tibble::tibble(panel = "Difference-in-differences (ΔAU \u2212 ΔSA)") %>%
   dplyr::mutate(
     did_rz = list(edge_did_draws_rz(fit_AU_T1, fit_AU_T2, fit_SA_T1, fit_SA_T2, node_names = nodes))
@@ -2821,7 +2812,7 @@ rq3_did_edges_rz <- tibble::tibble(panel = "Difference-in-differences (ΔAU \u22
     rope_p_r   = fmt_p(p_outside_rope_r, digits = 2)
   )
 
-# Combine into one print table (edges only)
+# Combine into one table
 rq3_edges_dual <- dplyr::bind_rows(rq3_wave_edges_rz, rq3_did_edges_rz) %>%
   dplyr::mutate(
     panel = factor(panel, levels = c(
@@ -2873,8 +2864,6 @@ gt_rq3_edges_dual
 ```{r}
 #| label: rq4-stratified-approach
 #| include: false
-
-# Option A: Split by moderator levels and compare networks
 
 # Create high/low splits at median within cohort
 ef_net_stratified <- ef_net %>%
@@ -2946,21 +2935,21 @@ fit_one_strat <- function(df) {
   list(fit = fit, n = n, reason = "success")
 }
 
-# Fit income-stratified models
+# fit income-stratified models
 ggm_fits_income <- purrr::map(dat_split_income, fit_one_strat)
 
 fit_tbl_income <- keys_income %>%
   dplyr::mutate(res = ggm_fits_income) %>%
   tidyr::unnest_wider(res)
 
-# Fit HLE-stratified models
+# fit HLE-stratified models
 ggm_fits_hle <- purrr::map(dat_split_hle, fit_one_strat)
 
 fit_tbl_hle <- keys_hle %>%
   dplyr::mutate(res = ggm_fits_hle) %>%
   tidyr::unnest_wider(res)
 
-# Check which fits succeeded
+# check which fits succeeded
 fit_tbl_income %>%
   dplyr::mutate(ok = !purrr::map_lgl(fit, is.null)) %>%
   dplyr::select(country, timepoint, income_group, n, reason, ok)
@@ -2985,14 +2974,14 @@ edge_group_diff <- function(fit_high, fit_low, node_names = nodes) {
   high_list <- edge_draws_list(fit_high, node_names = node_names)
   low_list  <- edge_draws_list(fit_low, node_names = node_names)
   
-  # Align and subtract
+  # align and subtract
   purrr::map2(high_list, low_list, function(h, l) {
     al <- align_draws(h, l, keep = "last")
     al$x - al$y  # High - Low
   })
 }
 
-# Income moderation: For each country × wave, compute High - Low
+# income moderation: For each country × wave, compute High - Low
 income_mod_effects <- fit_tbl_income %>%
   dplyr::filter(!purrr::map_lgl(fit, is.null)) %>%
   dplyr::arrange(country, timepoint, income_group) %>%
@@ -3117,8 +3106,6 @@ gt_rq4
 #| label: rq4-inline-helpers
 #| include: false
 
-# Helper functions for inline reporting
-
 rq4_mod_row <- function(moderator, country, wave, edge_label) {
   # Normalize moderator input (accept "income", "Income", "hle", "HLE")
   mod_val <- dplyr::case_when(
@@ -3163,15 +3150,14 @@ rq4_mod_meaningful <- function(moderator, country, wave, edge_label) {
 library(lavaan)
 library(semTools)
 
-# Ensure we have the raw EF data
-# These should exist from build-ef-age-objects chunk
+# raw EF data in the build-ef-age-objects chunk
 stopifnot(exists("ef_all"), exists("age_all"))
 
-# Create local copies to be safe
+# Create local copies
 ef_all_raw <- ef_all
 age_all_raw <- age_all
 
-# Helper: Extract EF data for lavaan
+# helper: extract EF data for lavaan
 prep_mi_data <- function(ef_long, age_long, wave) {
   ef_long %>%
     dplyr::filter(timepoint == wave) %>%
@@ -3187,11 +3173,11 @@ prep_mi_data <- function(ef_long, age_long, wave) {
     dplyr::filter(!is.na(ef_inhibition) | !is.na(ef_cogflex) | !is.na(ef_workingmem))
 }
 
-# Prepare data for T1 and T2 (both cohorts have these)
+# prep data for T1 and T2
 mi_data_t1 <- prep_mi_data(ef_all_raw, age_all_raw, "T1")
 mi_data_t2 <- prep_mi_data(ef_all_raw, age_all_raw, "T2")
 
-# Check sample sizes
+# check sample sizes
 cat("T1 sample sizes:\n")
 print(table(mi_data_t1$country))
 
@@ -3204,7 +3190,6 @@ print(table(mi_data_t2$country))
 #| include: false
 
 # Define EF measurement model
-# This tests whether the three EF components form a coherent construct
 
 ef_model <- '
   # Single-factor model
@@ -3223,7 +3208,7 @@ ef_model_network <- '
 # 2. Metric (weak): Same structure, same factor loadings
 # 3. Scalar (strong): Same structure, same loadings, same intercepts
 
-# Function to fit MI sequence at a given wave
+# function to fit MI sequence at a given wave
 fit_mi_sequence <- function(data, model, wave_label) {
   
   # Check if we have enough data
@@ -3235,7 +3220,7 @@ fit_mi_sequence <- function(data, model, wave_label) {
     warning("Small sample size in at least one group for wave ", wave_label)
   }
   
-  # 1. Configural invariance (baseline)
+  # Configural invariance (baseline)
   fit_configural <- tryCatch({
     cfa(model, data = data, group = "country", 
         missing = "fiml",  # handle missing data
@@ -3245,7 +3230,7 @@ fit_mi_sequence <- function(data, model, wave_label) {
     return(NULL)
   })
   
-  # 2. Metric invariance (equal loadings)
+  # Metric invariance (equal loadings)
   fit_metric <- tryCatch({
     cfa(model, data = data, group = "country",
         group.equal = "loadings",
@@ -3256,7 +3241,7 @@ fit_mi_sequence <- function(data, model, wave_label) {
     return(NULL)
   })
   
-  # 3. Scalar invariance (equal loadings + intercepts)
+  # Scalar invariance (equal loadings + intercepts)
   fit_scalar <- tryCatch({
     cfa(model, data = data, group = "country",
         group.equal = c("loadings", "intercepts"),
@@ -3284,12 +3269,12 @@ mi_t2 <- fit_mi_sequence(mi_data_t2, ef_model, "T2")
 #| label: measurement-invariance-tests
 #| include: false
 
-# Function to compare nested models and extract fit indices
+# function to compare nested models and extract fit indices
 compare_mi_models <- function(mi_results) {
   
   wave <- mi_results$wave
   
-  # Extract fit indices
+  # extract fit indices
   extract_fit <- function(fit) {
     if (is.null(fit)) {
       return(tibble::tibble(
@@ -3318,7 +3303,7 @@ compare_mi_models <- function(mi_results) {
     )
   }
   
-  # Fit indices for each model
+  # fit indices for each model
   fit_config <- extract_fit(mi_results$configural) %>% dplyr::mutate(model = "Configural")
   fit_metric <- extract_fit(mi_results$metric) %>% dplyr::mutate(model = "Metric")
   fit_scalar <- extract_fit(mi_results$scalar) %>% dplyr::mutate(model = "Scalar")
@@ -3327,7 +3312,7 @@ compare_mi_models <- function(mi_results) {
     dplyr::mutate(wave = wave) %>%
     dplyr::select(wave, model, everything())
   
-  # Model comparisons (if models converged)
+  # model comparisons (if models converged)
   comparisons <- list()
   
   if (!is.null(mi_results$configural) && !is.null(mi_results$metric)) {
@@ -3370,11 +3355,11 @@ compare_mi_models <- function(mi_results) {
   )
 }
 
-# Compare models for T1 and T2
+# compare models for T1 and T2
 mi_results_t1 <- compare_mi_models(mi_t1)
 mi_results_t2 <- compare_mi_models(mi_t2)
 
-# Combine results
+# combine results
 mi_fit_table <- dplyr::bind_rows(
   mi_results_t1$fit_indices,
   mi_results_t2$fit_indices
@@ -3391,7 +3376,7 @@ mi_comparison_table <- dplyr::bind_rows(
 #| label: measurement-invariance-interpretation
 #| include: false
 
-# Helper function to interpret MI results
+# helperto interpret MI results
 interpret_mi <- function(fit_table, comparison_table) {
   
   # Cutoffs (Cheung & Rensvold, 2002; Chen, 2007)
@@ -3449,8 +3434,6 @@ mi_interpretation <- interpret_mi(mi_fit_table, mi_comparison_table)
 ```{r}
 #| label: measurement-invariance-inline-helpers
 #| include: false
-
-# Helper functions for inline reporting
 
 mi_fit_value <- function(wave, model, index) {
   val <- mi_fit_table %>%
@@ -3518,7 +3501,7 @@ To test whether EF network differences reflected genuine structural differences 
 #| tbl-cap: "Measurement invariance tests across cohorts. Models test whether the three-component EF structure is equivalent between Australia and South Africa."
 #| include: true
 
-# Format fit indices table
+# format fit indices table
 mi_fit_display <- mi_fit_table %>%
   dplyr::mutate(
     `χ²` = sprintf("%.2f", chisq),
@@ -3658,7 +3641,7 @@ fmt_med_rng <- function(median, min, max, digits = 2) {
   )
 }
 
-# standardise country labels for tables
+# standardize country labels for tables
 country_for_table <- function(x) {
   dplyr::case_when(
     x == "AU" ~ "Australia",
@@ -4458,122 +4441,4 @@ p_spaghetti <- ggplot(ef_restricted_lab, aes(x = timepoint, y = value_z, group =
   )
 
 p_spaghetti
-
 ```
-
-```{r}
-#| label: excess-code
-#| include: false
-# excess code to be removed
-table(sa_data$hle_read_books)
-table(sa_data$hle_read_who___1)
-table(sa_data$hle_read_who___2)
-table(sa_data$hle_read_who___3)
-table(sa_data$hle_read_who___4)
-table(sa_data$hle_read_who___5)
-table(sa_data$hle_read_who___6)
-table(sa_data$hle_read_who___unk)
-table(sa_data$hle_read_who___na)
-table(sa_data$hle_read_who___999)
-table(sa_data$hle_read_who___9999)
-table(sa_data$hle_read_specify)
-table(sa_data$hle_stories)    
-table(sa_data$hle_stories_who___1)
-table(sa_data$hle_stories_who___2)
-table(sa_data$hle_stories_who___3)
-table(sa_data$hle_stories_who___4)
-table(sa_data$hle_stories_who___5)
-table(sa_data$hle_stories_who___6)
-table(sa_data$hle_stories_who___unk)
-table(sa_data$hle_stories_who___na)
-table(sa_data$hle_stories_who___999)
-table(sa_data$hle_stories_who___9999)
-table(sa_data$hle_stories_specify)
-table(sa_data$hle_songs)
-table(sa_data$hle_songs_who___1)
-table(sa_data$hle_songs_who___2)
-table(sa_data$hle_songs_who___3)
-table(sa_data$hle_songs_who___4)
-table(sa_data$hle_songs_who___5)
-table(sa_data$hle_songs_who___6)
-table(sa_data$hle_songs_who___unk)
-table(sa_data$hle_songs_who___na)
-table(sa_data$hle_songs_who___999)
-table(sa_data$hle_songs_who___9999)
-table(sa_data$hle_songs_specify)
-table(sa_data$hle_outside)
-table(sa_data$hle_outside_who___1)
-table(sa_data$hle_outside_who___2)
-table(sa_data$hle_outside_who___3)
-table(sa_data$hle_outside_who___4)
-table(sa_data$hle_outside_who___5)
-table(sa_data$hle_outside_who___6)
-table(sa_data$hle_outside_who___unk)
-table(sa_data$hle_outside_who___na)
-table(sa_data$hle_outside_who___999)
-table(sa_data$hle_outside_who___9999)
-table(sa_data$hle_outside_specify)
-table(sa_data$hle_play)
-table(sa_data$hle_play_who___1)
-table(sa_data$hle_play_who___2)
-table(sa_data$hle_play_who___3)
-table(sa_data$hle_play_who___4)
-table(sa_data$hle_play_who___5)
-table(sa_data$hle_play_who___6)
-table(sa_data$hle_play_who___unk)
-table(sa_data$hle_play_who___na)
-table(sa_data$hle_play_who___999)
-table(sa_data$hle_play_who___9999)
-table(sa_data$hle_play_specify)
-table(sa_data$hle_names)
-table(sa_data$hle_names_who___1)
-table(sa_data$hle_names_who___2)
-table(sa_data$hle_names_who___3)
-table(sa_data$hle_names_who___4)
-table(sa_data$hle_names_who___5)
-table(sa_data$hle_names_who___6)
-table(sa_data$hle_names_who___unk)
-table(sa_data$hle_names_who___na)
-table(sa_data$hle_names_who___999)
-table(sa_data$hle_names_who___999)
-table(sa_data$hle_names_specify)
-table(sa_data$hle_count)
-table(sa_data$hle_count_who___1)
-table(sa_data$hle_count_who___2)
-table(sa_data$hle_count_who___3)
-table(sa_data$hle_count_who___4)
-table(sa_data$hle_count_who___5)
-table(sa_data$hle_count_who___6)
-table(sa_data$hle_count_who___unk)
-table(sa_data$hle_count_who___na)
-table(sa_data$hle_count_who___999)
-table(sa_data$hle_count_who___9999)
-table(sa_data$hle_count_specify)
-table(sa_data$hle_draw)
-table(sa_data$hle_draw_who___1)
-table(sa_data$hle_draw_who___2)
-table(sa_data$hle_draw_who___3)
-table(sa_data$hle_draw_who___4)
-table(sa_data$hle_draw_who___5)
-table(sa_data$hle_draw_who___6)
-table(sa_data$hle_draw_who___unk)
-table(sa_data$hle_draw_who___na)
-table(sa_data$hle_draw_who___999)
-table(sa_data$hle_draw_who___9999)
-table(sa_data$hle_draw_specify)
-table(sa_data$hle_freqency_score)
-table(sa_data$hle_time_week)
-table(sa_data$hle_time_weekend)
-table(sa_data$total_time_with_child)
-table(sa_data$hle_books_home)
-table(sa_data$hle_books_number)
-table(sa_data$hle_homemade_toys)
-table(sa_data$hle_homemade_toys_specify)
-table(sa_data$hle_toys_shop)
-table(sa_data$hle_toys_shop_specify)
-table(sa_data$hle_household_objects)
-table(sa_data$hle_objects_specify)
-table(sa_data$books_toys_house_total)
-```
-
-
