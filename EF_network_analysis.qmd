@@ -3,46 +3,38 @@ title: "Mapping the Structure of Executive Function in Early Childhood using Net
 shorttitle: "Mapping Executive Function"
 
 author:
-- name: "Fionnuala O'Reilly" 
-  orcid: 0000-0002-4355-9088 
+- name: "A" 
   affiliations: 
     - ref: stanford
     - ref: oxford
-  email: fionnuala.oreilly@psy.ox.ac.uk
+  email: f@psy.ox.ac.uk
   corresponding: true
 
-- name: "Jelena Sucevic" 
-  orcid: 0000-0001-5091-5434 
+- name: "B" 
   affiliations: 
     - ref: oxford
     
-- name: "Caylee Cook"
-  orcid: 0000-0001-9718-8887
+- name: "C"
   affiliations:
     - ref: witwatersrand
     
-- name: "Justin E. Karr"
-  orcid: 0000-0003-3653-332X
+- name: "D"
   affiliations:
     - ref: kentucky
     
-- name: "Philippe Rast"
-  orcid: 0000-0003-3630-6629
+- name: "E"
   affiliations:
     - ref: ucdavis
     
-- name: "Catherine Draper*"
-  orcid: 0000-0002-2885-437X
+- name: "F*"
   affiliations:
     - ref: witwatersrand
 
-- name: "Steven Howard*" 
-  orcid: 0000-0002-1258-3210 
+- name: "G*" 
   affiliations: 
     - ref: oxford
 
-- name: "Gaia Scerif*" 
-  orcid: 0000-0002-6371-8874 
+- name: "H*" 
   affiliations: 
     - ref: oxford
 
@@ -106,18 +98,16 @@ execute:
 
 ## Research Questions
 
-**RQ1 (Primary): EF Network Structure Within Cohorts**
+**Research Question 1 (Primary): EF Network Structure Within Cohorts**  
 Within each cohort and wave, what is the age-adjusted EF network—defined by partial correlations among working memory, inhibition, and cognitive flexibility—and what do global strength and expected influence indicate about overall connectivity and node centrality?
 
-**RQ2 (Primary): Developmental Change Within Cohorts**
-RQ2a: Within each cohort, do the EF conditional associations (partial correlations) change across adjacent waves (AU: T1→T2→T3; SA: T1→T2), and if so, which specific edges strengthen or weaken over time?
+**Research Question 2 (Primary): Developmental Change Within Cohorts**  
+Within each cohort, do the EF conditional associations (partial correlations) change across adjacent waves (AU: T1→T2→T3; SA: T1→T2), and if so, which specific edges strengthen or weaken over time?
 
-RQ2b: At the individual level, are gains in one EF component coupled with gains in other components (i.e., does change in one domain predict change in another), and does this coupling vary by baseline SES?
-
-**RQ3 (Secondary): Cross-Cohort Comparisons**
+**Research Question 3 (Secondary): Cross-Cohort Comparisons**  
 At matched waves (T1 and T2), do AU and SA differ in EF conditional associations, and do the cohorts show divergent developmental trajectories from T1 to T2 (difference-in-differences)?
 
-**RQ4 (Exploratory): Socioeconomic Moderation of Network Structure**
+**Research Question 4 (Exploratory): Socioeconomic Moderation of Network Structure**  
 Within each cohort, does EF network structure differ between children from high versus low baseline (T1) household income and home learning environments? Specifically, are edges systematically stronger or weaker in high-SES groups across waves?
 
 \clearpage
@@ -170,9 +160,7 @@ $$
 EI_i = \sum_{j \neq i} r_{ij}
 $$
 
-Unlike older centrality metrics (e.g., betweenness, closeness), expected influence is appropriate for networks estimated from partial correlations and does not require thresholding edges or converting the network to a binary graph.
-
-We chose expected influence over strength (which uses absolute values) because it preserves directional information: a node can have high expected influence by being positively connected to many nodes, whereas strength would treat positive and negative edges equivalently. In EF networks where edges are predominantly positive, the two metrics converge, but expected influence provides a more nuanced picture if any negative edges emerge.
+Unlike older centrality metrics (e.g., betweenness, closeness), expected influence is appropriate for networks estimated from partial correlations and does not require thresholding edges or converting the network to a binary graph. We chose expected influence over strength (which uses absolute values) because it preserves directional information: a node can have high expected influence by being positively connected to many nodes, whereas strength would treat positive and negative edges equivalently. In EF networks where edges are predominantly positive, the two metrics converge, but expected influence provides a more nuanced picture if any negative edges emerge.
 
 ### Change and Comparison Analyses
 
@@ -182,23 +170,19 @@ For cross-cohort comparisons (RQ3), we computed cohort difference scores (e.g., 
 
 For difference-in-differences (DiD) contrasts, we tested whether cohorts showed divergent developmental trajectories by computing (Δr~T2-T1~)~AU~ − (Δr~T2-T1~)~SA~. A meaningful DiD would indicate that one cohort changed more than the other over time.
 
-### Individual-Level Change Coupling
-
-To test whether developmental changes across EF components were coordinated at the individual level (RQ2b), we computed change scores for each child (ΔEF = EF~T2~ − EF~T1~) and regressed change in one component on change in another, controlling for baseline performance and age. Significant positive regression coefficients would indicate coupled development, where gains in one domain predict gains in another. We tested all pairwise relationships and examined whether SES moderated coupling strength.
-
 ### Moderation Analyses
 
 To test whether socioeconomic factors moderate network structure (RQ4), we adopted a stratified approach. Within each cohort, we split children into High vs. Low groups based on median splits of baseline (T1) income and home learning environment (HLE), then fit separate BGGM models for each group at each wave. We computed moderation effects as High − Low edge differences, with ROPE probabilities indicating the strength of evidence for moderation (P(|High − Low| > 0.10)). This stratified approach is more robust than including SES as a continuous covariate in a single model, as it allows network structure to differ nonlinearly across SES groups and does not assume constant effects across the SES distribution.
 
-### Robustness check: Measurement Invariance
+### Measurement Invariance
 
-We tested measurement invariance across cohorts using confirmatory factor analysis (CFA) in the lavaan R package [@rosseel2012lavaan]. We fit a single-factor model with the three EF components as indicators and tested three levels of invariance:
+We tested measurement invariance using multi-group confirmatory factor analysis (CFA) in the lavaan R package [@rosseel2012lavaan]. Because cognitive flexibility exhibited pronounced floor effects in Australian children (see @fig-ef-boxplots-by-wave) at T1 (32.5% scoring zero), we treated all three EF indicators as ordinal variables, segmenting them into tertiles (Low/Medium/High) based on pooled distributions. We fit a single-factor ordinal CFA model across four groups simultaneously (AU_T1, AU_T2, SA_T1, SA_T2), testing invariance across both cohorts and developmental timepoints using robust weighted least squares estimation (WLSMV). We tested three levels of invariance:
 
-1. **Configural invariance**: The same factor structure (three indicators loading on one factor) holds in both cohorts
-2. **Metric invariance**: Factor loadings are equal across cohorts (components relate to the latent construct equivalently)
-3. **Scalar invariance**: Intercepts are equal across cohorts (groups have the same baseline levels)
+1. **Configural invariance**: The same factor structure (three indicators loading on one factor) holds across all groups
+2. **Metric invariance**: Factor loadings are equal across groups (components relate to the latent EF construct equivalently)
+3. **Scalar invariance**: Thresholds (category boundaries for ordinal indicators) are equal across groups
 
-We evaluated invariance using chi-square difference tests (Δχ²) and changes in fit indices (ΔCFI, ΔRMSEA), with ΔCFI < 0.01 supporting invariance [@cheung2002evaluating]. Metric invariance is a prerequisite for comparing relationships between variables across groups, while scalar invariance is required for comparing mean levels.
+We evaluated invariance using chi-square difference tests (Δχ²) and changes in fit indices (ΔCFI), with ΔCFI < 0.01 supporting invariance [@cheung2002evaluating]. Metric invariance is a prerequisite for comparing network structures (relationships between EF components) across groups, while scalar invariance is required for comparing mean levels.
 
 ### Software
 
@@ -901,6 +885,335 @@ stopifnot(all(levels(ef_all_keep$variable) == nodes))
 ```
 
 ```{r}
+#| label: ef-data-diagnostics
+#| include: false
+
+# Verify that ef_all_keep exists from build-ef-age-objects
+stopifnot(exists("ef_all_keep"), exists("age_all_keep"))
+
+cat("=== COMBINED EF DATA ===\n")
+print(ef_all_keep %>% count(country, timepoint))
+
+# Descriptive statistics
+cat("\n=== DESCRIPTIVE STATISTICS ===\n\n")
+
+descriptives <- ef_all_keep %>%
+  group_by(country, timepoint, variable) %>%
+  summarise(
+    n = sum(!is.na(value)),
+    mean = mean(value, na.rm = TRUE),
+    sd = sd(value, na.rm = TRUE),
+    min = min(value, na.rm = TRUE),
+    q25 = quantile(value, 0.25, na.rm = TRUE),
+    median = median(value, na.rm = TRUE),
+    q75 = quantile(value, 0.75, na.rm = TRUE),
+    max = max(value, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+print(descriptives)
+
+# Missingness patterns
+cat("\n=== MISSINGNESS PATTERNS ===\n\n")
+
+# Need wide format for missingness analysis
+ef_wide_temp <- ef_all_keep %>%
+  pivot_wider(
+    id_cols = c(country, timepoint, id),
+    names_from = variable,
+    values_from = value
+  )
+
+missingness <- ef_wide_temp %>%
+  group_by(country, timepoint) %>%
+  summarise(
+    n_total = n(),
+    n_inhibition = sum(!is.na(ef_inhibition)),
+    n_cogflex = sum(!is.na(ef_cogflex)),
+    n_workingmem = sum(!is.na(ef_workingmem)),
+    n_all_ef = sum(!is.na(ef_inhibition) & !is.na(ef_cogflex) & !is.na(ef_workingmem)),
+    n_any_ef = sum(!is.na(ef_inhibition) | !is.na(ef_cogflex) | !is.na(ef_workingmem)),
+    pct_complete = 100 * n_all_ef / n_total,
+    .groups = "drop"
+  )
+
+print(missingness)
+
+# Floor/ceiling effects
+cat("\n=== FLOOR/CEILING EFFECTS ===\n\n")
+
+floor_ceiling <- ef_all_keep %>%
+  filter(!is.na(value)) %>%
+  group_by(country, timepoint, variable) %>%
+  summarise(
+    n = n(),
+    n_at_min = sum(value == min(value)),
+    n_at_max = sum(value == max(value)),
+    pct_at_min = 100 * n_at_min / n,
+    pct_at_max = 100 * n_at_max / n,
+    .groups = "drop"
+  )
+
+print(floor_ceiling)
+
+# Create plot-ready version with human-readable labels
+cat("\n=== CREATING DISTRIBUTION PLOTS ===\n")
+
+ef_long_plot <- ef_all_keep %>%
+  mutate(
+    measure = recode(variable,
+      "ef_inhibition" = "Inhibition",
+      "ef_cogflex" = "Cognitive Flexibility",
+      "ef_workingmem" = "Working Memory"
+    ),
+    wave = as.character(timepoint)  # for plot labels
+  )
+
+# Histograms
+p1 <- ggplot(ef_long_plot, aes(x = value, fill = country)) +
+  geom_histogram(alpha = 0.6, position = "identity", bins = 30) +
+  facet_grid(wave ~ measure, scales = "free") +
+  theme_bw() +
+  labs(title = "Distribution of EF Scores",
+       x = "Score", y = "Count")
+
+print(p1)
+
+# Normality tests
+cat("\n=== NORMALITY TESTS (Shapiro-Wilk) ===\n")
+cat("(Only testing if n < 5000; otherwise skipping)\n\n")
+
+normality_tests <- ef_long_plot %>%
+  filter(!is.na(value)) %>%
+  group_by(country, wave, measure) %>%
+  summarise(
+    n = n(),
+    shapiro_p = if_else(
+      n >= 3 & n < 5000,
+      shapiro.test(value)$p.value,
+      NA_real_
+    ),
+    .groups = "drop"
+  )
+
+print(normality_tests)
+
+# Correlations within wave
+cat("\n=== CORRELATIONS BETWEEN EF MEASURES (within wave) ===\n\n")
+
+# Need wide format for correlations
+correlations <- ef_wide_temp %>%
+  group_by(country, timepoint) %>%
+  summarise(
+    n = sum(!is.na(ef_inhibition) & !is.na(ef_cogflex) & !is.na(ef_workingmem)),
+    inh_cog = cor(ef_inhibition, ef_cogflex, use = "pairwise.complete"),
+    inh_wm = cor(ef_inhibition, ef_workingmem, use = "pairwise.complete"),
+    cog_wm = cor(ef_cogflex, ef_workingmem, use = "pairwise.complete"),
+    .groups = "drop"
+  )
+
+print(correlations)
+
+cat("\nObjects created:\n")
+cat("- descriptives: summary statistics by cohort×wave×measure\n")
+cat("- missingness: missingness patterns by cohort×wave\n")
+cat("- floor_ceiling: floor/ceiling effects by cohort×wave×measure\n")
+cat("- correlations: within-wave correlations between EF measures\n")
+cat("- ef_long_plot: plot-ready long-format data with human-readable labels\n")
+
+```
+
+```{r}
+#| label: invariance-data-prep
+#| include: false
+
+# Multi-group CFA invariance with all three vars treated as ordinal
+
+# Start with ef_all_keep (long format)
+# Convert to wide format for lavaan
+df_mi_wide <- ef_all_keep %>%
+  filter(timepoint %in% c("T1", "T2")) %>%  # Only T1 and T2 (SA has no T3)
+  pivot_wider(
+    id_cols = c(country, timepoint, id),
+    names_from = variable,
+    values_from = value
+  ) %>%
+  mutate(group = paste(country, timepoint, sep = "_")) %>%
+  filter(group %in% c("AU_T1", "AU_T2", "SA_T1", "SA_T2"))
+
+# Define tertile binning function
+qcut3 <- function(x) {
+  qs <- quantile(x, probs = c(0, 1/3, 2/3, 1), na.rm = TRUE, names = FALSE)
+  qs <- unique(qs)
+  if (length(qs) < 4) return(ordered(NA))
+  cut(x, breaks = qs, include.lowest = TRUE,
+      labels = c("L","M","H"), ordered_result = TRUE)
+}
+
+# Create ordinal categories (pooled tertiles)
+df_mi <- df_mi_wide %>%
+  mutate(
+    inh_cat = qcut3(ef_inhibition),
+    wm_cat  = qcut3(ef_workingmem),
+    cf_cat  = qcut3(ef_cogflex)
+  )
+
+# Check no empty categories
+cat("=== CATEGORY DISTRIBUTIONS ===\n\n")
+print(with(df_mi, table(group, inh_cat, useNA="no")))
+print(with(df_mi, table(group, wm_cat,  useNA="no")))
+print(with(df_mi, table(group, cf_cat,  useNA="no")))
+```
+
+```{r}
+#| label: invariance-models
+#| include: false
+
+# Define EF factor model
+model_ef <- "
+EF =~ inh_cat + wm_cat + cf_cat
+"
+
+# Fit configural model (same structure across groups)
+fit_config <- cfa(
+  model_ef,
+  data = df_mi,
+  group = "group",
+  ordered = c("inh_cat","wm_cat","cf_cat"),
+  estimator = "WLSMV"
+)
+
+# Fit metric model (equal loadings)
+fit_metric <- cfa(
+  model_ef,
+  data = df_mi,
+  group = "group",
+  ordered = c("inh_cat","wm_cat","cf_cat"),
+  estimator = "WLSMV",
+  group.equal = "loadings"
+)
+
+# Fit scalar model (equal loadings + thresholds)
+fit_scalar <- cfa(
+  model_ef,
+  data = df_mi,
+  group = "group",
+  ordered = c("inh_cat","wm_cat","cf_cat"),
+  estimator = "WLSMV",
+  group.equal = c("loadings","thresholds")
+)
+
+# Compare models
+cmp_metric <- lavTestLRT(fit_config, fit_metric)
+cmp_scalar <- lavTestLRT(fit_metric, fit_scalar)
+
+cat("=== MODEL COMPARISONS ===\n\n")
+print(cmp_metric)
+print(cmp_scalar)
+
+cat("\n=== FIT SUMMARIES ===\n\n")
+cat("Configural:\n")
+print(fitMeasures(fit_config, c("cfi","tli","rmsea","srmr")))
+cat("\nMetric:\n")
+print(fitMeasures(fit_metric, c("cfi","tli","rmsea","srmr")))
+cat("\nScalar:\n")
+print(fitMeasures(fit_scalar, c("cfi","tli","rmsea","srmr")))
+```
+
+```{r}
+#| label: mi-extract
+#| include: false
+
+# helper: pull the "diff test" row from lavTestLRT output
+extract_lrt <- function(lrt_obj) {
+  # lavTestLRT returns a data.frame-like object with two rows:
+  # row 1 = less constrained model, row 2 = more constrained model
+  df <- as.data.frame(lrt_obj)
+  out <- df[nrow(df), , drop = FALSE]
+
+  list(
+    chisq = unname(out$`Chisq diff`),
+    df    = unname(out$`Df diff`),
+    p     = unname(out$`Pr(>Chisq)`)
+  )
+}
+
+lrt_metric <- extract_lrt(cmp_metric)  # configural -> metric
+lrt_scalar <- extract_lrt(cmp_scalar)  # metric -> scalar
+
+# Grab fit indices 
+fit_conf <- fitMeasures(fit_config, c("cfi","tli","rmsea","srmr"))
+fit_met  <- fitMeasures(fit_metric, c("cfi","tli","rmsea","srmr"))
+fit_sca  <- fitMeasures(fit_scalar, c("cfi","tli","rmsea","srmr"))
+
+dCFI_metric <- unname(fit_met["cfi"] - fit_conf["cfi"])
+dCFI_scalar <- unname(fit_sca["cfi"] - fit_met["cfi"])
+```
+### Measurement Invariance
+
+To evaluate cross-cohort comparability of EF indicators, we conducted multi-group confirmatory factor analyses (CFA) across four cohort×wave groups (AU_T1, AU_T2, SA_T1, SA_T2), thereby testing invariance simultaneously across countries and developmental timepoints. Because cognitive flexibility exhibited pronounced floor effects in Australian children at T1 (32.5% scoring zero), all three EF indicators were treated as ordinal variables using robust weighted least squares estimation (WLSMV). Indicators were segmented into tertiles based on pooled distributions to ensure adequate category representation.
+
+In ordinal CFA, each observed categorical indicator reflects an underlying continuous latent response variable partitioned by thresholds. Factor loadings capture the strength of association between the latent EF construct and each indicator, while thresholds capture distributional placement of categories. This allows floor effect severity to be represented through threshold parameters without distorting factor loadings.
+
+We estimated a one-factor model in a sequence of increasingly constrained models. Configural invariance was supported. Constraining factor loadings equal across groups (metric invariance) did not significantly reduce fit (Δχ²(`r lrt_metric$df`) = `r round(lrt_metric$chisq, 2)`, *p* = `r signif(lrt_metric$p, 3)`; ΔCFI = `r round(dCFI_metric, 3)`), indicating comparable strength of association between the EF factor and its indicators. However, constraining thresholds (scalar invariance) significantly worsened fit (Δχ²(`r lrt_scalar$df`) = `r round(lrt_scalar$chisq, 2)`, *p* < .001; ΔCFI = `r round(dCFI_scalar, 3)`), with CFI declining from `r round(fit_met["cfi"], 3)` to `r round(fit_sca["cfi"], 3)`, indicating systematic threshold differences across groups. Metric invariance supports comparison of network structures (relationships between EF components) across cohorts, though absolute performance levels cannot be compared (see @tbl-invariance) .
+
+```{r}
+#| label: tbl-invariance
+#| tbl-cap: "Measurement Invariance Testing: Fit Indices and Model Comparisons"
+
+# Create combined table with fit indices AND tests
+inv_table <- tibble::tibble(
+  Model = c("Configural", "Metric", "Scalar"),
+  CFI = c(fit_conf["cfi"], fit_met["cfi"], fit_sca["cfi"]),
+  TLI = c(fit_conf["tli"], fit_met["tli"], fit_sca["tli"]),
+  RMSEA = c(fit_conf["rmsea"], fit_met["rmsea"], fit_sca["rmsea"]),
+  SRMR = c(fit_conf["srmr"], fit_met["srmr"], fit_sca["srmr"]),
+  `Δχ²` = c(NA, lrt_metric$chisq, lrt_scalar$chisq),
+  `Δdf` = c(NA, lrt_metric$df, lrt_scalar$df),
+  `p` = c(NA, lrt_metric$p, lrt_scalar$p),
+  ΔCFI = c(NA, dCFI_metric, dCFI_scalar)
+) %>%
+  mutate(
+    Decision = case_when(
+      is.na(p) ~ "—",
+      abs(ΔCFI) < 0.01 & p > 0.05 ~ "Supported",
+      TRUE ~ "Not supported"
+    )
+  )
+
+inv_table %>%
+  gt() %>%
+  opt_css(
+    css = "
+    #tbl-invariance {
+      margin-top: 30px;
+    }
+    "
+  ) %>%
+  fmt_number(columns = c(CFI, TLI, RMSEA, SRMR, ΔCFI), decimals = 3) %>%
+  fmt_number(columns = `Δχ²`, decimals = 2) %>%
+  fmt_number(columns = p, decimals = 3) %>%
+  sub_missing(missing_text = "—") %>%
+  tab_style(
+    style = cell_fill(color = "#E8F5E9"),
+    locations = cells_body(rows = Decision == "Supported")
+  ) %>%
+  tab_style(
+    style = cell_fill(color = "#FFEBEE"),
+    locations = cells_body(rows = Decision == "Not supported")
+  ) %>%
+  tab_footnote(
+    footnote = "ΔCFI < 0.01 indicates invariance is supported (Cheung & Rensvold, 2002)",
+    locations = cells_column_labels(columns = ΔCFI)
+  ) %>%
+  tab_footnote(
+    footnote = "Ordinal CFA with WLSMV estimation; four groups: AU_T1, AU_T2, SA_T1, SA_T2",
+    locations = cells_column_labels(columns = Model)
+  )
+```
+\clearpage
+
+```{r}
 #| label: prepare-moderators
 #| include: false
 
@@ -1553,7 +1866,7 @@ ei_report <- function(country, tp, node_label) {
 }
 ```
 
-**RQ1 (Primary): EF Network Structure Within Cohorts**:
+### Research Question 1 (Primary): EF Network Structure Within Cohorts
 Within each cohort and wave, what is the age-adjusted EF network—defined by partial correlations among working memory, inhibition, and cognitive flexibility—and what do global strength and expected influence indicate about overall connectivity and node centrality?
 
 ### Edges
@@ -1863,7 +2176,9 @@ ggplot(rq1_ei, aes(x = timepoint, y = q50, group = 1)) +
   scale_y_continuous(expand = expansion(mult = c(0.12, 0.05)))
 ```
 \clearpage
+
 ```{r}
+#################### RQ2 - cross cultural comparisons #################### 
 #| label: rq2-difference-helpers
 #| include: false
 
@@ -1945,6 +2260,8 @@ fmt_p <- function(p, digits = 2) sprintf(paste0("%.", digits, "f"), p)
 ```
 
 ```{r}
+
+
 #| label: rq2-ei-delta-summaries
 #| include: false
 
@@ -1974,7 +2291,6 @@ ei_delta_summaries <- function(fit_A, fit_B,
 
   out
 }
-
 ```
 
 ```{r}
@@ -2061,12 +2377,14 @@ rq2_table_all <- dplyr::bind_rows(rq2_delta_gs, rq2_delta_edges, rq2_delta_ei) %
 rq2_table_all
 
 ```
-
-**RQ2a (Primary): Developmental Change Within Cohorts**:
+### Research Question 2 (Primary): Developmental Change Within Cohorts 
 Within each cohort, do the EF conditional associations (partial correlations) change across adjacent waves (AU: T1→T2→T3; SA: T1→T2), and if so, which specific edges strengthen or weaken over time?
 
-We found little evidence for meaningful change in EF network summaries across adjacent waves within either cohort (see @tbl-rq2-gt-all). Posterior 95% CrIs for all Δs included 0, and probabilities that edge changes exceeded the ROPE (|Δr| > 0.10) were modest (≈0.3–0.6), indicating substantial uncertainty and no clear support for meaningful change.
+Given metric invariance, we compared network structures across adjacent waves within each cohort. For each wave transition, we computed posterior distributions of change in edge weights (Δr = later wave − earlier 
+wave), global strength (Δ), and expected influence (Δ). We evaluated whether changes exceeded a region of practical equivalence (ROPE; |Δr| > 0.10) to distinguish meaningful developmental change from negligible fluctuation.
 
+We found little evidence for meaningful change in EF network summaries across adjacent waves within either cohort (see @tbl-rq2-gt-all). Posterior 95% CrIs for all Δs included 0, and probabilities that edge changes exceeded the ROPE (|Δr| > 0.10) were modest (≈0.3–0.6), indicating substantial uncertainty and 
+no clear support for meaningful change.
 ```{r}
 #| label: tbl-rq2-gt-all
 #| tbl-cap: "Change in EF network summaries across adjacent waves within cohort. Cells show posterior median [95% CrI] for Δ (later − earlier). For edges, cells also show $P(|\\Delta r| > 0.10)$."
@@ -2138,522 +2456,6 @@ rq2_ei_meaningful    <- function(country, tp2, tp1, node) rq2_cell("Expected inf
 ```
 \clearpage
 
-```{r}
-#| label: rq2b-prepare-change-scores
-#| include: false
-
-# Prepare individual-level change scores
-# Compute changes in raw EF scores and test whether changes in one domain predict changes in another (coupling of developmental change)
-
-# Step 1: Get raw EF scores at T1 and T2 for each person
-# Use ef_all (raw scores before residualization)
-
-ef_change_data <- ef_all %>%
-  dplyr::filter(timepoint %in% c("T1", "T2")) %>%
-  dplyr::select(country, id, timepoint, variable, value) %>%
-  tidyr::pivot_wider(
-    names_from = c(variable, timepoint),
-    values_from = value,
-    names_sep = "_"
-  ) %>%
-  dplyr::mutate(
-    # Compute change scores (T2 - T1) for each EF component
-    delta_inhibition = ef_inhibition_T2 - ef_inhibition_T1,
-    delta_cogflex    = ef_cogflex_T2 - ef_cogflex_T1,
-    delta_workingmem = ef_workingmem_T2 - ef_workingmem_T1,
-    
-    # Compute baseline (T1) scores
-    baseline_inhibition = ef_inhibition_T1,
-    baseline_cogflex    = ef_cogflex_T1,
-    baseline_workingmem = ef_workingmem_T1
-  ) %>%
-  # add age
-  dplyr::left_join(
-    age_all %>% 
-      dplyr::filter(timepoint == "T1") %>% 
-      dplyr::select(country, id, age_t1 = age),
-    by = c("country", "id")
-  ) %>%
-  dplyr::left_join(
-    mods_t1 %>% dplyr::select(country, id, income_z, hle_z),
-    by = c("country", "id")
-  ) %>%
-  # Keep only those with data at both waves
-  dplyr::filter(
-    !is.na(delta_inhibition) | !is.na(delta_cogflex) | !is.na(delta_workingmem)
-  )
-
-# Check sample sizes
-ef_change_data %>%
-  dplyr::group_by(country) %>%
-  dplyr::summarise(
-    n = n(),
-    n_delta_inh = sum(!is.na(delta_inhibition)),
-    n_delta_cog = sum(!is.na(delta_cogflex)),
-    n_delta_wm  = sum(!is.na(delta_workingmem)),
-    .groups = "drop"
-  )
-```
-
-```{r}
-#| label: rq2b-coupling-of-change
-#| include: false
-
-# Test whether changes in one EF domain predict changes in another
-
-# Function to run change-on-change regression
-test_change_coupling <- function(data, outcome_var, predictor_var, 
-                                  baseline_var, covariates = c("age_t1")) {
-  
-  # Build formula
-  outcome_col <- paste0("delta_", outcome_var)
-  predictor_col <- paste0("delta_", predictor_var)
-  baseline_col <- paste0("baseline_", outcome_var)
-  
-  formula_str <- paste0(
-    outcome_col, " ~ ", 
-    predictor_col, " + ",
-    baseline_col, " + ",
-    paste(covariates, collapse = " + ")
-  )
-  
-  # Fit model
-  fit <- lm(as.formula(formula_str), data = data)
-  
-  # Extract coefficient for predictor
-  coef_summary <- summary(fit)$coefficients
-  pred_row <- coef_summary[predictor_col, ]
-  
-  tibble::tibble(
-    beta = pred_row["Estimate"],
-    se = pred_row["Std. Error"],
-    t = pred_row["t value"],
-    p = pred_row["Pr(>|t|)"],
-    ci_lower = beta - 1.96 * se,
-    ci_upper = beta + 1.96 * se
-  )
-}
-
-# Test all pairwise change couplings within each cohort
-ef_vars <- c("inhibition", "cogflex", "workingmem")
-
-# Generate all directed pairs (A predicts B)
-change_pairs <- expand.grid(
-  outcome = ef_vars,
-  predictor = ef_vars,
-  stringsAsFactors = FALSE
-) %>%
-  dplyr::filter(outcome != predictor)  # Don't predict variable from itself
-
-# Test in AU
-au_change_coupling <- change_pairs %>%
-  dplyr::rowwise() %>%
-  dplyr::mutate(
-    result = list(test_change_coupling(
-      data = ef_change_data %>% dplyr::filter(country == "AU"),
-      outcome_var = outcome,
-      predictor_var = predictor,
-      baseline_var = outcome
-    ))
-  ) %>%
-  dplyr::ungroup() %>%
-  tidyr::unnest(result) %>%
-  dplyr::mutate(country = "AU") %>%
-  dplyr::select(country, outcome, predictor, beta, se, ci_lower, ci_upper, t, p)
-
-# Test in SA
-sa_change_coupling <- change_pairs %>%
-  dplyr::rowwise() %>%
-  dplyr::mutate(
-    result = list(test_change_coupling(
-      data = ef_change_data %>% dplyr::filter(country == "SA"),
-      outcome_var = outcome,
-      predictor_var = predictor,
-      baseline_var = outcome
-    ))
-  ) %>%
-  dplyr::ungroup() %>%
-  tidyr::unnest(result) %>%
-  dplyr::mutate(country = "SA") %>%
-  dplyr::select(country, outcome, predictor, beta, se, ci_lower, ci_upper, t, p)
-
-# Combine
-rq2b_change_coupling <- dplyr::bind_rows(au_change_coupling, sa_change_coupling) %>%
-  dplyr::mutate(
-    sig = dplyr::case_when(
-      p < .001 ~ "***",
-      p < .01 ~ "**",
-      p < .05 ~ "*",
-      p < .10 ~ "†",
-      TRUE ~ ""
-    )
-  )
-```
-
-```{r}
-#| label: rq2b-ses-moderates-change
-#| include: false
-
-# Test whether SES predicts patterns of change
-# Does baseline income/HLE predict EF change?
-
-test_ses_predicts_change <- function(data, outcome_var, ses_var, 
-                                     baseline_var, covariates = c("age_t1")) {
-  
-  outcome_col <- paste0("delta_", outcome_var)
-  baseline_col <- paste0("baseline_", outcome_var)
-  
-  formula_str <- paste0(
-    outcome_col, " ~ ", 
-    ses_var, " + ",
-    baseline_col, " + ",
-    paste(covariates, collapse = " + ")
-  )
-  
-  fit <- lm(as.formula(formula_str), data = data)
-  coef_summary <- summary(fit)$coefficients
-  
-  if (ses_var %in% rownames(coef_summary)) {
-    ses_row <- coef_summary[ses_var, ]
-    tibble::tibble(
-      beta = ses_row["Estimate"],
-      se = ses_row["Std. Error"],
-      t = ses_row["t value"],
-      p = ses_row["Pr(>|t|)"],
-      ci_lower = beta - 1.96 * se,
-      ci_upper = beta + 1.96 * se
-    )
-  } else {
-    tibble::tibble(
-      beta = NA, se = NA, t = NA, p = NA,
-      ci_lower = NA, ci_upper = NA
-    )
-  }
-}
-
-# Test income and HLE predicting each EF change
-ses_pred_grid <- expand.grid(
-  outcome = ef_vars,
-  ses_var = c("income_z", "hle_z"),
-  stringsAsFactors = FALSE
-)
-
-# AU
-au_ses_predicts_change <- ses_pred_grid %>%
-  dplyr::rowwise() %>%
-  dplyr::mutate(
-    result = list(test_ses_predicts_change(
-      data = ef_change_data %>% dplyr::filter(country == "AU"),
-      outcome_var = outcome,
-      ses_var = ses_var,
-      baseline_var = outcome
-    ))
-  ) %>%
-  dplyr::ungroup() %>%
-  tidyr::unnest(result) %>%
-  dplyr::mutate(country = "AU")
-
-# SA
-sa_ses_predicts_change <- ses_pred_grid %>%
-  dplyr::rowwise() %>%
-  dplyr::mutate(
-    result = list(test_ses_predicts_change(
-      data = ef_change_data %>% dplyr::filter(country == "SA"),
-      outcome_var = outcome,
-      ses_var = ses_var,
-      baseline_var = outcome
-    ))
-  ) %>%
-  dplyr::ungroup() %>%
-  tidyr::unnest(result) %>%
-  dplyr::mutate(country = "SA")
-
-# Combine
-rq2b_ses_predicts_change <- dplyr::bind_rows(
-  au_ses_predicts_change,
-  sa_ses_predicts_change
-) %>%
-  dplyr::mutate(
-    sig = dplyr::case_when(
-      p < .001 ~ "***",
-      p < .01 ~ "**",
-      p < .05 ~ "*",
-      p < .10 ~ "†",
-      TRUE ~ ""
-    )
-  )
-```
-
-```{r}
-#| label: rq2b-change-coupling-moderated-by-ses
-#| include: false
-
-# Test whether SES moderates the coupling of change
-# Does the relationship between ΔWM and ΔInhibition differ by income/HLE?
-
-test_ses_moderates_coupling <- function(data, outcome_var, predictor_var, 
-                                        moderator_var, baseline_var) {
-  
-  outcome_col <- paste0("delta_", outcome_var)
-  predictor_col <- paste0("delta_", predictor_var)
-  baseline_col <- paste0("baseline_", outcome_var)
-  
-  # interaction model
-  formula_str <- paste0(
-    outcome_col, " ~ ", 
-    predictor_col, " * ", moderator_var, " + ",
-    baseline_col, " + age_t1"
-  )
-  
-  fit <- lm(as.formula(formula_str), data = data)
-  coef_summary <- summary(fit)$coefficients
-  
-  # extract interaction term
-  interaction_term <- paste0(predictor_col, ":", moderator_var)
-  
-  if (interaction_term %in% rownames(coef_summary)) {
-    int_row <- coef_summary[interaction_term, ]
-    tibble::tibble(
-      beta_interaction = int_row["Estimate"],
-      se = int_row["Std. Error"],
-      t = int_row["t value"],
-      p = int_row["Pr(>|t|)"],
-      ci_lower = beta_interaction - 1.96 * se,
-      ci_upper = beta_interaction + 1.96 * se
-    )
-  } else {
-    tibble::tibble(
-      beta_interaction = NA, se = NA, t = NA, p = NA,
-      ci_lower = NA, ci_upper = NA
-    )
-  }
-}
-
-# Test interactions 
-# WM predicting other domains, moderated by SES
-mod_grid <- expand.grid(
-  outcome = c("inhibition", "cogflex"),  # WM predicting these
-  predictor = "workingmem",
-  moderator = c("income_z", "hle_z"),
-  stringsAsFactors = FALSE
-)
-
-# AU
-au_moderation <- mod_grid %>%
-  dplyr::rowwise() %>%
-  dplyr::mutate(
-    result = list(test_ses_moderates_coupling(
-      data = ef_change_data %>% dplyr::filter(country == "AU"),
-      outcome_var = outcome,
-      predictor_var = predictor,
-      moderator_var = moderator,
-      baseline_var = outcome
-    ))
-  ) %>%
-  dplyr::ungroup() %>%
-  tidyr::unnest(result) %>%
-  dplyr::mutate(country = "AU")
-
-# SA
-sa_moderation <- mod_grid %>%
-  dplyr::rowwise() %>%
-  dplyr::mutate(
-    result = list(test_ses_moderates_coupling(
-      data = ef_change_data %>% dplyr::filter(country == "SA"),
-      outcome_var = outcome,
-      predictor_var = predictor,
-      moderator_var = moderator,
-      baseline_var = outcome
-    ))
-  ) %>%
-  dplyr::ungroup() %>%
-  tidyr::unnest(result) %>%
-  dplyr::mutate(country = "SA")
-
-# Combine
-rq2b_ses_moderation <- dplyr::bind_rows(au_moderation, sa_moderation) %>%
-  dplyr::mutate(
-    sig = dplyr::case_when(
-      p < .001 ~ "***",
-      p < .01 ~ "**",
-      p < .05 ~ "*",
-      p < .10 ~ "†",
-      TRUE ~ ""
-    )
-  )
-```
-
-```{r}
-#| label: rq2b-inline-helpers
-#| include: false
-
-# Helper functions for inline reporting
-rq2b_coupling_beta <- function(country, predictor, outcome) {
-  val <- rq2b_change_coupling %>%
-    dplyr::filter(country == !!country, 
-                  predictor == !!predictor,
-                  outcome == !!outcome) %>%
-    dplyr::pull(beta)
-  
-  if (length(val) == 0 || is.na(val)) return("NA")
-  sprintf("%.2f", val)
-}
-
-rq2b_coupling_ci <- function(country, predictor, outcome) {
-  row <- rq2b_change_coupling %>%
-    dplyr::filter(country == !!country, 
-                  predictor == !!predictor,
-                  outcome == !!outcome)
-  
-  if (nrow(row) == 0) return("NA")
-  sprintf("[%.2f, %.2f]", row$ci_lower, row$ci_upper)
-}
-
-rq2b_coupling_p <- function(country, predictor, outcome) {
-  val <- rq2b_change_coupling %>%
-    dplyr::filter(country == !!country, 
-                  predictor == !!predictor,
-                  outcome == !!outcome) %>%
-    dplyr::pull(p)
-  
-  if (length(val) == 0 || is.na(val)) return("NA")
-  if (val < .001) return("< .001")
-  if (val < .01) return("< .01")
-  if (val < .05) return("< .05")
-  sprintf("= %.3f", val)
-}
-
-rq2b_ses_beta <- function(country, outcome, ses_var) {
-  val <- rq2b_ses_predicts_change %>%
-    dplyr::filter(country == !!country, 
-                  outcome == !!outcome,
-                  ses_var == !!ses_var) %>%
-    dplyr::pull(beta)
-  
-  if (length(val) == 0 || is.na(val)) return("NA")
-  sprintf("%.2f", val)
-}
-
-rq2b_ses_p <- function(country, outcome, ses_var) {
-  val <- rq2b_ses_predicts_change %>%
-    dplyr::filter(country == !!country, 
-                  outcome == !!outcome,
-                  ses_var == !!ses_var) %>%
-    dplyr::pull(p)
-  
-  if (length(val) == 0 || is.na(val)) return("NA")
-  if (val < .001) return("< .001")
-  if (val < .01) return("< .01")
-  if (val < .05) return("< .05")
-  sprintf("= %.3f", val)
-}
-```
-
-**RQ2b: Individual Differences in Developmental Change**:
-At the individual level, are gains in one EF component coupled with gains in other components (i.e., does change in one domain predict change in another), and does this coupling vary by baseline SES?
-
-While group-level networks showed stability (RQ2a), we tested whether individual differences in EF developmental change showed coupling—that is, whether gains in one EF domain predicted gains in another. For each child with data at both T1 and T2 (Australia: n = `r ef_change_data %>% filter(country == "AU") %>% nrow()`; South Africa: n = `r ef_change_data %>% filter(country == "SA") %>% nrow()`), we computed change scores (ΔEF = T2 − T1) and tested whether change in one component predicted change in another, controlling for baseline performance and age (see @tbl-rq2b-change-coupling).
-
-We found little evidence for systematic coupling of developmental change. In Australia, all relationships between component changes were near zero (|β| ≤ 0.11, all *p* > .10). Working memory gains did not reliably predict inhibition gains (β = `r rq2b_coupling_beta("AU", "workingmem", "inhibition")` `r rq2b_coupling_ci("AU", "workingmem", "inhibition")`, *p* `r rq2b_coupling_p("AU", "workingmem", "inhibition")`) nor cognitive flexibility gains (β = `r rq2b_coupling_beta("AU", "workingmem", "cogflex")` `r rq2b_coupling_ci("AU", "workingmem", "cogflex")`, *p* `r rq2b_coupling_p("AU", "workingmem", "cogflex")`). Similarly, inhibition and cognitive flexibility changes did not predict gains in other domains.
-
-In South Africa, the pattern was similar, with one marginal exception: working memory gains showed a tentative positive association with cognitive flexibility gains (β = `r rq2b_coupling_beta("SA", "workingmem", "cogflex")` `r rq2b_coupling_ci("SA", "workingmem", "cogflex")`, *p* `r rq2b_coupling_p("SA", "workingmem", "cogflex")`). All other relationships remained near zero (see @fig-rq2b-scatter), with substantial individual variability in change patterns but no systematic coupling across domains.
-
-These findings indicate that EF components develop independently at the individual level during this developmental window, with gains in one domain not systematically predicting gains in others. This lack of coupling validates the group-level stability finding (RQ2a): the stability we observed reflects genuine architectural stability rather than an artifact of averaging heterogeneous individual trajectories. The independence of developmental change supports models of EF as a set of related but dissociable capacities that mature through component-specific rather than domain-general processes during early childhood.
-
-```{r}
-#| label: tbl-rq2b-change-coupling
-#| tbl-cap: "Coupling of developmental change across EF domains. Each row shows whether change in one EF component (predictor) predicts change in another component (outcome), controlling for baseline performance and age. Standardized coefficients with 95% CIs."
-#| include: true
-
-rq2b_table <- rq2b_change_coupling %>%
-  dplyr::mutate(
-    predictor_label = dplyr::recode(predictor,
-      "inhibition" = "ΔInhibition",
-      "cogflex" = "ΔCogFlex",
-      "workingmem" = "ΔWorking Memory"
-    ),
-    outcome_label = dplyr::recode(outcome,
-      "inhibition" = "ΔInhibition",
-      "cogflex" = "ΔCogFlex",
-      "workingmem" = "ΔWorking Memory"
-    ),
-    estimate = sprintf("%.2f [%.2f, %.2f]%s", beta, ci_lower, ci_upper, sig)
-  ) %>%
-  dplyr::select(country, predictor_label, outcome_label, estimate) %>%
-  tidyr::pivot_wider(
-    names_from = country,
-    values_from = estimate
-  )
-
-gt_rq2b <- rq2b_table %>%
-  gt::gt() %>%
-  gt::tab_header(title = gt::md("\\vspace{10pt}")) %>%
-  gt::cols_label(
-    predictor_label = "Predictor",
-    outcome_label = "Outcome",
-    AU = "Australia",
-    SA = "South Africa"
-  ) %>%
-  gt::cols_align(align = "center", columns = c(AU, SA)) %>%
-  gt::tab_footnote(
-    footnote = "† p<.10, * p<.05, ** p<.01, *** p<.001. Models control for baseline outcome and age.",
-    locations = gt::cells_column_labels(columns = AU)
-  ) %>%
-  gt::tab_options(
-    table.font.size = gt::px(11),
-    heading.title.font.size = gt::px(1)
-  )
-
-gt_rq2b
-
-```
-
-```{r}
-#| label: fig-rq2b-scatter
-#| fig-cap: "Individual-level coupling of developmental change. Points show individual children; lines show regression slopes. Strong positive slopes indicate that gains in one domain predict gains in another (coupled development)."
-#| fig-width: 8
-#| fig-height: 6
-#| include: true
-
-library(ggplot2)
-
-plot_data <- ef_change_data %>%
-  dplyr::select(country, id, delta_inhibition, delta_cogflex, delta_workingmem) %>%
-  tidyr::pivot_longer(
-    cols = c(delta_inhibition, delta_cogflex),
-    names_to = "outcome_var",
-    values_to = "outcome_change",
-    names_prefix = "delta_"
-  ) %>%
-  dplyr::filter(!is.na(delta_workingmem) & !is.na(outcome_change)) %>%
-  dplyr::mutate(
-    outcome_label = dplyr::recode(outcome_var,
-      "inhibition" = "ΔInhibition",
-      "cogflex" = "ΔCognitive Flexibility"
-    ),
-    country_label = dplyr::recode(country,
-      "AU" = "Australia",
-      "SA" = "South Africa"
-    )
-  )
-
-ggplot(plot_data, aes(x = delta_workingmem, y = outcome_change)) +
-  geom_point(alpha = 0.4, size = 1.5) +
-  geom_smooth(method = "lm", se = TRUE, color = "blue", linewidth = 1) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "gray50") +
-  geom_vline(xintercept = 0, linetype = "dashed", color = "gray50") +
-  facet_grid(outcome_label ~ country_label, scales = "free") +
-  labs(
-    x = "ΔWorking Memory (T2 − T1)",
-    y = "Change in Other EF Component (T2 − T1)"
-  ) +
-  theme_bw(base_size = 11) +
-  theme(
-    panel.grid.minor = element_blank(),
-    strip.background = element_blank()
-  )
-```
-\clearpage
 ```{r}
 #| label: rq3-fisher-helpers
 #| include: false
@@ -2752,34 +2554,182 @@ edge_did_draws_rz <- function(fit_AU_T1, fit_AU_T2, fit_SA_T1, fit_SA_T2,
 ```
 
 ```{r}
+#| label: rq3-sensitivity-networks-no-floor
+#| include: false
+
+# Cog flex floor exclusion
+# Exclude from each wave only if scored 0 on COGFLEX (the problematic measure)
+# This directly tests whether the cogflex floor effect contaminates networks
+
+cat("=== SENSITIVITY ANALYSIS: EXCLUDING COGFLEX FLOOR PERFORMERS ===\n\n")
+
+# Identify cogflex floor performers at each wave
+floor_ids_by_wave <- ef_all_keep %>%
+  filter(variable == "ef_cogflex", value == 0) %>%  # <- ONLY cogflex
+  distinct(country, timepoint, id) %>%
+  mutate(floor_at_wave = TRUE)
+
+# Report who has cogflex floor effects by wave
+cat("Cogflex floor performers by wave:\n")
+floor_summary <- floor_ids_by_wave %>%
+  count(country, timepoint, name = "n_floor")
+print(floor_summary)
+
+# Apply wave-specific cogflex exclusion
+ef_net_wide_no_floor <- ef_net_wide %>%
+  left_join(floor_ids_by_wave, by = c("country", "timepoint", "id")) %>%
+  filter(is.na(floor_at_wave)) %>%
+  select(-floor_at_wave)
+
+# Report sample sizes
+cat("\n=== SAMPLE SIZES ===\n\n")
+cat("Original sample sizes:\n")
+original_n <- ef_net_wide %>% count(country, timepoint)
+print(original_n)
+
+cat("\nAfter cogflex-specific floor exclusion:\n")
+sensitivity_n <- ef_net_wide_no_floor %>% count(country, timepoint)
+print(sensitivity_n)
+
+cat("\nExcluded by cohort×wave:\n")
+excluded_summary <- original_n %>%
+  left_join(sensitivity_n, by = c("country", "timepoint"), suffix = c("_orig", "_sens")) %>%
+  mutate(
+    n_excluded = n_orig - n_sens,
+    pct_excluded = round(100 * n_excluded / n_orig, 1)
+  )
+print(excluded_summary)
+
+# Verify we have enough data to proceed
+if (nrow(ef_net_wide_no_floor) == 0) {
+  stop("No data remaining after floor exclusion!")
+}
+
+# Split by cohort×wave for network fitting
+dat_split_no_floor <- ef_net_wide_no_floor %>%
+  select(country, timepoint, id, all_of(nodes)) %>%
+  group_by(country, timepoint) %>%
+  group_split()
+
+keys_no_floor <- ef_net_wide_no_floor %>%
+  select(country, timepoint, id, all_of(nodes)) %>%
+  group_by(country, timepoint) %>%
+  group_keys() %>%
+  arrange(country, timepoint)
+
+stopifnot(nrow(keys_no_floor) == length(dat_split_no_floor))
+
+# Refit networks using same BGGM settings as main analysis
+cat("\n=== REFITTING NETWORKS ===\n")
+cat("Using settings: iter =", bggm_iter, ", burnin =", bggm_burnin, ", chains =", bggm_chains, "\n\n")
+
+fit_one_no_floor <- function(df) {
+  Y <- df %>%
+    select(all_of(nodes)) %>%
+    mutate(across(everything(), as.numeric)) %>%
+    as.matrix()
+  
+  n <- nrow(Y)
+  p <- ncol(Y)
+  miss_cells <- sum(is.na(Y))
+  total_cells <- length(Y)
+  pct_missing <- 100 * miss_cells / total_cells
+  
+  # Require at least 10 observations
+  if (n < 10) {
+    cat("Skipping fit (n < 10):", unique(df$country), unique(df$timepoint), "\n")
+    return(list(
+      fit = NULL,
+      n = n,
+      missing_cells = miss_cells,
+      total_cells = total_cells,
+      pct_missing = pct_missing
+    ))
+  }
+  
+  cat("Fitting:", unique(df$country), unique(df$timepoint), "- n =", n, "\n")
+  
+  fit <- BGGM::estimate(
+    Y,
+    type   = "continuous",
+    iter   = bggm_iter,
+    burnin = bggm_burnin,
+    chains = bggm_chains,
+    impute = TRUE,
+    save   = TRUE
+  )
+  
+  list(
+    fit = fit,
+    n = n,
+    missing_cells = miss_cells,
+    total_cells = total_cells,
+    pct_missing = pct_missing
+  )
+}
+
+# Fit all networks
+ggm_fits_no_floor <- purrr::map(dat_split_no_floor, fit_one_no_floor)
+
+# Create fit table
+fit_tbl_no_floor <- keys_no_floor %>%
+  mutate(res = ggm_fits_no_floor) %>%
+  tidyr::unnest_wider(res)
+
+# Check fits
+cat("\n=== SENSITIVITY ANALYSIS NETWORKS FITTED ===\n")
+fit_summary <- fit_tbl_no_floor %>%
+  mutate(ok = !purrr::map_lgl(fit, is.null)) %>%
+  select(country, timepoint, n, missing_cells, total_cells, pct_missing, ok)
+print(fit_summary)
+
+# Verify all fits succeeded
+n_failed <- sum(!fit_summary$ok)
+if (n_failed > 0) {
+  warning("Some fits failed (n < 10). Results may be incomplete.")
+}
+
+cat("\nSensitivity analysis complete. Object 'fit_tbl_no_floor' created.\n")
+```
+
+```{r}
 #| label: rq3-build-fisher-tables
 #| include: false
 
-# unique fits table
+# Unique fits table (ORIGINAL - includes floor performers)
 fit_tbl_uniq <- fit_tbl %>%
-  dplyr::filter(!purrr::map_lgl(fit, is.null)) %>%
-  dplyr::arrange(country, timepoint) %>%
-  dplyr::group_by(country, timepoint) %>%
-  dplyr::slice(1) %>%
-  dplyr::ungroup()
+  filter(!purrr::map_lgl(fit, is.null)) %>%
+  arrange(country, timepoint) %>%
+  group_by(country, timepoint) %>%
+  slice(1) %>%
+  ungroup()
 
-# pull required fits
+# Unique fits table (SENSITIVITY - excludes floor performers)
+fit_tbl_uniq_no_floor <- fit_tbl_no_floor %>%
+  filter(!purrr::map_lgl(fit, is.null)) %>%
+  arrange(country, timepoint) %>%
+  group_by(country, timepoint) %>%
+  slice(1) %>%
+  ungroup()
+
+# === ORIGINAL ANALYSIS (with floor) ===
+
+# Pull required fits
 fit_AU_T1 <- get_fit("AU", "T1", fit_tbl_uniq)
 fit_AU_T2 <- get_fit("AU", "T2", fit_tbl_uniq)
 fit_SA_T1 <- get_fit("SA", "T1", fit_tbl_uniq)
 fit_SA_T2 <- get_fit("SA", "T2", fit_tbl_uniq)
 
-# cohort differences at matched waves (AU - SA), edges only: Δr and Δz
-rq3_wave_edges_rz <- tibble::tibble(wave = c("T1","T2")) %>%
-  dplyr::mutate(
+# Cohort differences at matched waves (AU - SA)
+rq3_wave_edges_rz <- tibble(wave = c("T1","T2")) %>%
+  mutate(
     fit_AU   = purrr::map(wave, ~ get_fit("AU", .x, fit_tbl_uniq)),
     fit_SA   = purrr::map(wave, ~ get_fit("SA", .x, fit_tbl_uniq)),
     diff_rz  = purrr::map2(fit_AU, fit_SA, ~ edge_cohort_diff_draws_rz(.x, .y, node_names = nodes))
   ) %>%
-  dplyr::select(wave, diff_rz) %>%
+  select(wave, diff_rz) %>%
   tidyr::unnest_longer(diff_rz, values_to = "rz", indices_to = "edge_raw") %>%
-  dplyr::mutate(
-    # canonical edge key
+  mutate(
     term = vapply(
       strsplit(edge_raw, " — ", fixed = TRUE),
       function(z) paste(sort(z), collapse = " - "),
@@ -2788,76 +2738,225 @@ rq3_wave_edges_rz <- tibble::tibble(wave = c("T1","T2")) %>%
     stats = purrr::map(rz, ~ summ_delta_rz(.x$dr, .x$dz, rope = rope_rq3))
   ) %>%
   tidyr::unnest(stats) %>%
-  dplyr::transmute(
-    panel = paste0("Cohort difference (AU \u2212 SA) at ", wave),
+  transmute(
+    panel = paste0("Cohort difference (AU − SA) at ", wave),
     term,
     estimate_r = fmt_ci(r_q50, r_q025, r_q975, digits = 2),
     estimate_z = fmt_ci(z_q50, z_q025, z_q975, digits = 2),
-    rope_p_r   = fmt_p(p_outside_rope_r, digits = 2)
+    rope_p_r   = fmt_p(p_outside_rope_r, digits = 2),
+    analysis   = "Main analysis"
   )
 
-# DiD (ΔAU - ΔSA), edges only
-rq3_did_edges_rz <- tibble::tibble(panel = "Difference-in-differences (ΔAU \u2212 ΔSA)") %>%
-  dplyr::mutate(
+# DiD
+rq3_did_edges_rz <- tibble(panel = "Difference-in-differences (ΔAU − ΔSA)") %>%
+  mutate(
     did_rz = list(edge_did_draws_rz(fit_AU_T1, fit_AU_T2, fit_SA_T1, fit_SA_T2, node_names = nodes))
   ) %>%
-  tidyr::unnest_longer(did_rz, values_to = "rz", indices_to = "term") %>%
-  dplyr::mutate(stats = purrr::map(rz, ~ summ_delta_rz(.x$dr, .x$dz, rope = rope_rq3))) %>%
+  tidyr::unnest_longer(did_rz, values_to = "rz", indices_to = "edge_raw") %>%
+  mutate(
+    # STANDARDISE term format to match the wave tables
+    term = vapply(
+      strsplit(edge_raw, " — ", fixed = TRUE),
+      function(z) paste(sort(z), collapse = " - "),
+      character(1)
+    ),
+    stats = purrr::map(rz, ~ summ_delta_rz(.x$dr, .x$dz, rope = rope_rq3))
+  ) %>%
   tidyr::unnest(stats) %>%
-  dplyr::transmute(
+  transmute(
     panel,
     term,
     estimate_r = fmt_ci(r_q50, r_q025, r_q975, digits = 2),
     estimate_z = fmt_ci(z_q50, z_q025, z_q975, digits = 2),
-    rope_p_r   = fmt_p(p_outside_rope_r, digits = 2)
+    rope_p_r   = fmt_p(p_outside_rope_r, digits = 2),
+    analysis   = "Main analysis"
   )
 
-# Combine into one table
-rq3_edges_dual <- dplyr::bind_rows(rq3_wave_edges_rz, rq3_did_edges_rz) %>%
-  dplyr::mutate(
+rq3_edges_dual <- bind_rows(rq3_wave_edges_rz, rq3_did_edges_rz) %>%
+  mutate(
     panel = factor(panel, levels = c(
       "Cohort difference (AU − SA) at T1",
       "Cohort difference (AU − SA) at T2",
       "Difference-in-differences (ΔAU − ΔSA)"
     ))
   ) %>%
-  dplyr::arrange(panel, term)
+  arrange(panel, term)
 
-rq3_edges_dual
+# === SENSITIVITY ANALYSIS (no floor) ===
+
+# Pull required fits
+fit_AU_T1_nf <- get_fit("AU", "T1", fit_tbl_uniq_no_floor)
+fit_AU_T2_nf <- get_fit("AU", "T2", fit_tbl_uniq_no_floor)
+fit_SA_T1_nf <- get_fit("SA", "T1", fit_tbl_uniq_no_floor)
+fit_SA_T2_nf <- get_fit("SA", "T2", fit_tbl_uniq_no_floor)
+
+# Cohort differences (sensitivity)
+rq3_wave_edges_rz_sens <- tibble(wave = c("T1","T2")) %>%
+  mutate(
+    fit_AU   = purrr::map(wave, ~ get_fit("AU", .x, fit_tbl_uniq_no_floor)),
+    fit_SA   = purrr::map(wave, ~ get_fit("SA", .x, fit_tbl_uniq_no_floor)),
+    diff_rz  = purrr::map2(fit_AU, fit_SA, ~ edge_cohort_diff_draws_rz(.x, .y, node_names = nodes))
+  ) %>%
+  select(wave, diff_rz) %>%
+  tidyr::unnest_longer(diff_rz, values_to = "rz", indices_to = "edge_raw") %>%
+  mutate(
+    term = vapply(
+      strsplit(edge_raw, " — ", fixed = TRUE),
+      function(z) paste(sort(z), collapse = " - "),
+      character(1)
+    ),
+    stats = purrr::map(rz, ~ summ_delta_rz(.x$dr, .x$dz, rope = rope_rq3))
+  ) %>%
+  tidyr::unnest(stats) %>%
+  transmute(
+    panel = paste0("Cohort difference (AU − SA) at ", wave),
+    term,
+    estimate_r = fmt_ci(r_q50, r_q025, r_q975, digits = 2),
+    estimate_z = fmt_ci(z_q50, z_q025, z_q975, digits = 2),
+    rope_p_r   = fmt_p(p_outside_rope_r, digits = 2),
+    analysis   = "Sensitivity (no floor)"
+  )
+
+# DiD (sensitivity)
+rq3_did_edges_rz_sens <- tibble(panel = "Difference-in-differences (ΔAU − ΔSA)") %>%
+  mutate(
+    did_rz = list(edge_did_draws_rz(fit_AU_T1_nf, fit_AU_T2_nf, fit_SA_T1_nf, fit_SA_T2_nf, node_names = nodes))
+  ) %>%
+  tidyr::unnest_longer(did_rz, values_to = "rz", indices_to = "edge_raw") %>%
+  mutate(
+    term = vapply(
+      strsplit(edge_raw, " — ", fixed = TRUE),
+      function(z) paste(sort(z), collapse = " - "),
+      character(1)
+    ),
+    stats = purrr::map(rz, ~ summ_delta_rz(.x$dr, .x$dz, rope = rope_rq3))
+  ) %>%
+  tidyr::unnest(stats) %>%
+  transmute(
+    panel,
+    term,
+    estimate_r = fmt_ci(r_q50, r_q025, r_q975, digits = 2),
+    estimate_z = fmt_ci(z_q50, z_q025, z_q975, digits = 2),
+    rope_p_r   = fmt_p(p_outside_rope_r, digits = 2),
+    analysis   = "Sensitivity (no floor)"
+  )
+
+rq3_edges_dual_sens <- bind_rows(rq3_wave_edges_rz_sens, rq3_did_edges_rz_sens) %>%
+  mutate(
+    panel = factor(panel, levels = c(
+      "Cohort difference (AU − SA) at T1",
+      "Cohort difference (AU − SA) at T2",
+      "Difference-in-differences (ΔAU − ΔSA)"
+    ))
+  ) %>%
+  arrange(panel, term)
+
+# Combine main + sensitivity
+rq3_edges_dual_combined <- bind_rows(
+  rq3_edges_dual,
+  rq3_edges_dual_sens
+)
 
 ```
 
-**RQ3 (Secondary): Cross-Cohort Comparisons**
+```{r}
+#| label: rq3-inline-helpers
+#| include: false
+
+library(dplyr)
+library(stringr)
+
+# Return the (unique) row for a given panel/term/analysis from your long table
+rq3_row <- function(panel, term, analysis = "Main analysis") {
+  out <- rq3_edges_dual_combined %>%
+    dplyr::filter(panel == !!panel, term == !!term, analysis == !!analysis)
+  if (nrow(out) != 1) stop("Expected 1 row; got ", nrow(out), " for: ", panel, " / ", term, " / ", analysis)
+  out
+}
+
+# Parse "m [lo, hi]" from estimate_r
+rq3_ci <- function(panel, term, analysis = "Main analysis") {
+  est <- rq3_row(panel, term, analysis)$estimate_r
+  m  <- as.numeric(str_match(est, "^\\s*([-0-9.]+)\\s*\\[")[,2])
+  lo <- as.numeric(str_match(est, "\\[\\s*([-0-9.]+)\\s*,")[,2])
+  hi <- as.numeric(str_match(est, ",\\s*([-0-9.]+)\\s*\\]")[,2])
+  c(m = m, lo = lo, hi = hi)
+}
+
+rq3_rope <- function(panel, term, analysis = "Main analysis") {
+  as.numeric(rq3_row(panel, term, analysis)$rope_p_r)
+}
+
+# Exclusion lookups from excluded_summary (created in rq3-sensitivity-networks-no-floor)
+excl_n <- function(country, timepoint) {
+  excluded_summary %>% filter(country == !!country, timepoint == !!timepoint) %>% pull(n_excluded) %>% as.integer()
+}
+orig_n <- function(country, timepoint) {
+  excluded_summary %>% filter(country == !!country, timepoint == !!timepoint) %>% pull(n_orig) %>% as.integer()
+}
+excl_pct <- function(country, timepoint) {
+  excluded_summary %>% filter(country == !!country, timepoint == !!timepoint) %>% pull(pct_excluded) %>% as.numeric()
+}
+```
+### Research Question 3 (Secondary): Cross-Cohort Comparisons
 At matched waves (T1 and T2), do AU and SA differ in EF conditional associations, and do the cohorts show divergent developmental trajectories from T1 to T2 (difference-in-differences)?
 
-At T1, posterior medians suggested a more negative CogFlex–Inhibition difference (AU−SA) and more positive working-memory edges (AU>SA), but uncertainty remains because the 95% credible intervals for all between-cohort contrasts cross 0 —i.e., the posterior still assigns non-trivial probability to both AU>SA and SA>AU. ROPE probabilities were nonetheless moderate (P(|Δr|>0.1)=0.53–0.72), reflecting that the posterior can place substantial mass beyond ±0.1 while still spanning 0, so magnitude may be meaningful even when direction is not pinned down. At T2, cohort differences were smaller and mostly positive, but again CrIs overlapped 0. For DiD, two edges showed little evidence of cohort-divergent change (posteriors centered near 0), while CogFlex–Inhibition was most suggestive (median ≈0.20; P(|DiD|>0.1)=0.78) yet still crossed 0. Fisher-z results closely matched Δr, indicating the pattern is not an artifact of the bounded correlation scale.
+A substantial floor effect was observed in Australian T1 cognitive flexibility (32.5% scoring zero), raising potential concerns for cross-cohort network comparisons. Floor effects can induce artificial correlations through range restriction and may bias partial correlation estimates. To address this, we (1) Report cross-cohort comparisons using the full sample (primary analysis), and (2) Conduct sensitivity analyses excluding children who scored zero on cognitive flexibility at each wave. If results converge across analyses, this would suggest floor effects do not meaningfully distort cross-cohort comparisons. Divergence would indicate that apparent cohort differences partly reflect measurement artefacts.
 
+**Main Analysis (Full Sample)**: At T1, posterior medians suggested modest AU–SA differences in several edges; however, all 95% credible intervals overlapped zero. At T2, cohort differences were smaller and predominantly positive, but again uncertain. In the difference-in-differences analysis, most edges were centered near zero. The largest deviation was observed for CogFlex–Inhibition (median = `r round(rq3_ci("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition", "Main analysis")["m"], 2)`; 95% CrI [`r round(rq3_ci("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition", "Main analysis")["lo"], 2)`, `r round(rq3_ci("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition", "Main analysis")["hi"], 2)`]; P(|Δr|>0.10) = `r round(rq3_rope("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition", "Main analysis"), 2)`), though its credible interval still included zero, indicating substantial uncertainty. Results were substantively unchanged when differences were summarized on the Fisher z (atanh) scale (@tbl-rq3-gt-edges-dual).
+
+**Sensitivity Analysis (Excluding Cognitive Flexibility Floor Performers)**: Given the pronounced floor effect in Australian T1 cognitive flexibility (`r excl_n("AU","T1")`/`r orig_n("AU","T1")` excluded [`r excl_pct("AU","T1")`%]; AU T2: `r excl_n("AU","T2")`/`r orig_n("AU","T2")` [`r excl_pct("AU","T2")`%]; SA T1: `r excl_n("SA","T1")`/`r orig_n("SA","T1")` [`r excl_pct("SA","T1")`%]; SA T2: `r excl_n("SA","T2")`/`r orig_n("SA","T2")` [`r excl_pct("SA","T2")`%]), we refitted networks after wave-specific exclusion of children scoring zero on cognitive flexibility. Estimates were highly similar in direction and magnitude to the main analysis (see @tbl-rq3-sensitivity-comparison), with credible intervals widening due to reduced sample size. Patterns at T2 and in the difference-in-differences analysis were nearly identical.Together, these results indicate that cross-cohort differences in EF network structure are small and uncertain.
 ```{r}
-#| label: tbl-rq3-gt-edges-dual
-#| tbl-cap: "Between-cohort differences (edges only) at matched waves (AU − SA at T1/T2) and difference-in-differences for change from T1 to T2 (ΔAU − ΔSA). Columns show posterior median [95% CrI] on the raw partial-correlation scale (Δr) and Fisher-z scale (Δz = atanh(r)). ROPE probabilities are computed on Δr: $P(|\\Delta r| > 0.10)$."
+#| label: tbl-rq3-sensitivity-comparison
+#| tbl-cap: "Sensitivity analysis: Cross-cohort comparisons with vs without floor performers. Main analysis includes all children; sensitivity analysis uses wave-specific exclusion of children who scored 0 on any EF measure at that wave."
 #| include: true
 
-gt_rq3_edges_dual <- rq3_edges_dual %>%
-  gt::gt(rowname_col = "term", groupname_col = "panel") %>%
-  gt::tab_header(title = gt::md("\\vspace{10pt}")) %>%
-  gt::tab_stubhead(label = "Edge") %>%
-  gt::cols_label(
-    estimate_r = "Median [95% CrI]",
-    estimate_z = "Median [95% CrI]",
-    rope_p_r   = paste0("P(|Δr|>", rope_rq3, ")")
+# Side-by-side comparison table
+rq3_comparison <- rq3_edges_dual_combined %>%
+  select(panel, term, analysis, estimate_r, rope_p_r) %>%
+  pivot_wider(
+    names_from = analysis,
+    values_from = c(estimate_r, rope_p_r),
+    names_glue = "{analysis}_{.value}"
   ) %>%
-  gt::tab_spanner(label = gt::md("Δr (raw partial correlation)"), columns = c(estimate_r, rope_p_r)) %>%
-  gt::tab_spanner(label = gt::md("Δz (Fisher atanh scale)"), columns = c(estimate_z)) %>%
-  gt::cols_align(align = "center", columns = c(estimate_r, rope_p_r, estimate_z)) %>%
-  gt::sub_missing(columns = c(rope_p_r), missing_text = "") %>%
-  gt::tab_options(
-    table.font.size         = gt::px(11),
-    row_group.font.weight   = "bold",
-    heading.title.font.size = gt::px(1)
+  select(
+    panel, term,
+    `Main analysis_estimate_r`,
+    `Main analysis_rope_p_r`,
+    `Sensitivity (no floor)_estimate_r`,
+    `Sensitivity (no floor)_rope_p_r`
   )
 
-gt_rq3_edges_dual
+gt_rq3_comparison <- rq3_comparison %>%
+  gt(rowname_col = "term", groupname_col = "panel") %>%
+  tab_header(title = md("\\vspace{10pt}")) %>%
+  tab_stubhead(label = "Edge") %>%
+  cols_label(
+    `Main analysis_estimate_r` = "Δr [95% CrI]",
+    `Main analysis_rope_p_r` = "P(|Δr|>0.10)",
+    `Sensitivity (no floor)_estimate_r` = "Δr [95% CrI]",
+    `Sensitivity (no floor)_rope_p_r` = "P(|Δr|>0.10)"
+  ) %>%
+  tab_spanner(
+    label = "Main Analysis",
+    columns = starts_with("Main analysis")
+  ) %>%
+  tab_spanner(
+    label = "Sensitivity (No Floor)",
+    columns = starts_with("Sensitivity")
+  ) %>%
+  cols_align(align = "center", columns = everything()) %>%
+  tab_options(
+    table.font.size = px(10),
+    row_group.font.weight = "bold",
+    heading.title.font.size = px(1)
+  ) %>%
+  tab_footnote(
+  footnote = "Main analysis: all children. Sensitivity: wave-specific exclusion of children who scored 0 on Cognitive Flexibility at that wave (AU T1: 75/232 excluded [32.3%]; AU T2: 42/217 excluded [19.4%]; SA T1: 0/217 excluded [0.0%]; SA T2: 7/189 excluded [3.7%]).",
+  locations = cells_column_spanners(spanners = "Sensitivity (No Floor)")
+)
 
+gt_rq3_comparison
 ```
 \clearpage
 
@@ -3063,8 +3162,7 @@ rq4_table <- dplyr::bind_rows(rq4_income_mods, rq4_hle_mods) %>%
 rq4_table
 
 ```
-
-**RQ4 (Exploratory): Socioeconomic Moderation of Network Structure**:
+### RQ4 (Exploratory): Socioeconomic Moderation of Network Structure
 Within each cohort, does EF network structure differ between children from high versus low baseline (T1) household income and home learning environments? Specifically, are edges systematically stronger or weaker in high-SES groups across waves?
 
 Exploratory moderation analyses revealed little consistent evidence that baseline income or HLE systematically altered EF network structure within cohorts. However, in Australia at T2, the cognitive flexibility–working memory edge was substantially weaker among children from high-income families (High−Low: −0.46 [−0.80, −0.11], P(|Δ|>0.1)=0.98), suggesting that socioeconomic advantage may be associated with more differentiated EF development. Conversely, HLE showed tentative positive moderation patterns (stronger coupling in enriched home environments), though credible intervals crossed zero.
@@ -3142,471 +3240,6 @@ rq4_mod_meaningful <- function(moderator, country, wave, edge_label) {
 }
 ```
 \clearpage
-
-```{r}
-#| label: measurement-invariance-setup
-#| include: false
-
-library(lavaan)
-library(semTools)
-
-# raw EF data in the build-ef-age-objects chunk
-stopifnot(exists("ef_all"), exists("age_all"))
-
-# Create local copies
-ef_all_raw <- ef_all
-age_all_raw <- age_all
-
-# helper: extract EF data for lavaan
-prep_mi_data <- function(ef_long, age_long, wave) {
-  ef_long %>%
-    dplyr::filter(timepoint == wave) %>%
-    tidyr::pivot_wider(
-      id_cols = c(country, id),
-      names_from = variable,
-      values_from = value
-    ) %>%
-    dplyr::left_join(
-      age_long %>% dplyr::filter(timepoint == wave) %>% dplyr::select(country, id, age),
-      by = c("country", "id")
-    ) %>%
-    dplyr::filter(!is.na(ef_inhibition) | !is.na(ef_cogflex) | !is.na(ef_workingmem))
-}
-
-# prep data for T1 and T2
-mi_data_t1 <- prep_mi_data(ef_all_raw, age_all_raw, "T1")
-mi_data_t2 <- prep_mi_data(ef_all_raw, age_all_raw, "T2")
-
-# check sample sizes
-cat("T1 sample sizes:\n")
-print(table(mi_data_t1$country))
-
-cat("\nT2 sample sizes:\n")
-print(table(mi_data_t2$country))
-```
-
-```{r}
-#| label: measurement-invariance-models
-#| include: false
-
-# Define EF measurement model
-
-ef_model <- '
-  # Single-factor model
-  EF =~ ef_inhibition + ef_cogflex + ef_workingmem
-'
-
-# Alternative: Allow correlations but no latent factor (more flexible)
-ef_model_network <- '
-  # Correlations only (network-like)
-  ef_inhibition ~~ ef_cogflex + ef_workingmem
-  ef_cogflex ~~ ef_workingmem
-'
-
-# Fit sequence of increasingly restrictive models
-# 1. Configural: Same structure, different parameters
-# 2. Metric (weak): Same structure, same factor loadings
-# 3. Scalar (strong): Same structure, same loadings, same intercepts
-
-# function to fit MI sequence at a given wave
-fit_mi_sequence <- function(data, model, wave_label) {
-  
-  # Check if we have enough data
-  n_per_group <- data %>% 
-    dplyr::count(country) %>%
-    dplyr::pull(n)
-  
-  if (any(n_per_group < 50)) {
-    warning("Small sample size in at least one group for wave ", wave_label)
-  }
-  
-  # Configural invariance (baseline)
-  fit_configural <- tryCatch({
-    cfa(model, data = data, group = "country", 
-        missing = "fiml",  # handle missing data
-        estimator = "MLR")  # robust to non-normality
-  }, error = function(e) {
-    warning("Configural model failed for ", wave_label, ": ", e$message)
-    return(NULL)
-  })
-  
-  # Metric invariance (equal loadings)
-  fit_metric <- tryCatch({
-    cfa(model, data = data, group = "country",
-        group.equal = "loadings",
-        missing = "fiml",
-        estimator = "MLR")
-  }, error = function(e) {
-    warning("Metric model failed for ", wave_label, ": ", e$message)
-    return(NULL)
-  })
-  
-  # Scalar invariance (equal loadings + intercepts)
-  fit_scalar <- tryCatch({
-    cfa(model, data = data, group = "country",
-        group.equal = c("loadings", "intercepts"),
-        missing = "fiml",
-        estimator = "MLR")
-  }, error = function(e) {
-    warning("Scalar model failed for ", wave_label, ": ", e$message)
-    return(NULL)
-  })
-  
-  list(
-    configural = fit_configural,
-    metric = fit_metric,
-    scalar = fit_scalar,
-    wave = wave_label
-  )
-}
-
-# Fit MI models for T1 and T2
-mi_t1 <- fit_mi_sequence(mi_data_t1, ef_model, "T1")
-mi_t2 <- fit_mi_sequence(mi_data_t2, ef_model, "T2")
-```
-
-```{r}
-#| label: measurement-invariance-tests
-#| include: false
-
-# function to compare nested models and extract fit indices
-compare_mi_models <- function(mi_results) {
-  
-  wave <- mi_results$wave
-  
-  # extract fit indices
-  extract_fit <- function(fit) {
-    if (is.null(fit)) {
-      return(tibble::tibble(
-        chisq = NA, df = NA, pvalue = NA,
-        cfi = NA, tli = NA, rmsea = NA, rmsea_ci_lower = NA, rmsea_ci_upper = NA,
-        srmr = NA, converged = FALSE
-      ))
-    }
-    
-    fit_measures <- fitmeasures(fit, c("chisq.scaled", "df.scaled", "pvalue.scaled",
-                                       "cfi.scaled", "tli.scaled", "rmsea.scaled",
-                                       "rmsea.ci.lower.scaled", "rmsea.ci.upper.scaled",
-                                       "srmr"))
-    
-    tibble::tibble(
-      chisq = fit_measures["chisq.scaled"],
-      df = fit_measures["df.scaled"],
-      pvalue = fit_measures["pvalue.scaled"],
-      cfi = fit_measures["cfi.scaled"],
-      tli = fit_measures["tli.scaled"],
-      rmsea = fit_measures["rmsea.scaled"],
-      rmsea_ci_lower = fit_measures["rmsea.ci.lower.scaled"],
-      rmsea_ci_upper = fit_measures["rmsea.ci.upper.scaled"],
-      srmr = fit_measures["srmr"],
-      converged = lavInspect(fit, "converged")
-    )
-  }
-  
-  # fit indices for each model
-  fit_config <- extract_fit(mi_results$configural) %>% dplyr::mutate(model = "Configural")
-  fit_metric <- extract_fit(mi_results$metric) %>% dplyr::mutate(model = "Metric")
-  fit_scalar <- extract_fit(mi_results$scalar) %>% dplyr::mutate(model = "Scalar")
-  
-  fit_table <- dplyr::bind_rows(fit_config, fit_metric, fit_scalar) %>%
-    dplyr::mutate(wave = wave) %>%
-    dplyr::select(wave, model, everything())
-  
-  # model comparisons (if models converged)
-  comparisons <- list()
-  
-  if (!is.null(mi_results$configural) && !is.null(mi_results$metric)) {
-    comp_metric <- tryCatch({
-      lavTestLRT(mi_results$configural, mi_results$metric, method = "satorra.2000")
-    }, error = function(e) NULL)
-    
-    if (!is.null(comp_metric)) {
-      comparisons$config_vs_metric <- tibble::tibble(
-        wave = wave,
-        comparison = "Configural vs Metric",
-        delta_chisq = comp_metric$`Chisq diff`[2],
-        delta_df = comp_metric$`Df diff`[2],
-        pvalue = comp_metric$`Pr(>Chisq)`[2]
-      )
-    }
-  }
-  
-  if (!is.null(mi_results$metric) && !is.null(mi_results$scalar)) {
-    comp_scalar <- tryCatch({
-      lavTestLRT(mi_results$metric, mi_results$scalar, method = "satorra.2000")
-    }, error = function(e) NULL)
-    
-    if (!is.null(comp_scalar)) {
-      comparisons$metric_vs_scalar <- tibble::tibble(
-        wave = wave,
-        comparison = "Metric vs Scalar",
-        delta_chisq = comp_scalar$`Chisq diff`[2],
-        delta_df = comp_scalar$`Df diff`[2],
-        pvalue = comp_scalar$`Pr(>Chisq)`[2]
-      )
-    }
-  }
-  
-  comparison_table <- dplyr::bind_rows(comparisons)
-  
-  list(
-    fit_indices = fit_table,
-    comparisons = comparison_table
-  )
-}
-
-# compare models for T1 and T2
-mi_results_t1 <- compare_mi_models(mi_t1)
-mi_results_t2 <- compare_mi_models(mi_t2)
-
-# combine results
-mi_fit_table <- dplyr::bind_rows(
-  mi_results_t1$fit_indices,
-  mi_results_t2$fit_indices
-)
-
-mi_comparison_table <- dplyr::bind_rows(
-  mi_results_t1$comparisons,
-  mi_results_t2$comparisons
-)
-
-```
-
-```{r}
-#| label: measurement-invariance-interpretation
-#| include: false
-
-# helperto interpret MI results
-interpret_mi <- function(fit_table, comparison_table) {
-  
-  # Cutoffs (Cheung & Rensvold, 2002; Chen, 2007)
-  # Good fit: CFI > .95, RMSEA < .06, SRMR < .08
-  # MI supported if: ΔCFI < .01, ΔRMSEA < .015
-  
-  results <- list()
-  
-  for (w in unique(fit_table$wave)) {
-    wave_fit <- fit_table %>% dplyr::filter(wave == w)
-    wave_comp <- comparison_table %>% dplyr::filter(wave == w)
-    
-    # Check configural fit
-    config_row <- wave_fit %>% dplyr::filter(model == "Configural")
-    configural_acceptable <- !is.na(config_row$cfi) && 
-                            config_row$cfi > 0.90 && 
-                            config_row$rmsea < 0.08
-    
-    # Check metric invariance
-    metric_supported <- FALSE
-    if (nrow(wave_comp %>% dplyr::filter(comparison == "Configural vs Metric")) > 0) {
-      comp_row <- wave_comp %>% dplyr::filter(comparison == "Configural vs Metric")
-      metric_row <- wave_fit %>% dplyr::filter(model == "Metric")
-      config_row <- wave_fit %>% dplyr::filter(model == "Configural")
-      
-      # Non-significant chi-square difference OR small change in fit indices
-      metric_supported <- (comp_row$pvalue > 0.05) || 
-                         (abs(metric_row$cfi - config_row$cfi) < 0.01)
-    }
-    
-    # Check scalar invariance
-    scalar_supported <- FALSE
-    if (nrow(wave_comp %>% dplyr::filter(comparison == "Metric vs Scalar")) > 0) {
-      comp_row <- wave_comp %>% dplyr::filter(comparison == "Metric vs Scalar")
-      scalar_row <- wave_fit %>% dplyr::filter(model == "Scalar")
-      metric_row <- wave_fit %>% dplyr::filter(model == "Metric")
-      
-      scalar_supported <- (comp_row$pvalue > 0.05) || 
-                         (abs(scalar_row$cfi - metric_row$cfi) < 0.01)
-    }
-    
-    results[[w]] <- list(
-      configural_acceptable = configural_acceptable,
-      metric_supported = metric_supported,
-      scalar_supported = scalar_supported
-    )
-  }
-  
-  results
-}
-
-mi_interpretation <- interpret_mi(mi_fit_table, mi_comparison_table)
-```
-
-```{r}
-#| label: measurement-invariance-inline-helpers
-#| include: false
-
-mi_fit_value <- function(wave, model, index) {
-  val <- mi_fit_table %>%
-    dplyr::filter(wave == !!wave, model == !!model) %>%
-    dplyr::pull(!!index)
-  
-  if (length(val) == 0 || is.na(val)) return("NA")
-  
-  if (index %in% c("cfi", "tli", "rmsea", "srmr")) {
-    return(sprintf("%.3f", val))
-  } else if (index == "chisq") {
-    return(sprintf("%.2f", val))
-  } else if (index == "df") {
-    return(sprintf("%.0f", val))
-  } else if (index == "pvalue") {
-    if (val < .001) return("<.001")
-    if (val < .01) return("<.01")
-    if (val < .05) return("<.05")
-    return(sprintf("%.3f", val))
-  }
-  return(as.character(val))
-}
-
-mi_comparison_value <- function(wave, comparison_type, index) {
-  val <- mi_comparison_table %>%
-    dplyr::filter(wave == !!wave, comparison == !!comparison_type) %>%
-    dplyr::pull(!!index)
-  
-  if (length(val) == 0 || is.na(val)) return("NA")
-  
-  if (index == "delta_chisq") {
-    return(sprintf("%.2f", val))
-  } else if (index == "delta_df") {
-    return(sprintf("%.0f", val))
-  } else if (index == "pvalue") {
-    if (val < .001) return("<.001")
-    if (val < .01) return("<.01")
-    if (val < .05) return("<.05")
-    return(sprintf("%.3f", val))
-  }
-  return(as.character(val))
-}
-
-mi_is_supported <- function(wave, level = c("metric", "scalar")) {
-  level <- match.arg(level)
-  
-  if (level == "metric") {
-    result <- mi_interpretation[[wave]]$metric_supported
-  } else {
-    result <- mi_interpretation[[wave]]$scalar_supported
-  }
-  
-  if (is.null(result) || is.na(result)) return(FALSE)
-  return(result)
-}
-
-```
-
-## Robustness Check: Measurement Invariance
-
-To test whether EF network differences reflected genuine structural differences versus measurement artifacts, we conducted measurement invariance tests across cohorts at T1 and T2. At T1, metric invariance was not supported (Δχ² = `r mi_comparison_value("T1", "Configural vs Metric", "delta_chisq")`, Δ*df* = `r mi_comparison_value("T1", "Configural vs Metric", "delta_df")`, *p* = `r mi_comparison_value("T1", "Configural vs Metric", "pvalue")`), with model fit deteriorating from CFI = `r mi_fit_value("T1", "Configural", "cfi")` to `r mi_fit_value("T1", "Metric", "cfi")`. This indicates that the factor loadings—the relationships between EF components and the underlying construct—differed significantly across cohorts at baseline, validating our RQ1 finding that network architectures are context-dependent. However, by T2, metric invariance was achieved (Δχ² = `r mi_comparison_value("T2", "Configural vs Metric", "delta_chisq")`, *p* = `r mi_comparison_value("T2", "Configural vs Metric", "pvalue")`; CFI remained at `r mi_fit_value("T2", "Metric", "cfi")`), indicating that structural relationships had converged despite differences in baseline performance levels (scalar invariance: *p* = `r mi_comparison_value("T2", "Metric vs Scalar", "pvalue")`).
-
-```{r}
-#| label: tbl-measurement-invariance
-#| tbl-cap: "Measurement invariance tests across cohorts. Models test whether the three-component EF structure is equivalent between Australia and South Africa."
-#| include: true
-
-# format fit indices table
-mi_fit_display <- mi_fit_table %>%
-  dplyr::mutate(
-    `χ²` = sprintf("%.2f", chisq),
-    df = sprintf("%.0f", df),
-    p = dplyr::case_when(
-      pvalue < .001 ~ "<.001",
-      pvalue < .01 ~ "<.01",
-      pvalue < .05 ~ "<.05",
-      TRUE ~ sprintf("%.3f", pvalue)
-    ),
-    CFI = sprintf("%.3f", cfi),
-    TLI = sprintf("%.3f", tli),
-    RMSEA = sprintf("%.3f [%.3f, %.3f]", rmsea, rmsea_ci_lower, rmsea_ci_upper),
-    SRMR = sprintf("%.3f", srmr)
-  ) %>%
-  dplyr::select(wave, model, `χ²`, df, p, CFI, TLI, RMSEA, SRMR)
-
-gt_mi_fit <- mi_fit_display %>%
-  gt::gt() %>%
-  gt::tab_header(title = gt::md("\\vspace{10pt}")) %>%
-  gt::cols_label(
-    wave = "Wave",
-    model = "Model",
-    `χ²` = gt::md("χ²"),
-    df = gt::md("*df*"),
-    p = gt::md("*p*"),
-    CFI = "CFI",
-    TLI = "TLI",
-    RMSEA = "RMSEA [90% CI]",
-    SRMR = "SRMR"
-  ) %>%
-  gt::cols_align(align = "center", columns = -c(wave, model)) %>%
-  gt::tab_style(
-    style = gt::cell_text(weight = "bold"),
-    locations = gt::cells_column_labels()
-  ) %>%
-  gt::tab_options(
-    table.font.size = gt::px(11),
-    heading.title.font.size = gt::px(1)
-  ) %>%
-  gt::tab_footnote(
-    footnote = "Good fit: CFI/TLI > .95, RMSEA < .06, SRMR < .08. Configural = same structure across groups; Metric = equal factor loadings; Scalar = equal loadings + intercepts.",
-    locations = gt::cells_column_labels(columns = CFI)
-  )
-
-gt_mi_fit
-```
-
-```{r}
-#| label: tbl-measurement-invariance-comparisons
-#| tbl-cap: "Model comparison tests for measurement invariance. Δχ² tests whether constraining parameters significantly worsens fit."
-#| include: true
-
-if (nrow(mi_comparison_table) > 0) {
-  mi_comp_display <- mi_comparison_table %>%
-    dplyr::mutate(
-      `Δχ²` = sprintf("%.2f", delta_chisq),
-      `Δdf` = sprintf("%.0f", delta_df),
-      p = dplyr::case_when(
-        pvalue < .001 ~ "<.001",
-        pvalue < .01 ~ "<.01",
-        pvalue < .05 ~ "<.05",
-        TRUE ~ sprintf("%.3f", pvalue)
-      ),
-      decision = dplyr::if_else(pvalue > .05, "Supported", "Rejected")
-    ) %>%
-    dplyr::select(wave, comparison, `Δχ²`, `Δdf`, p, decision)
-  
-  gt_mi_comp <- mi_comp_display %>%
-    gt::gt() %>%
-    gt::tab_header(title = gt::md("\\vspace{10pt}")) %>%
-    gt::cols_label(
-      wave = "Wave",
-      comparison = "Comparison",
-      `Δχ²` = gt::md("Δχ²"),
-      `Δdf` = gt::md("Δ*df*"),
-      p = gt::md("*p*"),
-      decision = "Invariance"
-    ) %>%
-    gt::cols_align(align = "center", columns = -comparison) %>%
-    gt::tab_style(
-      style = gt::cell_fill(color = "lightgreen"),
-      locations = gt::cells_body(columns = decision, rows = decision == "Supported")
-    ) %>%
-    gt::tab_style(
-      style = gt::cell_fill(color = "lightcoral"),
-      locations = gt::cells_body(columns = decision, rows = decision == "Rejected")
-    ) %>%
-    gt::tab_options(
-      table.font.size = gt::px(11),
-      heading.title.font.size = gt::px(1)
-    ) %>%
-    gt::tab_footnote(
-      footnote = "Non-significant p-value supports invariance (constraints do not significantly worsen fit).",
-      locations = gt::cells_column_labels(columns = p)
-    )
-  
-  gt_mi_comp
-} else {
-  cat("No model comparisons available (models may not have converged).\n")
-}
-
-```
-
-\newpage
 
 # References
 
@@ -4441,4 +4074,52 @@ p_spaghetti <- ggplot(ef_restricted_lab, aes(x = timepoint, y = value_z, group =
   )
 
 p_spaghetti
+```
+
+# Boxplot: Distribution of EF scores across waves {.appendix #fig-ef-boxplots-by-wave}
+```{r}
+#| label: fig-ef-boxplots-by-wave
+#| fig-cap: "Executive function scores across waves in Australia and South Africa. Boxplots show the distribution of harmonised task scores at each wave, stratified by country."
+#| fig-width: 12
+#| fig-height: 5
+
+p2 <- ggplot(ef_long_plot, aes(x = wave, y = value, fill = country)) +
+  geom_boxplot() +
+  facet_wrap(~ measure, scales = "free_y", ncol = 3) +
+  theme_bw() +
+  labs(
+    x = "Wave",
+    y = "Score",
+    fill = "Country"
+  )
+
+p2
+```
+
+# RQ3 results reported on the Fisher z scale {.appendix #tbl-rq3-gt-edges-dual}
+```{r}
+#| label: tbl-rq3-gt-edges-dual
+#| tbl-cap: "Between-cohort differences (edges only) at matched waves (AU − SA at T1/T2) and difference-in-differences for change from T1 to T2 (ΔAU − ΔSA). Columns show posterior median [95% CrI] on the raw partial-correlation scale (Δr) and Fisher-z scale (Δz = atanh(r)). ROPE probabilities are computed on Δr: $P(|\\Delta r| > 0.10)$."
+#| include: true
+
+gt_rq3_edges_dual <- rq3_edges_dual %>%
+  gt::gt(rowname_col = "term", groupname_col = "panel") %>%
+  gt::tab_header(title = gt::md("\\vspace{10pt}")) %>%
+  gt::tab_stubhead(label = "Edge") %>%
+  gt::cols_label(
+    estimate_r = "Median [95% CrI]",
+    estimate_z = "Median [95% CrI]",
+    rope_p_r   = paste0("P(|Δr|>", rope_rq3, ")")
+  ) %>%
+  gt::tab_spanner(label = gt::md("Δr (raw partial correlation)"), columns = c(estimate_r, rope_p_r)) %>%
+  gt::tab_spanner(label = gt::md("Δz (Fisher atanh scale)"), columns = c(estimate_z)) %>%
+  gt::cols_align(align = "center", columns = c(estimate_r, rope_p_r, estimate_z)) %>%
+  gt::sub_missing(columns = c(rope_p_r), missing_text = "") %>%
+  gt::tab_options(
+    table.font.size         = gt::px(11),
+    row_group.font.weight   = "bold",
+    heading.title.font.size = gt::px(1)
+  )
+
+gt_rq3_edges_dual
 ```
