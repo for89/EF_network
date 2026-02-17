@@ -70,28 +70,40 @@ ef_pal <- setNames(ggthemes::ptol_pal()(length(ef_levels)), ef_levels)
   )
 }
 
-# Countries
-country_levels <- c("Australia", "South Africa")
+# Countries (support both long and short codes)
+country_levels <- c("Australia", "South Africa", "AU", "SA")
 
-country_pal <- setNames(ggthemes::solarized_pal()(length(country_levels)), country_levels)
+country_labels_pretty <- c(
+  Australia = "Australia",
+  `South Africa` = "South Africa",
+  AU = "Australia",
+  SA = "South Africa"
+)
 
-.scale_colour_country <- function(...) {
-  scale_colour_manual(values = country_pal, breaks = country_levels, ...)
+# pick two colours and reuse for AU/SA
+base_cols <- ggthemes::solarized_pal()(2)
+country_pal <- c(
+  Australia = base_cols[1],
+  AU        = base_cols[1],
+  `South Africa` = base_cols[2],
+  SA            = base_cols[2]
+)
+
+.scale_colour_country <- function(..., pretty_labels = TRUE) {
+  scale_colour_manual(
+    values = country_pal,
+    breaks = country_levels,
+    labels = if (pretty_labels) unname(country_labels_pretty[country_levels]) else country_levels,
+    ...
+  )
 }
 .scale_color_country <- .scale_colour_country
 
-.scale_fill_country <- function(...) {
-  scale_fill_manual(values = country_pal, breaks = country_levels, ...)
+.scale_fill_country <- function(..., pretty_labels = TRUE) {
+  scale_fill_manual(
+    values = country_pal,
+    breaks = country_levels,
+    labels = if (pretty_labels) unname(country_labels_pretty[country_levels]) else country_levels,
+    ...
+  )
 }
-
-# Default discrete contrast
-.scale_colour_default <- function(...) scale_colour_brewer(palette = "Set1", ...)
-.scale_color_default  <- .scale_colour_default
-.scale_fill_default   <- function(...) scale_fill_brewer(palette = "Set1", ...)
-
-# Handy specific colours for annotations
-pal <- list(
-  grey = "#93a1a1",
-  red  = RColorBrewer::brewer.pal(3, "Set1")[1],
-  blue = RColorBrewer::brewer.pal(3, "Set1")[2]
-)

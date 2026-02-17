@@ -96,7 +96,59 @@ execute:
 
 # Introduction
 
-## Research Questions
+Executive functions (EFs) comprise a set of higher-order cognitive control processes that enable goal-directed, flexible, and adaptive behavior [@diamond2013executive]. These processes, including inhibitory control, working memory, and cognitive flexibility, support the regulation of attention, the maintenance and manipulation of information, and the ability to shift between task rules. Early childhood represents a period of particularly rapid growth in these abilities, coinciding with substantial maturation of the neural systems that underpin cognitive control [@blair2016executive; @best2010developmental; @garon2008executive].
+
+## Unity and Diversity of Executive Function
+
+A central question in executive function research concerns how executive abilities are organised: do inhibitory control, working memory, and cognitive flexibility reflect distinct cognitive systems, or are they manifestations of a common control mechanism? The influential unity/diversity framework proposed by @miyake2000unity suggests an integrative account. Using confirmatory factor analysis with adults, @miyake2000unity demonstrated that shifting, updating, and inhibition are moderately correlated yet separable constructs, best characterized by three correlated latent factors rather than a single unitary factor or independent processes. This work established that executive functions exhibit both unity (shared variance) and diversity (component-specific variance).
+
+Subsequent refinements introduced nested or bifactor formulations in which a Common EF factor captures shared variance across tasks, while Updating-Specific and Shifting-Specific factors account for residual variance unique to those domains [@friedman2017unity]. Notably, inhibition tasks load almost entirely on the Common EF factor, suggesting that inhibitory control closely aligns with processes common to executive regulation more broadly. Twin modelling further demonstrated that the unity component of executive function is highly heritable, reinforcing the notion of a biologically grounded common control system [@friedman2008individual].
+
+A central developmental question concerns when and how this differentiated structure emerges. Do young children exhibit the same unity-diversity organization observed in adults, or does executive function become progressively more differentiated across development?
+
+## Developmental Differentiation of Executive Function
+
+During the preschool years, empirical research predominantly supports a unidimensional representation of EF, with performance across tasks best explained by a single underlying construct [@nelson2016structure; @wiebe2008using; @willoughby2012measurement; @zelazo2016executive]. This pattern is consistent with theoretical perspectives suggesting that executive processes are relatively undifferentiated in young children and progressively become more distinct with maturation [@lehto2003dimensions; @miyake2000unity]. Recent longitudinal and network analyses have provided converging evidence for this developmental differentiation, showing that EF transitions from one factor in early childhood to increasingly separable components by late childhood and adolescence [@brydges2012unitary; @menu2024latent; @reilly2022developmental]. However, several investigations with preschool-aged samples have documented bifactor solutions wherein inhibitory control emerges as separable from working memory and cognitive flexibility [@lee2013developmental; @miller2012latent; @usai2014latent], suggesting that the transition toward differentiation may begin earlier in some populations or measurement contexts.
+
+Systematic reviews have confirmed this developmental progression: preschool samples frequently support unidimensional or two-factor solutions, whereas school-age children and adults more consistently exhibit three-factor or nested structures [@karr2018unity; @lee2013developmental]. These findings have been interpreted as evidence for progressive differentiation of executive processes, whereby initially unified control mechanisms become increasingly specialized with maturation.
+
+## Neural Architecture of Executive Function
+
+Neuroimaging research in adults has identified distributed brain networks that support executive function across diverse task demands. Two core control networks are central to executive processing: the fronto-parietal network (FPN), comprising dorsolateral prefrontal cortex, inferior and superior parietal lobules, and middle frontal gyrus; and the cingulo-opercular network (CON), including dorsal anterior cingulate cortex and bilateral anterior insula [@dosenbach2008dual; @niendam2012meta]. The FPN is hypothesized to support trial-by-trial adaptive control, while the CON is implicated in task-set maintenance and sustained control across trials [@dosenbach2008dual].
+
+These networks demonstrate reliable activation across inhibition, working memory, and shifting tasks, providing neural evidence for the "unity" component observed in behavioral models [@engelhardt2019neural; @niendam2012meta]. A meta-analysis of 193 neuroimaging studies confirmed that a superordinate fronto-cingulo-parietal network is consistently engaged across executive function domains [@niendam2012meta].
+
+While shared networks support general executive control, meta-analytic evidence also reveals component-specific neural signatures paralleling the "diversity" observed in behavioral factor structures. Inhibition tasks show strongly right-lateralized activation, particularly in right inferior frontal gyrus and superior parietal cortex [@rodriguez2022inhibition; @zhang2017large]. Working memory tasks engage bilateral dorsolateral prefrontal and posterior parietal cortex, with load-dependent increases in inferior frontal gyrus [@rottschy2012modelling]. Shifting tasks show bilateral activation with notable engagement of striatal and cerebellar regions [@rodriguez2022inhibition]. Executive tasks thus recruit common control networks while simultaneously engaging component-specific regions [@collette2006exploration; @mckenna2017informing], mirroring nested-factor behavioral models wherein a Common EF factor coexists with component-specific factors.
+
+## Developmental Emergence of Executive Networks
+
+The neural networks supporting executive function undergo substantial reorganization during childhood and adolescence. A pivotal finding from developmental neuroimaging is that the core architecture of adult executive networks is established by middle childhood, approximately age 8-10 years [@engelhardt2019neural]. Using task-based fMRI in children aged 8-13 years, @engelhardt2019neural demonstrated that brain regions consistently engaged across shifting, updating, and inhibition tasks closely corresponded to the FPN and CON networks identified in adults. Critically, after network establishment, developmental improvements in executive function from middle childhood through adolescence appear to reflect quantitative strengthening of connectivity within established networks rather than qualitative reorganization of network architecture [@engelhardt2019neural].
+
+However, earlier in development—during the preschool and early childhood period—functional brain organization appears less differentiated. Longitudinal fNIRS studies reveal that functional connectivity within the frontoparietal network and default mode network is associated with executive function abilities as early as age 3, but the strength and organization of these connections undergo considerable change across early childhood [@kelsey2025forming]. At age 3-4, children exhibit weaker frontal-frontal interactions and less refined fronto-parietal connectivity compared to older children [@buss2018changes; @fiske2019neural]. By age 4-5, children show strengthened neural connections and more efficient fronto-parietal pathways, enabling improved performance on executive tasks [@buss2018changes; @ezekiel2013dimensional].
+
+Developmental fMRI research consistently demonstrates progressive strengthening of functional connectivity within task-relevant fronto-parietal and fronto-striatal networks from childhood through adolescence, accompanied by increasing differentiation of activation patterns [@rubia2013functional]. Younger children (ages 6-8) recruit prefrontal regions more diffusely and fail to engage the full fronto-parietal network observed in adults, instead showing more localized activation in ventrolateral PFC [@crone2006neurocognitive; @o2008neurodevelopmental]. With age, there is progressive recruitment of DLPFC, posterior parietal cortex, and strengthening of long-range fronto-parietal and fronto-cerebellar connectivity [@o2008neurodevelopmental; @rubia2013functional].
+
+Recent work applying network control theory demonstrates that structural brain networks mature to allow more efficient transitions to fronto-parietal activation states necessary for executive function, with reduced energetic cost observed from childhood through early adulthood [@cui2020optimization]. This developmental reduction in control energy is driven primarily by decreased costs within the fronto-parietal system itself, particularly in lateral PFC and middle cingulate cortex—regions critical for task preparation, execution, and monitoring [@cui2020optimization].
+
+The developmental trajectory of neural network organization closely parallels the behavioral differentiation of executive function components. Just as behavioral factor analyses reveal increasing differentiation from a unidimensional structure in early childhood to separable components by late childhood [@karr2018unity], neuroimaging evidence suggests progressive functional specialization of brain regions supporting executive control [@li2025structural; @johnson2011interactive]. In early childhood, executive tasks recruit less specialized and more diffuse patterns of activation; with maturation, regions within FPN and CON networks become increasingly selective in their functional profiles, supporting the emergence of distinct yet coordinated executive processes [@fiske2019neural; @shanmugan2016neural]. This developmental specialization occurs through multiple neurobiological mechanisms, including experience-dependent synaptic pruning, myelination of long-range white matter tracts, and refinement of functional connectivity patterns [@baum2020development; @tamnes2017development]. The convergence of behavioral differentiation and neural specialization underscores that the unity-diversity structure of executive function is grounded in the developing architecture of distributed brain networks.
+
+## Methodological Approaches to Studying Executive Organization
+
+Latent variable methodologies have been central to advancing the unity/diversity framework. By extracting shared variance across multiple tasks, confirmatory factor analysis addresses the problem of task impurity and isolates executive constructs from task-specific noise [@wiebe2008using; @karr2018unity]. This approach has proven particularly valuable for developmental research, as it enables comparison of factor structures across age groups while accounting for measurement error and task-specific variance.
+
+At the same time, latent modelling relies on specific assumptions about how executive abilities are represented. Latent factors are inferred from covariance among observed tasks, with shared variance attributed to common underlying processes and residual variance treated as task-specific or error-related [@vandierendonck2021utility]. Although this framework has proven powerful, the factor structure obtained can vary depending on task selection, performance indicators, and analytic specification [@miller2012latent], highlighting that latent representations are partially shaped by methodological choices.
+
+Importantly, latent models characterize executive organisation in terms of shared variance explained by unobserved factors. They do not directly model conditional dependencies among executive components themselves. From a systems perspective, this distinction matters. If executive control reflects coordinated activity within distributed neural networks, then understanding how executive components directly relate to one another may offer complementary insight beyond shared latent variance.
+
+Recent methodological developments have begun to bridge this gap. For example, latent network approaches integrate structural equation modelling with network analysis to examine how executive constructs relate within a relational framework [@menu2024latent]. Such approaches reflect a broader shift toward viewing cognitive abilities as interconnected systems rather than solely as reflections of underlying factors. A network perspective that models conditional associations among executive components offers a systems-level complement to latent approaches, enabling direct investigation of developmental change in executive architecture.
+
+## The Present Study 
+
+The present study applies network analysis to examine the organization of executive function in early childhood across two longitudinal cohorts from Australia and South Africa. Using Bayesian Gaussian Graphical Models, we estimate age-adjusted partial correlations among inhibitory control, working memory, and cognitive flexibility—capturing the direct conditional associations among EF components after accounting for shared relationships and age-related variance. This network approach enables us to investigate the relational architecture of executive abilities, examining which components show direct coupling, how these conditional associations change developmentally, and whether network structure varies across sociocultural contexts and socioeconomic environments.
+
+Understanding how executive components are organized during early development holds substantial implications. Network analysis can reveal whether EF components function as tightly coupled systems or operate more independently, informing both theoretical models of executive development and the design of interventions. If components show strong direct coupling, broad interventions targeting general executive control may be most effective; if components are weakly connected, targeted domain-specific training may be warranted [@li2025structural].
+
+### Research Questions
 
 **Research Question 1 (Primary): EF Network Structure Within Cohorts**  
 Within each cohort and wave, what is the age-adjusted EF network—defined by partial correlations among working memory, inhibition, and cognitive flexibility—and what do global strength and expected influence indicate about overall connectivity and node centrality?
@@ -115,10 +167,44 @@ Within each cohort, does EF network structure differ between children from high 
 # Methods
 
 ## Participants 
-To be added.
+
+### Australia
+Request description from Steven - unsure which paper this sample is from. 
+
+### South Africa
+The South African sample was drawn from a longitudinal study that recruited 243 preschool-aged children and their primary caregivers from four low-income communities in Cape Town characterized by informal housing, poverty, and exposure to violence [@cook2024risk]. For the current study, the analytic sample comprised children with EF data available on any measure at each timepoint: 217 children at T1 (M age = 4.70 years, SD = 0.60; 48.1% female) and 189 at T2. For comprehensive details on study sites, recruitment procedures, and sample characteristics, see @cook2024risk.
 
 ## Measures
-To be added.
+
+### Executive Function
+EF was assessed using three measures from the Early Years Toolbox (EYT; @howard2017early), a suite of iPad-based assessments with integrated audio instructions to ensure standardized delivery, sequencing, and timing. The EYT has been validated across diverse cultural contexts, including previous studies in South Africa [@cook2019associations; @draper2020understanding] and other countries [@hossain2021international; @munambah202124].
+
+#### Working Memory (Mr. Ant) 
+This task requires children to remember the spatial locations of an increasing number of colored stickers placed on a cartoon ant [@howard2017early]. Each trial proceeds as follows: Mr. Ant appears with one or more stickers for 5 seconds; a blank screen is presented for 4 seconds; Mr. Ant reappears without stickers and children tap the locations where they believe the stickers were. The task increases in difficulty from one to eight stickers, with three trials at each level. Testing continues until completion or failure on all three trials at the same level. Working memory capacity was indexed by a point score calculated per @howard2017early: one point for each consecutive level with at least two correct trials, plus 1/3 point for each additional correct trial.
+
+#### Inhibition (Go/No-Go) 
+This task measures children's ability to inhibit a prepotent response [@howard2017early]. Children are instructed to tap the screen for "go" trials (catch a fish; 80% of trials) and refrain from tapping for "no-go" trials (avoid sharks; 20% of trials). The task comprises 75 trials divided into three blocks. The preponderance of go trials generates a strong response tendency that children must overcome on no-go trials. Inhibition was indexed by an impulse control score representing the product of go and no-go proportional accuracy, which accounts for both the strength of the prepotent response and children's ability to inhibit it.
+
+#### Cognitive Flexibility (Card Sorting)
+This task requires children to flexibly shift between sorting rules [@howard2017early; @zelazo2006dimensional]. Children sort stimuli (blue rabbits, red boats) first by one dimension (e.g., color), then by the alternate dimension (e.g., shape). After completing pre-switch and post-switch phases, children who meet performance criteria proceed to a border phase requiring rule switching based on whether stimuli are surrounded by a black border (sort by color) or not (sort by shape). The cognitive flexibility task was originally scored as switch accuracy (correct sorts on post-switch and border phases only; range 0-12). However, this approach produced substantial floor effects in the Australian sample, with 75 of 232 children (32.3%) scoring zero at T1. To address this, Australian scores were recalculated as total accuracy across all phases, including the baseline pre-switch phase (6 points) plus post-switch and border phases (0-12 points), yielding a range of 4-18. This scoring provided meaningful differentiation at the lower end of the distribution, reducing floor performers to less than 1%. South African scores retained the original switch-only scoring (range 0-12), as floor effects were minimal in this sample (0% at T1, 3.7% at T2).
+
+### Socioeconomic Status
+
+### Income
+
+#### Australia
+Caregivers reported gross annual household income using bands aligned with Australia's Child Care Subsidy (CCS) eligibility thresholds: low income (AUD $0–$45,144; eligible for 100% CCS subsidy), middle income (AUD $45,145–$156,914; eligible for subsidies on a sliding scale), or high income (>AUD $156,915; no subsidy eligibility). These income bands reflect meaningful policy-defined thresholds for accessing early childhood education support in Australia.
+
+#### South Africa
+Caregivers reported household income using items adapted from the National Income Dynamics Survey (NIDS; http://www.nids.uct.ac.za), a nationally representative panel study conducted in South Africa. Participants indicated whether their household income was above, the same as, or below specified income ranges, yielding seven ordered categories. Due to small cell sizes in some categories and to facilitate comparability with the Australian sample, income was collapsed into three categories: low income (categories 1–2), middle income (categories 3–5), and high income (categories 6–7). This tripartite categorization captures meaningful gradations in household economic resources while ensuring adequate sample sizes for analysis.
+
+### The Home Learning Envionment
+
+#### Australia
+Caregivers reported the frequency of eight home learning and enrichment activities in the past 7 days (e.g., reading to the child, visiting the library, teaching sports or physical activities). This measure was adapted from the Effective Pre-school, Primary and Secondary Education (EPPSE) study [@melhuish2008effects; @sylva2004effective]. Response options for each activity were: 0 days, 1–2 days, 3–4 days, 5–6 days, or 7 days. An HLE composite score was calculated by summing responses across all eight activities.
+
+#### South Africa
+The home learning environment was assessed using the Home Learning Environment questionnaire [@dawes2020early], which was developed for the South African context by combining items from the UNICEF Multiple Indicator Cluster Survey (https://mics.unicef.org) and the Home Learning Environment questionnaire [@melhuish2010impact]. Caregivers reported how frequently (never, sometimes, or many times) their child engaged in eight enrichment activities over the past 7 days (e.g., reading books, counting things, singing songs). To align with the Australian sample measures, we used the home learning activity (HLA) frequency score, calculated as the sum of activity frequencies across all eight activities, with higher scores indicating greater frequency of enrichment activities.
 
 ## Statistical Analysis
 
@@ -143,7 +229,6 @@ This approach differs from traditional null hypothesis significance testing in t
 Global strength summarizes overall network connectivity by summing the absolute values of all unique edge weights. Higher global strength indicates a more densely connected network where EF components are more strongly coupled. We computed global strength for each posterior sample, yielding a posterior distribution that captures uncertainty in this summary metric.
 
 Formally, for a network with *p* nodes, global strength is:
-
 $$
 GS = \sum_{i<j} |r_{ij}|
 $$
@@ -155,7 +240,6 @@ where *r~ij~* is the partial correlation between nodes *i* and *j*. For our thre
 Expected Influence [@robinaugh2016identifying] quantifies the centrality of each node in the network—that is, how strongly connected it is to other nodes. Expected influence is computed as the sum of a node's edge weights to all other nodes (without taking absolute values), preserving the sign of the relationships. Nodes with higher expected influence are more central to the network and may play a more important role in the overall system.
 
 Formally, for node *i*:
-
 $$
 EI_i = \sum_{j \neq i} r_{ij}
 $$
@@ -176,7 +260,7 @@ To test whether socioeconomic factors moderate network structure (RQ4), we adopt
 
 ### Measurement Invariance
 
-We tested measurement invariance using multi-group confirmatory factor analysis (CFA) in the lavaan R package [@rosseel2012lavaan]. Because cognitive flexibility exhibited pronounced floor effects in Australian children (see @fig-ef-boxplots-by-wave) at T1 (32.5% scoring zero), we treated all three EF indicators as ordinal variables, segmenting them into tertiles (Low/Medium/High) based on pooled distributions. We fit a single-factor ordinal CFA model across four groups simultaneously (AU_T1, AU_T2, SA_T1, SA_T2), testing invariance across both cohorts and developmental timepoints using robust weighted least squares estimation (WLSMV). We tested three levels of invariance:
+We tested measurement invariance using multi-group confirmatory factor analysis (CFA) in the lavaan R package [@rosseel2012lavaan]. To accommodate heterogeneous measurement scales across cohorts (cognitive flexibility: AU 4-18 including baseline sorting, SA 0-12 switch accuracy only; working memory: 0-4.33 scaled score; inhibition: 0-1 proportion) and differing performance distributions, we treated all three EF indicators as ordinal variables, segmenting them into tertiles (Low/Medium/High) based on pooled distributions. We fit a single-factor ordinal CFA model across four groups simultaneously (AU_T1, AU_T2, SA_T1, SA_T2), testing invariance across both cohorts and developmental timepoints using robust weighted least squares estimation (WLSMV). We tested three levels of invariance:
 
 1. **Configural invariance**: The same factor structure (three indicators loading on one factor) holds across all groups
 2. **Metric invariance**: Factor loadings are equal across groups (components relate to the latent EF construct equivalently)
@@ -237,10 +321,22 @@ if (requireNamespace("conflicted", quietly = TRUE)) {
 ```
 
 ```{r}
-#| label: plot-helper
+#| label: helpers
 #| include: false
 
+# Helper to extract fit for specific country×timepoint
+get_fit <- function(country, tp, fit_tbl_uniq) {
+  out <- fit_tbl_uniq %>%
+    dplyr::filter(country == !!country, timepoint == !!tp) %>%
+    dplyr::pull(fit)
+  if (length(out) != 1) {
+    stop("Could not uniquely match fit: ", country, " ", tp)
+  }
+  out[[1]]
+}
+
 source(here::here("ef_network_plotting_helper.R"))
+source(here::here("ef_network_gt_helper.R"))
 ```
 
 ```{r}
@@ -432,8 +528,6 @@ sum(!is.na(sa_data$household_items_score) & !is.na(sa_data$household_items_score
 # optional: inspect threshold behavior
 table(sa_data$n_assets_answered < 20, useNA = "ifany")
 summary(sa_data$household_items_score_repl)
-
-
 ```
 
 ```{r}
@@ -595,10 +689,12 @@ harmonise_sex_aus <- function(x) {
   )
   factor(out, levels = c("Female","Male","Other/Unknown","Missing"))
 }
-
 ```
 
 ```{r}
+#| label: build-sa-aus-objects
+#| include: false
+
 #| label: build-sa-aus-objects
 #| include: false
 
@@ -881,7 +977,6 @@ age_all_keep <- age_all %>%
 
 #  check
 stopifnot(all(levels(ef_all_keep$variable) == nodes))
-
 ```
 
 ```{r}
@@ -1013,14 +1108,6 @@ correlations <- ef_wide_temp %>%
   )
 
 print(correlations)
-
-cat("\nObjects created:\n")
-cat("- descriptives: summary statistics by cohort×wave×measure\n")
-cat("- missingness: missingness patterns by cohort×wave\n")
-cat("- floor_ceiling: floor/ceiling effects by cohort×wave×measure\n")
-cat("- correlations: within-wave correlations between EF measures\n")
-cat("- ef_long_plot: plot-ready long-format data with human-readable labels\n")
-
 ```
 
 ```{r}
@@ -1149,51 +1236,25 @@ fit_sca  <- fitMeasures(fit_scalar, c("cfi","tli","rmsea","srmr"))
 dCFI_metric <- unname(fit_met["cfi"] - fit_conf["cfi"])
 dCFI_scalar <- unname(fit_sca["cfi"] - fit_met["cfi"])
 ```
+
 ### Measurement Invariance
 
 To evaluate cross-cohort comparability of EF indicators, we conducted multi-group confirmatory factor analyses (CFA) across four cohort×wave groups (AU_T1, AU_T2, SA_T1, SA_T2), thereby testing invariance simultaneously across countries and developmental timepoints. Because cognitive flexibility exhibited pronounced floor effects in Australian children at T1 (32.5% scoring zero), all three EF indicators were treated as ordinal variables using robust weighted least squares estimation (WLSMV). Indicators were segmented into tertiles based on pooled distributions to ensure adequate category representation.
 
 In ordinal CFA, each observed categorical indicator reflects an underlying continuous latent response variable partitioned by thresholds. Factor loadings capture the strength of association between the latent EF construct and each indicator, while thresholds capture distributional placement of categories. This allows floor effect severity to be represented through threshold parameters without distorting factor loadings.
 
-We estimated a one-factor model in a sequence of increasingly constrained models. Configural invariance was supported. Constraining factor loadings equal across groups (metric invariance) did not significantly reduce fit (Δχ²(`r lrt_metric$df`) = `r round(lrt_metric$chisq, 2)`, *p* = `r signif(lrt_metric$p, 3)`; ΔCFI = `r round(dCFI_metric, 3)`), indicating comparable strength of association between the EF factor and its indicators. However, constraining thresholds (scalar invariance) significantly worsened fit (Δχ²(`r lrt_scalar$df`) = `r round(lrt_scalar$chisq, 2)`, *p* < .001; ΔCFI = `r round(dCFI_scalar, 3)`), with CFI declining from `r round(fit_met["cfi"], 3)` to `r round(fit_sca["cfi"], 3)`, indicating systematic threshold differences across groups. Metric invariance supports comparison of network structures (relationships between EF components) across cohorts, though absolute performance levels cannot be compared (see @tbl-invariance) .
+We estimated a one-factor model in a sequence of increasingly constrained models. Configural invariance was supported. Constraining factor loadings equal across groups (metric invariance) did not significantly reduce fit (Δχ²(`r lrt_metric$df`) = `r round(lrt_metric$chisq, 2)`, *p* = `r signif(lrt_metric$p, 3)`; ΔCFI = `r round(dCFI_metric, 3)`), indicating comparable strength of association between the EF factor and its indicators. However, constraining thresholds (scalar invariance) significantly worsened fit (Δχ²(`r lrt_scalar$df`) = `r round(lrt_scalar$chisq, 2)`, *p* < .001; ΔCFI = `r round(dCFI_scalar, 3)`), with CFI declining from `r round(fit_met["cfi"], 3)` to `r round(fit_sca["cfi"], 3)`, indicating systematic threshold differences across groups. Metric invariance supports comparison of network structures (relationships between EF components) across cohorts, though absolute performance levels cannot be compared (see @tbl-invariance).
 
 ```{r}
 #| label: tbl-invariance
 #| tbl-cap: "Measurement Invariance Testing: Fit Indices and Model Comparisons"
 
-# Create combined table with fit indices AND tests
-inv_table <- tibble::tibble(
-  Model = c("Configural", "Metric", "Scalar"),
-  CFI = c(fit_conf["cfi"], fit_met["cfi"], fit_sca["cfi"]),
-  TLI = c(fit_conf["tli"], fit_met["tli"], fit_sca["tli"]),
-  RMSEA = c(fit_conf["rmsea"], fit_met["rmsea"], fit_sca["rmsea"]),
-  SRMR = c(fit_conf["srmr"], fit_met["srmr"], fit_sca["srmr"]),
-  `Δχ²` = c(NA, lrt_metric$chisq, lrt_scalar$chisq),
-  `Δdf` = c(NA, lrt_metric$df, lrt_scalar$df),
-  `p` = c(NA, lrt_metric$p, lrt_scalar$p),
-  ΔCFI = c(NA, dCFI_metric, dCFI_scalar)
-) %>%
-  mutate(
-    Decision = case_when(
-      is.na(p) ~ "—",
-      abs(ΔCFI) < 0.01 & p > 0.05 ~ "Supported",
-      TRUE ~ "Not supported"
-    )
-  )
-
 inv_table %>%
   gt() %>%
-  opt_css(
-    css = "
-    #tbl-invariance {
-      margin-top: 30px;
-    }
-    "
-  ) %>%
+  gt_theme_ef() %>%
   fmt_number(columns = c(CFI, TLI, RMSEA, SRMR, ΔCFI), decimals = 3) %>%
   fmt_number(columns = `Δχ²`, decimals = 2) %>%
   fmt_number(columns = p, decimals = 3) %>%
-  sub_missing(missing_text = "—") %>%
   tab_style(
     style = cell_fill(color = "#E8F5E9"),
     locations = cells_body(rows = Decision == "Supported")
@@ -1211,7 +1272,6 @@ inv_table %>%
     locations = cells_column_labels(columns = Model)
   )
 ```
-\clearpage
 
 ```{r}
 #| label: prepare-moderators
@@ -1370,6 +1430,114 @@ align_draws <- function(x, y, keep = c("last","first")) {
 ```
 
 ```{r}
+#| label: descriptives-sample-sizes
+#| include: false
+
+# Sample sizes by cohort×wave (for main text)
+sample_sizes <- ef_all_keep %>%
+  group_by(country, timepoint) %>%
+  summarise(
+    n_children = n_distinct(id),
+    .groups = "drop"
+  )
+
+sample_sizes_wide <- sample_sizes %>%
+  pivot_wider(names_from = timepoint, values_from = n_children)
+```
+
+```{r}
+#| label: descriptives-zero-order-cors
+#| include: false
+
+# Zero-order (raw, unadjusted) correlations within each cohort×wave
+# This shows the "before" picture that motivates partial correlations
+
+cor_raw <- ef_net_wide %>%
+  group_by(country, timepoint) %>%
+  summarise(
+    n = n(),
+    cor_inh_cog = cor(ef_inhibition, ef_cogflex, use = "pairwise.complete"),
+    cor_inh_wm = cor(ef_inhibition, ef_workingmem, use = "pairwise.complete"),
+    cor_cog_wm = cor(ef_cogflex, ef_workingmem, use = "pairwise.complete"),
+    .groups = "drop"
+  )
+
+# Summary statistics for inline reporting
+cor_summary <- cor_raw %>%
+  pivot_longer(
+    cols = starts_with("cor_"),
+    names_to = "pair",
+    values_to = "r"
+  ) %>%
+  summarise(
+    min_r = min(r, na.rm = TRUE),
+    max_r = max(r, na.rm = TRUE),
+    mean_r = mean(r, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+# Table-ready format
+cor_raw_table <- cor_raw %>%
+  pivot_longer(
+    cols = starts_with("cor_"),
+    names_to = "pair",
+    values_to = "r"
+  ) %>%
+  mutate(
+    pair = recode(pair,
+      "cor_inh_cog" = "Inhibition–Cognitive Flexibility",
+      "cor_inh_wm" = "Inhibition–Working Memory",  
+      "cor_cog_wm" = "Cognitive Flexibility–Working Memory"
+    )
+  )
+```
+
+```{r}
+#| label: descriptives-age-effects
+#| include: false
+
+# Age-EF correlations by cohort×wave (for reporting)
+age_ef_cors <- ef_all_keep %>%
+  left_join(age_all_keep %>% select(country, timepoint, id, age),
+            by = c("country", "timepoint", "id")) %>%
+  filter(!is.na(age), !is.na(value)) %>%
+  group_by(country, timepoint, variable) %>%
+  summarise(
+    r_age = cor(age, value, use = "complete.obs"),
+    .groups = "drop"
+  )
+
+age_cor_summary <- age_ef_cors %>%
+  summarise(
+    min_r = min(r_age, na.rm = TRUE),
+    max_r = max(r_age, na.rm = TRUE),
+    .groups = "drop"
+  )
+```
+
+### Descriptive Statistics and Preliminary Analyses
+
+Sample sizes for key variables are shown in @tbl-render-table1 and @tbl-render-table2. Executive function scores increased with age across waves (see @fig-test-re-test-plot and @fig-age-ef-wave), with age-EF correlations ranging from r = `r round(age_cor_summary$min_r, 2)` to `r round(age_cor_summary$max_r, 2)`. Zero-order correlations between EF measures are shown in @tbl-descriptives-zero-order. Raw correlations ranged from r = `r round(cor_summary$min_r, 2)` to `r round(cor_summary$max_r, 2)`, with inhibition-working memory showing the strongest association (mean r = `r round(mean(filter(cor_raw_table, pair == "Inhibition–Working Memory")$r), 2)`). These moderate correlations motivated the network approach: partial correlations reveal conditional dependencies after controlling for shared variance and age-related trends.
+
+```{r}
+#| label: tbl-descriptives-zero-order
+#| tbl-cap: "Zero-order correlations between EF measures by cohort and wave"
+#| include: true
+
+cor_raw_table %>%
+  dplyr::select(pair, country, timepoint, r) %>%
+  tidyr::pivot_wider(
+    names_from  = c(country, timepoint),
+    values_from = r,
+    names_sep   = " "
+  ) %>%
+  gt(rowname_col = "pair") %>%
+  gt_theme_ef() %>%
+  tab_stubhead(label = "Edge") %>%
+  fmt_number(columns = -pair, decimals = 2)
+```
+
+```{r}
 #| label: step_1a-fit-bggm
 #| include: false
 
@@ -1448,7 +1616,6 @@ fit_tbl %>%
   dplyr::mutate(ok = !purrr::map_lgl(fit, is.null)) %>%
   dplyr::select(country, timepoint, n, missing_cells, total_cells, pct_missing, ok)
 fit_tbl
-
 ```
 
 ```{r}
@@ -1565,7 +1732,6 @@ edge_tbl <- fit_tbl %>%
     character(1)
   )
 )
-
 ```
 
 ```{r}
@@ -1581,7 +1747,6 @@ gs_tbl <- fit_tbl %>%
     q975 = purrr::map_dbl(gs_draws, ~ stats::quantile(.x, .975, na.rm = TRUE))
   ) %>%
   dplyr::select(country, timepoint, q025, q50, q975)
-
 ```
 
 ```{r}
@@ -1876,6 +2041,8 @@ In Australia, edges involving working memory showed the clearest evidence of cou
 
 In South Africa, the inhibition–working memory edge remained positive across waves (T1: `r edge_report("South Africa", "T1", "Inhibition – Working memory")`; T2: `r edge_report("South Africa", "T2", "Inhibition – Working memory")`) and met the meaningfulness criterion more consistently than the other edges (T1: `r edge_meaningful("South Africa", "T1", "Inhibition – Working memory")`; T2: `r edge_meaningful("South Africa", "T2", "Inhibition – Working memory")`). The cognitive flexibility–inhibition edge was stronger at T1 (`r edge_report("South Africa", "T1", "Cognitive flexibility – Inhibition")`) but attenuated at T2 (`r edge_report("South Africa", "T2", "Cognitive flexibility – Inhibition")`) and did not reliably exceed the meaningfulness threshold at T2 (T1: `r edge_meaningful("South Africa", "T1", "Cognitive flexibility – Inhibition")`; T2: `r edge_meaningful("South Africa", "T2", "Cognitive flexibility – Inhibition")`). In contrast to the Australian results, he cognitive flexibility–working memory edge was comparatively weaker and uncertain across waves (T1: `r edge_report("South Africa", "T1", "Cognitive flexibility – Working memory")`; T2: `r edge_report("South Africa", "T2", "Cognitive flexibility – Working memory")`).
 
+@fig-rq1-network-graphs visualizes the network structure. The spatial layout is held constant across panels to facilitate comparison. Working memory consistently occupied a well-connected position, with edges to both inhibition and cognitive flexibility appearing in all Australia networks and both South Africa networks. The weaker cognitive flexibility–inhibition coupling in Australia at T1 is evident in the absence of this edge (P(|r|>0.10) = 0.50), while it appears at T2 and T3 when the relationship strengthens.
+
 \clearpage
 
 ```{r}
@@ -1897,7 +2064,6 @@ rq1_table_all <- dplyr::bind_rows(
       estimate,
       rope_p
     ),
-
   # Global strength panel
   rq1_gs %>%
     dplyr::transmute(
@@ -1907,7 +2073,6 @@ rq1_table_all <- dplyr::bind_rows(
       estimate,
       rope_p = ""       
     ),
-
   # Expected influence panel
   rq1_table_B %>%
     dplyr::transmute(
@@ -1926,35 +2091,21 @@ rq1_table_all <- dplyr::bind_rows(
   dplyr::arrange(panel, country, timepoint, term)
 
 # GT table
-gt_rq1_all <- rq1_table_all %>%
-  gt::gt(
+rq1_table_all %>%
+  gt(
     rowname_col = "term",
     groupname_col = "panel"
   ) %>%
-  # add vertical space between caption and header in PDF
-  gt::tab_header(title = gt::md("\\vspace{10pt}")) %>%
-  gt::tab_stubhead(label = "Measure") %>%
-  gt::cols_label(
+  gt_theme_ef() %>%
+  tab_stubhead(label = "Measure") %>%
+  cols_label(
     country = "Cohort",
     timepoint = "Wave",
     estimate = "Median [95% CrI]",
     rope_p = paste0("P(|r|>", rope, ")"),
     n = "N",
     pct_missing = "% missing cells"
-  ) %>%
-  gt::cols_align(
-    align = "center",
-    columns = c(country, timepoint, estimate, rope_p, n, pct_missing)
-  ) %>%
-  gt::sub_missing(columns = "rope_p", missing_text = "") %>%
-  gt::tab_options(
-    table.font.size        = gt::px(11),
-    row_group.font.weight  = "bold",
-    heading.title.font.size = gt::px(1)  # minimise spacer row height
   )
-
-gt_rq1_all
-
 ```
 
 ```{r}
@@ -2021,6 +2172,83 @@ ggplot(edges_df2, aes(x = q50, y = edge_short, colour = edge_short)) +
     strip.text.y.right = element_text(angle = 0)
   )
 ```
+
+```{r}
+#| label: fig-rq1-network-graphs
+#| fig-cap: "EF network structure by cohort and wave. Nodes positioned consistently across panels; edge thickness reflects partial correlation strength; edges with P(|r|>0.10) < 0.75 are omitted for clarity."
+#| include: true
+#| out.width: "100%"
+#| fig.width: 10
+#| fig.height: 8
+
+library(qgraph)
+
+# Fixed layout
+layout_fixed <- matrix(c(
+  0, 1,
+  -0.87, -0.5,
+  0.87, -0.5
+), ncol = 2, byrow = TRUE)
+
+# Helper functions
+get_pcor_median <- function(fit, nodes) {
+  A <- fit$post_samp$pcors
+  med_mat <- apply(A, c(1, 2), median)
+  dimnames(med_mat) <- list(nodes, nodes)
+  med_mat
+}
+
+get_edge_inclusion <- function(fit, nodes, rope = 0.10) {
+  A <- fit$post_samp$pcors
+  p <- length(nodes)
+  inc_mat <- matrix(0, p, p)
+  for (i in 1:p) {
+    for (j in 1:p) {
+      if (i != j) inc_mat[i,j] <- mean(abs(A[i,j,]) > rope)
+    }
+  }
+  dimnames(inc_mat) <- list(nodes, nodes)
+  inc_mat
+}
+
+# Plot function
+plot_ef_network <- function(fit, title, threshold = 0.75) {
+  pcor <- get_pcor_median(fit, nodes)
+  inclusion <- get_edge_inclusion(fit, nodes, rope = 0.10)
+  
+  pcor[inclusion < threshold] <- 0
+  diag(pcor) <- 0
+  
+  labs <- c("Inhibition", "Cognitive\nFlexibility", "Working\nMemory")
+  
+  qgraph(pcor,
+         layout = layout_fixed,
+         labels = labs,
+         label.cex = 1.0,
+         maximum = 0.4,
+         title = title,
+         title.cex = 1.1,
+         edge.labels = FALSE,
+         vsize = 12,
+         esize = 10,
+         asize = 4,
+         curve = 0.2,
+         fade = FALSE)
+}
+
+# Create grid - THIS WILL RENDER DIRECTLY TO PDF
+par(mfrow = c(2, 3), mar = c(1, 1, 3, 1))
+
+plot_ef_network(get_fit("AU", "T1", fit_tbl_uniq), "Australia T1")
+plot_ef_network(get_fit("AU", "T2", fit_tbl_uniq), "Australia T2")
+plot_ef_network(get_fit("AU", "T3", fit_tbl_uniq), "Australia T3")
+plot_ef_network(get_fit("SA", "T1", fit_tbl_uniq), "South Africa T1")
+plot_ef_network(get_fit("SA", "T2", fit_tbl_uniq), "South Africa T2")
+plot.new()  # Empty panel
+
+par(mfrow = c(1, 1))
+```
+
 \clearpage
 
 ### Global strength
@@ -2178,7 +2406,6 @@ ggplot(rq1_ei, aes(x = timepoint, y = q50, group = 1)) +
 \clearpage
 
 ```{r}
-#################### RQ2 - cross cultural comparisons #################### 
 #| label: rq2-difference-helpers
 #| include: false
 
@@ -2256,12 +2483,9 @@ fmt_ci_delta <- function(m, lo, hi, digits = 2) {
   sprintf(paste0("%.", digits, "f [%.", digits, "f, %.", digits, "f]"), m, lo, hi)
 }
 fmt_p <- function(p, digits = 2) sprintf(paste0("%.", digits, "f"), p)
-
 ```
 
 ```{r}
-
-
 #| label: rq2-ei-delta-summaries
 #| include: false
 
@@ -2375,7 +2599,6 @@ rq2_table_all <- dplyr::bind_rows(rq2_delta_gs, rq2_delta_edges, rq2_delta_ei) %
   dplyr::arrange(panel, country, contrast, term)
 
 rq2_table_all
-
 ```
 ### Research Question 2 (Primary): Developmental Change Within Cohorts 
 Within each cohort, do the EF conditional associations (partial correlations) change across adjacent waves (AU: T1→T2→T3; SA: T1→T2), and if so, which specific edges strengthen or weaken over time?
@@ -2383,8 +2606,8 @@ Within each cohort, do the EF conditional associations (partial correlations) ch
 Given metric invariance, we compared network structures across adjacent waves within each cohort. For each wave transition, we computed posterior distributions of change in edge weights (Δr = later wave − earlier 
 wave), global strength (Δ), and expected influence (Δ). We evaluated whether changes exceeded a region of practical equivalence (ROPE; |Δr| > 0.10) to distinguish meaningful developmental change from negligible fluctuation.
 
-We found little evidence for meaningful change in EF network summaries across adjacent waves within either cohort (see @tbl-rq2-gt-all). Posterior 95% CrIs for all Δs included 0, and probabilities that edge changes exceeded the ROPE (|Δr| > 0.10) were modest (≈0.3–0.6), indicating substantial uncertainty and 
-no clear support for meaningful change.
+We found little evidence for meaningful change in EF network summaries across adjacent waves within either cohort (see @tbl-rq2-gt-all). Posterior 95% CrIs for all Δs included 0, and probabilities that edge changes exceeded the ROPE (|Δr| > 0.10) were modest (≈0.3–0.6), indicating substantial uncertainty and no clear support for meaningful change.
+
 ```{r}
 #| label: tbl-rq2-gt-all
 #| tbl-cap: "Change in EF network summaries across adjacent waves within cohort. Cells show posterior median [95% CrI] for Δ (later − earlier). For edges, cells also show $P(|\\Delta r| > 0.10)$."
@@ -2395,32 +2618,19 @@ rq2_table_print <- rq2_table_all %>%
     term = dplyr::recode(term, !!!node_to_label)
   )
 
-gt_rq2_all <- rq2_table_print %>%
-  gt::gt(
+rq2_table_print %>%
+  gt(
     rowname_col   = "term",
     groupname_col = "panel"
   ) %>%
-  gt::tab_header(title = gt::md("\\vspace{10pt}")) %>%
-  gt::tab_stubhead(label = "Measure") %>%
-  gt::cols_label(
+  gt_theme_ef() %>%
+  tab_stubhead(label = "Measure") %>%
+  cols_label(
     country   = "Cohort",
     contrast  = "Contrast",
     estimate  = "Median [95% CrI]",
     rope_p    = paste0("P(|Δr|>", rope_delta, ")")
-  ) %>%
-  gt::cols_align(
-    align = "center",
-    columns = c(country, contrast, estimate, rope_p)
-  ) %>%
-  gt::sub_missing(columns = "rope_p", missing_text = "") %>%
-  gt::tab_options(
-    table.font.size = gt::px(11),
-    row_group.font.weight = "bold",
-    # ADDED: Minimizes the height of the spacer row so it doesn't look like a massive gap
-    heading.title.font.size = gt::px(1)
   )
-
-gt_rq2_all
 ```
 
 ```{r}
@@ -2452,7 +2662,6 @@ rq2_gs_report        <- function(country, tp2, tp1)       rq2_cell("Global stren
 
 rq2_ei_report        <- function(country, tp2, tp1, node) rq2_cell("Expected influence (Δ)", country, tp2, tp1, node, "estimate")
 rq2_ei_meaningful    <- function(country, tp2, tp1, node) rq2_cell("Expected influence (Δ)", country, tp2, tp1, node, "rope_p")
-
 ```
 \clearpage
 
@@ -2690,6 +2899,7 @@ if (n_failed > 0) {
 }
 
 cat("\nSensitivity analysis complete. Object 'fit_tbl_no_floor' created.\n")
+
 ```
 
 ```{r}
@@ -2856,7 +3066,6 @@ rq3_edges_dual_combined <- bind_rows(
   rq3_edges_dual,
   rq3_edges_dual_sens
 )
-
 ```
 
 ```{r}
@@ -2906,6 +3115,7 @@ A substantial floor effect was observed in Australian T1 cognitive flexibility (
 **Main Analysis (Full Sample)**: At T1, posterior medians suggested modest AU–SA differences in several edges; however, all 95% credible intervals overlapped zero. At T2, cohort differences were smaller and predominantly positive, but again uncertain. In the difference-in-differences analysis, most edges were centered near zero. The largest deviation was observed for CogFlex–Inhibition (median = `r round(rq3_ci("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition", "Main analysis")["m"], 2)`; 95% CrI [`r round(rq3_ci("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition", "Main analysis")["lo"], 2)`, `r round(rq3_ci("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition", "Main analysis")["hi"], 2)`]; P(|Δr|>0.10) = `r round(rq3_rope("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition", "Main analysis"), 2)`), though its credible interval still included zero, indicating substantial uncertainty. Results were substantively unchanged when differences were summarized on the Fisher z (atanh) scale (@tbl-rq3-gt-edges-dual).
 
 **Sensitivity Analysis (Excluding Cognitive Flexibility Floor Performers)**: Given the pronounced floor effect in Australian T1 cognitive flexibility (`r excl_n("AU","T1")`/`r orig_n("AU","T1")` excluded [`r excl_pct("AU","T1")`%]; AU T2: `r excl_n("AU","T2")`/`r orig_n("AU","T2")` [`r excl_pct("AU","T2")`%]; SA T1: `r excl_n("SA","T1")`/`r orig_n("SA","T1")` [`r excl_pct("SA","T1")`%]; SA T2: `r excl_n("SA","T2")`/`r orig_n("SA","T2")` [`r excl_pct("SA","T2")`%]), we refitted networks after wave-specific exclusion of children scoring zero on cognitive flexibility. Estimates were highly similar in direction and magnitude to the main analysis (see @tbl-rq3-sensitivity-comparison), with credible intervals widening due to reduced sample size. Patterns at T2 and in the difference-in-differences analysis were nearly identical.Together, these results indicate that cross-cohort differences in EF network structure are small and uncertain.
+
 ```{r}
 #| label: tbl-rq3-sensitivity-comparison
 #| tbl-cap: "Sensitivity analysis: Cross-cohort comparisons with vs without floor performers. Main analysis includes all children; sensitivity analysis uses wave-specific exclusion of children who scored 0 on any EF measure at that wave."
@@ -2927,9 +3137,9 @@ rq3_comparison <- rq3_edges_dual_combined %>%
     `Sensitivity (no floor)_rope_p_r`
   )
 
-gt_rq3_comparison <- rq3_comparison %>%
+rq3_comparison %>%
   gt(rowname_col = "term", groupname_col = "panel") %>%
-  tab_header(title = md("\\vspace{10pt}")) %>%
+  gt_theme_ef() %>%
   tab_stubhead(label = "Edge") %>%
   cols_label(
     `Main analysis_estimate_r` = "Δr [95% CrI]",
@@ -2945,37 +3155,148 @@ gt_rq3_comparison <- rq3_comparison %>%
     label = "Sensitivity (No Floor)",
     columns = starts_with("Sensitivity")
   ) %>%
-  cols_align(align = "center", columns = everything()) %>%
-  tab_options(
-    table.font.size = px(10),
-    row_group.font.weight = "bold",
-    heading.title.font.size = px(1)
-  ) %>%
   tab_footnote(
-  footnote = "Main analysis: all children. Sensitivity: wave-specific exclusion of children who scored 0 on Cognitive Flexibility at that wave (AU T1: 75/232 excluded [32.3%]; AU T2: 42/217 excluded [19.4%]; SA T1: 0/217 excluded [0.0%]; SA T2: 7/189 excluded [3.7%]).",
-  locations = cells_column_spanners(spanners = "Sensitivity (No Floor)")
-)
-
-gt_rq3_comparison
+    footnote = "Main analysis: all children. Sensitivity: wave-specific exclusion of children who scored 0 on Cognitive Flexibility at that wave (AU T1: 75/232 excluded [32.3%]; AU T2: 42/217 excluded [19.4%]; SA T1: 0/217 excluded [0.0%]; SA T2: 7/189 excluded [3.7%]).",
+    locations = cells_column_spanners(spanners = "Sensitivity (No Floor)")
+  )
 ```
 \clearpage
 
 ```{r}
-#| label: rq4-stratified-approach
+#| label: prepare-moderators-wave-specific
 #| include: false
 
-# Create high/low splits at median within cohort
-ef_net_stratified <- ef_net %>%
-  dplyr::left_join(mods_t1, by = c("country", "id")) %>%
-  dplyr::filter(!is.na(income_z) & !is.na(hle_z)) %>%
-  dplyr::group_by(country) %>%
+# ============================================================================
+# Prepare wave-specific income + baseline HLE
+# ============================================================================
+# Income: Use wave-specific values (changes across waves)
+# HLE: Use baseline T1 only (doesn't change - enrichment at age 4 predicts later networks)
+
+# AUSTRALIA - wave-specific income, baseline HLE
+au_mods_all_waves <- aus_ses_tp %>%
+  dplyr::transmute(
+    country,
+    timepoint,
+    id,
+    income_raw = as.numeric(income_aus),  # 1, 2, or 3
+    hle_raw = as.numeric(hle_aus)
+  )
+
+# Get T1 HLE only
+au_hle_t1 <- au_mods_all_waves %>%
+  dplyr::filter(timepoint == "T1") %>%
+  dplyr::select(country, id, hle_t1 = hle_raw)
+
+# Join back to get: wave-specific income + T1 HLE
+au_mods_combined <- au_mods_all_waves %>%
+  dplyr::left_join(au_hle_t1, by = c("country", "id")) %>%
+  dplyr::group_by(country, timepoint) %>%
   dplyr::mutate(
-    income_group = dplyr::if_else(income_z > median(income_z, na.rm = TRUE), "High", "Low"),
-    hle_group    = dplyr::if_else(hle_z > median(hle_z, na.rm = TRUE), "High", "Low")
+    # Z-score HLE within cohort×wave for consistency
+    hle_z = scale(hle_t1)[,1]
   ) %>%
+  dplyr::ungroup() %>%
+  dplyr::select(country, timepoint, id, income_raw, hle_z)
+
+# SOUTH AFRICA - wave-specific income, baseline HLE  
+sa_mods_all_waves <- sa_ses %>%
+  dplyr::transmute(
+    country,
+    timepoint,
+    id,
+    income_raw = as.numeric(income_range),  # 1-7 (will collapse to 3)
+    hle_raw = as.numeric(hla_frequency1)
+  ) %>%
+  # Exclude invalid income codes
+  dplyr::mutate(
+    income_raw = dplyr::if_else(income_raw == 999, NA_real_, income_raw)
+  )
+
+# Get T1 HLE only
+sa_hle_t1 <- sa_mods_all_waves %>%
+  dplyr::filter(timepoint == "T1") %>%
+  dplyr::select(country, id, hle_t1 = hle_raw)
+
+# Join back
+sa_mods_combined <- sa_mods_all_waves %>%
+  dplyr::left_join(sa_hle_t1, by = c("country", "id")) %>%
+  dplyr::group_by(country, timepoint) %>%
+  dplyr::mutate(
+    hle_z = scale(hle_t1)[,1]
+  ) %>%
+  dplyr::ungroup() %>%
+  dplyr::select(country, timepoint, id, income_raw, hle_z)
+
+# COMBINE
+mods_all_waves <- dplyr::bind_rows(au_mods_combined, sa_mods_combined)
+
+# Report availability
+cat("=== WAVE-SPECIFIC MODERATOR AVAILABILITY ===\n\n")
+mod_summary <- mods_all_waves %>%
+  dplyr::group_by(country, timepoint) %>%
+  dplyr::summarise(
+    n = n(),
+    n_income = sum(!is.na(income_raw)),
+    pct_income = round(100 * n_income / n, 1),
+    n_hle = sum(!is.na(hle_z)),
+    pct_hle = round(100 * n_hle / n, 1),
+    .groups = "drop"
+  )
+print(mod_summary)
+
+```
+
+```{r}
+#| label: rq4-stratified-approach-3cat
+#| include: false
+
+# Create 3-category income groups + HLE median split
+ef_net_stratified <- ef_net %>%
+  dplyr::left_join(mods_all_waves, by = c("country", "timepoint", "id")) %>%
+  dplyr::filter(!is.na(income_raw) & !is.na(hle_z)) %>%
+  dplyr::mutate(
+    # 3-category income (wave-specific)
+    income_group = dplyr::case_when(
+      # Australia: Use natural categories
+      country == "AU" & income_raw == 1 ~ "Low",
+      country == "AU" & income_raw == 2 ~ "Middle",
+      country == "AU" & income_raw == 3 ~ "High",
+      
+      # South Africa: Collapse 7 categories to 3
+      country == "SA" & income_raw %in% c(1, 2) ~ "Low",
+      country == "SA" & income_raw == 3 ~ "Middle",
+      country == "SA" & income_raw %in% c(4, 5, 7) ~ "High",  # Include 7 with High (only n=1)
+      
+      TRUE ~ NA_character_
+    ),
+    # HLE: Median split within cohort×wave (using baseline T1 HLE)
+    hle_group = dplyr::case_when(
+      country == "AU" & hle_z > median(hle_z[country == "AU"], na.rm = TRUE) ~ "High",
+      country == "AU" ~ "Low",
+      country == "SA" & hle_z > median(hle_z[country == "SA"], na.rm = TRUE) ~ "High",
+      country == "SA" ~ "Low",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  dplyr::filter(!is.na(income_group), !is.na(hle_group)) %>%
   dplyr::ungroup()
 
-# Prepare wide data for BGGM, split by country × wave × moderator group
+# Check income group distribution
+cat("=== INCOME GROUP DISTRIBUTION ===\n\n")
+income_dist <- ef_net_stratified %>%
+  dplyr::distinct(country, timepoint, id, income_group) %>%
+  dplyr::count(country, timepoint, income_group) %>%
+  tidyr::pivot_wider(names_from = income_group, values_from = n, values_fill = 0)
+print(income_dist)
+
+cat("\n=== HLE GROUP DISTRIBUTION ===\n\n")
+hle_dist <- ef_net_stratified %>%
+  dplyr::distinct(country, timepoint, id, hle_group) %>%
+  dplyr::count(country, timepoint, hle_group) %>%
+  tidyr::pivot_wider(names_from = hle_group, values_from = n, values_fill = 0)
+print(hle_dist)
+
+# Prepare wide data for BGGM
 ef_net_wide_strat <- ef_net_stratified %>%
   dplyr::select(country, timepoint, id, variable, node, income_group, hle_group) %>%
   tidyr::pivot_wider(
@@ -2984,7 +3305,7 @@ ef_net_wide_strat <- ef_net_stratified %>%
   ) %>%
   dplyr::filter(!dplyr::if_all(dplyr::all_of(nodes), ~ is.na(.)))
 
-# Split by country × wave × income group
+# Split by country × wave × income group (3 groups)
 dat_split_income <- ef_net_wide_strat %>%
   dplyr::select(country, timepoint, income_group, id, dplyr::all_of(nodes)) %>%
   dplyr::group_by(country, timepoint, income_group) %>%
@@ -2996,7 +3317,7 @@ keys_income <- ef_net_wide_strat %>%
   dplyr::group_keys() %>%
   dplyr::arrange(country, timepoint, income_group)
 
-# Split by country × wave × HLE group  
+# Split by country × wave × HLE group (2 groups)
 dat_split_hle <- ef_net_wide_strat %>%
   dplyr::select(country, timepoint, hle_group, id, dplyr::all_of(nodes)) %>%
   dplyr::group_by(country, timepoint, hle_group) %>%
@@ -3017,7 +3338,7 @@ fit_one_strat <- function(df) {
   
   n <- nrow(Y)
   
-  if (n < 20) {  # minimum sample size for stable estimation
+  if (n < 20) {
     return(list(fit = NULL, n = n, reason = "insufficient_n"))
   }
   
@@ -3034,35 +3355,41 @@ fit_one_strat <- function(df) {
   list(fit = fit, n = n, reason = "success")
 }
 
-# fit income-stratified models
+# Fit income-stratified models
+cat("\n=== FITTING INCOME-STRATIFIED NETWORKS ===\n")
 ggm_fits_income <- purrr::map(dat_split_income, fit_one_strat)
 
 fit_tbl_income <- keys_income %>%
   dplyr::mutate(res = ggm_fits_income) %>%
   tidyr::unnest_wider(res)
 
-# fit HLE-stratified models
+cat("\nIncome fits:\n")
+fit_tbl_income %>%
+  dplyr::mutate(ok = !purrr::map_lgl(fit, is.null)) %>%
+  dplyr::select(country, timepoint, income_group, n, reason, ok) %>%
+  print()
+
+# Fit HLE-stratified models
+cat("\n=== FITTING HLE-STRATIFIED NETWORKS ===\n")
 ggm_fits_hle <- purrr::map(dat_split_hle, fit_one_strat)
 
 fit_tbl_hle <- keys_hle %>%
   dplyr::mutate(res = ggm_fits_hle) %>%
   tidyr::unnest_wider(res)
 
-# check which fits succeeded
-fit_tbl_income %>%
-  dplyr::mutate(ok = !purrr::map_lgl(fit, is.null)) %>%
-  dplyr::select(country, timepoint, income_group, n, reason, ok)
-
+cat("\nHLE fits:\n")
 fit_tbl_hle %>%
   dplyr::mutate(ok = !purrr::map_lgl(fit, is.null)) %>%
-  dplyr::select(country, timepoint, hle_group, n, reason, ok)
+  dplyr::select(country, timepoint, hle_group, n, reason, ok) %>%
+  print()
 ```
 
 ```{r}
-#| label: rq4-compute-moderation-effects
+#| label: rq4-compute-moderation-effects-3cat
 #| include: false
 
-# Compute edge differences: High - Low for each moderator
+# For income: Compute 3 pairwise contrasts (High-Low, High-Middle, Middle-Low)
+# For HLE: Compute High-Low only
 
 # Helper: get edge draws difference between two groups
 edge_group_diff <- function(fit_high, fit_low, node_names = nodes) {
@@ -3073,64 +3400,104 @@ edge_group_diff <- function(fit_high, fit_low, node_names = nodes) {
   high_list <- edge_draws_list(fit_high, node_names = node_names)
   low_list  <- edge_draws_list(fit_low, node_names = node_names)
   
-  # align and subtract
   purrr::map2(high_list, low_list, function(h, l) {
     al <- align_draws(h, l, keep = "last")
-    al$x - al$y  # High - Low
+    al$x - al$y
   })
 }
 
-# income moderation: For each country × wave, compute High - Low
+# Income moderation: 3-way contrasts
 income_mod_effects <- fit_tbl_income %>%
   dplyr::filter(!purrr::map_lgl(fit, is.null)) %>%
   dplyr::arrange(country, timepoint, income_group) %>%
   dplyr::group_by(country, timepoint) %>%
-  dplyr::filter(n() == 2) %>%  # need both High and Low
   dplyr::summarise(
-    fit_high = list(fit[income_group == "High"][[1]]),
-    fit_low  = list(fit[income_group == "Low"][[1]]),
-    n_high   = n[income_group == "High"],
-    n_low    = n[income_group == "Low"],
+    groups_present = list(unique(income_group)),
+    fits = list(fit),
+    group_names = list(income_group),
+    group_ns = list(n),
     .groups = "drop"
   ) %>%
   dplyr::mutate(
-    diff_draws = purrr::map2(fit_high, fit_low, ~ edge_group_diff(.x, .y, node_names = nodes))
-  )
+    # Create all pairwise comparisons
+    comparisons = purrr::pmap(list(groups_present, fits, group_names, group_ns), function(grps, fts, nms, n_vec) {
+      
+      # Define contrasts
+      contrasts <- list(
+        c("High", "Low"),
+        c("High", "Middle"),
+        c("Middle", "Low")
+      )
+      
+      # Compute differences
+      purrr::map_dfr(contrasts, function(pair) {
+        idx_a <- which(nms == pair[1])
+        idx_b <- which(nms == pair[2])
+        
+        if (length(idx_a) == 0 | length(idx_b) == 0) return(NULL)
+        
+        tibble::tibble(
+          contrast = paste0(pair[1], " - ", pair[2]),
+          fit_a = list(fts[[idx_a]]),
+          fit_b = list(fts[[idx_b]]),
+          n_a = n_vec[idx_a],
+          n_b = n_vec[idx_b],
+          diff_draws = list(edge_group_diff(fts[[idx_a]], fts[[idx_b]], node_names = nodes))
+        )
+      })
+    })
+  ) %>%
+  tidyr::unnest(comparisons) %>%
+  dplyr::select(country, timepoint, contrast, n_a, n_b, diff_draws)
 
-# HLE moderation: For each country × wave, compute High - Low
+# HLE moderation: High - Low only
 hle_mod_effects <- fit_tbl_hle %>%
   dplyr::filter(!purrr::map_lgl(fit, is.null)) %>%
   dplyr::arrange(country, timepoint, hle_group) %>%
   dplyr::group_by(country, timepoint) %>%
   dplyr::filter(n() == 2) %>%
   dplyr::summarise(
-    fit_high = list(fit[hle_group == "High"][[1]]),
-    fit_low  = list(fit[hle_group == "Low"][[1]]),
-    n_high   = n[hle_group == "High"],
-    n_low    = n[hle_group == "Low"],
+    contrast = "High - Low",
+    fit_a = list(fit[hle_group == "High"][[1]]),
+    fit_b = list(fit[hle_group == "Low"][[1]]),
+    n_a = n[hle_group == "High"],
+    n_b = n[hle_group == "Low"],
     .groups = "drop"
   ) %>%
   dplyr::mutate(
-    diff_draws = purrr::map2(fit_high, fit_low, ~ edge_group_diff(.x, .y, node_names = nodes))
+    diff_draws = purrr::map2(fit_a, fit_b, ~ edge_group_diff(.x, .y, node_names = nodes))
   )
+
+cat("=== INCOME MODERATION CONTRASTS ===\n")
+print(income_mod_effects %>% select(country, timepoint, contrast, n_a, n_b))
+
+cat("\n=== HLE MODERATION CONTRASTS ===\n")
+print(hle_mod_effects %>% select(country, timepoint, contrast, n_a, n_b))
 ```
 
 ```{r}
-#| label: rq4-moderation-tables
+#| label: rq4-moderation-tables-3cat
 #| include: false
 
 rope_mod <- 0.10
 
 # Summarize income moderation effects
 rq4_income_mods <- income_mod_effects %>%
-  dplyr::select(country, timepoint, n_high, n_low, diff_draws) %>%
-  tidyr::unnest_longer(diff_draws, values_to = "draws", indices_to = "edge") %>%
+  dplyr::select(country, timepoint, contrast, n_a, n_b, diff_draws) %>%
+  tidyr::unnest_longer(diff_draws, values_to = "draws", indices_to = "edge_raw") %>%
   dplyr::filter(!purrr::map_lgl(draws, is.null)) %>%
-  dplyr::mutate(stats = purrr::map(draws, ~ summ_draws_delta(.x, rope = rope_mod))) %>%
+  dplyr::mutate(
+    edge = vapply(
+      strsplit(edge_raw, " — ", fixed = TRUE),
+      function(z) paste(sort(z), collapse = " - "),
+      character(1)
+    ),
+    stats = purrr::map(draws, ~ summ_draws_delta(.x, rope = rope_mod))
+  ) %>%
   tidyr::unnest(stats) %>%
   dplyr::transmute(
     moderator = "Income",
-    country, timepoint, n_high, n_low,
+    country, timepoint, contrast, n_a, n_b,
     edge,
     estimate = fmt_ci_delta(q50, q025, q975, digits = 2),
     rope_p   = fmt_p(p_outside_rope, digits = 2)
@@ -3138,14 +3505,21 @@ rq4_income_mods <- income_mod_effects %>%
 
 # Summarize HLE moderation effects
 rq4_hle_mods <- hle_mod_effects %>%
-  dplyr::select(country, timepoint, n_high, n_low, diff_draws) %>%
-  tidyr::unnest_longer(diff_draws, values_to = "draws", indices_to = "edge") %>%
+  dplyr::select(country, timepoint, contrast, n_a, n_b, diff_draws) %>%
+  tidyr::unnest_longer(diff_draws, values_to = "draws", indices_to = "edge_raw") %>%
   dplyr::filter(!purrr::map_lgl(draws, is.null)) %>%
-  dplyr::mutate(stats = purrr::map(draws, ~ summ_draws_delta(.x, rope = rope_mod))) %>%
+  dplyr::mutate(
+    edge = vapply(
+      strsplit(edge_raw, " — ", fixed = TRUE),
+      function(z) paste(sort(z), collapse = " - "),
+      character(1)
+    ),
+    stats = purrr::map(draws, ~ summ_draws_delta(.x, rope = rope_mod))
+  ) %>%
   tidyr::unnest(stats) %>%
   dplyr::transmute(
     moderator = "HLE",
-    country, timepoint, n_high, n_low,
+    country, timepoint, contrast, n_a, n_b,
     edge,
     estimate = fmt_ci_delta(q50, q025, q975, digits = 2),
     rope_p   = fmt_p(p_outside_rope, digits = 2)
@@ -3157,88 +3531,90 @@ rq4_table <- dplyr::bind_rows(rq4_income_mods, rq4_hle_mods) %>%
     moderator = factor(moderator, levels = c("Income", "HLE")),
     country   = factor(country, levels = c("AU", "SA"))
   ) %>%
-  dplyr::arrange(moderator, country, timepoint, edge)
+  dplyr::arrange(moderator, country, timepoint, contrast, edge)
 
-rq4_table
-
-```
-### RQ4 (Exploratory): Socioeconomic Moderation of Network Structure
-Within each cohort, does EF network structure differ between children from high versus low baseline (T1) household income and home learning environments? Specifically, are edges systematically stronger or weaker in high-SES groups across waves?
-
-Exploratory moderation analyses revealed little consistent evidence that baseline income or HLE systematically altered EF network structure within cohorts. However, in Australia at T2, the cognitive flexibility–working memory edge was substantially weaker among children from high-income families (High−Low: −0.46 [−0.80, −0.11], P(|Δ|>0.1)=0.98), suggesting that socioeconomic advantage may be associated with more differentiated EF development. Conversely, HLE showed tentative positive moderation patterns (stronger coupling in enriched home environments), though credible intervals crossed zero.
-
-```{r}
-#| label: tbl-rq4-moderation
-#| tbl-cap: "Within-cohort moderation of EF edges by baseline (T1) income and HLE. Cells show posterior median [95% CrI] for the difference in edge strength between high vs low moderator groups (High − Low). ROPE probability indicates P(|difference| > 0.10)."
-#| include: true
-
-gt_rq4 <- rq4_table %>%
-  gt::gt(
-    rowname_col   = "edge",
-    groupname_col = "moderator"
-  ) %>%
-  gt::tab_header(title = gt::md("\\vspace{10pt}")) %>%
-  gt::tab_stubhead(label = "Edge") %>%
-  gt::cols_label(
-    country   = "Cohort",
-    timepoint = "Wave",
-    n_high    = "n (High)",
-    n_low     = "n (Low)",
-    estimate  = "Median [95% CrI]",
-    rope_p    = paste0("P(|Δ|>", rope_mod, ")")
-  ) %>%
-  gt::cols_align(
-    align = "center",
-    columns = c(country, timepoint, n_high, n_low, estimate, rope_p)
-  ) %>%
-  gt::tab_options(
-    table.font.size         = gt::px(11),
-    row_group.font.weight   = "bold",
-    heading.title.font.size = gt::px(1)
-  )
-
-gt_rq4
+cat("=== RQ4 MODERATION TABLE (3-CATEGORY INCOME) ===\n")
+print(rq4_table %>% select(moderator, country, timepoint, contrast, edge, estimate, rope_p))
+print(rq4_table, n = Inf)
 ```
 
 ```{r}
 #| label: rq4-inline-helpers
 #| include: false
 
-rq4_mod_row <- function(moderator, country, wave, edge_label) {
-  # Normalize moderator input (accept "income", "Income", "hle", "HLE")
+rq4_mod_row <- function(moderator, country, wave, contrast, edge) {
   mod_val <- dplyr::case_when(
     tolower(moderator) == "income" ~ "Income",
-    tolower(moderator) == "hle" ~ "HLE",
-    TRUE ~ stop("Unknown moderator: ", moderator, ". Use 'income' or 'hle'")
+    tolower(moderator) == "hle"    ~ "HLE",
+    TRUE ~ NA_character_
   )
-  
+  if (is.na(mod_val)) stop("Unknown moderator: ", moderator)
+
   ctry <- normalise_country(country)
-  key  <- canonical_edge_key(edge_label)
-  
+
   out <- rq4_table %>%
     dplyr::filter(
-      moderator == mod_val,
-      country == ctry,
-      timepoint == wave,
-      edge == key
+      moderator == .env$mod_val,
+      country == .env$ctry,
+      timepoint == .env$wave,
+      contrast == .env$contrast, # Forces comparison to the function argument
+      edge == .env$edge          # Forces comparison to the function argument
     )
-  
+
   if (nrow(out) != 1) {
-    stop("Could not uniquely match: ", moderator, ", ", country, ", ", wave, ", ", edge_label,
-         "\nRows matched: ", nrow(out))
+    stop(
+      "Could not uniquely match: ", moderator, ", ", country, ", ", wave, ", ",
+      contrast, ", ", edge, "\nRows matched: ", nrow(out)
+    )
   }
   out
 }
 
-rq4_mod_report <- function(moderator, country, wave, edge_label) {
-  rq4_mod_row(moderator, country, wave, edge_label)$estimate
+rq4_mod_report <- function(moderator, country, wave, contrast, edge) {
+  rq4_mod_row(moderator, country, wave, contrast, edge)$estimate
 }
 
-rq4_mod_meaningful <- function(moderator, country, wave, edge_label) {
-  r <- rq4_mod_row(moderator, country, wave, edge_label)
-  paste0("P(|Δ|>0.1)=", r$rope_p)
+rq4_mod_meaningful <- function(moderator, country, wave, contrast, edge) {
+  rq4_mod_row(moderator, country, wave, contrast, edge)$rope_p
 }
 ```
+### Research Question 4 (Exploratory): Socioeconomic Moderation of Network Structure
+
+Within each cohort, does EF network structure differ between children from high versus low baseline (T1) household income and home learning environments? Specifically, are edges systematically stronger or weaker in high-SES groups across waves?
+
+Within-cohort moderation analyses compared EF edge strengths across SES strata within each cohort×wave. In AU at T2, the cognitive flexibility–working memory edge differed between High and Middle income groups (Δ = `r rq4_mod_report("income","AU","T2","High - Middle","ef_cogflex - ef_workingmem")`; P(|Δ|>0.10) = `r rq4_mod_meaningful("income","AU","T2","High - Middle","ef_cogflex - ef_workingmem")`). In SA at T2, the inhibition–working memory edge differed between High and Low income groups (Δ = `r rq4_mod_report("income","SA","T2","High - Low","ef_inhibition - ef_workingmem")`; P(|Δ|>0.10) = `r rq4_mod_meaningful("income","SA","T2","High - Low","ef_inhibition - ef_workingmem")`).
+
+```{r}
+#| label: tbl-rq4-moderation
+#| tbl-cap: "Within-cohort moderation of EF edges by income and HLE. For income, cells show posterior median [95% CrI] for pairwise group differences. For HLE, cells show High - Low differences. ROPE probability indicates P(|difference| > 0.10)."
+#| include: true
+
+rq4_table %>%
+  gt(
+    rowname_col   = "edge",
+    groupname_col = "moderator"
+  ) %>%
+  gt_theme_ef() %>%
+  tab_stubhead(label = "Edge") %>%
+  cols_label(
+    country   = "Cohort",
+    timepoint = "Wave",
+    contrast  = "Contrast",
+    n_a       = "n (A)",
+    n_b       = "n (B)",
+    estimate  = "Median [95% CrI]",
+    rope_p    = paste0("P(|Δ|>", rope_mod, ")")
+  ) %>%
+  tab_footnote(
+    footnote = "For income contrasts: A and B refer to the two groups being compared (e.g., High-Low: A=High, B=Low). Due to attrition, AU T2 Low (n=19) and T3 Low (n=8) groups fell below the n=20 threshold; only High-Middle and High-Low contrasts are available for these waves.",
+    locations = cells_column_labels(columns = n_a)
+  )
+```
+
+\clearpage
+
+# Discussion
+
 \clearpage
 
 # References
@@ -3399,10 +3775,9 @@ to_wide <- function(long_df, group_levels) {
 # Demographics {.appendix #render-table1}
 ::: {.landscape}
 ```{r}
-#| label: render-table1
+#| label: tbl-render-table1
 #| tbl-cap: "Age and executive function by country and timepoint. All summaries are anchored to children with any EF observed at that timepoint (partial EF allowed)."
 #| include: true
-#| ft.arraystretch: 1
 
 group_levels <- make_group_levels(
   tp_age %>% distinct(country, timepoint),
@@ -3459,20 +3834,16 @@ metrics1_long <- bind_rows(ef_long, age_long, sex_long) %>%
 
 paper_table1 <- to_wide(metrics1_long, group_levels)
 
-gt1 <- paper_table1 %>%
+paper_table1 %>%
   gt(groupname_col = "section", rowname_col = "row") %>%
-  cols_align(align = "center") %>%
+  gt_theme_ef() %>%
   tab_options(
-    table.width = pct(100),
-    row_group.as_column = TRUE,
-    table.font.size = px(11)
+    row_group.as_column = TRUE
   ) %>%
   tab_style(
     style = cell_text(weight = "bold"),
     locations = cells_row_groups()
   )
-
-gt1
 ```
 :::
 
@@ -3509,7 +3880,7 @@ tp_hle_aus <- summ_cont_tp(
 
 ::: {.landscape}
 ```{r}
-#| label: render-table2
+#| label: tbl-render-table2
 #| tbl-cap: "Socioeconomic status and home learning environment by country and timepoint."
 #| include: true
 
@@ -3524,7 +3895,7 @@ group_levels <- bind_rows(
     timepoint = factor(timepoint, levels = paste0("T", 1:10)),
     group = paste(country, timepoint, sep = " — ")
   ) %>%
-  arrange(match(country, c("Australia","SA")), timepoint) %>%  # <-- Australia first
+  arrange(match(country, c("Australia","SA")), timepoint) %>%
   pull(group)
 
 # SA income (continuous)
@@ -3606,23 +3977,19 @@ paper_table2 <- bind_rows(ses2_wide, income2_wide, hle_aus_wide, hle_sa_wide) %>
   ))) %>%
   arrange(section, row)
 
-gt2 <- paper_table2 %>%
+paper_table2 %>%
   gt(groupname_col = "section", rowname_col = "row") %>%
+  gt_theme_ef() %>%
   tab_source_note(
     source_note = md("**Note.** Summaries are restricted to children with any EF data at each wave (partial EF allowed). In Australia, caregiver education, household income, and the HLE Index are measured once per child and carried across waves; *n* and summary statistics may still differ across T1–T3 because the EF-available sample varies by wave (attrition/partial EF). In South Africa, caregiver education, income, and HLE measures are recorded by wave and summarised only where collected (later-wave cells are NA if not assessed).")
   ) %>%
-  cols_align(align = "center") %>%
   tab_options(
-    table.width = pct(100),
-    row_group.as_column = TRUE,
-    table.font.size = px(11)
+    row_group.as_column = TRUE
   ) %>%
   tab_style(
     style = cell_text(weight = "bold"),
     locations = cells_row_groups()
   )
-
-gt2
 ```
 :::
 
@@ -3672,7 +4039,7 @@ ef_std <- ef_all %>%
 ```
 
 ```{r}
-#| label: test-re-test
+#| label: fig-test-re-test
 #| include: false
 
 # keep only children who have >1 wave for a given task (within country)
@@ -3744,7 +4111,7 @@ trt
 
 # Age associations {.appendix #render-test-re-test-plot}
 ```{r}
-#| label: test-re-test-plot
+#| label: fig-test-re-test-plot
 #| fig-cap: "Executive Function associations across waves. Note: Standardised scores (z); colour indicates mean age across available waves"
 #| include: true
 #| fig-align: center
@@ -3821,12 +4188,11 @@ p_retest_simple <- ggplot(retest_long_pairs, aes(x = x, y = y)) +
   theme(legend.position = "bottom")
 
 p_retest_simple
-
 ```
 
 # Executive Function across waves {.appendix #age-ef-wave}
 ```{r}
-#| label: age-ef-wave
+#| label: fig-age-ef-wave
 #| fig-cap: "Executive Function by age across waves (z-scored within EF task). Note: Points jittered + transparent; lines are linear fits with 95% CI"
 #| include: true
 #| fig-align: center
@@ -3951,7 +4317,7 @@ ef_restricted <- ef_std %>%
 
 # Executive Function scores over time {.appendix #mean-trend}
 ```{r}
-#| label: mean-trend
+#| label: fig-mean-trend
 #| include: true
 #| fig-align: center
 #| fig-width: 8
@@ -4000,7 +4366,7 @@ p_mean_trend
 
 # Executive Function individual trajectories {.appendix #spaghetti-plot}
 ```{r}
-#| label: spaghetti-plot
+#| label: fig-spaghetti-plot
 #| include: true
 #| fig-align: center
 #| fig-width: 8
@@ -4096,30 +4462,417 @@ p2 <- ggplot(ef_long_plot, aes(x = wave, y = value, fill = country)) +
 p2
 ```
 
+# RQ4 Sample sizes for moderation analysis {.appendix #tbl-rq4-sample-sizes}
+```{r}
+#| label: tbl-rq4-sample-sizes
+#| tbl-cap: "Sample sizes for socioeconomic moderation analyses by cohort×wave×group"
+#| include: true
+
+# Sample sizes for income stratification
+income_n_summary <- fit_tbl_income %>%
+  dplyr::mutate(ok = !purrr::map_lgl(fit, is.null)) %>%
+  dplyr::select(country, timepoint, income_group, n, ok) %>%
+  dplyr::arrange(country, timepoint, income_group)
+
+# Sample sizes for HLE stratification  
+hle_n_summary <- fit_tbl_hle %>%
+  dplyr::mutate(ok = !purrr::map_lgl(fit, is.null)) %>%
+  dplyr::select(country, timepoint, hle_group, n, ok) %>%
+  dplyr::arrange(country, timepoint, hle_group)
+
+# Combine income and HLE sample summaries
+rq4_n_table <- dplyr::bind_rows(
+  income_n_summary %>% 
+    dplyr::transmute(
+      moderator = "Income",
+      country, timepoint, 
+      group = income_group,
+      n, ok
+    ),
+  hle_n_summary %>%
+    dplyr::transmute(
+      moderator = "HLE",
+      country, timepoint,
+      group = hle_group,
+      n, ok
+    )
+) %>%
+  dplyr::mutate(
+    status = ifelse(ok, "✓", "Insufficient n"),
+    moderator = factor(moderator, levels = c("Income", "HLE"))
+  ) %>%
+  dplyr::select(moderator, country, timepoint, group, n, status)
+
+rq4_n_table %>%
+  gt(groupname_col = "moderator") %>%
+  gt_theme_ef() %>%
+  cols_label(
+    country   = "Cohort",
+    timepoint = "Wave",
+    group     = "Group",
+    n         = "N",
+    status    = "Fit Status"
+  ) %>%
+  tab_footnote(
+    footnote = "Minimum n = 20 required for stable network estimation. Groups with insufficient n were excluded from moderation analyses.",
+    locations = cells_column_labels(columns = status)
+  )
+```
+
 # RQ3 results reported on the Fisher z scale {.appendix #tbl-rq3-gt-edges-dual}
 ```{r}
 #| label: tbl-rq3-gt-edges-dual
 #| tbl-cap: "Between-cohort differences (edges only) at matched waves (AU − SA at T1/T2) and difference-in-differences for change from T1 to T2 (ΔAU − ΔSA). Columns show posterior median [95% CrI] on the raw partial-correlation scale (Δr) and Fisher-z scale (Δz = atanh(r)). ROPE probabilities are computed on Δr: $P(|\\Delta r| > 0.10)$."
 #| include: true
 
-gt_rq3_edges_dual <- rq3_edges_dual %>%
-  gt::gt(rowname_col = "term", groupname_col = "panel") %>%
-  gt::tab_header(title = gt::md("\\vspace{10pt}")) %>%
-  gt::tab_stubhead(label = "Edge") %>%
-  gt::cols_label(
+rq3_edges_dual %>%
+  gt(rowname_col = "term", groupname_col = "panel") %>%
+  gt_theme_ef() %>%
+  tab_stubhead(label = "Edge") %>%
+  cols_label(
     estimate_r = "Median [95% CrI]",
     estimate_z = "Median [95% CrI]",
     rope_p_r   = paste0("P(|Δr|>", rope_rq3, ")")
   ) %>%
-  gt::tab_spanner(label = gt::md("Δr (raw partial correlation)"), columns = c(estimate_r, rope_p_r)) %>%
-  gt::tab_spanner(label = gt::md("Δz (Fisher atanh scale)"), columns = c(estimate_z)) %>%
-  gt::cols_align(align = "center", columns = c(estimate_r, rope_p_r, estimate_z)) %>%
-  gt::sub_missing(columns = c(rope_p_r), missing_text = "") %>%
-  gt::tab_options(
-    table.font.size         = gt::px(11),
-    row_group.font.weight   = "bold",
-    heading.title.font.size = gt::px(1)
-  )
+  tab_spanner(label = md("Δr (raw partial correlation)"), columns = c(estimate_r, rope_p_r)) %>%
+  tab_spanner(label = md("Δz (Fisher atanh scale)"), columns = c(estimate_z))
+```
 
-gt_rq3_edges_dual
+```{r}
+#| label: explore-ses-data
+#| include: false
+
+# ============================================================================
+# EXPLORATION 1: What SES data exists by cohort×wave?
+# ============================================================================
+
+cat("=== SES DATA AVAILABILITY BY COHORT × WAVE ===\n\n")
+
+# Check AUSTRALIA
+cat("--- AUSTRALIA (aus_ses_tp) ---\n")
+aus_ses_availability <- aus_ses_tp %>%
+  group_by(timepoint) %>%
+  summarise(
+    n_total = n(),
+    n_income = sum(!is.na(income_aus)),
+    pct_income = round(100 * n_income / n_total, 1),
+    n_hle = sum(!is.na(hle_aus)),
+    pct_hle = round(100 * n_hle / n_total, 1),
+    .groups = "drop"
+  )
+print(aus_ses_availability)
+
+cat("\n--- SOUTH AFRICA (sa_ses) ---\n")
+sa_ses_availability <- sa_ses %>%
+  group_by(timepoint) %>%
+  summarise(
+    n_total = n(),
+    n_income = sum(!is.na(income_range)),
+    pct_income = round(100 * n_income / n_total, 1),
+    n_hle = sum(!is.na(hla_frequency1)),
+    pct_hle = round(100 * n_hle / n_total, 1),
+    .groups = "drop"
+  )
+print(sa_ses_availability)
+
+# ============================================================================
+# EXPLORATION 2: AU income - confirm 3 categories
+# ============================================================================
+
+cat("\n\n=== AUSTRALIA INCOME STRUCTURE ===\n\n")
+
+au_income_all <- aus_ses_tp %>%
+  filter(!is.na(income_aus))
+
+cat("Class:", class(au_income_all$income_aus), "\n")
+if (is.factor(au_income_all$income_aus)) {
+  cat("Levels:", levels(au_income_all$income_aus), "\n")
+}
+cat("Unique values:", sort(unique(as.character(au_income_all$income_aus))), "\n\n")
+
+cat("--- Frequency table (all waves) ---\n")
+au_income_freq <- au_income_all %>%
+  mutate(income_char = as.character(income_aus)) %>%
+  count(income_char) %>%
+  mutate(pct = round(100 * n / sum(n), 1)) %>%
+  arrange(income_char)
+print(au_income_freq)
+
+cat("\n--- By wave ---\n")
+au_income_by_wave <- aus_ses_tp %>%
+  filter(!is.na(income_aus)) %>%
+  mutate(income_char = as.character(income_aus)) %>%
+  count(timepoint, income_char) %>%
+  group_by(timepoint) %>%
+  mutate(pct = round(100 * n / sum(n), 1)) %>%
+  arrange(timepoint, income_char)
+print(au_income_by_wave)
+
+# Convert to numeric to see underlying values
+cat("\n--- Numeric conversion ---\n")
+au_income_numeric <- aus_ses_tp %>%
+  filter(timepoint == "T1", !is.na(income_aus)) %>%
+  mutate(income_num = as.numeric(income_aus)) %>%
+  count(income_aus, income_num) %>%
+  arrange(income_num)
+print(au_income_numeric)
+
+# ============================================================================
+# EXPLORATION 3: SA income - check if categorical or continuous
+# ============================================================================
+
+cat("\n\n=== SOUTH AFRICA INCOME STRUCTURE ===\n\n")
+
+# T1 income
+sa_income_t1 <- sa_ses %>%
+  filter(timepoint == "T1", !is.na(income_range))
+
+cat("--- T1 Income ---\n")
+cat("N with income:", nrow(sa_income_t1), "\n")
+cat("Range:", range(sa_income_t1$income_range), "\n")
+cat("N unique values:", length(unique(sa_income_t1$income_range)), "\n\n")
+
+# Check if categorical or continuous
+n_unique_sa <- length(unique(sa_income_t1$income_range))
+
+if (n_unique_sa <= 10) {
+  cat("APPEARS CATEGORICAL (≤10 unique values)\n\n")
+  cat("Frequency table:\n")
+  sa_income_table <- sa_income_t1 %>%
+    count(income_range) %>%
+    mutate(pct = round(100 * n / sum(n), 1)) %>%
+    arrange(income_range)
+  print(sa_income_table)
+} else {
+  cat("APPEARS CONTINUOUS (>10 unique values)\n\n")
+  cat("Summary statistics:\n")
+  print(summary(sa_income_t1$income_range))
+  
+  cat("\nDeciles:\n")
+  print(quantile(sa_income_t1$income_range, probs = seq(0, 1, 0.1), na.rm = TRUE))
+}
+
+# Check T2
+cat("\n--- T2 Income ---\n")
+if ("T2" %in% sa_ses$timepoint) {
+  sa_income_t2 <- sa_ses %>%
+    filter(timepoint == "T2", !is.na(income_range))
+  
+  cat("N with income at T2:", nrow(sa_income_t2), "\n")
+  
+  if (nrow(sa_income_t2) > 10) {
+    cat("T2 has income data!\n")
+    cat("Range:", range(sa_income_t2$income_range), "\n")
+    cat("N unique:", length(unique(sa_income_t2$income_range)), "\n")
+  } else if (nrow(sa_income_t2) > 0) {
+    cat("T2 has SOME income data but very sparse\n")
+  } else {
+    cat("T2 has NO income data\n")
+  }
+} else {
+  cat("No T2 wave exists\n")
+}
+
+# ============================================================================
+# EXPLORATION 4: Look at actual income variable in raw data
+# ============================================================================
+
+cat("\n\n=== CHECKING RAW DATA OBJECTS ===\n\n")
+
+if (exists("sa_data")) {
+  cat("--- SA income_range in raw sa_data ---\n")
+  sa_raw_income <- sa_data %>%
+    filter(!is.na(income_range)) %>%
+    pull(income_range)
+  
+  cat("N:", length(sa_raw_income), "\n")
+  cat("N unique:", length(unique(sa_raw_income)), "\n")
+  cat("Range:", range(sa_raw_income), "\n")
+  
+  if (length(unique(sa_raw_income)) <= 10) {
+    cat("\nFrequency:\n")
+    print(table(sa_raw_income))
+  }
+}
+
+if (exists("aus_data")) {
+  cat("\n--- AU A3_FamIncome in raw aus_data ---\n")
+  if ("A3_FamIncome" %in% names(aus_data)) {
+    au_raw_income <- aus_data %>%
+      filter(!is.na(A3_FamIncome)) %>%
+      pull(A3_FamIncome)
+    
+    cat("Class:", class(au_raw_income), "\n")
+    if (is.factor(au_raw_income)) {
+      cat("Levels:", levels(au_raw_income), "\n")
+    }
+    cat("Unique values:", sort(unique(as.character(au_raw_income))), "\n")
+    cat("\nFrequency:\n")
+    print(table(au_raw_income, useNA = "ifany"))
+  }
+}
+```
+
+```{r}
+#| label: explore-hle-data
+#| include: false
+
+# ============================================================================
+# EXPLORATION: HLE Data Structure and Distribution
+# ============================================================================
+
+cat("=== HLE DATA AVAILABILITY BY COHORT × WAVE ===\n\n")
+
+# Check AUSTRALIA HLE
+cat("--- AUSTRALIA HLE ---\n")
+au_hle_availability <- aus_ses_tp %>%
+  group_by(timepoint) %>%
+  summarise(
+    n_total = n(),
+    n_hle = sum(!is.na(hle_aus)),
+    pct_hle = round(100 * n_hle / n_total, 1),
+    .groups = "drop"
+  )
+print(au_hle_availability)
+
+cat("\n--- SOUTH AFRICA HLE ---\n")
+sa_hle_availability <- sa_ses %>%
+  group_by(timepoint) %>%
+  summarise(
+    n_total = n(),
+    n_hle = sum(!is.na(hla_frequency1)),
+    pct_hle = round(100 * n_hle / n_total, 1),
+    .groups = "drop"
+  )
+print(sa_hle_availability)
+
+# ============================================================================
+# AUSTRALIA HLE STRUCTURE
+# ============================================================================
+
+cat("\n\n=== AUSTRALIA HLE (HLE_Index) ===\n\n")
+
+au_hle_t1 <- aus_ses_tp %>%
+  filter(timepoint == "T1", !is.na(hle_aus))
+
+cat("--- T1 Distribution ---\n")
+cat("N:", nrow(au_hle_t1), "\n")
+cat("Range:", paste(range(au_hle_t1$hle_aus), collapse = " to "), "\n")
+cat("N unique values:", length(unique(au_hle_t1$hle_aus)), "\n\n")
+
+cat("Summary statistics:\n")
+print(summary(au_hle_t1$hle_aus))
+
+cat("\nQuintiles:\n")
+print(quantile(au_hle_t1$hle_aus, probs = seq(0, 1, 0.2), na.rm = TRUE))
+
+# Check if HLE varies by wave or is stable
+cat("\n--- HLE Stability Across Waves (Australia) ---\n")
+au_hle_stability <- aus_ses_tp %>%
+  filter(!is.na(hle_aus)) %>%
+  select(timepoint, id, hle_aus) %>%
+  pivot_wider(names_from = timepoint, values_from = hle_aus, names_prefix = "T")
+
+if (all(c("T1", "T2") %in% names(au_hle_stability))) {
+  cat("T1 vs T2 correlation:\n")
+  cor_t1_t2 <- cor(au_hle_stability$T1, au_hle_stability$T2, use = "complete.obs")
+  cat("r =", round(cor_t1_t2, 3), "\n")
+  
+  cat("\nN children with HLE at both T1 and T2:", 
+      sum(!is.na(au_hle_stability$T1) & !is.na(au_hle_stability$T2)), "\n")
+  
+  # Check if values actually change
+  au_hle_change <- au_hle_stability %>%
+    filter(!is.na(T1), !is.na(T2)) %>%
+    mutate(
+      diff = T2 - T1,
+      changed = abs(diff) > 0.01
+    )
+  
+  cat("N with any change T1→T2:", sum(au_hle_change$changed), "\n")
+  cat("% unchanged:", round(100 * sum(!au_hle_change$changed) / nrow(au_hle_change), 1), "%\n")
+}
+
+# ============================================================================
+# SOUTH AFRICA HLE STRUCTURE
+# ============================================================================
+
+cat("\n\n=== SOUTH AFRICA HLE (hla_frequency1) ===\n\n")
+
+sa_hle_t1 <- sa_ses %>%
+  filter(timepoint == "T1", !is.na(hla_frequency1))
+
+cat("--- T1 Distribution ---\n")
+cat("N:", nrow(sa_hle_t1), "\n")
+cat("Range:", paste(range(sa_hle_t1$hla_frequency1), collapse = " to "), "\n")
+cat("N unique values:", length(unique(sa_hle_t1$hla_frequency1)), "\n\n")
+
+# Check if it's a sum score (discrete) or continuous
+n_unique_sa_hle <- length(unique(sa_hle_t1$hla_frequency1))
+
+if (n_unique_sa_hle <= 20) {
+  cat("APPEARS TO BE A SUM SCORE (≤20 unique values)\n\n")
+  cat("Frequency table:\n")
+  sa_hle_freq <- table(sa_hle_t1$hla_frequency1)
+  print(sa_hle_freq)
+  
+  cat("\nPercentage distribution:\n")
+  sa_hle_pct <- prop.table(sa_hle_freq) * 100
+  print(round(sa_hle_pct, 1))
+} else {
+  cat("APPEARS CONTINUOUS (>20 unique values)\n\n")
+}
+
+cat("\nSummary statistics:\n")
+print(summary(sa_hle_t1$hla_frequency1))
+
+cat("\nQuintiles:\n")
+print(quantile(sa_hle_t1$hla_frequency1, probs = seq(0, 1, 0.2), na.rm = TRUE))
+
+# Check stability across waves
+cat("\n--- HLE Stability Across Waves (South Africa) ---\n")
+sa_hle_stability <- sa_ses %>%
+  filter(!is.na(hla_frequency1)) %>%
+  select(timepoint, id, hla_frequency1) %>%
+  pivot_wider(names_from = timepoint, values_from = hla_frequency1, names_prefix = "T")
+
+if (all(c("T1", "T2") %in% names(sa_hle_stability))) {
+  cat("T1 vs T2 correlation:\n")
+  cor_t1_t2_sa <- cor(sa_hle_stability$T1, sa_hle_stability$T2, use = "complete.obs")
+  cat("r =", round(cor_t1_t2_sa, 3), "\n")
+  
+  cat("\nN children with HLE at both T1 and T2:", 
+      sum(!is.na(sa_hle_stability$T1) & !is.na(sa_hle_stability$T2)), "\n")
+  
+  # Check if values actually change
+  sa_hle_change <- sa_hle_stability %>%
+    filter(!is.na(T1), !is.na(T2)) %>%
+    mutate(
+      diff = T2 - T1,
+      changed = abs(diff) > 0.01
+    )
+  
+  cat("N with any change T1→T2:", sum(sa_hle_change$changed), "\n")
+  cat("% unchanged:", round(100 * sum(!sa_hle_change$changed) / nrow(sa_hle_change), 1), "%\n")
+}
+
+# ============================================================================
+# COMPARING DISTRIBUTIONS ACROSS COHORTS
+# ============================================================================
+
+cat("\n\n=== CROSS-COHORT COMPARISON ===\n\n")
+
+cat("Australia HLE_Index:\n")
+cat("  Type: Composite index\n")
+cat("  Range:", paste(range(au_hle_t1$hle_aus), collapse = " - "), "\n")
+cat("  Median:", median(au_hle_t1$hle_aus), "\n")
+cat("  IQR:", IQR(au_hle_t1$hle_aus), "\n\n")
+
+cat("South Africa hla_frequency1:\n")
+cat("  Type: Activity frequency sum (8 items, 0/1/2 each)\n")
+cat("  Range:", paste(range(sa_hle_t1$hla_frequency1), collapse = " - "), "\n")
+cat("  Median:", median(sa_hle_t1$hla_frequency1), "\n")
+cat("  IQR:", IQR(sa_hle_t1$hla_frequency1), "\n\n")
+
+cat("NOTE: Different scales make cross-cohort comparisons non-interpretable\n")
 ```
