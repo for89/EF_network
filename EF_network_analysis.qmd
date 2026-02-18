@@ -1,40 +1,48 @@
 ---
-title: "Mapping the Structure of Executive Function in Early Childhood using Network Analysis" 
+title: "Mapping the Cognitive Architecture of Executive Function in Early Childhood: A Cross-Cultural Longitudinal Study Using Bayesian Network Analysis" 
 shorttitle: "Mapping Executive Function"
 
 author:
-- name: "A" 
+- name: "Fionnuala O'Reilly" 
+  orcid: 0000-0002-4355-9088 
   affiliations: 
     - ref: stanford
     - ref: oxford
-  email: f@psy.ox.ac.uk
+  email: fionnuala.oreilly@psy.ox.ac.uk
   corresponding: true
 
-- name: "B" 
+- name: "Jelena Sucevic" 
+  orcid: 0000-0001-5091-5434 
   affiliations: 
     - ref: oxford
     
-- name: "C"
+- name: "Caylee Cook"
+  orcid: 0000-0001-9718-8887
   affiliations:
     - ref: witwatersrand
     
-- name: "D"
+- name: "Justin E. Karr"
+  orcid: 0000-0003-3653-332X
   affiliations:
     - ref: kentucky
     
-- name: "E"
+- name: "Philippe Rast"
+  orcid: 0000-0003-3630-6629
   affiliations:
     - ref: ucdavis
     
-- name: "F*"
+- name: "Catherine Draper*"
+  orcid: 0000-0002-2885-437X
   affiliations:
     - ref: witwatersrand
 
-- name: "G*" 
+- name: "Steven Howard*" 
+  orcid: 0000-0002-1258-3210 
   affiliations: 
     - ref: oxford
 
-- name: "H*" 
+- name: "Gaia Scerif*" 
+  orcid: 0000-0002-6371-8874 
   affiliations: 
     - ref: oxford
 
@@ -55,7 +63,7 @@ author-note:
     financial-support: "This work was supported by X." 
     conflict-of-interest: "The author has no conflict of interest to declare."
 
-abstract: TO BE ADDED.
+abstract: Executive functions (EFs) are foundational cognitive abilities that develop rapidly during early childhood. Although latent variable approaches have characterized the unity and diversity of EF structure extensively, less is known about the conditional associations among EF components–how these associations change as children develop, and whether they vary across sociocultural contexts. The present study applied Bayesian Gaussian Graphical Models to map age-adjusted EF networks across two longitudinal preschool cohorts from Australia (N = 232; M age = 4.43 years; three waves) and South Africa (N = 217; M age = 4.70 years; two waves). Results suggest moderate and selective coupling among EF components, consistent with partial unity: the inhibition–working memory edge was the most reliable connection across cohorts and waves. Network structure differed between cohorts, with working memory emerging as the most central node in Australia and inhibitory control playing a comparably central role in South Africa — a difference that may reflect the influence of sociocultural and environmental context on EF organization. Despite substantial gains in EF performance across waves, network structure remained stable over time, suggesting a dissociation between the level of executive abilities and the relational architecture organizing them. Exploratory moderation analyses indicated that income-related differences in specific edges emerged at T2 in both cohorts, though these findings require replication in larger samples. Together, these results advance a network perspective on early EF development that complements latent variable approaches, highlighting that the pattern of coupling among EF components — not just children's performance levels — may be sensitive to the environments in which development occurs.
 
 keywords: ["executive function"] 
 word-count: true
@@ -344,7 +352,7 @@ source(here::here("ef_network_plotting_helper.R"))
 #| include: false
 #| cache: false
 
-aus_data <- read_sav("REDACTED")
+aus_data <- read_sav("/Users/foreilly/Library/CloudStorage/OneDrive-Nexus365/Network_analysis_2026/aus_data/DECRA Master Dataset (T1-T3) 2026-01-08.sav")
 colnames(aus_data)
 # view(aus_data)
 ```
@@ -354,13 +362,13 @@ colnames(aus_data)
 #| include: false
 #| cache: false
 
-# sa_data <- read_csv("REDACTED")
+# sa_data <- read_csv("/Users/foreilly/Library/CloudStorage/OneDrive-Nexus365/Network_analysis_2026/sa_data/SAGCRFStudy20202021_DATA_NOHDRS_2023-01-18_1418.csv")
 
 # Caylee's do file as text file
-path <- "REDACTED"
+path <- "/Users/foreilly/Library/CloudStorage/OneDrive-Nexus365/Network_analysis_2026/sa_data/SAGCRFStudy20202021_STATA_2023-01-18_1418.txt"
 system2("open", path)
 
-do_lines <- read_lines("REDACTED")
+do_lines <- read_lines("/Users/foreilly/Library/CloudStorage/OneDrive-Nexus365/Network_analysis_2026/sa_data/SAGCRFStudy20202021_STATA_2023-01-18_1418.do")
 
 idx <- which(str_detect(do_lines, "^\\s*import\\s+delimited\\b"))[1]
 stopifnot(!is.na(idx))
@@ -377,7 +385,7 @@ varlist <- tmp[1]  # everything before "using"
 cols <- str_split(str_squish(varlist), "\\s+")[[1]]
 
 sa_data <- read_csv(
-  "REDACTED",
+  "/Users/foreilly/Library/CloudStorage/OneDrive-Nexus365/Network_analysis_2026/sa_data/SAGCRFStudy20202021_DATA_NOHDRS_2023-01-18_1418.csv",
   col_names = FALSE
 )
 
