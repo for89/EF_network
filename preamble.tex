@@ -1,3 +1,21 @@
 \usepackage{setspace}
-% \AtBeginEnvironment{longtable}{\singlespacing\footnotesize}
 \AtBeginEnvironment{longtable}{\singlespacing\renewcommand*{\arraystretch}{1.15}}
+
+% Better caption handling
+\usepackage{caption}
+\usepackage{float}
+
+% Force more space between captions and tables
+\captionsetup[table]{
+  skip=25pt,
+  position=above,
+  font={small},
+  labelfont={bf}
+}
+
+% Add extra space before tables
+\setlength{\intextsep}{20pt plus 4pt minus 4pt}
+\setlength{\textfloatsep}{20pt plus 4pt minus 4pt}
+
+% Prevent tight spacing
+\raggedbottom

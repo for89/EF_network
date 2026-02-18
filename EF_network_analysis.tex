@@ -211,8 +211,26 @@ to A, Email: \href{mailto:f@psy.ox.ac.uk}{f@psy.ox.ac.uk}}
 
 
 \usepackage{setspace}
-% \AtBeginEnvironment{longtable}{\singlespacing\footnotesize}
 \AtBeginEnvironment{longtable}{\singlespacing\renewcommand*{\arraystretch}{1.15}}
+
+% Better caption handling
+\usepackage{caption}
+\usepackage{float}
+
+% Force more space between captions and tables
+\captionsetup[table]{
+  skip=25pt,
+  position=above,
+  font={small},
+  labelfont={bf}
+}
+
+% Add extra space before tables
+\setlength{\intextsep}{20pt plus 4pt minus 4pt}
+\setlength{\textfloatsep}{20pt plus 4pt minus 4pt}
+
+% Prevent tight spacing
+\raggedbottom
 \usepackage{booktabs}
 \usepackage{caption}
 \usepackage{longtable}
@@ -310,77 +328,75 @@ to A, Email: \href{mailto:f@psy.ox.ac.uk}{f@psy.ox.ac.uk}}
 
 \section{Introduction}\label{introduction}
 
-Executive functions (EFs) comprise a set of higher-order cognitive
-control processes that enable goal-directed, flexible, and adaptive
-behavior (\citeproc{ref-diamond2013executive}{Diamond, 2013}). These
-processes, including inhibitory control, working memory, and cognitive
-flexibility, support the regulation of attention, the maintenance and
-manipulation of information, and the ability to shift between task
-rules. Early childhood represents a period of particularly rapid growth
-in these abilities, coinciding with substantial maturation of the neural
-systems that underpin cognitive control
-(\citeproc{ref-best2010developmental}{Best \& Miller, 2010};
-\citeproc{ref-blair2016executive}{Blair, 2016};
+Executive functions (EFs) are a set of higher-order cognitive control
+processes that enable goal-directed and adaptive behavior
+(\citeproc{ref-diamond2013executive}{Diamond, 2013}). EF is an umbrella
+term for inhibitory control, working memory, and cognitive flexibility
+which support attention regulation, remembering and manipulating
+information, and switching between task rules. Early childhood
+represents a period of particularly rapid growth in these abilities,
+coinciding with substantial maturation of the neural systems that
+underpin cognitive control (\citeproc{ref-best2010developmental}{Best \&
+Miller, 2010}; \citeproc{ref-blair2016executive}{Blair, 2016};
 \citeproc{ref-garon2008executive}{Garon et al., 2008}).
 
 \subsection{Unity and Diversity of Executive
 Function}\label{unity-and-diversity-of-executive-function}
 
-A central question in executive function research concerns how executive
-abilities are organised: do inhibitory control, working memory, and
+A key question in executive function research concerns how these
+abilities are organized: do inhibitory control, working memory, and
 cognitive flexibility reflect distinct cognitive systems, or are they
 manifestations of a common control mechanism? The influential
 unity/diversity framework proposed by Miyake et al.
-(\citeproc{ref-miyake2000unity}{2000}) suggests an integrative account.
-Using confirmatory factor analysis with adults, Miyake et al.
-(\citeproc{ref-miyake2000unity}{2000}) demonstrated that shifting,
-updating, and inhibition are moderately correlated yet separable
-constructs, best characterized by three correlated latent factors rather
-than a single unitary factor or independent processes. This work
-established that executive functions exhibit both unity (shared
-variance) and diversity (component-specific variance).
+(\citeproc{ref-miyake2000unity}{2000}) used confirmatory factor analysis
+with adults to demonstrate that shifting, updating, and inhibition are
+moderately correlated yet separable constructs, best characterized by
+three correlated latent factors rather than a single unitary factor or
+independent processes. This work established that executive functions
+exhibit both unity (shared variance) and diversity (component-specific
+variance).
 
-Subsequent refinements introduced nested or bifactor formulations in
-which a Common EF factor captures shared variance across tasks, while
+Subsequent refinements introduced nested or bifactor solutions in which
+a Common EF factor captures shared variance across tasks, while
 Updating-Specific and Shifting-Specific factors account for residual
 variance unique to those domains
 (\citeproc{ref-friedman2017unity}{Friedman \& Miyake, 2017}). Notably,
 inhibition tasks load almost entirely on the Common EF factor,
 suggesting that inhibitory control closely aligns with processes common
-to executive regulation more broadly. Twin modelling further
-demonstrated that the unity component of executive function is highly
-heritable, reinforcing the notion of a biologically grounded common
+to executive regulation more broadly. Modelling in twin sampoles has
+further demonstrated that the unity component of executive function is
+highly heritable, reinforcing the idea of a biologically grounded common
 control system (\citeproc{ref-friedman2008individual}{Friedman et al.,
 2008}).
 
-A central developmental question concerns when and how this
+A central question in the developmental literature is when and how this
 differentiated structure emerges. Do young children exhibit the same
 unity-diversity organization observed in adults, or does executive
-function become progressively more differentiated across development?
+function become progressively more differentiated with age?
 
 \subsection{Developmental Differentiation of Executive
 Function}\label{developmental-differentiation-of-executive-function}
 
-During the preschool years, empirical research predominantly supports a
-unidimensional representation of EF, with performance across tasks best
-explained by a single underlying construct
+In the main, empirical research supports a unidimensional representation
+of EF during the preschool years, with performance across EF tasks best
+characterized by a single underlying construct
 (\citeproc{ref-nelson2016structure}{Nelson et al., 2016};
 \citeproc{ref-wiebe2008using}{Wiebe et al., 2008};
 \citeproc{ref-willoughby2012measurement}{Willoughby et al., 2012};
-\citeproc{ref-zelazo2016executive}{Zelazo et al., 2016}). This pattern
-is consistent with theoretical perspectives suggesting that executive
+\citeproc{ref-zelazo2016executive}{Zelazo et al., 2016}). This is
+consistent with theoretical perspectives which suggest executive
 processes are relatively undifferentiated in young children and
-progressively become more distinct with maturation
+progressively become more distinct with age
 (\citeproc{ref-lehto2003dimensions}{Lehto et al., 2003};
-\citeproc{ref-miyake2000unity}{Miyake et al., 2000}). Recent
+\citeproc{ref-miyake2000unity}{Miyake et al., 2000}). More recent
 longitudinal and network analyses have provided converging evidence for
 this developmental differentiation, showing that EF transitions from one
 factor in early childhood to increasingly separable components by late
 childhood and adolescence (\citeproc{ref-brydges2012unitary}{Brydges et
 al., 2012}; \citeproc{ref-menu2024latent}{Menu et al., 2024};
 \citeproc{ref-reilly2022developmental}{Reilly et al., 2022}). However,
-several investigations with preschool-aged samples have documented
-bifactor solutions wherein inhibitory control emerges as separable from
+several investigations with preschool-aged children have documented
+bifactor solutions wherein inhibitory control emerges as separate from
 working memory and cognitive flexibility
 (\citeproc{ref-lee2013developmental}{Lee et al., 2013};
 \citeproc{ref-miller2012latent}{Miller et al., 2012};
@@ -388,8 +404,8 @@ working memory and cognitive flexibility
 transition toward differentiation may begin earlier in some populations
 or measurement contexts.
 
-Systematic reviews have confirmed this developmental progression:
-preschool samples frequently support unidimensional or two-factor
+This developmental progression has been confirmed in systematic reviews
+also: preschool samples frequently support unidimensional or two-factor
 solutions, whereas school-age children and adults more consistently
 exhibit three-factor or nested structures
 (\citeproc{ref-karr2018unity}{Karr et al., 2018};
@@ -401,22 +417,22 @@ increasingly specialized with maturation.
 \subsection{Neural Architecture of Executive
 Function}\label{neural-architecture-of-executive-function}
 
-Neuroimaging research in adults has identified distributed brain
-networks that support executive function across diverse task demands.
-Two core control networks are central to executive processing: the
-fronto-parietal network (FPN), comprising dorsolateral prefrontal
-cortex, inferior and superior parietal lobules, and middle frontal
-gyrus; and the cingulo-opercular network (CON), including dorsal
-anterior cingulate cortex and bilateral anterior insula
+The brain networks that support EF across diverse task demands have been
+identified in neuroimaging research with adults. The fronto-parietal
+network (FPN), comprising dorsolateral prefrontal cortex, inferior and
+superior parietal lobules, and middle frontal gyrus; and the
+cingulo-opercular network (CON), including dorsal anterior cingulate
+cortex and bilateral anterior insula are the core control networks
+central to executive processing
 (\citeproc{ref-dosenbach2008dual}{Dosenbach et al., 2008};
 \citeproc{ref-niendam2012meta}{Niendam et al., 2012}). The FPN is
-hypothesized to support trial-by-trial adaptive control, while the CON
-is implicated in task-set maintenance and sustained control across
-trials (\citeproc{ref-dosenbach2008dual}{Dosenbach et al., 2008}).
+hypothesized to support adaptive control, while the CON
+facilitatestask-set maintenance and sustained control across trials
+(\citeproc{ref-dosenbach2008dual}{Dosenbach et al., 2008}).
 
-These networks demonstrate reliable activation across inhibition,
-working memory, and shifting tasks, providing neural evidence for the
-``unity'' component observed in behavioral models
+These networks show reliable activation across inhibition, working
+memory, and shifting tasks, providing neural evidence for the ``unity''
+component observed in behavioral models
 (\citeproc{ref-engelhardt2019neural}{Engelhardt et al., 2019};
 \citeproc{ref-niendam2012meta}{Niendam et al., 2012}). A meta-analysis
 of 193 neuroimaging studies confirmed that a superordinate
@@ -424,7 +440,7 @@ fronto-cingulo-parietal network is consistently engaged across executive
 function domains (\citeproc{ref-niendam2012meta}{Niendam et al., 2012}).
 
 While shared networks support general executive control, meta-analytic
-evidence also reveals component-specific neural signatures paralleling
+evidence also points to component-specific neural signatures mirroring
 the ``diversity'' observed in behavioral factor structures. Inhibition
 tasks show strongly right-lateralized activation, particularly in right
 inferior frontal gyrus and superior parietal cortex
@@ -433,59 +449,57 @@ inferior frontal gyrus and superior parietal cortex
 engage bilateral dorsolateral prefrontal and posterior parietal cortex,
 with load-dependent increases in inferior frontal gyrus
 (\citeproc{ref-rottschy2012modelling}{Rottschy et al., 2012}). Shifting
-tasks show bilateral activation with notable engagement of striatal and
+tasks show bilateral activation with engagement of striatal and
 cerebellar regions
 (\citeproc{ref-rodriguez2022inhibition}{Rodrı́guez-Nieto et al., 2022}).
-Executive tasks thus recruit common control networks while
+Executive tasks therefore recruit common control networks while
 simultaneously engaging component-specific regions
 (\citeproc{ref-collette2006exploration}{Collette et al., 2006};
-\citeproc{ref-mckenna2017informing}{McKenna et al., 2017}), mirroring
-nested-factor behavioral models wherein a Common EF factor coexists with
-component-specific factors.
+\citeproc{ref-mckenna2017informing}{McKenna et al., 2017}),
+complementing nested-factor behavioral models wherein a Common EF factor
+coexists with component-specific factors.
 
 \subsection{Developmental Emergence of Executive
 Networks}\label{developmental-emergence-of-executive-networks}
 
-The neural networks supporting executive function undergo substantial
-reorganization during childhood and adolescence. A pivotal finding from
-developmental neuroimaging is that the core architecture of adult
-executive networks is established by middle childhood, approximately age
-8-10 years (\citeproc{ref-engelhardt2019neural}{Engelhardt et al.,
-2019}). Using task-based fMRI in children aged 8-13 years, Engelhardt et
-al. (\citeproc{ref-engelhardt2019neural}{2019}) demonstrated that brain
-regions consistently engaged across shifting, updating, and inhibition
-tasks closely corresponded to the FPN and CON networks identified in
-adults. Critically, after network establishment, developmental
-improvements in executive function from middle childhood through
-adolescence appear to reflect quantitative strengthening of connectivity
-within established networks rather than qualitative reorganization of
-network architecture (\citeproc{ref-engelhardt2019neural}{Engelhardt et
-al., 2019}).
+During childhood and adolescence, neural networks supporting EF undergo
+significant reorganization. The core architecture of adult executive
+networks is established by middle childhood, approximately age 8-10
+years (\citeproc{ref-engelhardt2019neural}{Engelhardt et al., 2019}).
+fMRI studies in children aged 8-13 years show that the same brain
+regions engaged across cognitive flexibility, working memory and
+inhibition tasks closely correspond to those networks identified in
+adults - the FNP and CON (\citeproc{ref-engelhardt2019neural}{Engelhardt
+et al., 2019}). Crucially, after networks have been established,
+developmental improvements in EF from middle childhood to adolescence
+appear to reflect a strengthening of connectivity within the formulated
+networks as opposed to a reorganization of overall network structures
+(\citeproc{ref-engelhardt2019neural}{Engelhardt et al., 2019}).
 
-However, earlier in development---during the preschool and early
-childhood period---functional brain organization appears less
-differentiated. Longitudinal fNIRS studies reveal that functional
+In earlier development, particulalry during the preschool and early
+childhood years, functional brain organization appears to be less
+differentiated. Longitudinal fNIRS studies show that functional
 connectivity within the frontoparietal network and default mode network
-is associated with executive function abilities as early as age 3, but
-the strength and organization of these connections undergo considerable
-change across early childhood (\citeproc{ref-kelsey2025forming}{Kelsey
-et al., 2025}). At age 3-4, children exhibit weaker frontal-frontal
-interactions and less refined fronto-parietal connectivity compared to
-older children (\citeproc{ref-buss2018changes}{Buss \& Spencer, 2018};
-\citeproc{ref-fiske2019neural}{Fiske \& Holmboe, 2019}). By age 4-5,
-children show strengthened neural connections and more efficient
-fronto-parietal pathways, enabling improved performance on executive
-tasks (\citeproc{ref-buss2018changes}{Buss \& Spencer, 2018};
+is associated with EF abilities as early as age 3. However, the strength
+and structure of these connections undergo considerable change across
+early childhood (\citeproc{ref-kelsey2025forming}{Kelsey et al., 2025}).
+Compared to their older counterparts, at age 3-4, children exhibit
+weaker frontal-frontal interactions and less refined fronto-parietal
+connectivityn (\citeproc{ref-buss2018changes}{Buss \& Spencer, 2018};
+\citeproc{ref-fiske2019neural}{Fiske \& Holmboe, 2019}). Strengthened
+neural connections and more efficient fronto-parietal pathways are
+evident at age 4-5, enabling improved performance on executive tasks
+(\citeproc{ref-buss2018changes}{Buss \& Spencer, 2018};
 \citeproc{ref-ezekiel2013dimensional}{Ezekiel et al., 2013}).
 
-Developmental fMRI research consistently demonstrates progressive
-strengthening of functional connectivity within task-relevant
-fronto-parietal and fronto-striatal networks from childhood through
-adolescence, accompanied by increasing differentiation of activation
-patterns (\citeproc{ref-rubia2013functional}{Rubia, 2013}). Younger
-children (ages 6-8) recruit prefrontal regions more diffusely and fail
-to engage the full fronto-parietal network observed in adults, instead
-showing more localized activation in ventrolateral PFC
+fMRI research with chlidren consistently shows progressive strengthening
+of functional connectivity within task-relevant fronto-parietal and
+fronto-striatal networks from childhood through adolescence, accompanied
+by increasing differentiation of activation patterns
+(\citeproc{ref-rubia2013functional}{Rubia, 2013}). Younger children
+(e.g., ages 6-8) recruit prefrontal regions in a more diffuse manner and
+fail to engage the full fronto-parietal network observed in adults,
+instead showing more localized activation in ventrolateral PFC
 (\citeproc{ref-crone2006neurocognitive}{Crone et al., 2006};
 \citeproc{ref-o2008neurodevelopmental}{O'Hare et al., 2008}). With age,
 there is progressive recruitment of DLPFC, posterior parietal cortex,
@@ -493,10 +507,10 @@ and strengthening of long-range fronto-parietal and fronto-cerebellar
 connectivity (\citeproc{ref-o2008neurodevelopmental}{O'Hare et al.,
 2008}; \citeproc{ref-rubia2013functional}{Rubia, 2013}).
 
-Recent work applying network control theory demonstrates that structural
+Using network control theory, recent work demonstrates that structural
 brain networks mature to allow more efficient transitions to
-fronto-parietal activation states necessary for executive function, with
-reduced energetic cost observed from childhood through early adulthood
+fronto-parietal activation states necessary for EF, with reduced
+energetic cost observed from childhood through early adulthood
 (\citeproc{ref-cui2020optimization}{Cui et al., 2020}). This
 developmental reduction in control energy is driven primarily by
 decreased costs within the fronto-parietal system itself, particularly
@@ -505,19 +519,18 @@ preparation, execution, and monitoring
 (\citeproc{ref-cui2020optimization}{Cui et al., 2020}).
 
 The developmental trajectory of neural network organization closely
-parallels the behavioral differentiation of executive function
-components. Just as behavioral factor analyses reveal increasing
-differentiation from a unidimensional structure in early childhood to
-separable components by late childhood
-(\citeproc{ref-karr2018unity}{Karr et al., 2018}), neuroimaging evidence
-suggests progressive functional specialization of brain regions
-supporting executive control
+parallels the behavioral differentiation of EF components. In the same
+way that behavioral factor analyses reveal incremental differentiation
+from a unidimensional structure in early childhood to separable
+components by late childhood (\citeproc{ref-karr2018unity}{Karr et al.,
+2018}), neuroimaging evidence suggests progressive functional
+specialization of brain regions supporting executive control
 (\citeproc{ref-johnson2011interactive}{Johnson, 2011};
 \citeproc{ref-li2025structural}{Li et al., 2025}). In early childhood,
 executive tasks recruit less specialized and more diffuse patterns of
 activation; with maturation, regions within FPN and CON networks become
-increasingly selective in their functional profiles, supporting the
-emergence of distinct yet coordinated executive processes
+more and more selective in their functional profiles, supporting the
+emergence of distinct yet related executive processes
 (\citeproc{ref-fiske2019neural}{Fiske \& Holmboe, 2019};
 \citeproc{ref-shanmugan2016neural}{Shanmugan \& Satterthwaite, 2016}).
 This developmental specialization occurs through multiple
@@ -538,8 +551,8 @@ unity/diversity framework. By extracting shared variance across multiple
 tasks, confirmatory factor analysis addresses the problem of task
 impurity and isolates executive constructs from task-specific noise
 (\citeproc{ref-karr2018unity}{Karr et al., 2018};
-\citeproc{ref-wiebe2008using}{Wiebe et al., 2008}). This approach has
-proven particularly valuable for developmental research, as it enables
+\citeproc{ref-wiebe2008using}{Wiebe et al., 2008}). This methodology has
+been especially valuable in developmental research, as it enables
 comparison of factor structures across age groups while accounting for
 measurement error and task-specific variance.
 
@@ -549,46 +562,47 @@ from covariance among observed tasks, with shared variance attributed to
 common underlying processes and residual variance treated as
 task-specific or error-related
 (\citeproc{ref-vandierendonck2021utility}{Vandierendonck, 2021}).
-Although this framework has proven powerful, the factor structure
-obtained can vary depending on task selection, performance indicators,
-and analytic specification (\citeproc{ref-miller2012latent}{Miller et
-al., 2012}), highlighting that latent representations are partially
-shaped by methodological choices.
+Although this framework has proven highly informative, the factor
+structure obtained can vary depending on the tasks selected, performance
+indicators, and analytic specification
+(\citeproc{ref-miller2012latent}{Miller et al., 2012}), highlighting
+that latent representations are partially shaped by methodological
+choices.
 
 Importantly, latent models characterize executive organisation in terms
 of shared variance explained by unobserved factors. They do not directly
 model conditional dependencies among executive components themselves.
-From a systems perspective, this distinction matters. If executive
-control reflects coordinated activity within distributed neural
-networks, then understanding how executive components directly relate to
-one another may offer complementary insight beyond shared latent
-variance.
+From a systems perspective, this is an important distinction. If
+executive control reflects coordinated activity within distributed
+neural networks, then understanding how executive components directly
+relate to one another may offer complementary insight beyond shared
+latent variance.
 
-Recent methodological developments have begun to bridge this gap. For
-example, latent network approaches integrate structural equation
-modelling with network analysis to examine how executive constructs
-relate within a relational framework (\citeproc{ref-menu2024latent}{Menu
-et al., 2024}). Such approaches reflect a broader shift toward viewing
-cognitive abilities as interconnected systems rather than solely as
-reflections of underlying factors. A network perspective that models
-conditional associations among executive components offers a
-systems-level complement to latent approaches, enabling direct
-investigation of developmental change in executive architecture.
+Recent methodological developments have begun to address the limiations
+of latent models. For example, latent network approaches use structural
+equation modelling with network analysis to examine how executive
+constructs relate within a relational framework
+(\citeproc{ref-menu2024latent}{Menu et al., 2024}). Such approaches
+reflect a shift toward viewing cognitive abilities as interconnected
+systems rather than solely as reflections of underlying factors. A
+network perspective that models conditional associations among executive
+components offers a systems-level complement to latent approaches,
+enabling direct investigation of developmental change in executive
+architecture.
 
 \subsection{The Present Study}\label{the-present-study}
 
 The present study applies network analysis to examine the organization
-of executive function in early childhood across two longitudinal cohorts
-from Australia and South Africa. Using Bayesian Gaussian Graphical
-Models, we estimate age-adjusted partial correlations among inhibitory
-control, working memory, and cognitive flexibility---capturing the
-direct conditional associations among EF components after accounting for
-shared relationships and age-related variance. This network approach
-enables us to investigate the relational architecture of executive
-abilities, examining which components show direct coupling, how these
-conditional associations change developmentally, and whether network
-structure varies across sociocultural contexts and socioeconomic
-environments.
+of EF during early childhood across two longitudinal cohorts from
+Australia and South Africa. Using Bayesian Gaussian Graphical Models, we
+estimate age-adjusted partial correlations among inhibitory control,
+working memory, and cognitive flexibility, capturing the direct
+conditional associations among EF components after accounting for shared
+relationships and age-related variance. This network approach enables us
+to investigate the relational architecture of executive abilities,
+examining which components show direct coupling, how these conditional
+associations change developmentally, and whether network structure
+varies across sociocultural contexts and socioeconomic environments.
 
 Understanding how executive components are organized during early
 development holds substantial implications. Network analysis can reveal
@@ -604,11 +618,10 @@ domain-specific training may be warranted
 
 \textbf{Research Question 1 (Primary): EF Network Structure Within
 Cohorts}\\
-Within each cohort and wave, what is the age-adjusted EF
-network---defined by partial correlations among working memory,
-inhibition, and cognitive flexibility---and what do global strength and
-expected influence indicate about overall connectivity and node
-centrality?
+Within each cohort and wave, what is the age-adjusted EF network,
+defined by partial correlations among working memory, inhibition, and
+cognitive flexibility, and what do global strength and expected
+influence indicate about overall connectivity and node centrality?
 
 \textbf{Research Question 2 (Primary): Developmental Change Within
 Cohorts}\\
@@ -1000,12 +1013,25 @@ compared (see Table~\ref{tbl-invariance}).
 Comparisons}{\label{tbl-invariance}}}
 \vspace{-20pt}}
 
-\begin{verbatim}
-Error:
-! object 'inv_table' not found
-\end{verbatim}
+\fontsize{8.0pt}{10.0pt}\selectfont
+\begin{tabular*}{1\linewidth}{@{\extracolsep{\fill}}lccccccccc}
+\toprule
+Model\textsuperscript{\textit{1}} & CFI & TLI & RMSEA & SRMR & Δχ² & Δdf & p & ΔCFI\textsuperscript{\textit{2}} & Decision \\ 
+\midrule\addlinespace[2.5pt]
+Configural & 1.000 & 1.000 & 0.000 & 0.000 & — & — & — & — & — \\ 
+{\cellcolor[HTML]{E8F5E9}{Metric}} & {\cellcolor[HTML]{E8F5E9}{1.000}} & {\cellcolor[HTML]{E8F5E9}{1.054}} & {\cellcolor[HTML]{E8F5E9}{0.000}} & {\cellcolor[HTML]{E8F5E9}{0.023}} & {\cellcolor[HTML]{E8F5E9}{2.62}} & {\cellcolor[HTML]{E8F5E9}{6}} & {\cellcolor[HTML]{E8F5E9}{0.854}} & {\cellcolor[HTML]{E8F5E9}{0.000}} & {\cellcolor[HTML]{E8F5E9}{Supported}} \\ 
+{\cellcolor[HTML]{FFEBEE}{Scalar}} & {\cellcolor[HTML]{FFEBEE}{0.846}} & {\cellcolor[HTML]{FFEBEE}{0.846}} & {\cellcolor[HTML]{FFEBEE}{0.094}} & {\cellcolor[HTML]{FFEBEE}{0.037}} & {\cellcolor[HTML]{FFEBEE}{35.29}} & {\cellcolor[HTML]{FFEBEE}{6}} & {\cellcolor[HTML]{FFEBEE}{0.000}} & {\cellcolor[HTML]{FFEBEE}{-0.154}} & {\cellcolor[HTML]{FFEBEE}{Not supported}} \\ 
+\bottomrule
+\end{tabular*}
+\begin{minipage}{\linewidth}
+\vspace{.05em}
+\textsuperscript{\textit{1}} Ordinal CFA with WLSMV estimation; four groups: AU\_T1, AU\_T2, SA\_T1, SA\_T2\\
+\textsuperscript{\textit{2}} ΔCFI < 0.01 indicates invariance is supported (Cheung \& Rensvold, 2002)\\
+\end{minipage}
 
 \end{table}
+
+\clearpage
 
 \subsubsection{Descriptive Statistics and Preliminary
 Analyses}\label{descriptive-statistics-and-preliminary-analyses}
@@ -1062,43 +1088,43 @@ inhibition--working memory edge was consistently positive (T1: 0.27
 and reliably exceeded the meaningfulness threshold (T1:
 P(\textbar r\textbar\textgreater0.1)=1.00; T2:
 P(\textbar r\textbar\textgreater0.1)=1.00; T3:
-P(\textbar r\textbar\textgreater0.1)=0.98). The cognitive
+P(\textbar r\textbar\textgreater0.1)=0.99). The cognitive
 flexibility--working memory edge was also positive across waves (T1:
-0.25 {[}0.13, 0.37{]}; T2: 0.20 {[}0.06, 0.33{]}; T3: 0.13 {[}-0.06,
+0.25 {[}0.13, 0.37{]}; T2: 0.20 {[}0.06, 0.32{]}; T3: 0.13 {[}-0.06,
 0.32{]}) and exceeded the meaningfulness threshold (meaningfulness: T1:
 P(\textbar r\textbar\textgreater0.1)=0.99; T2:
-P(\textbar r\textbar\textgreater0.1)=0.92; T3:
+P(\textbar r\textbar\textgreater0.1)=0.91; T3:
 P(\textbar r\textbar\textgreater0.1)=0.64). In contrast, the cognitive
 flexibility--inhibition edge was weaker and more wave-dependent (T1:
-0.06 {[}-0.07, 0.19{]}; T2: 0.15 {[}0.01, 0.28{]}; T3: 0.19 {[}-0.00,
-0.37{]}), with less consistent evidence that it exceeded the
-meaningfulness threshold (T1: P(\textbar r\textbar\textgreater0.1)=0.27;
-T2: P(\textbar r\textbar\textgreater0.1)=0.75; T3:
-P(\textbar r\textbar\textgreater0.1)=0.81).
+0.06 {[}-0.07, 0.18{]}; T2: 0.15 {[}0.01, 0.28{]}; T3: 0.19 {[}-0.01,
+0.38{]}), with less consistent evidence that it exceeded the
+meaningfulness threshold (T1: P(\textbar r\textbar\textgreater0.1)=0.28;
+T2: P(\textbar r\textbar\textgreater0.1)=0.74; T3:
+P(\textbar r\textbar\textgreater0.1)=0.82).
 
 In South Africa, the inhibition--working memory edge remained positive
-across waves (T1: 0.17 {[}0.03, 0.30{]}; T2: 0.19 {[}0.04, 0.32{]}) and
+across waves (T1: 0.17 {[}0.03, 0.30{]}; T2: 0.19 {[}0.04, 0.33{]}) and
 met the meaningfulness criterion more consistently than the other edges
 (T1: P(\textbar r\textbar\textgreater0.1)=0.83; T2:
 P(\textbar r\textbar\textgreater0.1)=0.89). The cognitive
-flexibility--inhibition edge was stronger at T1 (0.21 {[}0.08, 0.34{]})
-but attenuated at T2 (0.10 {[}-0.05, 0.24{]}) and did not reliably
+flexibility--inhibition edge was stronger at T1 (0.21 {[}0.09, 0.34{]})
+but attenuated at T2 (0.10 {[}-0.04, 0.25{]}) and did not reliably
 exceed the meaningfulness threshold at T2 (T1:
-P(\textbar r\textbar\textgreater0.1)=0.95; T2:
-P(\textbar r\textbar\textgreater0.1)=0.51). In contrast to the
+P(\textbar r\textbar\textgreater0.1)=0.96; T2:
+P(\textbar r\textbar\textgreater0.1)=0.52). In contrast to the
 Australian results, he cognitive flexibility--working memory edge was
 comparatively weaker and uncertain across waves (T1: 0.12 {[}-0.01,
-0.26{]}; T2: 0.12 {[}-0.03, 0.26{]}).
+0.25{]}; T2: 0.12 {[}-0.03, 0.26{]}).
 
 Figure~\ref{fig-rq1-network-graphs} visualizes the network structure.
 The spatial layout is held constant across panels to facilitate
 comparison. Working memory consistently occupied a well-connected
 position, with edges to both inhibition and cognitive flexibility
-appearing in all Australia networks and both South Africa networks. The
-weaker cognitive flexibility--inhibition coupling in Australia at T1 is
-evident in the absence of this edge
-(P(\textbar r\textbar\textgreater0.10) = 0.50), while it appears at T2
-and T3 when the relationship strengthens.
+appearing in all Australian networks and both South African networks.
+The cognitive flexibility--inhibition edge was absent in Australia at T1
+and T2, only emerging at T3 when the relationship strengthened
+sufficiently, consistent with the pattern of increasing coupling seen in
+the edge estimates.
 
 \clearpage
 
@@ -1117,28 +1143,28 @@ Measure & Cohort & Wave & N & \% missing cells & Median [95\% CrI] & P(|r|>0.1) 
 \midrule\addlinespace[2.5pt]
 \multicolumn{7}{>{\raggedright\arraybackslash}m{1\linewidth}}{Edges} \\[2.5pt] 
 \midrule\addlinespace[2.5pt]
-ef\_cogflex - ef\_inhibition & AU & T1 & 232 & 0.1 & 0.06 [-0.07, 0.19] & 0.27 \\ 
+ef\_cogflex - ef\_inhibition & AU & T1 & 232 & 0.1 & 0.06 [-0.07, 0.18] & 0.28 \\ 
 ef\_cogflex - ef\_workingmem & AU & T1 & 232 & 0.1 & 0.25 [0.13, 0.37] & 0.99 \\ 
 ef\_inhibition - ef\_workingmem & AU & T1 & 232 & 0.1 & 0.27 [0.15, 0.39] & 1.00 \\ 
-ef\_cogflex - ef\_inhibition & AU & T2 & 217 & 0.8 & 0.15 [0.01, 0.28] & 0.75 \\ 
-ef\_cogflex - ef\_workingmem & AU & T2 & 217 & 0.8 & 0.20 [0.06, 0.33] & 0.92 \\ 
+ef\_cogflex - ef\_inhibition & AU & T2 & 217 & 0.8 & 0.15 [0.01, 0.28] & 0.74 \\ 
+ef\_cogflex - ef\_workingmem & AU & T2 & 217 & 0.8 & 0.20 [0.06, 0.32] & 0.91 \\ 
 ef\_inhibition - ef\_workingmem & AU & T2 & 217 & 0.8 & 0.32 [0.20, 0.44] & 1.00 \\ 
-ef\_cogflex - ef\_inhibition & AU & T3 & 105 & 0.0 & 0.19 [-0.00, 0.37] & 0.81 \\ 
+ef\_cogflex - ef\_inhibition & AU & T3 & 105 & 0.0 & 0.19 [-0.01, 0.38] & 0.82 \\ 
 ef\_cogflex - ef\_workingmem & AU & T3 & 105 & 0.0 & 0.13 [-0.06, 0.32] & 0.64 \\ 
-ef\_inhibition - ef\_workingmem & AU & T3 & 105 & 0.0 & 0.30 [0.12, 0.47] & 0.98 \\ 
-ef\_cogflex - ef\_inhibition & SA & T1 & 217 & 2.0 & 0.21 [0.08, 0.34] & 0.95 \\ 
-ef\_cogflex - ef\_workingmem & SA & T1 & 217 & 2.0 & 0.12 [-0.01, 0.26] & 0.64 \\ 
+ef\_inhibition - ef\_workingmem & AU & T3 & 105 & 0.0 & 0.30 [0.12, 0.47] & 0.99 \\ 
+ef\_cogflex - ef\_inhibition & SA & T1 & 217 & 2.0 & 0.21 [0.09, 0.34] & 0.96 \\ 
+ef\_cogflex - ef\_workingmem & SA & T1 & 217 & 2.0 & 0.12 [-0.01, 0.25] & 0.64 \\ 
 ef\_inhibition - ef\_workingmem & SA & T1 & 217 & 2.0 & 0.17 [0.03, 0.30] & 0.83 \\ 
-ef\_cogflex - ef\_inhibition & SA & T2 & 189 & 1.2 & 0.10 [-0.05, 0.24] & 0.51 \\ 
+ef\_cogflex - ef\_inhibition & SA & T2 & 189 & 1.2 & 0.10 [-0.04, 0.25] & 0.52 \\ 
 ef\_cogflex - ef\_workingmem & SA & T2 & 189 & 1.2 & 0.12 [-0.03, 0.26] & 0.60 \\ 
-ef\_inhibition - ef\_workingmem & SA & T2 & 189 & 1.2 & 0.19 [0.04, 0.32] & 0.89 \\ 
+ef\_inhibition - ef\_workingmem & SA & T2 & 189 & 1.2 & 0.19 [0.04, 0.33] & 0.89 \\ 
 \midrule\addlinespace[2.5pt]
 \multicolumn{7}{>{\raggedright\arraybackslash}m{1\linewidth}}{Global strength} \\[2.5pt] 
 \midrule\addlinespace[2.5pt]
-Global strength & AU & T1 & 232 & 0.1 & 0.59 [0.42, 0.75] &  \\ 
-Global strength & AU & T2 & 217 & 0.8 & 0.66 [0.51, 0.81] &  \\ 
-Global strength & AU & T3 & 105 & 0.0 & 0.64 [0.39, 0.84] &  \\ 
-Global strength & SA & T1 & 217 & 2.0 & 0.51 [0.31, 0.68] &  \\ 
+Global strength & AU & T1 & 232 & 0.1 & 0.59 [0.43, 0.75] &  \\ 
+Global strength & AU & T2 & 217 & 0.8 & 0.66 [0.49, 0.82] &  \\ 
+Global strength & AU & T3 & 105 & 0.0 & 0.63 [0.40, 0.86] &  \\ 
+Global strength & SA & T1 & 217 & 2.0 & 0.51 [0.32, 0.68] &  \\ 
 Global strength & SA & T2 & 189 & 1.2 & 0.42 [0.21, 0.61] &  \\ 
 \midrule\addlinespace[2.5pt]
 \multicolumn{7}{>{\raggedright\arraybackslash}m{1\linewidth}}{Expected influence} \\[2.5pt] 
@@ -1146,18 +1172,18 @@ Global strength & SA & T2 & 189 & 1.2 & 0.42 [0.21, 0.61] &  \\
 Cognitive flexibility & AU & T1 & 232 & 0.1 & 0.31 [0.15, 0.46] &  \\ 
 Inhibition & AU & T1 & 232 & 0.1 & 0.33 [0.18, 0.48] &  \\ 
 Working memory & AU & T1 & 232 & 0.1 & 0.52 [0.36, 0.68] &  \\ 
-Cognitive flexibility & AU & T2 & 217 & 0.8 & 0.34 [0.19, 0.50] &  \\ 
-Inhibition & AU & T2 & 217 & 0.8 & 0.47 [0.31, 0.62] &  \\ 
-Working memory & AU & T2 & 217 & 0.8 & 0.52 [0.36, 0.68] &  \\ 
-Cognitive flexibility & AU & T3 & 105 & 0.0 & 0.32 [0.09, 0.54] &  \\ 
+Cognitive flexibility & AU & T2 & 217 & 0.8 & 0.34 [0.18, 0.49] &  \\ 
+Inhibition & AU & T2 & 217 & 0.8 & 0.47 [0.30, 0.63] &  \\ 
+Working memory & AU & T2 & 217 & 0.8 & 0.52 [0.35, 0.67] &  \\ 
+Cognitive flexibility & AU & T3 & 105 & 0.0 & 0.32 [0.09, 0.55] &  \\ 
 Inhibition & AU & T3 & 105 & 0.0 & 0.49 [0.25, 0.72] &  \\ 
-Working memory & AU & T3 & 105 & 0.0 & 0.43 [0.20, 0.65] &  \\ 
-Cognitive flexibility & SA & T1 & 217 & 2.0 & 0.34 [0.17, 0.51] &  \\ 
-Inhibition & SA & T1 & 217 & 2.0 & 0.38 [0.20, 0.55] &  \\ 
-Working memory & SA & T1 & 217 & 2.0 & 0.29 [0.12, 0.46] &  \\ 
+Working memory & AU & T3 & 105 & 0.0 & 0.43 [0.21, 0.66] &  \\ 
+Cognitive flexibility & SA & T1 & 217 & 2.0 & 0.34 [0.17, 0.50] &  \\ 
+Inhibition & SA & T1 & 217 & 2.0 & 0.38 [0.21, 0.55] &  \\ 
+Working memory & SA & T1 & 217 & 2.0 & 0.29 [0.12, 0.45] &  \\ 
 Cognitive flexibility & SA & T2 & 189 & 1.2 & 0.22 [0.03, 0.40] &  \\ 
-Inhibition & SA & T2 & 189 & 1.2 & 0.29 [0.10, 0.48] &  \\ 
-Working memory & SA & T2 & 189 & 1.2 & 0.31 [0.10, 0.49] &  \\ 
+Inhibition & SA & T2 & 189 & 1.2 & 0.29 [0.10, 0.47] &  \\ 
+Working memory & SA & T2 & 189 & 1.2 & 0.30 [0.12, 0.49] &  \\ 
 \bottomrule
 \end{tabular*}
 
@@ -1178,6 +1204,8 @@ show 95\% credible intervals. Solid line = 0; dashed lines = ROPE
 
 \end{figure}%
 
+\clearpage
+
 \begin{figure}
 
 \caption{\label{fig-rq1-network-graphs}EF network structure by cohort
@@ -1196,15 +1224,54 @@ clarity.}
 
 \clearpage
 
+These edge-level results point to a consistent pattern across cohorts:
+EF components in early childhood are moderately but selectively coupled,
+rather than uniformly interconnected. The inhibition--working memory
+edge was the most reliable connection across all waves and both cohorts,
+suggesting that these two components share the strongest conditional
+association once cognitive flexibility and age are accounted for. This
+is consistent with theoretical accounts in which inhibitory control and
+working memory are closely related facets of a common executive control
+mechanism (\citeproc{ref-friedman2017unity}{Friedman \& Miyake, 2017};
+\citeproc{ref-miyake2000unity}{Miyake et al., 2000}), and extends that
+finding into early childhood using a network approach.
+
+However, the specific topology of the network differed between cohorts
+in theoretically interesting ways. In Australia, working memory emerged
+as the most centrally connected node, with reliable edges to both
+inhibition and cognitive flexibility. In South Africa, inhibition played
+a comparably central role, with a strong cognitive
+flexibility--inhibition edge at T1 (0.21 {[}0.09, 0.34{]};
+P(\textbar r\textbar\textgreater0.1)=0.96) that attenuated over time
+(T2: 0.10 {[}-0.04, 0.25{]}; P(\textbar r\textbar\textgreater0.1)=0.52),
+while the cognitive flexibility--working memory edge remained weaker and
+more uncertain across waves (T1: 0.12 {[}-0.01, 0.25{]};
+P(\textbar r\textbar\textgreater0.1)=0.64). This divergence in network
+topology --- not simply overall connectivity suggests that the
+relational architecture of executive function may be sensitive to
+sociocultural and environmental context.
+
+A further notable difference concerns the cognitive
+flexibility--inhibition edge, which was absent in the Australian network
+at T1 (P(\textbar r\textbar\textgreater0.1)=0.28) but present in South
+Africa (P(\textbar r\textbar\textgreater0.1)=0.96). Caution is warranted
+in interpreting this difference, given the pronounced floor effect in
+Australian cognitive flexibility scores at T1 (32.5\% scoring zero).
+Floor effects can artificially suppress partial correlations through
+range restriction. Sensitivity analyses excluding floor performers are
+reported in the cross-cohort comparisons section (RQ3) and results were
+substantively unchanged, but this AU T1 edge should nonetheless be
+interpreted with caution.
+
 \subsubsection{Global strength}\label{global-strength-1}
 
 Global strength estimates (sum of absolute partial correlations over
 unique edges) are reported in Table~\ref{tbl-rq1-gt-all} and visualized
 over time in Figure~\ref{fig-rq1-global-strength-trend}. Australia
-showed stable global strength across waves (T1: 0.59 {[}0.42, 0.75{]};
-T2: 0.66 {[}0.51, 0.81{]}; T3: 0.64 {[}0.39, 0.84{]}), whereas South
+showed stable global strength across waves (T1: 0.59 {[}0.43, 0.75{]};
+T2: 0.66 {[}0.49, 0.82{]}; T3: 0.63 {[}0.40, 0.86{]}), whereas South
 Africa showed lower global strength and attenuation from T1 to T2 (T1:
-0.51 {[}0.31, 0.68{]}; T2: 0.42 {[}0.21, 0.61{]}).
+0.51 {[}0.32, 0.68{]}; T2: 0.42 {[}0.21, 0.61{]}).
 
 \begin{figure}
 
@@ -1221,8 +1288,6 @@ over unique edges.}
 
 \end{figure}%
 
-\clearpage
-
 \subsubsection{Centrality (Expected
 influence)}\label{centrality-expected-influence-1}
 
@@ -1231,12 +1296,12 @@ correlations) are summarized in Table~\ref{tbl-rq1-gt-all} and
 visualized over time by node in Figure~\ref{fig-rq1-ei-trend-by-node-n}.
 In Australia, expected influence was consistently positive across nodes
 and waves, with working memory showing the highest expected influence
-across waves (T1: 0.52 {[}0.36, 0.68{]}; T2: 0.52 {[}0.36, 0.68{]}; T3:
-0.43 {[}0.20, 0.65{]}). Inhibition showed comparatively high expected
-influence from T2 onward (T1: 0.33 {[}0.18, 0.48{]}; T2: 0.47 {[}0.31,
-0.62{]}; T3: 0.49 {[}0.25, 0.72{]}), whereas cognitive flexibility was
+across waves (T1: 0.52 {[}0.36, 0.68{]}; T2: 0.52 {[}0.35, 0.67{]}; T3:
+0.43 {[}0.21, 0.66{]}). Inhibition showed comparatively high expected
+influence from T2 onward (T1: 0.33 {[}0.18, 0.48{]}; T2: 0.47 {[}0.30,
+0.63{]}; T3: 0.49 {[}0.25, 0.72{]}), whereas cognitive flexibility was
 lower and more stable across waves (T1: 0.31 {[}0.15, 0.46{]}; T2: 0.34
-{[}0.19, 0.50{]}; T3: 0.32 {[}0.09, 0.54{]}). These patterns are evident
+{[}0.18, 0.49{]}; T3: 0.32 {[}0.09, 0.55{]}). These patterns are evident
 in Figure~\ref{fig-rq1-ei-trend-by-node-n}, which shows sustained
 positive centrality for all three nodes in the Australian cohort, with
 working memory and inhibition contributing most strongly to within-wave
@@ -1244,10 +1309,10 @@ coupling across time.
 
 In South Africa, expected influence was positive but generally lower,
 with attenuation from T1 to T2 for inhibition and cognitive flexibility
-(inhibition: T1: 0.38 {[}0.20, 0.55{]}; T2: 0.29 {[}0.10, 0.48{]};
-cognitive flexibility: T1: 0.34 {[}0.17, 0.51{]}; T2: 0.22 {[}0.03,
+(inhibition: T1: 0.38 {[}0.21, 0.55{]}; T2: 0.29 {[}0.10, 0.47{]};
+cognitive flexibility: T1: 0.34 {[}0.17, 0.50{]}; T2: 0.22 {[}0.03,
 0.40{]}). Working memory showed comparatively stable expected influence
-across waves (T1: 0.29 {[}0.12, 0.46{]}; T2: 0.31 {[}0.10, 0.49{]}).
+across waves (T1: 0.29 {[}0.12, 0.45{]}; T2: 0.30 {[}0.12, 0.49{]}).
 Figure~\ref{fig-rq1-ei-trend-by-node-n} shows a downward shift from T1
 to T2 for inhibition and cognitive flexibility in South Africa, while
 working memory remains comparatively steady. \clearpage
@@ -1308,39 +1373,61 @@ Measure & Cohort & Contrast & Median [95\% CrI] & P(|Δr|>0.1) \\
 \midrule\addlinespace[2.5pt]
 \multicolumn{5}{>{\raggedright\arraybackslash}m{1\linewidth}}{Edges (Δr)} \\[2.5pt] 
 \midrule\addlinespace[2.5pt]
-ef\_cogflex - ef\_inhibition & AU & T2 − T1 & 0.09 [-0.10, 0.27] & 0.48 \\ 
-ef\_cogflex - ef\_workingmem & AU & T2 − T1 & -0.05 [-0.24, 0.13] & 0.35 \\ 
-ef\_inhibition - ef\_workingmem & AU & T2 − T1 & 0.05 [-0.12, 0.22] & 0.32 \\ 
-ef\_cogflex - ef\_inhibition & AU & T3 − T2 & 0.04 [-0.20, 0.27] & 0.43 \\ 
-ef\_cogflex - ef\_workingmem & AU & T3 − T2 & -0.06 [-0.30, 0.17] & 0.47 \\ 
-ef\_inhibition - ef\_workingmem & AU & T3 − T2 & -0.02 [-0.24, 0.19] & 0.35 \\ 
-ef\_cogflex - ef\_inhibition & SA & T2 − T1 & -0.11 [-0.30, 0.08] & 0.56 \\ 
-ef\_cogflex - ef\_workingmem & SA & T2 − T1 & -0.01 [-0.20, 0.19] & 0.32 \\ 
-ef\_inhibition - ef\_workingmem & SA & T2 − T1 & 0.02 [-0.18, 0.22] & 0.32 \\ 
+ef\_cogflex - ef\_inhibition & AU & T2 − T1 & 0.09 [-0.10, 0.27] & 0.47 \\ 
+ef\_cogflex - ef\_workingmem & AU & T2 − T1 & -0.06 [-0.23, 0.13] & 0.36 \\ 
+ef\_inhibition - ef\_workingmem & AU & T2 − T1 & 0.05 [-0.12, 0.22] & 0.33 \\ 
+ef\_cogflex - ef\_inhibition & AU & T3 − T2 & 0.04 [-0.19, 0.28] & 0.42 \\ 
+ef\_cogflex - ef\_workingmem & AU & T3 − T2 & -0.06 [-0.30, 0.17] & 0.45 \\ 
+ef\_inhibition - ef\_workingmem & AU & T3 − T2 & -0.02 [-0.24, 0.19] & 0.36 \\ 
+ef\_cogflex - ef\_inhibition & SA & T2 − T1 & -0.11 [-0.31, 0.08] & 0.56 \\ 
+ef\_cogflex - ef\_workingmem & SA & T2 − T1 & -0.01 [-0.20, 0.19] & 0.33 \\ 
+ef\_inhibition - ef\_workingmem & SA & T2 − T1 & 0.02 [-0.17, 0.22] & 0.33 \\ 
 \midrule\addlinespace[2.5pt]
 \multicolumn{5}{>{\raggedright\arraybackslash}m{1\linewidth}}{Global strength (Δ)} \\[2.5pt] 
 \midrule\addlinespace[2.5pt]
-Global strength & AU & T2 − T1 & 0.07 [-0.15, 0.30] &  \\ 
-Global strength & AU & T3 − T2 & -0.03 [-0.31, 0.22] &  \\ 
-Global strength & SA & T2 − T1 & -0.09 [-0.36, 0.18] &  \\ 
+Global strength & AU & T2 − T1 & 0.07 [-0.16, 0.30] &  \\ 
+Global strength & AU & T3 − T2 & -0.03 [-0.31, 0.25] &  \\ 
+Global strength & SA & T2 − T1 & -0.09 [-0.36, 0.17] &  \\ 
 \midrule\addlinespace[2.5pt]
 \multicolumn{5}{>{\raggedright\arraybackslash}m{1\linewidth}}{Expected influence (Δ)} \\[2.5pt] 
 \midrule\addlinespace[2.5pt]
-Cognitive flexibility & AU & T2 − T1 & 0.03 [-0.18, 0.26] & 0.39 \\ 
-Inhibition & AU & T2 − T1 & 0.14 [-0.09, 0.36] & 0.66 \\ 
-Working memory & AU & T2 − T1 & -0.01 [-0.24, 0.22] & 0.40 \\ 
-Cognitive flexibility & AU & T3 − T2 & -0.02 [-0.29, 0.25] & 0.47 \\ 
-Inhibition & AU & T3 − T2 & 0.02 [-0.25, 0.30] & 0.50 \\ 
-Working memory & AU & T3 − T2 & -0.08 [-0.37, 0.19] & 0.55 \\ 
-Cognitive flexibility & SA & T2 − T1 & -0.12 [-0.36, 0.13] & 0.59 \\ 
-Inhibition & SA & T2 − T1 & -0.09 [-0.35, 0.17] & 0.54 \\ 
-Working memory & SA & T2 − T1 & 0.02 [-0.24, 0.26] & 0.45 \\ 
+Cognitive flexibility & AU & T2 − T1 & 0.03 [-0.18, 0.25] & 0.37 \\ 
+Inhibition & AU & T2 − T1 & 0.13 [-0.08, 0.36] & 0.64 \\ 
+Working memory & AU & T2 − T1 & -0.00 [-0.23, 0.22] & 0.39 \\ 
+Cognitive flexibility & AU & T3 − T2 & -0.02 [-0.29, 0.26] & 0.47 \\ 
+Inhibition & AU & T3 − T2 & 0.02 [-0.26, 0.31] & 0.50 \\ 
+Working memory & AU & T3 − T2 & -0.08 [-0.36, 0.20] & 0.55 \\ 
+Cognitive flexibility & SA & T2 − T1 & -0.12 [-0.37, 0.13] & 0.59 \\ 
+Inhibition & SA & T2 − T1 & -0.09 [-0.34, 0.16] & 0.55 \\ 
+Working memory & SA & T2 − T1 & 0.02 [-0.24, 0.27] & 0.45 \\ 
 \bottomrule
 \end{tabular*}
 
 \end{table}
 
-\clearpage
+The absence of meaningful developmental change in EF network structure
+across adjacent waves, despite clear increases in mean EF performance
+across the same period (see Figure~\ref{fig-test-re-test-plot} and
+Figure~\ref{fig-age-ef-wave} in the Appendix), constitutes a
+substantively important dissociation. Children in both cohorts showed
+reliable improvement in raw EF scores across waves --- consistent with
+the well-documented rapid growth of executive abilities during the
+preschool years (\citeproc{ref-best2010developmental}{Best \& Miller,
+2010}; \citeproc{ref-diamond2013executive}{Diamond, 2013}) --- yet the
+conditional associations among EF components remained largely stable in
+both magnitude and pattern. This suggests that the relational
+architecture of the EF network is preserved even as individual
+components strengthen. This parallels evidence from neuroimaging studies
+suggesting that the broad architecture of executive networks is
+established by middle childhood, with subsequent gains reflecting
+quantitative strengthening rather than qualitative reorganization (e.g.,
+Engelhardt et al. (\citeproc{ref-engelhardt2019neural}{2019})). The
+stable network topology observed here may reflect a similarly
+established relational structure that is maintained across this
+developmental window. The gains children make in EF during early
+childhood appear to reflect strengthening within a stable organizational
+architecture, not a wholesale restructuring of how components relate to
+one another. \clearpage
 
 \subsubsection{Research Question 3 (Secondary): Cross-Cohort
 Comparisons}\label{research-question-3-secondary-cross-cohort-comparisons}
@@ -1354,12 +1441,11 @@ flexibility (32.5\% scoring zero), raising potential concerns for
 cross-cohort network comparisons. Floor effects can induce artificial
 correlations through range restriction and may bias partial correlation
 estimates. To address this, we (1) Report cross-cohort comparisons using
-the full sample (primary analysis), and (2) Conduct sensitivity analyses
-excluding children who scored zero on cognitive flexibility at each
-wave. If results converge across analyses, this would suggest floor
-effects do not meaningfully distort cross-cohort comparisons. Divergence
-would indicate that apparent cohort differences partly reflect
-measurement artefacts.
+the full sample, and (2) Conduct sensitivity analyses excluding children
+who scored zero on cognitive flexibility at each wave. If results
+converge across analyses, this would suggest floor effects do not
+meaningfully distort cross-cohort comparisons. Divergence would indicate
+that apparent cohort differences partly reflect measurement artefacts.
 
 \textbf{Main Analysis (Full Sample)}: At T1, posterior medians suggested
 modest AU--SA differences in several edges; however, all 95\% credible
@@ -1367,7 +1453,7 @@ intervals overlapped zero. At T2, cohort differences were smaller and
 predominantly positive, but again uncertain. In the
 difference-in-differences analysis, most edges were centered near zero.
 The largest deviation was observed for CogFlex--Inhibition (median =
-0.2; 95\% CrI {[}-0.08, 0.47{]}; P(\textbar Δr\textbar\textgreater0.10)
+0.2; 95\% CrI {[}-0.07, 0.46{]}; P(\textbar Δr\textbar\textgreater0.10)
 = 0.78), though its credible interval still included zero, indicating
 substantial uncertainty. Results were substantively unchanged when
 differences were summarized on the Fisher z (atanh) scale
@@ -1385,6 +1471,23 @@ widening due to reduced sample size. Patterns at T2 and in the
 difference-in-differences analysis were nearly identical.Together, these
 results indicate that cross-cohort differences in EF network structure
 are small and uncertain.
+
+Although formal cross-cohort tests were inconclusive --- credible
+intervals for all AU--SA differences included zero --- the pattern of
+observed differences was directionally consistent with a topology in
+which cognitive flexibility is more strongly coupled to inhibition in
+South Africa and more strongly coupled to working memory in Australia.
+The largest difference-in-differences contrast was observed for the
+CogFlex--Inhibition edge (median Δ = 0.2; 95\% CrI {[}-0.07, 0.46{]};
+P(\textbar Δr\textbar\textgreater0.10) = 0.78), consistent with the
+trajectory seen in the within-cohort edge estimates: this edge
+strengthened across waves in Australia but attenuated in South Africa.
+Taken together, these results do not provide strong evidence for cohort
+differences in EF network structure, but they are consistent with a
+tentative interpretation in which the relational role of cognitive
+flexibility within the EF network may develop differently across
+sociocultural contexts. Replication with larger samples and additional
+timepoints would be needed to evaluate this possibility.
 
 \begin{table}
 
@@ -1404,21 +1507,21 @@ Edge & Δr [95\% CrI] & P(|Δr|>0.10) & Δr [95\% CrI] & P(|Δr|>0.10) \\
 \midrule\addlinespace[2.5pt]
 \multicolumn{5}{>{\raggedright\arraybackslash}m{1\linewidth}}{Cohort difference (AU − SA) at T1} \\[2.5pt] 
 \midrule\addlinespace[2.5pt]
-ef\_cogflex - ef\_inhibition & -0.15 [-0.33, 0.03] & 0.72 & -0.02 [-0.22, 0.17] & 0.34 \\ 
-ef\_cogflex - ef\_workingmem & 0.13 [-0.05, 0.30] & 0.61 & 0.13 [-0.07, 0.33] & 0.64 \\ 
-ef\_inhibition - ef\_workingmem & 0.11 [-0.07, 0.28] & 0.55 & 0.08 [-0.12, 0.28] & 0.47 \\ 
+ef\_cogflex - ef\_inhibition & -0.16 [-0.33, 0.02] & 0.72 & -0.02 [-0.23, 0.17] & 0.34 \\ 
+ef\_cogflex - ef\_workingmem & 0.13 [-0.05, 0.31] & 0.63 & 0.13 [-0.08, 0.33] & 0.62 \\ 
+ef\_inhibition - ef\_workingmem & 0.10 [-0.07, 0.28] & 0.53 & 0.09 [-0.12, 0.28] & 0.48 \\ 
 \midrule\addlinespace[2.5pt]
 \multicolumn{5}{>{\raggedright\arraybackslash}m{1\linewidth}}{Cohort difference (AU − SA) at T2} \\[2.5pt] 
 \midrule\addlinespace[2.5pt]
-ef\_cogflex - ef\_inhibition & 0.04 [-0.15, 0.24] & 0.37 & 0.18 [-0.02, 0.38] & 0.78 \\ 
-ef\_cogflex - ef\_workingmem & 0.08 [-0.12, 0.27] & 0.45 & 0.02 [-0.19, 0.23] & 0.36 \\ 
-ef\_inhibition - ef\_workingmem & 0.13 [-0.05, 0.31] & 0.65 & 0.10 [-0.10, 0.30] & 0.52 \\ 
+ef\_cogflex - ef\_inhibition & 0.04 [-0.16, 0.24] & 0.37 & 0.18 [-0.02, 0.38] & 0.79 \\ 
+ef\_cogflex - ef\_workingmem & 0.08 [-0.12, 0.27] & 0.45 & 0.02 [-0.18, 0.22] & 0.35 \\ 
+ef\_inhibition - ef\_workingmem & 0.13 [-0.05, 0.32] & 0.64 & 0.10 [-0.10, 0.29] & 0.53 \\ 
 \midrule\addlinespace[2.5pt]
 \multicolumn{5}{>{\raggedright\arraybackslash}m{1\linewidth}}{Difference-in-differences (ΔAU − ΔSA)} \\[2.5pt] 
 \midrule\addlinespace[2.5pt]
-ef\_cogflex - ef\_inhibition & 0.20 [-0.08, 0.47] & 0.78 & 0.20 [-0.08, 0.49] & 0.78 \\ 
-ef\_cogflex - ef\_workingmem & -0.05 [-0.31, 0.21] & 0.48 & -0.11 [-0.40, 0.18] & 0.60 \\ 
-ef\_inhibition - ef\_workingmem & 0.03 [-0.24, 0.28] & 0.46 & 0.02 [-0.27, 0.29] & 0.50 \\ 
+ef\_cogflex - ef\_inhibition & 0.20 [-0.07, 0.46] & 0.78 & 0.21 [-0.08, 0.50] & 0.79 \\ 
+ef\_cogflex - ef\_workingmem & -0.05 [-0.32, 0.21] & 0.49 & -0.10 [-0.39, 0.18] & 0.59 \\ 
+ef\_inhibition - ef\_workingmem & 0.03 [-0.23, 0.29] & 0.46 & 0.01 [-0.27, 0.30] & 0.49 \\ 
 \bottomrule
 \end{tabular*}
 \begin{minipage}{\linewidth}
@@ -1442,11 +1545,11 @@ in high-SES groups across waves?
 Within-cohort moderation analyses compared EF edge strengths across SES
 strata within each cohort×wave. In AU at T2, the cognitive
 flexibility--working memory edge differed between High and Middle income
-groups (Δ = -0.47 {[}-0.80, -0.11{]};
-P(\textbar Δ\textbar\textgreater0.10) = 0.98). In SA at T2, the
+groups (Δ = -0.46 {[}-0.79, -0.09{]};
+P(\textbar Δ\textbar\textgreater0.10) = 0.97). In SA at T2, the
 inhibition--working memory edge differed between High and Low income
-groups (Δ = 0.40 {[}0.04, 0.75{]}; P(\textbar Δ\textbar\textgreater0.10)
-= 0.95).
+groups (Δ = 0.39 {[}0.01, 0.74{]}; P(\textbar Δ\textbar\textgreater0.10)
+= 0.94).
 
 \begin{table}
 
@@ -1464,57 +1567,57 @@ Edge & Cohort & Wave & Contrast & n (A)\textsuperscript{\textit{1}} & n (B) & Me
 \midrule\addlinespace[2.5pt]
 \multicolumn{8}{>{\raggedright\arraybackslash}m{1\linewidth}}{Income} \\[2.5pt] 
 \midrule\addlinespace[2.5pt]
-ef\_cogflex - ef\_inhibition & AU & T1 & High - Low & 43 & 20 & -0.19 [-0.71, 0.37] & 0.79 \\ 
-ef\_cogflex - ef\_workingmem & AU & T1 & High - Low & 43 & 20 & -0.29 [-0.75, 0.25] & 0.84 \\ 
-ef\_inhibition - ef\_workingmem & AU & T1 & High - Low & 43 & 20 & -0.16 [-0.66, 0.41] & 0.76 \\ 
-ef\_cogflex - ef\_inhibition & AU & T1 & High - Middle & 43 & 126 & -0.14 [-0.51, 0.22] & 0.69 \\ 
-ef\_cogflex - ef\_workingmem & AU & T1 & High - Middle & 43 & 126 & -0.15 [-0.51, 0.19] & 0.68 \\ 
-ef\_inhibition - ef\_workingmem & AU & T1 & High - Middle & 43 & 126 & -0.24 [-0.60, 0.11] & 0.81 \\ 
-ef\_cogflex - ef\_inhibition & AU & T1 & Middle - Low & 126 & 20 & -0.05 [-0.51, 0.44] & 0.70 \\ 
-ef\_cogflex - ef\_workingmem & AU & T1 & Middle - Low & 126 & 20 & -0.14 [-0.50, 0.35] & 0.72 \\ 
+ef\_cogflex - ef\_inhibition & AU & T1 & High - Low & 43 & 20 & -0.20 [-0.71, 0.37] & 0.78 \\ 
+ef\_cogflex - ef\_workingmem & AU & T1 & High - Low & 43 & 20 & -0.27 [-0.73, 0.25] & 0.83 \\ 
+ef\_inhibition - ef\_workingmem & AU & T1 & High - Low & 43 & 20 & -0.16 [-0.65, 0.40] & 0.77 \\ 
+ef\_cogflex - ef\_inhibition & AU & T1 & High - Middle & 43 & 126 & -0.15 [-0.49, 0.22] & 0.70 \\ 
+ef\_cogflex - ef\_workingmem & AU & T1 & High - Middle & 43 & 126 & -0.14 [-0.50, 0.20] & 0.68 \\ 
+ef\_inhibition - ef\_workingmem & AU & T1 & High - Middle & 43 & 126 & -0.23 [-0.58, 0.12] & 0.80 \\ 
+ef\_cogflex - ef\_inhibition & AU & T1 & Middle - Low & 126 & 20 & -0.05 [-0.49, 0.43] & 0.70 \\ 
+ef\_cogflex - ef\_workingmem & AU & T1 & Middle - Low & 126 & 20 & -0.13 [-0.49, 0.34] & 0.72 \\ 
 ef\_inhibition - ef\_workingmem & AU & T1 & Middle - Low & 126 & 20 & 0.08 [-0.35, 0.58] & 0.70 \\ 
-ef\_cogflex - ef\_inhibition & AU & T2 & High - Middle & 43 & 117 & 0.09 [-0.26, 0.44] & 0.64 \\ 
-ef\_cogflex - ef\_workingmem & AU & T2 & High - Middle & 43 & 117 & -0.47 [-0.80, -0.11] & 0.98 \\ 
-ef\_inhibition - ef\_workingmem & AU & T2 & High - Middle & 43 & 117 & -0.08 [-0.42, 0.22] & 0.59 \\ 
-ef\_cogflex - ef\_inhibition & AU & T3 & High - Middle & 26 & 51 & -0.22 [-0.70, 0.24] & 0.79 \\ 
-ef\_cogflex - ef\_workingmem & AU & T3 & High - Middle & 26 & 51 & 0.20 [-0.29, 0.63] & 0.77 \\ 
-ef\_inhibition - ef\_workingmem & AU & T3 & High - Middle & 26 & 51 & -0.19 [-0.69, 0.28] & 0.76 \\ 
-ef\_cogflex - ef\_inhibition & SA & T1 & High - Low & 52 & 78 & 0.25 [-0.11, 0.58] & 0.83 \\ 
-ef\_cogflex - ef\_workingmem & SA & T1 & High - Low & 52 & 78 & 0.00 [-0.37, 0.36] & 0.59 \\ 
-ef\_inhibition - ef\_workingmem & SA & T1 & High - Low & 52 & 78 & -0.29 [-0.66, 0.09] & 0.86 \\ 
-ef\_cogflex - ef\_inhibition & SA & T1 & High - Middle & 52 & 80 & 0.11 [-0.23, 0.42] & 0.63 \\ 
-ef\_cogflex - ef\_workingmem & SA & T1 & High - Middle & 52 & 80 & 0.16 [-0.22, 0.51] & 0.71 \\ 
-ef\_inhibition - ef\_workingmem & SA & T1 & High - Middle & 52 & 80 & -0.20 [-0.57, 0.20] & 0.76 \\ 
-ef\_cogflex - ef\_inhibition & SA & T1 & Middle - Low & 80 & 78 & 0.14 [-0.16, 0.45] & 0.66 \\ 
-ef\_cogflex - ef\_workingmem & SA & T1 & Middle - Low & 80 & 78 & -0.15 [-0.46, 0.17] & 0.69 \\ 
-ef\_inhibition - ef\_workingmem & SA & T1 & Middle - Low & 80 & 78 & -0.09 [-0.40, 0.21] & 0.58 \\ 
-ef\_cogflex - ef\_inhibition & SA & T2 & High - Low & 47 & 59 & 0.03 [-0.36, 0.42] & 0.63 \\ 
-ef\_cogflex - ef\_workingmem & SA & T2 & High - Low & 47 & 59 & -0.30 [-0.68, 0.08] & 0.87 \\ 
-ef\_inhibition - ef\_workingmem & SA & T2 & High - Low & 47 & 59 & 0.40 [0.04, 0.75] & 0.95 \\ 
-ef\_cogflex - ef\_inhibition & SA & T2 & High - Middle & 47 & 63 & 0.16 [-0.24, 0.55] & 0.72 \\ 
-ef\_cogflex - ef\_workingmem & SA & T2 & High - Middle & 47 & 63 & -0.13 [-0.52, 0.25] & 0.69 \\ 
-ef\_inhibition - ef\_workingmem & SA & T2 & High - Middle & 47 & 63 & 0.24 [-0.12, 0.58] & 0.81 \\ 
-ef\_cogflex - ef\_inhibition & SA & T2 & Middle - Low & 63 & 59 & -0.14 [-0.50, 0.24] & 0.68 \\ 
-ef\_cogflex - ef\_workingmem & SA & T2 & Middle - Low & 63 & 59 & -0.17 [-0.52, 0.18] & 0.71 \\ 
-ef\_inhibition - ef\_workingmem & SA & T2 & Middle - Low & 63 & 59 & 0.16 [-0.20, 0.52] & 0.71 \\ 
+ef\_cogflex - ef\_inhibition & AU & T2 & High - Middle & 43 & 117 & 0.10 [-0.25, 0.44] & 0.63 \\ 
+ef\_cogflex - ef\_workingmem & AU & T2 & High - Middle & 43 & 117 & -0.46 [-0.79, -0.09] & 0.97 \\ 
+ef\_inhibition - ef\_workingmem & AU & T2 & High - Middle & 43 & 117 & -0.09 [-0.43, 0.22] & 0.60 \\ 
+ef\_cogflex - ef\_inhibition & AU & T3 & High - Middle & 26 & 51 & -0.22 [-0.69, 0.23] & 0.78 \\ 
+ef\_cogflex - ef\_workingmem & AU & T3 & High - Middle & 26 & 51 & 0.19 [-0.30, 0.66] & 0.76 \\ 
+ef\_inhibition - ef\_workingmem & AU & T3 & High - Middle & 26 & 51 & -0.20 [-0.67, 0.26] & 0.77 \\ 
+ef\_cogflex - ef\_inhibition & SA & T1 & High - Low & 52 & 78 & 0.25 [-0.09, 0.58] & 0.82 \\ 
+ef\_cogflex - ef\_workingmem & SA & T1 & High - Low & 52 & 78 & 0.00 [-0.36, 0.36] & 0.59 \\ 
+ef\_inhibition - ef\_workingmem & SA & T1 & High - Low & 52 & 78 & -0.29 [-0.66, 0.08] & 0.87 \\ 
+ef\_cogflex - ef\_inhibition & SA & T1 & High - Middle & 52 & 80 & 0.11 [-0.22, 0.42] & 0.62 \\ 
+ef\_cogflex - ef\_workingmem & SA & T1 & High - Middle & 52 & 80 & 0.16 [-0.20, 0.51] & 0.71 \\ 
+ef\_inhibition - ef\_workingmem & SA & T1 & High - Middle & 52 & 80 & -0.20 [-0.57, 0.18] & 0.75 \\ 
+ef\_cogflex - ef\_inhibition & SA & T1 & Middle - Low & 80 & 78 & 0.14 [-0.17, 0.47] & 0.68 \\ 
+ef\_cogflex - ef\_workingmem & SA & T1 & Middle - Low & 80 & 78 & -0.16 [-0.47, 0.17] & 0.69 \\ 
+ef\_inhibition - ef\_workingmem & SA & T1 & Middle - Low & 80 & 78 & -0.10 [-0.40, 0.21] & 0.60 \\ 
+ef\_cogflex - ef\_inhibition & SA & T2 & High - Low & 47 & 59 & 0.03 [-0.37, 0.42] & 0.62 \\ 
+ef\_cogflex - ef\_workingmem & SA & T2 & High - Low & 47 & 59 & -0.30 [-0.67, 0.09] & 0.85 \\ 
+ef\_inhibition - ef\_workingmem & SA & T2 & High - Low & 47 & 59 & 0.39 [0.01, 0.74] & 0.94 \\ 
+ef\_cogflex - ef\_inhibition & SA & T2 & High - Middle & 47 & 63 & 0.16 [-0.24, 0.54] & 0.72 \\ 
+ef\_cogflex - ef\_workingmem & SA & T2 & High - Middle & 47 & 63 & -0.12 [-0.53, 0.27] & 0.68 \\ 
+ef\_inhibition - ef\_workingmem & SA & T2 & High - Middle & 47 & 63 & 0.23 [-0.14, 0.58] & 0.79 \\ 
+ef\_cogflex - ef\_inhibition & SA & T2 & Middle - Low & 63 & 59 & -0.13 [-0.51, 0.26] & 0.67 \\ 
+ef\_cogflex - ef\_workingmem & SA & T2 & Middle - Low & 63 & 59 & -0.17 [-0.52, 0.19] & 0.72 \\ 
+ef\_inhibition - ef\_workingmem & SA & T2 & Middle - Low & 63 & 59 & 0.16 [-0.20, 0.51] & 0.70 \\ 
 \midrule\addlinespace[2.5pt]
 \multicolumn{8}{>{\raggedright\arraybackslash}m{1\linewidth}}{HLE} \\[2.5pt] 
 \midrule\addlinespace[2.5pt]
-ef\_cogflex - ef\_inhibition & AU & T1 & High - Low & 86 & 103 & 0.12 [-0.17, 0.41] & 0.63 \\ 
-ef\_cogflex - ef\_workingmem & AU & T1 & High - Low & 86 & 103 & -0.01 [-0.29, 0.26] & 0.46 \\ 
-ef\_inhibition - ef\_workingmem & AU & T1 & High - Low & 86 & 103 & -0.06 [-0.33, 0.22] & 0.51 \\ 
-ef\_cogflex - ef\_inhibition & AU & T2 & High - Low & 91 & 88 & 0.18 [-0.12, 0.46] & 0.73 \\ 
-ef\_cogflex - ef\_workingmem & AU & T2 & High - Low & 91 & 88 & 0.17 [-0.11, 0.45] & 0.70 \\ 
+ef\_cogflex - ef\_inhibition & AU & T1 & High - Low & 86 & 103 & 0.12 [-0.17, 0.40] & 0.62 \\ 
+ef\_cogflex - ef\_workingmem & AU & T1 & High - Low & 86 & 103 & -0.01 [-0.28, 0.26] & 0.46 \\ 
+ef\_inhibition - ef\_workingmem & AU & T1 & High - Low & 86 & 103 & -0.06 [-0.32, 0.21] & 0.51 \\ 
+ef\_cogflex - ef\_inhibition & AU & T2 & High - Low & 91 & 88 & 0.18 [-0.12, 0.47] & 0.74 \\ 
+ef\_cogflex - ef\_workingmem & AU & T2 & High - Low & 91 & 88 & 0.16 [-0.12, 0.45] & 0.71 \\ 
 ef\_inhibition - ef\_workingmem & AU & T2 & High - Low & 91 & 88 & 0.04 [-0.23, 0.32] & 0.48 \\ 
-ef\_cogflex - ef\_inhibition & AU & T3 & High - Low & 42 & 43 & 0.28 [-0.15, 0.68] & 0.83 \\ 
-ef\_cogflex - ef\_workingmem & AU & T3 & High - Low & 42 & 43 & 0.25 [-0.17, 0.67] & 0.81 \\ 
+ef\_cogflex - ef\_inhibition & AU & T3 & High - Low & 42 & 43 & 0.27 [-0.14, 0.68] & 0.84 \\ 
+ef\_cogflex - ef\_workingmem & AU & T3 & High - Low & 42 & 43 & 0.26 [-0.17, 0.67] & 0.81 \\ 
 ef\_inhibition - ef\_workingmem & AU & T3 & High - Low & 42 & 43 & -0.04 [-0.45, 0.37] & 0.64 \\ 
-ef\_cogflex - ef\_inhibition & SA & T1 & High - Low & 103 & 107 & -0.05 [-0.32, 0.21] & 0.49 \\ 
-ef\_cogflex - ef\_workingmem & SA & T1 & High - Low & 103 & 107 & 0.16 [-0.11, 0.44] & 0.71 \\ 
-ef\_inhibition - ef\_workingmem & SA & T1 & High - Low & 103 & 107 & 0.04 [-0.24, 0.31] & 0.49 \\ 
-ef\_cogflex - ef\_inhibition & SA & T2 & High - Low & 85 & 84 & -0.12 [-0.42, 0.18] & 0.63 \\ 
-ef\_cogflex - ef\_workingmem & SA & T2 & High - Low & 85 & 84 & 0.01 [-0.28, 0.31] & 0.52 \\ 
-ef\_inhibition - ef\_workingmem & SA & T2 & High - Low & 85 & 84 & 0.14 [-0.17, 0.44] & 0.67 \\ 
+ef\_cogflex - ef\_inhibition & SA & T1 & High - Low & 103 & 107 & -0.05 [-0.32, 0.21] & 0.50 \\ 
+ef\_cogflex - ef\_workingmem & SA & T1 & High - Low & 103 & 107 & 0.16 [-0.10, 0.43] & 0.70 \\ 
+ef\_inhibition - ef\_workingmem & SA & T1 & High - Low & 103 & 107 & 0.03 [-0.24, 0.31] & 0.50 \\ 
+ef\_cogflex - ef\_inhibition & SA & T2 & High - Low & 85 & 84 & -0.12 [-0.43, 0.18] & 0.64 \\ 
+ef\_cogflex - ef\_workingmem & SA & T2 & High - Low & 85 & 84 & 0.00 [-0.31, 0.31] & 0.52 \\ 
+ef\_inhibition - ef\_workingmem & SA & T2 & High - Low & 85 & 84 & 0.14 [-0.16, 0.44] & 0.67 \\ 
 \bottomrule
 \end{tabular*}
 \begin{minipage}{\linewidth}
@@ -1524,9 +1627,301 @@ ef\_inhibition - ef\_workingmem & SA & T2 & High - Low & 85 & 84 & 0.14 [-0.17, 
 
 \end{table}
 
+Despite limited statistical power given income group sample sizes ---
+particularly at later Australian waves where low-income cells fell below
+the n = 20 estimation threshold --- two SES moderation effects met the
+meaningfulness criterion. In Australia at T2, high-income children
+showed a notably weaker cognitive flexibility--working memory edge than
+middle-income children (Δ = -0.46 {[}-0.79, -0.09{]};
+P(\textbar Δ\textbar\textgreater0.10) = 0.97).
+
+In South Africa at T2, the inhibition--working memory edge was stronger
+in high- relative to low-income children (Δ = 0.39 {[}0.01, 0.74{]};
+P(\textbar Δ\textbar\textgreater0.10) = 0.94). Notably, the direction of
+the Australian moderation effect is counterintuitive: stronger SES was
+associated with weaker, not stronger, coupling between cognitive
+flexibility and working memory. This may reflect the greater
+heterogeneity of stimulation and cognitive demands in high-income
+environments, which could support more differentiated rather than
+unified EF development. In contrast, the South African result, where
+higher income predicted stronger inhibition--working memory coupling, is
+more consistent with resource-dependent co-development of executive
+control. Across cohorts and waves, HLE moderation effects were modest
+and did not reliably exceed the ROPE, suggesting that home learning
+environment exerts limited influence on EF network structure above and
+beyond income, at least within the range and measurement resolution
+available here. These results are exploratory and should be interpreted
+with caution given sample size constraints and multiple testing
+considerations.
+
 \clearpage
 
 \section{Discussion}\label{discussion}
+
+The present study applied Bayesian Gaussian Graphical Models to map the
+conditional architecture of executive function across two longitudinal
+preschool cohorts from Australia and South Africa. Using age-adjusted
+partial correlations among inhibitory control, working memory, and
+cognitive flexibility, we examined how EF components directly relate to
+one another --- moving beyond shared variance to characterize the
+relational structure of the EF system. Three substantive findings emerge
+from these analyses. First, EF components in early childhood show
+moderate and selective coupling, consistent with partial unity: the
+inhibition--working memory edge was the most reliable connection across
+cohorts and waves, while cognitive flexibility showed more
+context-dependent coupling. Second, the topology of the EF network
+diverged across cohorts, with working memory serving as the most central
+node in Australia and inhibition playing a comparably central role in
+South Africa --- a difference that was not captured by global
+connectivity measures alone. Third, network structure remained stable
+across adjacent developmental timepoints despite clear increases in EF
+performance, suggesting a dissociation between the level of executive
+abilities and the relational architecture that organizes them.
+
+\subsection{Partial Unity in Early Childhood EF
+Networks}\label{partial-unity-in-early-childhood-ef-networks}
+
+The finding that EF components in early childhood are moderately but
+selectively coupled --- rather than either strongly integrated or
+largely independent --- is broadly consistent with a substantial body of
+developmental factor analytic work. Confirmatory factor analyses with
+preschool samples consistently support unidimensional or two-factor
+representations of EF, in contrast to the three-factor unity-diversity
+structure characteristic of adults (\citeproc{ref-karr2018unity}{Karr et
+al., 2018}; \citeproc{ref-lee2013developmental}{Lee et al., 2013};
+\citeproc{ref-wiebe2008using}{Wiebe et al., 2008};
+\citeproc{ref-willoughby2012measurement}{Willoughby et al., 2012}). The
+network approach taken here complements these findings by revealing
+which pairwise associations drive this partial integration: across both
+cohorts, inhibitory control and working memory shared the strongest
+conditional association. In the bifactor framework of Friedman and
+Miyake (\citeproc{ref-friedman2017unity}{2017}), inhibition loads
+primarily on a Common EF factor, and the inhibition--working memory
+coupling observed here may reflect this shared common control variance,
+even in early childhood when the three-factor structure has not yet
+fully differentiated.
+
+The network approach offers a complementary perspective to latent
+variable models by making these pairwise conditional dependencies
+explicit and estimable. Whereas factor models treat shared variance as
+attributable to an unobserved common factor, network models treat the
+associations themselves as the target of inference
+(\citeproc{ref-borsboom2021network}{Borsboom et al., 2021};
+\citeproc{ref-cramer2010comorbidity}{Cramer et al., 2010}). In a
+three-node network such as the one examined here, the distinction
+between these frameworks is most apparent in the edge that is weakest:
+the cognitive flexibility--inhibition association. In standard factor
+models, this weak pairwise relationship is subsumed within shared latent
+variance; in the network, it is directly estimable and reveals that
+shifting and inhibition are, in fact, the least tightly coupled pair of
+EF components in this age range --- consistent with the emergence of
+shifting as a separable component in later development
+(\citeproc{ref-lee2013developmental}{Lee et al., 2013};
+\citeproc{ref-menu2024latent}{Menu et al., 2024}).
+
+\subsection{Divergent Network Topologies Across Sociocultural
+Contexts}\label{divergent-network-topologies-across-sociocultural-contexts}
+
+A central and novel finding of the present study is that while overall
+connectivity was broadly similar across cohorts, the topology of the EF
+network differed in potentially theoretically meaningful ways. Working
+memory emerged as the most centrally connected node in the Australian
+cohort, with reliable edges to both inhibition and cognitive flexibility
+across all three waves. In the South African cohort, the network at T1
+was anchored differently: inhibitory control showed comparably high
+centrality, and the cognitive flexibility--inhibition edge --- absent in
+Australia at T1 --- was the strongest edge in the South African T1
+network. The two cohorts were similarly connected overall at T1 ---
+their global strength was comparable --- yet the pattern of which
+components were coupled to which differed markedly between them.
+
+One interpretation of this pattern invokes the role of environmental
+adversity in shaping executive development. The South African sample was
+drawn from low-income communities in Cape Town characterized by informal
+housing, poverty, and exposure to community violence
+(\citeproc{ref-cook2024risk}{Cook et al., 2024}). A growing theoretical
+and empirical literature suggests that environments characterized by
+chronic stress and threat can selectively promote the development of
+reactive, threat-focused cognitive processes --- including inhibitory
+control --- potentially at the expense of other executive capacities
+(\citeproc{ref-blair2016poverty}{Blair \& Raver, 2016};
+\citeproc{ref-howard2020challenging}{Howard et al., 2020};
+\citeproc{ref-sheridan2014dimensions}{Sheridan \& McLaughlin, 2014}).
+Within this framework, the more prominent role of inhibition in the
+South African EF network may reflect an environment in which inhibitory
+control is particularly salient and practised, resulting in stronger
+coupling between inhibitory processes and cognitive flexibility in early
+childhood. This interpretation is speculative and cross-sectional with
+respect to the cohort comparison; nevertheless, it suggests that the
+topology of the EF network may be a more sensitive index of
+environmental influence than global connectivity measures.
+
+Although cognitive flexibility was scored identically across cohorts
+(using switch-only accuracy; range 0--12), a pronounced floor effect in
+the Australian T1 sample (32.5\% scoring zero) may have artificially
+suppressed partial correlations involving cognitive flexibility at that
+wave through range restriction. Sensitivity analyses excluding floor
+performers produced substantively similar results, but nonetheless, this
+limitation warrants acknowledgement when interpreting edges involving
+cognitive flexibility in Australia at T1 specifically.
+
+\subsection{Stability of Network Structure Amid Developmental
+Growth}\label{stability-of-network-structure-amid-developmental-growth}
+
+A striking dissociation emerged between the developmental trajectories
+of EF performance and EF network structure. Mean scores on inhibition,
+working memory, and cognitive flexibility increased reliably across
+waves in both cohorts, replicating the well-documented rapid growth of
+executive abilities during the preschool period
+(\citeproc{ref-best2010developmental}{Best \& Miller, 2010};
+\citeproc{ref-diamond2013executive}{Diamond, 2013}). Yet the conditional
+associations among EF components showed no meaningful change over the
+same period: posterior 95\% credible intervals for all within-cohort
+edge changes included zero, and ROPE probabilities for meaningful change
+were modest (approximately 0.3--0.6 across contrasts). Network topology
+and global connectivity were similarly stable.
+
+This stability suggests that the relational architecture of EF --- how
+components are coupled relative to one another --- is established and
+maintained across the developmental window of early childhood, even as
+absolute performance levels increase substantially. This parallels
+evidence from developmental neuroimaging showing that the broad
+architecture of executive control networks is established by middle
+childhood, with subsequent developmental gains reflecting quantitative
+strengthening of connectivity rather than qualitative reorganisation of
+network structure (\citeproc{ref-engelhardt2019neural}{Engelhardt et
+al., 2019}). In early childhood, the present findings suggest that a
+similar principle may apply at the behavioural level: the pattern of
+conditional dependencies among EF components appears stable, even as
+children improve substantially on each component individually.
+
+This dissociation also has implications for intervention. If the
+relational architecture of EF is stable during this period, broad
+interventions targeting general executive control --- which might be
+expected to shift overall connectivity --- may not alter the specific
+pairwise coupling among components. Domain-targeted approaches may
+therefore be more effective for changing the relational structure of EF,
+though whether such changes are desirable or achievable within the early
+childhood period remains an open question for future research
+(\citeproc{ref-li2025structural}{Li et al., 2025}).
+
+\subsection{Socioeconomic Moderation of EF Network
+Structure}\label{socioeconomic-moderation-of-ef-network-structure}
+
+Exploratory moderation analyses identified two edges that differed
+meaningfully across income groups, though these should be interpreted
+cautiously given small income-group sample sizes at later waves and the
+number of comparisons conducted. In Australia at T2, higher household
+income was associated with a weaker cognitive flexibility--working
+memory edge relative to middle-income families. This counterintuitive
+finding --- where greater socioeconomic resources were associated with
+weaker rather than stronger component coupling --- may reflect greater
+cognitive differentiation in higher-SES children. Higher-SES home
+environments tend to offer more varied and enriched cognitive
+stimulation (\citeproc{ref-melhuish2008effects}{Melhuish et al., 2008}),
+which may support more specialised and differentiated development of EF
+components rather than tightly coupled co-development. Under this
+interpretation, stronger coupling might reflect a more undifferentiated
+EF system, consistent with the developmental differentiation hypothesis
+(\citeproc{ref-karr2018unity}{Karr et al., 2018};
+\citeproc{ref-lee2013developmental}{Lee et al., 2013}), whereas weaker
+coupling --- at least between cognitive flexibility and working memory
+--- may indicate the early emergence of component-specific processing in
+children from more stimulating environments.
+
+In South Africa at T2, higher household income was associated with
+stronger inhibition--working memory coupling. This is more consistent
+with a resource-dependent co-development account: greater economic
+resources may support the sustained practice and scaffolding of both
+inhibitory control and working memory, resulting in stronger functional
+integration of these components. The directional divergence between
+Australian and South African income moderation effects --- where higher
+income predicted weaker CogFlex--WM coupling in Australia but stronger
+Inhibition--WM coupling in South Africa --- may reflect the differing
+baseline conditions of the two samples. In a low-income sample such as
+South Africa, income differences may primarily map onto resource
+availability and basic cognitive scaffolding; in a higher-income sample
+like Australia, income variation may more strongly relate to
+differentiated stimulation quality. These interpretations are
+necessarily speculative and the moderation effects require replication
+in larger samples with more granular SES measures before strong
+conclusions can be drawn.
+
+Home learning environment moderation effects were modest and did not
+reliably exceed the ROPE threshold. This is perhaps surprising given
+established links between HLE quality and EF development {[}Melhuish et
+al. (\citeproc{ref-melhuish2008effects}{2008}); sylva2004effective{]}.
+One possibility is that HLE influences the level of EF abilities rather
+than the relational architecture among components: children from
+enriched home learning environments may perform better on individual EF
+tasks without showing systematically different coupling among
+components. Alternatively, the composite HLE scores used here may not
+capture the specific dimensions of home experience most relevant to EF
+network structure. Future work employing more detailed and observational
+HLE measures may be better positioned to detect HLE-related differences
+in EF network topology.
+
+\subsection{Methodological Contributions and
+Limitations}\label{methodological-contributions-and-limitations}
+
+The present study makes several methodological contributions. The
+application of Bayesian Gaussian Graphical Models to EF data in early
+childhood provides a systems-level complement to the latent variable
+approaches that have dominated the field. By estimating age-adjusted
+partial correlations, this approach captures the direct conditional
+associations among EF components after removing shared age-related
+variance and shared covariance with other components, providing a less
+confounded view of pairwise coupling than zero-order correlations. The
+use of ROPE-based inference offers a principled alternative to binary
+significance testing that is particularly suited to the modest sample
+sizes common in developmental research: rather than asking whether an
+edge differs from exactly zero, the ROPE approach asks whether it is
+large enough to be practically meaningful.
+
+Several limitations should be noted. First, with only three nodes, the
+networks estimated here are necessarily simple --- and because all three
+nodes are connected to one another, graph-theoretic metrics such as
+clustering and path length cannot be meaningfully interpreted. The value
+of the network approach at this scale lies in the interpretability of
+individual edge weights and their comparison across cohorts and
+timepoints, rather than in topological properties that require larger
+networks to be meaningful. Second, the EF battery comprised a single
+task per construct, limiting construct reliability and precluding
+correction for measurement error within the network model. Future
+studies employing multiple tasks per EF domain would allow latent
+network models that account for task impurity. Third, the South African
+cohort lacked a third wave of data, limiting developmental inference in
+that sample to a single T1--T2 transition. Fourth, attrition in the
+Australian sample --- particularly the reduction to n = 105 at T3 ---
+increases uncertainty in T3 estimates and raises the possibility of
+selective retention. Finally, while metric invariance supported the
+comparison of network structures across cohorts, scalar invariance was
+not supported, precluding direct comparison of mean EF levels.
+Cross-cohort differences in network topology should therefore be
+understood as differences in relational structure, not performance.
+
+\section{Conclusion}\label{conclusion}
+
+This study mapped the conditional architecture of executive function in
+early childhood using Bayesian network analysis across two longitudinal
+cohorts from Australia and South Africa. The results reveal that EF in
+early childhood is characterized by partial unity: inhibitory control
+and working memory are consistently the most tightly coupled components,
+while cognitive flexibility shows more variable and context-dependent
+coupling. Working memory emerged as the most central node in the
+Australian EF network, whereas inhibitory control played a more
+prominent role in the South African network --- a topological difference
+that may reflect the influence of sociocultural environment on how
+executive components are relationally organized during early
+development. Crucially, network structure remained stable across
+developmental timepoints despite substantial gains in EF performance,
+suggesting a dissociation between the level of executive abilities and
+the architecture that organizes their interrelations. Together, these
+findings advance a network perspective on EF development that is both
+complementary to and distinct from the latent variable tradition, and
+highlight the potential value of examining not just how well children
+perform on EF tasks, but how the components of executive control are
+functionally coupled as a system.
 
 \clearpage
 
@@ -1548,6 +1943,18 @@ executive function. \emph{Child Development}, \emph{81}(6), 1641--1660.
 \bibitem[\citeproctext]{ref-blair2016executive}
 Blair, C. (2016). Executive function and early childhood education.
 \emph{Current Opinion in Behavioral Sciences}, \emph{10}, 102--107.
+
+\bibitem[\citeproctext]{ref-blair2016poverty}
+Blair, C., \& Raver, C. C. (2016). Poverty, stress, and brain
+development: New directions for prevention and intervention.
+\emph{Academic Pediatrics}, \emph{16}(3), S30--S36.
+
+\bibitem[\citeproctext]{ref-borsboom2021network}
+Borsboom, D., Deserno, M. K., Rhemtulla, M., Epskamp, S., Fried, E. I.,
+McNally, R. J., Robinaugh, D. J., Perugini, M., Dalege, J., Costantini,
+G., et al. (2021). Network analysis of multivariate data in
+psychological science. \emph{Nature Reviews Methods Primers},
+\emph{1}(1), 58.
 
 \bibitem[\citeproctext]{ref-brydges2012unitary}
 Brydges, C. R., Reid, C. L., Fox, A. M., \& Anderson, M. (2012). A
@@ -1581,6 +1988,11 @@ A., \& Draper, C. E. (2019). Associations of physical activity and gross
 motor skills with executive function in preschool children from
 low-income south african settings. \emph{Developmental Science},
 \emph{22}(5), e12820.
+
+\bibitem[\citeproctext]{ref-cramer2010comorbidity}
+Cramer, A. O., Waldorp, L. J., Van Der Maas, H. L., \& Borsboom, D.
+(2010). Comorbidity: A network perspective. \emph{Behavioral and Brain
+Sciences}, \emph{33}(2-3), 137--150.
 
 \bibitem[\citeproctext]{ref-crone2006neurocognitive}
 Crone, E. A., Wendelken, C., Donohue, S., Leijenhorst, L. van, \& Bunge,
@@ -1653,6 +2065,12 @@ Hossain, M. S., Deeba, I. M., Hasan, M., Kariippanon, K. E., Chong, K.
 H., Cross, P. L., Ferdous, S., \& Okely, A. D. (2021). International
 study of 24-h movement behaviors of early years (SUNRISE): A pilot study
 from bangladesh. \emph{Pilot and Feasibility Studies}, \emph{7}(1), 176.
+
+\bibitem[\citeproctext]{ref-howard2020challenging}
+Howard, S. J., Cook, C. J., Everts, L., Melhuish, E., Scerif, G.,
+Norris, S., Twine, R., Kahn, K., \& Draper, C. E. (2020). Challenging
+socioeconomic status: A cross-cultural comparison of early executive
+function. \emph{Developmental Science}, \emph{23}(1), e12854.
 
 \bibitem[\citeproctext]{ref-howard2017early}
 Howard, S. J., \& Melhuish, E. (2017). An early years toolbox for
@@ -1798,6 +2216,11 @@ Shanmugan, S., \& Satterthwaite, T. D. (2016). Neural markers of the
 development of executive function: Relevance for education.
 \emph{Current Opinion in Behavioral Sciences}, \emph{10}, 7--13.
 
+\bibitem[\citeproctext]{ref-sheridan2014dimensions}
+Sheridan, M. A., \& McLaughlin, K. A. (2014). Dimensions of early
+experience and neural development: Deprivation and threat. \emph{Trends
+in Cognitive Sciences}, \emph{18}(11), 580--585.
+
 \bibitem[\citeproctext]{ref-sylva2004effective}
 Sylva, K., Melhuish, E., Sammons, P., Siraj-Blatchford, I., \& Taggart,
 B. (2004). \emph{The effective provision of pre-school education (EPPE)
@@ -1869,11 +2292,11 @@ network correlates of response inhibition: An fMRI meta-analysis.
 
 \end{CSLReferences}
 
+\begin{landscape}
+
 \appendix
 
 \section{Demographics}\label{apx-render-table1}
-
-\begin{landscape}
 
 \begin{table}
 
@@ -2034,6 +2457,8 @@ overlaid. EF scores are z-scored within task (pooled).}
 
 \end{figure}%
 
+\clearpage
+
 \section{Boxplot: Distribution of EF scores across
 waves}\label{apx-fig-ef-boxplots-by-wave}
 
@@ -2051,6 +2476,8 @@ harmonised task scores at each wave, stratified by country.}
 
 \end{figure}%
 
+\clearpage
+
 \section{RQ4 Sample sizes for moderation
 analysis}\label{apx-tbl-rq4-sample-sizes}
 
@@ -2061,20 +2488,20 @@ cohort×wave×group}{\label{tbl-rq4-sample-sizes}}}
 \vspace{-20pt}}
 
 \fontsize{8.0pt}{10.0pt}\selectfont
-\begin{tabular*}{1\linewidth}{@{\extracolsep{\fill}}ccccc}
+\begin{tabular*}{375pt}{@{\extracolsep{\fill}}>{\raggedright\arraybackslash}p{\dimexpr 45.00pt -2\tabcolsep-1.5\arrayrulewidth}>{\centering\arraybackslash}p{\dimexpr 37.50pt -2\tabcolsep-1.5\arrayrulewidth}>{\raggedright\arraybackslash}p{\dimexpr 52.50pt -2\tabcolsep-1.5\arrayrulewidth}>{\centering\arraybackslash}p{\dimexpr 37.50pt -2\tabcolsep-1.5\arrayrulewidth}>{\centering\arraybackslash}p{\dimexpr 75.00pt -2\tabcolsep-1.5\arrayrulewidth}}
 \toprule
 Cohort & Wave & Group & N & Fit Status\textsuperscript{\textit{1}} \\ 
 \midrule\addlinespace[2.5pt]
-\multicolumn{5}{>{\raggedright\arraybackslash}m{1\linewidth}}{Income} \\[2.5pt] 
+\multicolumn{5}{>{\raggedright\arraybackslash}m{375pt}}{Income} \\[2.5pt] 
 \midrule\addlinespace[2.5pt]
 AU & T1 & High & 43 & ✓ \\ 
 AU & T1 & Low & 20 & ✓ \\ 
 AU & T1 & Middle & 126 & ✓ \\ 
 AU & T2 & High & 43 & ✓ \\ 
-AU & T2 & Low & 19 & Insufficient n \\ 
+{\cellcolor[HTML]{FFF3E0}{AU}} & {\cellcolor[HTML]{FFF3E0}{T2}} & {\cellcolor[HTML]{FFF3E0}{Low}} & {\cellcolor[HTML]{FFF3E0}{19}} & {\cellcolor[HTML]{FFF3E0}{Insufficient n}} \\ 
 AU & T2 & Middle & 117 & ✓ \\ 
 AU & T3 & High & 26 & ✓ \\ 
-AU & T3 & Low & 8 & Insufficient n \\ 
+{\cellcolor[HTML]{FFF3E0}{AU}} & {\cellcolor[HTML]{FFF3E0}{T3}} & {\cellcolor[HTML]{FFF3E0}{Low}} & {\cellcolor[HTML]{FFF3E0}{8}} & {\cellcolor[HTML]{FFF3E0}{Insufficient n}} \\ 
 AU & T3 & Middle & 51 & ✓ \\ 
 SA & T1 & High & 52 & ✓ \\ 
 SA & T1 & Low & 78 & ✓ \\ 
@@ -2083,7 +2510,7 @@ SA & T2 & High & 47 & ✓ \\
 SA & T2 & Low & 59 & ✓ \\ 
 SA & T2 & Middle & 63 & ✓ \\ 
 \midrule\addlinespace[2.5pt]
-\multicolumn{5}{>{\raggedright\arraybackslash}m{1\linewidth}}{HLE} \\[2.5pt] 
+\multicolumn{5}{>{\raggedright\arraybackslash}m{375pt}}{HLE} \\[2.5pt] 
 \midrule\addlinespace[2.5pt]
 AU & T1 & High & 86 & ✓ \\ 
 AU & T1 & Low & 103 & ✓ \\ 
@@ -2103,6 +2530,8 @@ SA & T2 & Low & 84 & ✓ \\
 \end{minipage}
 
 \end{table}
+
+\clearpage
 
 \section{RQ3 results reported on the Fisher z
 scale}\label{apx-tbl-rq3-gt-edges-dual}
@@ -2126,21 +2555,21 @@ Edge & Median [95\% CrI] & P(|Δr|>0.1) & Median [95\% CrI] & analysis \\
 \midrule\addlinespace[2.5pt]
 \multicolumn{5}{>{\raggedright\arraybackslash}m{1\linewidth}}{Cohort difference (AU − SA) at T1} \\[2.5pt] 
 \midrule\addlinespace[2.5pt]
-ef\_cogflex - ef\_inhibition & -0.15 [-0.33, 0.03] & 0.72 & -0.16 [-0.34, 0.03] & Main analysis \\ 
-ef\_cogflex - ef\_workingmem & 0.13 [-0.05, 0.30] & 0.61 & 0.13 [-0.06, 0.32] & Main analysis \\ 
-ef\_inhibition - ef\_workingmem & 0.11 [-0.07, 0.28] & 0.55 & 0.11 [-0.08, 0.30] & Main analysis \\ 
+ef\_cogflex - ef\_inhibition & -0.16 [-0.33, 0.02] & 0.72 & -0.16 [-0.35, 0.02] & Main analysis \\ 
+ef\_cogflex - ef\_workingmem & 0.13 [-0.05, 0.31] & 0.63 & 0.13 [-0.06, 0.32] & Main analysis \\ 
+ef\_inhibition - ef\_workingmem & 0.10 [-0.07, 0.28] & 0.53 & 0.11 [-0.08, 0.30] & Main analysis \\ 
 \midrule\addlinespace[2.5pt]
 \multicolumn{5}{>{\raggedright\arraybackslash}m{1\linewidth}}{Cohort difference (AU − SA) at T2} \\[2.5pt] 
 \midrule\addlinespace[2.5pt]
-ef\_cogflex - ef\_inhibition & 0.04 [-0.15, 0.24] & 0.37 & 0.05 [-0.16, 0.25] & Main analysis \\ 
+ef\_cogflex - ef\_inhibition & 0.04 [-0.16, 0.24] & 0.37 & 0.05 [-0.16, 0.25] & Main analysis \\ 
 ef\_cogflex - ef\_workingmem & 0.08 [-0.12, 0.27] & 0.45 & 0.08 [-0.12, 0.28] & Main analysis \\ 
-ef\_inhibition - ef\_workingmem & 0.13 [-0.05, 0.31] & 0.65 & 0.14 [-0.06, 0.34] & Main analysis \\ 
+ef\_inhibition - ef\_workingmem & 0.13 [-0.05, 0.32] & 0.64 & 0.14 [-0.06, 0.34] & Main analysis \\ 
 \midrule\addlinespace[2.5pt]
 \multicolumn{5}{>{\raggedright\arraybackslash}m{1\linewidth}}{Difference-in-differences (ΔAU − ΔSA)} \\[2.5pt] 
 \midrule\addlinespace[2.5pt]
-ef\_cogflex - ef\_inhibition & 0.20 [-0.08, 0.47] & 0.78 & 0.20 [-0.08, 0.48] & Main analysis \\ 
-ef\_cogflex - ef\_workingmem & -0.05 [-0.31, 0.21] & 0.48 & -0.05 [-0.33, 0.22] & Main analysis \\ 
-ef\_inhibition - ef\_workingmem & 0.03 [-0.24, 0.28] & 0.46 & 0.03 [-0.25, 0.31] & Main analysis \\ 
+ef\_cogflex - ef\_inhibition & 0.20 [-0.07, 0.46] & 0.78 & 0.20 [-0.07, 0.47] & Main analysis \\ 
+ef\_cogflex - ef\_workingmem & -0.05 [-0.32, 0.21] & 0.49 & -0.05 [-0.33, 0.22] & Main analysis \\ 
+ef\_inhibition - ef\_workingmem & 0.03 [-0.23, 0.29] & 0.46 & 0.03 [-0.24, 0.31] & Main analysis \\ 
 \bottomrule
 \end{tabular*}
 
