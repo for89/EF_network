@@ -12,3 +12,6 @@ _freeze/
 **/*.quarto_ipynb
 EF_network_analysis_files/
 *.png
+.Renviron
+replacements.txt
+.Renviron.sh
