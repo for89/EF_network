@@ -11,7 +11,7 @@ author:
   email: fionnuala.oreilly@psy.ox.ac.uk
   corresponding: true
 
-- name: "Jelena Sucevic" 
+- name: "Jelena Sučević" 
   orcid: 0000-0001-5091-5434 
   affiliations: 
     - ref: oxford
@@ -352,9 +352,11 @@ source(here::here("ef_network_plotting_helper.R"))
 #| include: false
 #| cache: false
 
-aus_data <- read_sav("/Users/foreilly/Library/CloudStorage/OneDrive-Nexus365/Network_analysis_2026/aus_data/DECRA Master Dataset (T1-T3) 2026-01-08.sav")
+file.edit("/Users/foreilly/Documents/GitHub/EF_network/.Renviron")
+
+library(haven)
+aus_data <- read_sav(Sys.getenv("DATA_PATH_1"))
 colnames(aus_data)
-# view(aus_data)
 ```
 
 ```{r}
@@ -362,30 +364,27 @@ colnames(aus_data)
 #| include: false
 #| cache: false
 
-# sa_data <- read_csv("/Users/foreilly/Library/CloudStorage/OneDrive-Nexus365/Network_analysis_2026/sa_data/SAGCRFStudy20202021_DATA_NOHDRS_2023-01-18_1418.csv")
-
 # Caylee's do file as text file
-path <- "/Users/foreilly/Library/CloudStorage/OneDrive-Nexus365/Network_analysis_2026/sa_data/SAGCRFStudy20202021_STATA_2023-01-18_1418.txt"
-system2("open", path)
+path <- Sys.getenv("DO_FILE_TXT_PATH")
+# system2("open", path)
 
-do_lines <- read_lines("/Users/foreilly/Library/CloudStorage/OneDrive-Nexus365/Network_analysis_2026/sa_data/SAGCRFStudy20202021_STATA_2023-01-18_1418.do")
+do_lines <- read_lines(Sys.getenv("DO_FILE_PATH"))
 
 idx <- which(str_detect(do_lines, "^\\s*import\\s+delimited\\b"))[1]
 stopifnot(!is.na(idx))
-
 line <- do_lines[idx]
 
 # remove "import delimited", then keep the varlist (everything before " using ")
 tmp <- line |>
   str_remove("^\\s*import\\s+delimited\\s+") |>
   str_split("\\s+using\\s+", n = 2, simplify = TRUE)
-
 varlist <- tmp[1]  # everything before "using"
-
 cols <- str_split(str_squish(varlist), "\\s+")[[1]]
 
+sa_data <- read.csv(Sys.getenv("DATA_PATH_2"))
+
 sa_data <- read_csv(
-  "/Users/foreilly/Library/CloudStorage/OneDrive-Nexus365/Network_analysis_2026/sa_data/SAGCRFStudy20202021_DATA_NOHDRS_2023-01-18_1418.csv",
+  Sys.getenv("DATA_PATH_2"),
   col_names = FALSE
 )
 
@@ -1056,8 +1055,7 @@ floor_ceiling <- ef_all_keep %>%
 
 print(floor_ceiling)
 
-# Create plot-ready version with human-readable labels
-cat("\n=== CREATING DISTRIBUTION PLOTS ===\n")
+cat("\n=== DISTRIBUTION PLOTS ===\n")
 
 ef_long_plot <- ef_all_keep %>%
   mutate(
@@ -1469,7 +1467,7 @@ align_draws <- function(x, y, keep = c("last","first")) {
 #| label: descriptives-sample-sizes
 #| include: false
 
-# Sample sizes by cohort×wave (for main text)
+# Sample sizes by cohort×wave
 sample_sizes <- ef_all_keep %>%
   group_by(country, timepoint) %>%
   summarise(
@@ -1485,8 +1483,7 @@ sample_sizes_wide <- sample_sizes %>%
 #| label: descriptives-zero-order-cors
 #| include: false
 
-# Zero-order (raw, unadjusted) correlations within each cohort×wave
-# This shows the "before" picture that motivates partial correlations
+# Zero-order (raw, unadjusted) correlations within each cohort×wave - shows the "before" picture that motivates partial correlations
 
 cor_raw <- ef_net_wide %>%
   group_by(country, timepoint) %>%
@@ -1512,7 +1509,7 @@ cor_summary <- cor_raw %>%
     .groups = "drop"
   )
 
-# Table-ready format
+# table
 cor_raw_table <- cor_raw %>%
   pivot_longer(
     cols = starts_with("cor_"),
@@ -1532,7 +1529,7 @@ cor_raw_table <- cor_raw %>%
 #| label: descriptives-age-effects
 #| include: false
 
-# Age-EF correlations by cohort×wave (for reporting)
+# Age-EF correlations by cohort×wave
 age_ef_cors <- ef_all_keep %>%
   left_join(age_all_keep %>% select(country, timepoint, id, age),
             by = c("country", "timepoint", "id")) %>%
@@ -1962,7 +1959,7 @@ rq1_table_A <- dplyr::bind_rows(rq1_gs, rq1_edges) %>%
   ) %>%
   dplyr::arrange(country, timepoint, dplyr::desc(edge == "Global strength"), edge)
 
-# check: 4 rows per cohort×wave (3 edges + global strength)
+# rows per cohort×wave (3 edges + global strength)
 stopifnot(all((rq1_table_A %>% dplyr::count(country, timepoint) %>% dplyr::pull(n)) == 4))
 
 # expected influence (node-level)
@@ -2291,11 +2288,11 @@ plot_ef_network <- function(fit, title, threshold = 0.75) {
          title = title,
          title.cex = 1.1,
          edge.labels = TRUE,
-         edge.label.cex = 2,         # cor font size
+         edge.label.cex = 2, # cor font size
          edge.label.bg = "white",
          edge.label.color = "black",
-         edge.label.font = 2,          # bold = 2
-         vsize = 22,                   # Larger nodes to make room
+         edge.label.font = 2, # bold = 2
+         vsize = 22, # Larger nodes to make room
          esize = 15,
          asize = 6,
          curve = 0.2,
@@ -2837,7 +2834,7 @@ edge_did_draws_rz <- function(fit_AU_T1, fit_AU_T2, fit_SA_T1, fit_SA_T2,
 #| include: false
 
 # Cog flex floor exclusion
-# Exclude from each wave only if scored 0 on COGFLEX (the problematic measure)
+# Exclude from each wave only if scored 0 on Cog Flex
 # This directly tests whether the cogflex floor effect contaminates networks
 
 cat("=== SENSITIVITY ANALYSIS: EXCLUDING COGFLEX FLOOR PERFORMERS ===\n\n")
@@ -2976,7 +2973,7 @@ cat("\nSensitivity analysis complete. Object 'fit_tbl_no_floor' created.\n")
 #| label: rq3-build-fisher-tables
 #| include: false
 
-# Unique fits table (ORIGINAL - includes floor performers)
+# Unique fits table (original - includes floor performers)
 fit_tbl_uniq <- fit_tbl %>%
   filter(!purrr::map_lgl(fit, is.null)) %>%
   arrange(country, timepoint) %>%
@@ -2984,7 +2981,7 @@ fit_tbl_uniq <- fit_tbl %>%
   slice(1) %>%
   ungroup()
 
-# Unique fits table (SENSITIVITY - excludes floor performers)
+# Unique fits table (sensitivity - excludes floor performers)
 fit_tbl_uniq_no_floor <- fit_tbl_no_floor %>%
   filter(!purrr::map_lgl(fit, is.null)) %>%
   arrange(country, timepoint) %>%
@@ -3249,13 +3246,11 @@ rq3_comparison %>%
 #| label: prepare-moderators-wave-specific
 #| include: false
 
-# ============================================================================
 # Prepare wave-specific income + baseline HLE
-# ============================================================================
 # Income: Use wave-specific values (changes across waves)
 # HLE: Use baseline T1 only (doesn't change - enrichment at age 4 predicts later networks)
 
-# AUSTRALIA - wave-specific income, baseline HLE
+# Australia - wave-specific income, baseline HLE
 au_mods_all_waves <- aus_ses_tp %>%
   dplyr::transmute(
     country,
@@ -3281,7 +3276,7 @@ au_mods_combined <- au_mods_all_waves %>%
   dplyr::ungroup() %>%
   dplyr::select(country, timepoint, id, income_raw, hle_z)
 
-# SOUTH AFRICA - wave-specific income, baseline HLE  
+# South Africa - wave-specific income, baseline HLE  
 sa_mods_all_waves <- sa_ses %>%
   dplyr::transmute(
     country,
@@ -3310,7 +3305,7 @@ sa_mods_combined <- sa_mods_all_waves %>%
   dplyr::ungroup() %>%
   dplyr::select(country, timepoint, id, income_raw, hle_z)
 
-# COMBINE
+# Combine
 mods_all_waves <- dplyr::bind_rows(au_mods_combined, sa_mods_combined)
 
 # Report availability
@@ -4728,13 +4723,9 @@ rq3_edges_dual %>%
 #| label: explore-ses-data
 #| include: false
 
-# ============================================================================
-# EXPLORATION 1: What SES data exists by cohort×wave?
-# ============================================================================
-
+# explore: What SES data exists by cohort×wave?
 cat("=== SES DATA AVAILABILITY BY COHORT × WAVE ===\n\n")
 
-# Check AUSTRALIA
 cat("--- AUSTRALIA (aus_ses_tp) ---\n")
 aus_ses_availability <- aus_ses_tp %>%
   group_by(timepoint) %>%
@@ -4761,10 +4752,8 @@ sa_ses_availability <- sa_ses %>%
   )
 print(sa_ses_availability)
 
-# ============================================================================
-# EXPLORATION 2: AU income - confirm 3 categories
-# ============================================================================
 
+# explore: AU income - confirm 3 categories
 cat("\n\n=== AUSTRALIA INCOME STRUCTURE ===\n\n")
 
 au_income_all <- aus_ses_tp %>%
@@ -4803,10 +4792,8 @@ au_income_numeric <- aus_ses_tp %>%
   arrange(income_num)
 print(au_income_numeric)
 
-# ============================================================================
-# EXPLORATION 3: SA income - check if categorical or continuous
-# ============================================================================
 
+# explore: SA income - check if categorical or continuous
 cat("\n\n=== SOUTH AFRICA INCOME STRUCTURE ===\n\n")
 
 # T1 income
@@ -4859,10 +4846,7 @@ if ("T2" %in% sa_ses$timepoint) {
   cat("No T2 wave exists\n")
 }
 
-# ============================================================================
-# EXPLORATION 4: Look at actual income variable in raw data
-# ============================================================================
-
+# explore 4: Look at actual income variable in raw data
 cat("\n\n=== CHECKING RAW DATA OBJECTS ===\n\n")
 
 if (exists("sa_data")) {
@@ -4903,10 +4887,7 @@ if (exists("aus_data")) {
 #| label: explore-hle-data
 #| include: false
 
-# ============================================================================
-# EXPLORATION: HLE Data Structure and Distribution
-# ============================================================================
-
+# explore: HLE Data Structure and Distribution
 cat("=== HLE DATA AVAILABILITY BY COHORT × WAVE ===\n\n")
 
 # Check AUSTRALIA HLE
@@ -4932,10 +4913,7 @@ sa_hle_availability <- sa_ses %>%
   )
 print(sa_hle_availability)
 
-# ============================================================================
-# AUSTRALIA HLE STRUCTURE
-# ============================================================================
-
+# Australia HLE structure 
 cat("\n\n=== AUSTRALIA HLE (HLE_Index) ===\n\n")
 
 au_hle_t1 <- aus_ses_tp %>%
@@ -4979,10 +4957,7 @@ if (all(c("T1", "T2") %in% names(au_hle_stability))) {
   cat("% unchanged:", round(100 * sum(!au_hle_change$changed) / nrow(au_hle_change), 1), "%\n")
 }
 
-# ============================================================================
-# SOUTH AFRICA HLE STRUCTURE
-# ============================================================================
-
+# South Africa HLE structure
 cat("\n\n=== SOUTH AFRICA HLE (hla_frequency1) ===\n\n")
 
 sa_hle_t1 <- sa_ses %>%
@@ -5042,10 +5017,8 @@ if (all(c("T1", "T2") %in% names(sa_hle_stability))) {
   cat("% unchanged:", round(100 * sum(!sa_hle_change$changed) / nrow(sa_hle_change), 1), "%\n")
 }
 
-# ============================================================================
-# COMPARING DISTRIBUTIONS ACROSS COHORTS
-# ============================================================================
 
+# Comparing distributions across cohorts 
 cat("\n\n=== CROSS-COHORT COMPARISON ===\n\n")
 
 cat("Australia HLE_Index:\n")
