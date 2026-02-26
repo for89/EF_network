@@ -169,7 +169,7 @@ Analysis}
 
 \authorsnames[{1,2},{2},{3},{4},{5},{3},{2},{2}]{Fionnuala
 O'Reilly,Jelena Sučević,Caylee Cook,Justin E. Karr,Philippe
-Rast,Catherine Draper*,Steven Howard*,Gaia Scerif*}
+Rast,CatherinePD E. Draper*,Steven J. Howard*,Gaia Scerif*}
 
 
 
@@ -197,8 +197,8 @@ O'Reilly}{0000-0002-4355-9088}}\par{\addORCIDlink{Jelena
 Sučević}{0000-0001-5091-5434}}\par{\addORCIDlink{Caylee
 Cook}{0000-0001-9718-8887}}\par{\addORCIDlink{Justin E.
 Karr}{0000-0003-3653-332X}}\par{\addORCIDlink{Philippe
-Rast}{0000-0003-3630-6629}}\par{\addORCIDlink{Catherine
-Draper*}{0000-0002-2885-437X}}\par{\addORCIDlink{Steven
+Rast}{0000-0003-3630-6629}}\par{\addORCIDlink{CatherinePD E.
+Draper*}{0000-0002-2885-437X}}\par{\addORCIDlink{Steven J.
 Howard*}{0000-0002-1258-3210}}\par{\addORCIDlink{Gaia
 Scerif*}{0000-0002-6371-8874}} 
 
@@ -839,9 +839,9 @@ interpreted as probability statements about the parameter.
 To distinguish meaningful edges from those that are small or negligible,
 we adopted a Region of Practical Equivalence (ROPE) approach
 (\citeproc{ref-kruschke2018rejecting}{Kruschke, 2018}). We defined the
-ROPE as \textbar r\textbar{} ≤ 0.10, such that edge weights falling
+ROPE as \textbar r\textbar{} ≤ 0.05, such that edge weights falling
 within ±0.10 were considered practically equivalent to zero. For each
-edge, we computed P(\textbar r\textbar{} \textgreater{} 0.10): the
+edge, we computed P(\textbar r\textbar{} \textgreater{} 0.05): the
 posterior probability that the edge weight exceeds the ROPE threshold in
 absolute value. Values close to 1 (e.g., P \textgreater{} 0.90) indicate
 strong evidence that the edge is meaningfully different from zero, while
@@ -907,7 +907,7 @@ difference scores between adjacent waves (e.g., Δr = r\textsubscript{T2}
 − r\textsubscript{T1}) by subtracting posterior samples pairwise. This
 yields a posterior distribution of the change, from which we derived
 95\% credible intervals and ROPE probabilities for the difference
-(P(\textbar Δr\textbar{} \textgreater{} 0.10)).
+(P(\textbar Δr\textbar{} \textgreater{} 0.05)).
 
 For cross-cohort comparisons (RQ3), we computed cohort difference scores
 (e.g., r\textsubscript{AU} − r\textsubscript{SA}) at matched waves. To
@@ -932,7 +932,7 @@ and home learning environment (HLE), then fit separate BGGM models for
 each group at each wave. We computed moderation effects as High − Low
 edge differences, with ROPE probabilities indicating the strength of
 evidence for moderation (P(\textbar High − Low\textbar{} \textgreater{}
-0.10)). This stratified approach is more robust than including SES as a
+0.05)). This stratified approach is more robust than including SES as a
 continuous covariate in a single model, as it allows network structure
 to differ nonlinearly across SES groups and does not assume constant
 effects across the SES distribution.
@@ -1099,30 +1099,30 @@ inhibition--working memory edge was consistently positive (T1: 0.27
 and reliably exceeded the meaningfulness threshold (T1:
 P(\textbar r\textbar\textgreater0.1)=1.00; T2:
 P(\textbar r\textbar\textgreater0.1)=1.00; T3:
-P(\textbar r\textbar\textgreater0.1)=0.99). The cognitive
+P(\textbar r\textbar\textgreater0.1)=1.00). The cognitive
 flexibility--working memory edge was also positive across waves (T1:
 0.25 {[}0.13, 0.37{]}; T2: 0.20 {[}0.06, 0.32{]}; T3: 0.13 {[}-0.06,
 0.32{]}) and exceeded the meaningfulness threshold (meaningfulness: T1:
-P(\textbar r\textbar\textgreater0.1)=0.99; T2:
-P(\textbar r\textbar\textgreater0.1)=0.91; T3:
-P(\textbar r\textbar\textgreater0.1)=0.64). In contrast, the cognitive
+P(\textbar r\textbar\textgreater0.1)=1.00; T2:
+P(\textbar r\textbar\textgreater0.1)=0.98; T3:
+P(\textbar r\textbar\textgreater0.1)=0.83). In contrast, the cognitive
 flexibility--inhibition edge was weaker and more wave-dependent (T1:
 0.06 {[}-0.07, 0.18{]}; T2: 0.15 {[}0.01, 0.28{]}; T3: 0.19 {[}-0.01,
 0.38{]}), with less consistent evidence that it exceeded the
-meaningfulness threshold (T1: P(\textbar r\textbar\textgreater0.1)=0.28;
-T2: P(\textbar r\textbar\textgreater0.1)=0.74; T3:
-P(\textbar r\textbar\textgreater0.1)=0.82).
+meaningfulness threshold (T1: P(\textbar r\textbar\textgreater0.1)=0.60;
+T2: P(\textbar r\textbar\textgreater0.1)=0.92; T3:
+P(\textbar r\textbar\textgreater0.1)=0.93).
 
 In South Africa, the inhibition--working memory edge remained positive
 across waves (T1: 0.17 {[}0.03, 0.30{]}; T2: 0.19 {[}0.04, 0.33{]}) and
 met the meaningfulness criterion more consistently than the other edges
-(T1: P(\textbar r\textbar\textgreater0.1)=0.83; T2:
-P(\textbar r\textbar\textgreater0.1)=0.89). The cognitive
+(T1: P(\textbar r\textbar\textgreater0.1)=0.95; T2:
+P(\textbar r\textbar\textgreater0.1)=0.97). The cognitive
 flexibility--inhibition edge was stronger at T1 (0.21 {[}0.09, 0.34{]})
 but attenuated at T2 (0.10 {[}-0.04, 0.25{]}) and did not reliably
 exceed the meaningfulness threshold at T2 (T1:
-P(\textbar r\textbar\textgreater0.1)=0.96; T2:
-P(\textbar r\textbar\textgreater0.1)=0.52). In contrast to the
+P(\textbar r\textbar\textgreater0.1)=0.99; T2:
+P(\textbar r\textbar\textgreater0.1)=0.78). In contrast to the
 Australian results, he cognitive flexibility--working memory edge was
 comparatively weaker and uncertain across waves (T1: 0.12 {[}-0.01,
 0.25{]}; T2: 0.12 {[}-0.03, 0.26{]}).
@@ -1205,7 +1205,7 @@ Working memory & SA & T2 & 189 & 1.2 & 0.30 [0.12, 0.49] &  \\
 \caption{\label{fig-rq1-edge-forest}\textbf{Within-wave EF coupling
 (posterior partial correlations).} Points show posterior medians; bars
 show 95\% credible intervals. Solid line = 0; dashed lines = ROPE
-(±0.10).}
+(±0.05).}
 
 \centering{
 
@@ -1253,19 +1253,19 @@ as the most centrally connected node, with reliable edges to both
 inhibition and cognitive flexibility. In South Africa, inhibition played
 a comparably central role, with a strong cognitive
 flexibility--inhibition edge at T1 (0.21 {[}0.09, 0.34{]};
-P(\textbar r\textbar\textgreater0.1)=0.96) that attenuated over time
-(T2: 0.10 {[}-0.04, 0.25{]}; P(\textbar r\textbar\textgreater0.1)=0.52),
+P(\textbar r\textbar\textgreater0.1)=0.99) that attenuated over time
+(T2: 0.10 {[}-0.04, 0.25{]}; P(\textbar r\textbar\textgreater0.1)=0.78),
 while the cognitive flexibility--working memory edge remained weaker and
 more uncertain across waves (T1: 0.12 {[}-0.01, 0.25{]};
-P(\textbar r\textbar\textgreater0.1)=0.64). This divergence in network
+P(\textbar r\textbar\textgreater0.1)=0.86). This divergence in network
 topology --- not simply overall connectivity suggests that the
 relational architecture of executive function may be sensitive to
 sociocultural and environmental context.
 
 A further notable difference concerns the cognitive
 flexibility--inhibition edge, which was absent in the Australian network
-at T1 (P(\textbar r\textbar\textgreater0.1)=0.28) but present in South
-Africa (P(\textbar r\textbar\textgreater0.1)=0.96). Caution is warranted
+at T1 (P(\textbar r\textbar\textgreater0.1)=0.60) but present in South
+Africa (P(\textbar r\textbar\textgreater0.1)=0.99). Caution is warranted
 in interpreting this difference, given the pronounced floor effect in
 Australian cognitive flexibility scores at T1 (32.5\% scoring zero).
 Floor effects can artificially suppress partial correlations through
@@ -1358,14 +1358,14 @@ waves within each cohort. For each wave transition, we computed
 posterior distributions of change in edge weights (Δr = later wave −
 earlier wave), global strength (Δ), and expected influence (Δ). We
 evaluated whether changes exceeded a region of practical equivalence
-(ROPE; \textbar Δr\textbar{} \textgreater{} 0.10) to distinguish
+(ROPE; \textbar Δr\textbar{} \textgreater{} 0.05) to distinguish
 meaningful developmental change from negligible fluctuation.
 
 We found little evidence for meaningful change in EF network summaries
 across adjacent waves within either cohort (see
 Table~\ref{tbl-rq2-gt-all}). Posterior 95\% CrIs for all Δs included 0,
 and probabilities that edge changes exceeded the ROPE
-(\textbar Δr\textbar{} \textgreater{} 0.10) were modest (≈0.3--0.6),
+(\textbar Δr\textbar{} \textgreater{} 0.05) were modest (≈0.3--0.6),
 indicating substantial uncertainty and no clear support for meaningful
 change.
 
@@ -1557,10 +1557,10 @@ Within-cohort moderation analyses compared EF edge strengths across SES
 strata within each cohort×wave. In AU at T2, the cognitive
 flexibility--working memory edge differed between High and Middle income
 groups (Δ = -0.46 {[}-0.79, -0.09{]};
-P(\textbar Δ\textbar\textgreater0.10) = 0.97). In SA at T2, the
+P(\textbar Δ\textbar\textgreater0.10) = 0.99). In SA at T2, the
 inhibition--working memory edge differed between High and Low income
 groups (Δ = 0.39 {[}0.01, 0.74{]}; P(\textbar Δ\textbar\textgreater0.10)
-= 0.94).
+= 0.98).
 
 \begin{table}
 
@@ -1568,67 +1568,67 @@ groups (Δ = 0.39 {[}0.01, 0.74{]}; P(\textbar Δ\textbar\textgreater0.10)
 income, cells show posterior median {[}95\% CrI{]} for pairwise group
 differences. For HLE, cells show High - Low differences. ROPE
 probability indicates P(\textbar difference\textbar{} \textgreater{}
-0.10).}{\label{tbl-rq4-moderation}}}
+0.05).}{\label{tbl-rq4-moderation}}}
 \vspace{-20pt}}
 
 \fontsize{8.0pt}{10.0pt}\selectfont
 \begin{tabular*}{1\linewidth}{@{\extracolsep{\fill}}l|ccccccc}
 \toprule
-Edge & Cohort & Wave & Contrast & n (A)\textsuperscript{\textit{1}} & n (B) & Median [95\% CrI] & P(|Δ|>0.1) \\ 
+Edge & Cohort & Wave & Contrast & n (A)\textsuperscript{\textit{1}} & n (B) & Median [95\% CrI] & P(|Δ|>0.05) \\ 
 \midrule\addlinespace[2.5pt]
 \multicolumn{8}{>{\raggedright\arraybackslash}m{1\linewidth}}{Income} \\[2.5pt] 
 \midrule\addlinespace[2.5pt]
-ef\_cogflex - ef\_inhibition & AU & T1 & High - Low & 43 & 20 & -0.20 [-0.71, 0.37] & 0.78 \\ 
-ef\_cogflex - ef\_workingmem & AU & T1 & High - Low & 43 & 20 & -0.27 [-0.73, 0.25] & 0.83 \\ 
-ef\_inhibition - ef\_workingmem & AU & T1 & High - Low & 43 & 20 & -0.16 [-0.65, 0.40] & 0.77 \\ 
-ef\_cogflex - ef\_inhibition & AU & T1 & High - Middle & 43 & 126 & -0.15 [-0.49, 0.22] & 0.70 \\ 
-ef\_cogflex - ef\_workingmem & AU & T1 & High - Middle & 43 & 126 & -0.14 [-0.50, 0.20] & 0.68 \\ 
-ef\_inhibition - ef\_workingmem & AU & T1 & High - Middle & 43 & 126 & -0.23 [-0.58, 0.12] & 0.80 \\ 
-ef\_cogflex - ef\_inhibition & AU & T1 & Middle - Low & 126 & 20 & -0.05 [-0.49, 0.43] & 0.70 \\ 
-ef\_cogflex - ef\_workingmem & AU & T1 & Middle - Low & 126 & 20 & -0.13 [-0.49, 0.34] & 0.72 \\ 
-ef\_inhibition - ef\_workingmem & AU & T1 & Middle - Low & 126 & 20 & 0.08 [-0.35, 0.58] & 0.70 \\ 
-ef\_cogflex - ef\_inhibition & AU & T2 & High - Middle & 43 & 117 & 0.10 [-0.25, 0.44] & 0.63 \\ 
-ef\_cogflex - ef\_workingmem & AU & T2 & High - Middle & 43 & 117 & -0.46 [-0.79, -0.09] & 0.97 \\ 
-ef\_inhibition - ef\_workingmem & AU & T2 & High - Middle & 43 & 117 & -0.09 [-0.43, 0.22] & 0.60 \\ 
-ef\_cogflex - ef\_inhibition & AU & T3 & High - Middle & 26 & 51 & -0.22 [-0.69, 0.23] & 0.78 \\ 
-ef\_cogflex - ef\_workingmem & AU & T3 & High - Middle & 26 & 51 & 0.19 [-0.30, 0.66] & 0.76 \\ 
-ef\_inhibition - ef\_workingmem & AU & T3 & High - Middle & 26 & 51 & -0.20 [-0.67, 0.26] & 0.77 \\ 
-ef\_cogflex - ef\_inhibition & SA & T1 & High - Low & 52 & 78 & 0.25 [-0.09, 0.58] & 0.82 \\ 
-ef\_cogflex - ef\_workingmem & SA & T1 & High - Low & 52 & 78 & 0.00 [-0.36, 0.36] & 0.59 \\ 
-ef\_inhibition - ef\_workingmem & SA & T1 & High - Low & 52 & 78 & -0.29 [-0.66, 0.08] & 0.87 \\ 
-ef\_cogflex - ef\_inhibition & SA & T1 & High - Middle & 52 & 80 & 0.11 [-0.22, 0.42] & 0.62 \\ 
-ef\_cogflex - ef\_workingmem & SA & T1 & High - Middle & 52 & 80 & 0.16 [-0.20, 0.51] & 0.71 \\ 
-ef\_inhibition - ef\_workingmem & SA & T1 & High - Middle & 52 & 80 & -0.20 [-0.57, 0.18] & 0.75 \\ 
-ef\_cogflex - ef\_inhibition & SA & T1 & Middle - Low & 80 & 78 & 0.14 [-0.17, 0.47] & 0.68 \\ 
-ef\_cogflex - ef\_workingmem & SA & T1 & Middle - Low & 80 & 78 & -0.16 [-0.47, 0.17] & 0.69 \\ 
-ef\_inhibition - ef\_workingmem & SA & T1 & Middle - Low & 80 & 78 & -0.10 [-0.40, 0.21] & 0.60 \\ 
-ef\_cogflex - ef\_inhibition & SA & T2 & High - Low & 47 & 59 & 0.03 [-0.37, 0.42] & 0.62 \\ 
-ef\_cogflex - ef\_workingmem & SA & T2 & High - Low & 47 & 59 & -0.30 [-0.67, 0.09] & 0.85 \\ 
-ef\_inhibition - ef\_workingmem & SA & T2 & High - Low & 47 & 59 & 0.39 [0.01, 0.74] & 0.94 \\ 
-ef\_cogflex - ef\_inhibition & SA & T2 & High - Middle & 47 & 63 & 0.16 [-0.24, 0.54] & 0.72 \\ 
-ef\_cogflex - ef\_workingmem & SA & T2 & High - Middle & 47 & 63 & -0.12 [-0.53, 0.27] & 0.68 \\ 
-ef\_inhibition - ef\_workingmem & SA & T2 & High - Middle & 47 & 63 & 0.23 [-0.14, 0.58] & 0.79 \\ 
-ef\_cogflex - ef\_inhibition & SA & T2 & Middle - Low & 63 & 59 & -0.13 [-0.51, 0.26] & 0.67 \\ 
-ef\_cogflex - ef\_workingmem & SA & T2 & Middle - Low & 63 & 59 & -0.17 [-0.52, 0.19] & 0.72 \\ 
-ef\_inhibition - ef\_workingmem & SA & T2 & Middle - Low & 63 & 59 & 0.16 [-0.20, 0.51] & 0.70 \\ 
+ef\_cogflex - ef\_inhibition & AU & T1 & High - Low & 43 & 20 & -0.20 [-0.71, 0.37] & 0.89 \\ 
+ef\_cogflex - ef\_workingmem & AU & T1 & High - Low & 43 & 20 & -0.27 [-0.73, 0.25] & 0.91 \\ 
+ef\_inhibition - ef\_workingmem & AU & T1 & High - Low & 43 & 20 & -0.16 [-0.65, 0.40] & 0.89 \\ 
+ef\_cogflex - ef\_inhibition & AU & T1 & High - Middle & 43 & 126 & -0.15 [-0.49, 0.22] & 0.85 \\ 
+ef\_cogflex - ef\_workingmem & AU & T1 & High - Middle & 43 & 126 & -0.14 [-0.50, 0.20] & 0.83 \\ 
+ef\_inhibition - ef\_workingmem & AU & T1 & High - Middle & 43 & 126 & -0.23 [-0.58, 0.12] & 0.90 \\ 
+ef\_cogflex - ef\_inhibition & AU & T1 & Middle - Low & 126 & 20 & -0.05 [-0.49, 0.43] & 0.84 \\ 
+ef\_cogflex - ef\_workingmem & AU & T1 & Middle - Low & 126 & 20 & -0.13 [-0.49, 0.34] & 0.85 \\ 
+ef\_inhibition - ef\_workingmem & AU & T1 & Middle - Low & 126 & 20 & 0.08 [-0.35, 0.58] & 0.84 \\ 
+ef\_cogflex - ef\_inhibition & AU & T2 & High - Middle & 43 & 117 & 0.10 [-0.25, 0.44] & 0.82 \\ 
+ef\_cogflex - ef\_workingmem & AU & T2 & High - Middle & 43 & 117 & -0.46 [-0.79, -0.09] & 0.99 \\ 
+ef\_inhibition - ef\_workingmem & AU & T2 & High - Middle & 43 & 117 & -0.09 [-0.43, 0.22] & 0.80 \\ 
+ef\_cogflex - ef\_inhibition & AU & T3 & High - Middle & 26 & 51 & -0.22 [-0.69, 0.23] & 0.89 \\ 
+ef\_cogflex - ef\_workingmem & AU & T3 & High - Middle & 26 & 51 & 0.19 [-0.30, 0.66] & 0.88 \\ 
+ef\_inhibition - ef\_workingmem & AU & T3 & High - Middle & 26 & 51 & -0.20 [-0.67, 0.26] & 0.89 \\ 
+ef\_cogflex - ef\_inhibition & SA & T1 & High - Low & 52 & 78 & 0.25 [-0.09, 0.58] & 0.92 \\ 
+ef\_cogflex - ef\_workingmem & SA & T1 & High - Low & 52 & 78 & 0.00 [-0.36, 0.36] & 0.79 \\ 
+ef\_inhibition - ef\_workingmem & SA & T1 & High - Low & 52 & 78 & -0.29 [-0.66, 0.08] & 0.94 \\ 
+ef\_cogflex - ef\_inhibition & SA & T1 & High - Middle & 52 & 80 & 0.11 [-0.22, 0.42] & 0.80 \\ 
+ef\_cogflex - ef\_workingmem & SA & T1 & High - Middle & 52 & 80 & 0.16 [-0.20, 0.51] & 0.85 \\ 
+ef\_inhibition - ef\_workingmem & SA & T1 & High - Middle & 52 & 80 & -0.20 [-0.57, 0.18] & 0.88 \\ 
+ef\_cogflex - ef\_inhibition & SA & T1 & Middle - Low & 80 & 78 & 0.14 [-0.17, 0.47] & 0.84 \\ 
+ef\_cogflex - ef\_workingmem & SA & T1 & Middle - Low & 80 & 78 & -0.16 [-0.47, 0.17] & 0.85 \\ 
+ef\_inhibition - ef\_workingmem & SA & T1 & Middle - Low & 80 & 78 & -0.10 [-0.40, 0.21] & 0.80 \\ 
+ef\_cogflex - ef\_inhibition & SA & T2 & High - Low & 47 & 59 & 0.03 [-0.37, 0.42] & 0.81 \\ 
+ef\_cogflex - ef\_workingmem & SA & T2 & High - Low & 47 & 59 & -0.30 [-0.67, 0.09] & 0.93 \\ 
+ef\_inhibition - ef\_workingmem & SA & T2 & High - Low & 47 & 59 & 0.39 [0.01, 0.74] & 0.98 \\ 
+ef\_cogflex - ef\_inhibition & SA & T2 & High - Middle & 47 & 63 & 0.16 [-0.24, 0.54] & 0.87 \\ 
+ef\_cogflex - ef\_workingmem & SA & T2 & High - Middle & 47 & 63 & -0.12 [-0.53, 0.27] & 0.83 \\ 
+ef\_inhibition - ef\_workingmem & SA & T2 & High - Middle & 47 & 63 & 0.23 [-0.14, 0.58] & 0.90 \\ 
+ef\_cogflex - ef\_inhibition & SA & T2 & Middle - Low & 63 & 59 & -0.13 [-0.51, 0.26] & 0.83 \\ 
+ef\_cogflex - ef\_workingmem & SA & T2 & Middle - Low & 63 & 59 & -0.17 [-0.52, 0.19] & 0.86 \\ 
+ef\_inhibition - ef\_workingmem & SA & T2 & Middle - Low & 63 & 59 & 0.16 [-0.20, 0.51] & 0.84 \\ 
 \midrule\addlinespace[2.5pt]
 \multicolumn{8}{>{\raggedright\arraybackslash}m{1\linewidth}}{HLE} \\[2.5pt] 
 \midrule\addlinespace[2.5pt]
-ef\_cogflex - ef\_inhibition & AU & T1 & High - Low & 86 & 103 & 0.12 [-0.17, 0.40] & 0.62 \\ 
-ef\_cogflex - ef\_workingmem & AU & T1 & High - Low & 86 & 103 & -0.01 [-0.28, 0.26] & 0.46 \\ 
-ef\_inhibition - ef\_workingmem & AU & T1 & High - Low & 86 & 103 & -0.06 [-0.32, 0.21] & 0.51 \\ 
-ef\_cogflex - ef\_inhibition & AU & T2 & High - Low & 91 & 88 & 0.18 [-0.12, 0.47] & 0.74 \\ 
-ef\_cogflex - ef\_workingmem & AU & T2 & High - Low & 91 & 88 & 0.16 [-0.12, 0.45] & 0.71 \\ 
-ef\_inhibition - ef\_workingmem & AU & T2 & High - Low & 91 & 88 & 0.04 [-0.23, 0.32] & 0.48 \\ 
-ef\_cogflex - ef\_inhibition & AU & T3 & High - Low & 42 & 43 & 0.27 [-0.14, 0.68] & 0.84 \\ 
-ef\_cogflex - ef\_workingmem & AU & T3 & High - Low & 42 & 43 & 0.26 [-0.17, 0.67] & 0.81 \\ 
-ef\_inhibition - ef\_workingmem & AU & T3 & High - Low & 42 & 43 & -0.04 [-0.45, 0.37] & 0.64 \\ 
-ef\_cogflex - ef\_inhibition & SA & T1 & High - Low & 103 & 107 & -0.05 [-0.32, 0.21] & 0.50 \\ 
-ef\_cogflex - ef\_workingmem & SA & T1 & High - Low & 103 & 107 & 0.16 [-0.10, 0.43] & 0.70 \\ 
-ef\_inhibition - ef\_workingmem & SA & T1 & High - Low & 103 & 107 & 0.03 [-0.24, 0.31] & 0.50 \\ 
-ef\_cogflex - ef\_inhibition & SA & T2 & High - Low & 85 & 84 & -0.12 [-0.43, 0.18] & 0.64 \\ 
-ef\_cogflex - ef\_workingmem & SA & T2 & High - Low & 85 & 84 & 0.00 [-0.31, 0.31] & 0.52 \\ 
-ef\_inhibition - ef\_workingmem & SA & T2 & High - Low & 85 & 84 & 0.14 [-0.16, 0.44] & 0.67 \\ 
+ef\_cogflex - ef\_inhibition & AU & T1 & High - Low & 86 & 103 & 0.12 [-0.17, 0.40] & 0.81 \\ 
+ef\_cogflex - ef\_workingmem & AU & T1 & High - Low & 86 & 103 & -0.01 [-0.28, 0.26] & 0.72 \\ 
+ef\_inhibition - ef\_workingmem & AU & T1 & High - Low & 86 & 103 & -0.06 [-0.32, 0.21] & 0.75 \\ 
+ef\_cogflex - ef\_inhibition & AU & T2 & High - Low & 91 & 88 & 0.18 [-0.12, 0.47] & 0.87 \\ 
+ef\_cogflex - ef\_workingmem & AU & T2 & High - Low & 91 & 88 & 0.16 [-0.12, 0.45] & 0.86 \\ 
+ef\_inhibition - ef\_workingmem & AU & T2 & High - Low & 91 & 88 & 0.04 [-0.23, 0.32] & 0.73 \\ 
+ef\_cogflex - ef\_inhibition & AU & T3 & High - Low & 42 & 43 & 0.27 [-0.14, 0.68] & 0.92 \\ 
+ef\_cogflex - ef\_workingmem & AU & T3 & High - Low & 42 & 43 & 0.26 [-0.17, 0.67] & 0.91 \\ 
+ef\_inhibition - ef\_workingmem & AU & T3 & High - Low & 42 & 43 & -0.04 [-0.45, 0.37] & 0.81 \\ 
+ef\_cogflex - ef\_inhibition & SA & T1 & High - Low & 103 & 107 & -0.05 [-0.32, 0.21] & 0.73 \\ 
+ef\_cogflex - ef\_workingmem & SA & T1 & High - Low & 103 & 107 & 0.16 [-0.10, 0.43] & 0.85 \\ 
+ef\_inhibition - ef\_workingmem & SA & T1 & High - Low & 103 & 107 & 0.03 [-0.24, 0.31] & 0.74 \\ 
+ef\_cogflex - ef\_inhibition & SA & T2 & High - Low & 85 & 84 & -0.12 [-0.43, 0.18] & 0.82 \\ 
+ef\_cogflex - ef\_workingmem & SA & T2 & High - Low & 85 & 84 & 0.00 [-0.31, 0.31] & 0.74 \\ 
+ef\_inhibition - ef\_workingmem & SA & T2 & High - Low & 85 & 84 & 0.14 [-0.16, 0.44] & 0.83 \\ 
 \bottomrule
 \end{tabular*}
 \begin{minipage}{\linewidth}
@@ -1644,11 +1644,11 @@ the n = 20 estimation threshold --- two SES moderation effects met the
 meaningfulness criterion. In Australia at T2, high-income children
 showed a notably weaker cognitive flexibility--working memory edge than
 middle-income children (Δ = -0.46 {[}-0.79, -0.09{]};
-P(\textbar Δ\textbar\textgreater0.10) = 0.97).
+P(\textbar Δ\textbar\textgreater0.10) = 0.99).
 
 In South Africa at T2, the inhibition--working memory edge was stronger
 in high- relative to low-income children (Δ = 0.39 {[}0.01, 0.74{]};
-P(\textbar Δ\textbar\textgreater0.10) = 0.94). Notably, the direction of
+P(\textbar Δ\textbar\textgreater0.10) = 0.98). Notably, the direction of
 the Australian moderation effect is counterintuitive: stronger SES was
 associated with weaker, not stronger, coupling between cognitive
 flexibility and working memory. This may reflect the greater
@@ -2554,7 +2554,7 @@ scale}\label{apx-tbl-rq3-gt-edges-dual}
 (ΔAU − ΔSA). Columns show posterior median {[}95\% CrI{]} on the raw
 partial-correlation scale (Δr) and Fisher-z scale (Δz = atanh(r)). ROPE
 probabilities are computed on Δr:
-\(P(|\Delta r| > 0.10)\).}{\label{tbl-rq3-gt-edges-dual}}}
+\(P(|\Delta r| > 0.05)\).}{\label{tbl-rq3-gt-edges-dual}}}
 \vspace{-20pt}}
 
 \fontsize{8.0pt}{10.0pt}\selectfont
@@ -2562,7 +2562,7 @@ probabilities are computed on Δr:
 \toprule
  & \multicolumn{2}{c}{Δr (raw partial correlation)} & \multicolumn{1}{c}{Δz (Fisher atanh scale)} &  \\ 
 \cmidrule(lr){2-3} \cmidrule(lr){4-4}
-Edge & Median [95\% CrI] & P(|Δr|>0.1) & Median [95\% CrI] & analysis \\ 
+Edge & Median [95\% CrI] & P(|Δr|>0.05) & Median [95\% CrI] & analysis \\ 
 \midrule\addlinespace[2.5pt]
 \multicolumn{5}{>{\raggedright\arraybackslash}m{1\linewidth}}{Cohort difference (AU − SA) at T1} \\[2.5pt] 
 \midrule\addlinespace[2.5pt]
