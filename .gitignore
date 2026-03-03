@@ -15,3 +15,5 @@ EF_network_analysis_files/
 .Renviron
 replacements.txt
 .Renviron.sh
+
+models/
