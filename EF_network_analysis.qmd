@@ -11,7 +11,7 @@ author:
   email: fionnuala.oreilly@psy.ox.ac.uk
   corresponding: true
 
-- name: "Jelena Sucevic" 
+- name: "Jelena Sučević" 
   orcid: 0000-0001-5091-5434 
   affiliations: 
     - ref: oxford
@@ -31,23 +31,18 @@ author:
   affiliations:
     - ref: ucdavis
     
-- name: "Catherine Draper*"
+- name: "Catherine E. Draper*"
   orcid: 0000-0002-2885-437X
   affiliations:
     - ref: witwatersrand
 
-- name: "Steven Howard*" 
+- name: "Steven J. Howard*" 
   orcid: 0000-0002-1258-3210 
   affiliations: 
     - ref: oxford
 
 - name: "Gaia Scerif*" 
   orcid: 0000-0002-6371-8874 
-  affiliations: 
-    - ref: oxford
-
-- name: "H*" 
-  orcid:  
   affiliations: 
     - ref: oxford
 
@@ -1364,10 +1359,6 @@ get_age_r <- function(ctry, tp, var) {
 
 @tbl-render-table1 below presents sample characteristics (age and sex), descriptive statistics for EF scores, and zero-order correlations between EF components by cohort and timepoint. EF scores increased with age across waves (see Appendix @fig-test-re-test-plot and @fig-age-ef-wave), with age-EF correlations ranging from r = `r round(age_cor_min_row$r_age, 2)` (`r ef_label_lookup[as.character(age_cor_min_row$variable)]` in `r country_label_lookup[as.character(age_cor_min_row$country)]` at `r age_cor_min_row$timepoint`) to r = `r round(age_cor_max_row$r_age, 2)` (`r ef_label_lookup[as.character(age_cor_max_row$variable)]` in `r country_label_lookup[as.character(age_cor_max_row$country)]` at `r age_cor_max_row$timepoint`). These negligible to moderate correlations motivated the network approach: partial correlations reveal conditional dependencies after controlling for shared variance and age-related trends.
 
-```{=latex}
-\begin{landscape}
-```
-
 ```{r}
 #| label: report-missingness
 #| include: false
@@ -1483,6 +1474,12 @@ sa_cols <- grep("South Africa", names(paper_table1), value = TRUE)
 ```
 
 ```{r}
+#| results: asis
+#| include: true
+knitr::raw_latex("\\begin{landscape}\n")
+```
+
+```{r}
 #| label: tbl-render-table1
 #| tbl-cap: "Age and Executive Function (EF) by country and timepoint. All summaries are anchored to children with any EF observed at that timepoint (partial EF allowed)."
 #| include: true
@@ -1535,8 +1532,10 @@ paper_table1 %>%
   ) 
 ```
 
-```{=latex}
-\end{landscape}
+```{r}
+#| results: asis
+#| include: true
+knitr::raw_latex("\\end{landscape}\n")
 ```
 
 ```{r}
@@ -2280,8 +2279,10 @@ rq1_table_all %>%
   )
 ```
 
-```{=latex}
-\begin{landscape}
+```{r}
+#| results: asis
+#| include: true
+knitr::raw_latex("\\begin{landscape}\n")
 ```
 
 ```{r}
@@ -2297,7 +2298,7 @@ library(qgraph)
 library(png)
 library(grid)
 
-# --- helper functions ---
+# helper functions
 nodes <- c("ef_inhibition", "ef_cogflex", "ef_workingmem")
 
 layout_fixed <- matrix(c(
@@ -2351,7 +2352,7 @@ plot_ef_network <- function(fit, title, threshold = 0.75) {
          fade             = FALSE)
 }
 
-# --- forest plot ---
+# forest plot
 rope <- 0.05
 
 edges_df2 <- edge_tbl %>%
@@ -2403,7 +2404,7 @@ p_forest <- ggplot(edges_df2, aes(x = q50, y = edge_short, colour = edge_short))
     strip.background   = element_blank()
   )
 
-# --- save network panels to PNG ---
+# save network panels to png
 net_png <- "fig-rq1-network.png"
 png(net_png, width = 700, height = 550, res = 120)
 par(mfrow = c(2, 3), mar = c(1, 1, 3, 1))
@@ -2416,11 +2417,11 @@ plot.new()
 par(mfrow = c(1, 1))
 dev.off()
 
-# --- save forest plot to PNG ---
+# save forest plot panels to png
 forest_png <- "fig-rq1-forest.png"
 ggsave(forest_png, p_forest, width = 7, height = 6, dpi = 120)
 
-# --- combine side by side into final PNG ---
+#combine
 img_net    <- png::readPNG(net_png)
 img_forest <- png::readPNG(forest_png)
 
@@ -2439,10 +2440,11 @@ dev.off()
 knitr::include_graphics(final_png)
 ```
 
-```{=latex}
-\end{landscape}
+```{r}
+#| results: asis
+#| include: true
+knitr::raw_latex("\\end{landscape}\n")
 ```
-
 ### Global strength
 
 Global strength estimates (sum of absolute partial correlations over unique edges) are reported in @tbl-rq1-gt-all (above) and visualized over time in @fig-rq1-strength-ei (below). Global strength estimates showed substantial overlap in their credible intervals across timepoints, indicating that the data did not provide reliable evidence for change in global strength over time (despite variation in point estimates, for example from T1 to T2 in the SA cohort).
@@ -2451,8 +2453,10 @@ Global strength estimates (sum of absolute partial correlations over unique edge
 Expected influence estimates (signed sum of incident partial correlations) are also summarized in @tbl-rq1-gt-all (above) and visualised over time by node in @fig-rq1-strength-ei (below). Across cohorts, expected influence was consistently positive, with working memory tending to show the highest centrality and inhibition also relatively high (particularly from T2 onward in Australia). However, credible intervals overlapped substantially across waves for each node, indicating that apparent shifts in point estimates (e.g., the T1–T2 increase for inhibition in Australia, or the downward shift for inhibition and cognitive flexibility in South Africa) cannot be interpreted as reliable change over time. Overall, the results therefore support a stable relative ordering of node centrality—working memory (and, to a lesser extent, inhibition) contributing most strongly to within-wave coupling—rather than clear evidence of longitudinal change in expected influence.
 \clearpage
 
-```{=latex}
-\begin{landscape}
+```{r}
+#| results: asis
+#| include: true
+knitr::raw_latex("\\begin{landscape}\n")
 ```
 
 ```{r}
@@ -2576,8 +2580,10 @@ p_ei <- ggplot(rq1_ei, aes(x = timepoint, y = q50, group = 1)) +
 p_gs | p_ei
 ```
 
-```{=latex}
-\end{landscape}
+```{r}
+#| results: asis
+#| include: true
+knitr::raw_latex("\\end{landscape}\n")
 ```
 \clearpage
 
@@ -3601,13 +3607,16 @@ tp_hle_aus <- summ_cont_tp(
   mutate(country = country_for_table(country))
 ```
 
-```{=latex}
-\begin{landscape}
-```
-
 ### Research Question 4 (Exploratory): Socioeconomic Moderation of Network Structure
 
 Descriptive statistics for socioeconomic status and home learning environment by cohort and timepoint are presented in @tbl-render-table2. We examined whether these factors moderated EF network structure within each cohort.
+
+```{r}
+#| results: asis
+#| include: true
+knitr::raw_latex("\\begin{landscape}\n")
+```
+
 ```{r}
 #| label: tbl-render-table2
 #| tbl-cap: "Socioeconomic status and home learning environment by country and timepoint."
@@ -3759,10 +3768,11 @@ paper_table2 %>%
   )
 ```
 
-```{=latex}
-\end{landscape}
+```{r}
+#| results: asis
+#| include: true
+knitr::raw_latex("\\end{landscape}\n")
 ```
-
 \clearpage
 
 ```{r}
