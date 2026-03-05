@@ -1,8 +1,8 @@
 ---
 title: "Modeling the Dynamics of Executive Function Networks: A Longitudinal Bayesian Network Analysis Across Two Countries" 
 shorttitle: "Modeling Executive Function Networks"
-
 author:
+    
 - name: "Fionnuala O'Reilly" 
   orcid: 0000-0002-4355-9088 
   affiliations: 
@@ -10,42 +10,35 @@ author:
     - ref: oxford
   email: fionnuala.oreilly@psy.ox.ac.uk
   corresponding: true
-
+    
 - name: "Jelena Sučević" 
   orcid: 0000-0001-5091-5434 
   affiliations: 
     - ref: oxford
-    
 - name: "Caylee Cook"
   orcid: 0000-0001-9718-8887
   affiliations:
     - ref: witwatersrand
-    
 - name: "Justin E. Karr"
   orcid: 0000-0003-3653-332X
   affiliations:
     - ref: kentucky
-    
 - name: "Philippe Rast"
   orcid: 0000-0003-3630-6629
   affiliations:
     - ref: ucdavis
-    
 - name: "Catherine E. Draper*"
   orcid: 0000-0002-2885-437X
   affiliations:
     - ref: witwatersrand
-
 - name: "Steven J. Howard*" 
   orcid: 0000-0002-1258-3210 
   affiliations: 
     - ref: oxford
-
 - name: "Gaia Scerif*" 
   orcid: 0000-0002-6371-8874 
   affiliations: 
     - ref: oxford
-
 affiliations: 
   - id: stanford 
     name: "Stanford University" 
@@ -57,36 +50,49 @@ affiliations:
     name: "University of Kentucky"
   - id: ucdavis
     name: "University of California, Davis"
-
 author-note: 
   disclosures: 
     financial-support: "This work was supported by X." 
     conflict-of-interest: "The author has no conflict of interest to declare."
 
 abstract: |
-Executive functions (EFs) are foundational cognitive abilities that develop rapidly during early childhood. Although latent variable approaches have characterized the unity and diversity of EF structure extensively, less is known about the conditional associations among EF components–how these associations change as children develop, and whether they vary across sociocultural contexts. The present study applied Bayesian Gaussian Graphical Models to map age-adjusted EF networks across two longitudinal preschool cohorts from Australia (N = 232; M age = 4.43 years; three waves) and South Africa (N = 217; M age = 4.70 years; two waves). Results suggest moderate and selective coupling among EF components, consistent with partial unity: the inhibition–working memory edge was the most reliable connection across cohorts and waves. Network structure differed between cohorts, with working memory emerging as the most central node in Australia and inhibitory control playing a comparably central role in South Africa — a difference that may reflect the influence of sociocultural and environmental context on EF organization. Despite substantial gains in EF performance across waves, network structure remained stable over time, suggesting a dissociation between the level of executive abilities and the relational architecture organizing them. Exploratory moderation analyses indicated that income-related differences in specific edges emerged at T2 in both cohorts, though these findings require replication in larger samples. Together, these results advance a network perspective on early EF development that complements latent variable approaches, highlighting that the pattern of coupling among EF components — not just children's performance levels — may be sensitive to the environments in which development occurs.
+  Executive functions (EFs) are foundational cognitive abilities that develop
+  rapidly during early childhood. Although latent variable approaches have
+  characterized the unity and diversity of EF structure extensively, less is
+  known about the conditional associations among EF components—how these
+  associations change as children develop, and whether they vary across
+  sociocultural contexts. The present study applied Bayesian Gaussian Graphical
+  Models to model age-adjusted EF networks across two longitudinal preschool
+  cohorts from Australia (N = 232; M age = 4.43 years; three waves) and South
+  Africa (N = 217; M age = 4.70 years; two waves). Results suggest moderate and
+  selective coupling among EF components, consistent with partial unity: the
+  inhibition–working memory edge was the most reliable connection across cohorts
+  and waves. Despite substantial gains in EF performance across waves, network
+  structure remained stable over time, suggesting a dissociation between the
+  level of executive abilities and the relational architecture organizing them.
+  Exploratory moderation analyses indicated that income-related differences in
+  specific edges emerged at T2 in both cohorts, though these findings require
+  replication in larger samples. Together, these results advance a network
+  perspective on early EF development that complements latent variable
+  approaches, highlighting that the pattern of coupling among EF components,
+  and not just children's performance levels, may be sensitive to the
+  environments in which development occurs.
 
 keywords: ["executive function"] 
 word-count: true
-
 project:
-  type: default
   
+  type: default
 bibliography: library.bib
-
-# appendix
 number-sections: false
 appendix-style: default
-
 floatsintext: true
 numbered-lines: true
 # draft: false
 mask: false
-
 # figurelist: no
 # tablelist: no
 # footnotelist: no
-
 format:
   apaquarto-pdf:
     documentmode: man
@@ -100,13 +106,14 @@ format:
 knitr:
   opts_chunk:
     ft.arraystretch: 1.25
-
 execute:
   echo: false 
   message: false 
   warning: false 
   error: true 
   cache: true
+editor_options: 
+  chunk_output_type: console
 ---
 
 # Introduction
@@ -270,13 +277,9 @@ For difference-in-differences (DiD) contrasts, we tested whether cohorts showed 
 
 To test whether socioeconomic factors moderate network structure (RQ4), we adopted a stratified approach. Within each cohort, we split children into High vs. Low groups based on median splits of baseline (T1) income and home learning environment (HLE), then fit separate BGGM models for each group at each wave. We computed moderation effects as High − Low edge differences, with ROPE probabilities indicating the strength of evidence for moderation (P(|High − Low| > 0.05)). This stratified approach is more robust than including SES as a continuous covariate in a single model, as it allows network structure to differ nonlinearly across SES groups and does not assume constant effects across the SES distribution.
 
-### Measurement Invariance
-
-We tested measurement invariance using multi-group Bayesian confirmatory factor analysis (bCFA), estimated via Markov chain Monte Carlo sampling in Stan [@merkle2018blavaan; @merkle2021efficient]. Because cognitive flexibility exhibited pronounced floor effects in Australian children at T1 (32.5% scoring zero), and to accommodate heterogeneous measurement scales across cohorts (cognitive flexibility: 0–12 switch accuracy; working memory: 0–4.33 scaled score; inhibition: 0–1 proportion), we treated all three EF indicators as ordinal variables, segmenting them into tertiles (Low/Medium/High) based on pooled distributions to ensure adequate category representation. We fit a one-factor model across four groups simultaneously (AU_T1, AU_T2, SA_T1, SA_T2), testing invariance in a sequence of increasingly constrained models: configural (same factor structure across groups), metric (factor loadings additionally constrained to equality), and scalar (thresholds additionally constrained to equality). We compared model fit using the leave-one-out information criterion (LOO-IC). See Appendix A for further detail.
-
 ### Software
 
-All analyses were conducted in R (version 4.5.0). Network models were fit using BGGM (version 2.1.5), measurement invariance tests used lavaan (version 0.6.19), and visualizations used ggplot2 (version 4.0.0). Analysis code is available at [include github url].
+All analyses were conducted in R (version 4.5.0). Network models were fit using BGGM (version 2.1.5) and visualizations used ggplot2 (version 4.0.0). Analysis code is available via github.
 
 ```{r}
 #| label: packages
@@ -1357,7 +1360,8 @@ get_age_r <- function(ctry, tp, var) {
 
 ### Descriptive Statistics and Preliminary Analyses
 
-@tbl-render-table1 below presents sample characteristics (age and sex), descriptive statistics for EF scores, and zero-order correlations between EF components by cohort and timepoint. EF scores increased with age across waves (see Appendix @fig-test-re-test-plot and @fig-age-ef-wave), with age-EF correlations ranging from r = `r round(age_cor_min_row$r_age, 2)` (`r ef_label_lookup[as.character(age_cor_min_row$variable)]` in `r country_label_lookup[as.character(age_cor_min_row$country)]` at `r age_cor_min_row$timepoint`) to r = `r round(age_cor_max_row$r_age, 2)` (`r ef_label_lookup[as.character(age_cor_max_row$variable)]` in `r country_label_lookup[as.character(age_cor_max_row$country)]` at `r age_cor_max_row$timepoint`). These negligible to moderate correlations motivated the network approach: partial correlations reveal conditional dependencies after controlling for shared variance and age-related trends.
+@tbl-render-table1 presents sample characteristics (age and sex), descriptive statistics for EF scores, and zero-order correlations between EF components by cohort and timepoint. EF scores increased with age across waves (see Appendix @fig-age-ef-wave), with age-EF correlations ranging from r = `r round(age_cor_min_row$r_age, 2)` (`r ef_label_lookup[as.character(age_cor_min_row$variable)]` in `r country_label_lookup[as.character(age_cor_min_row$country)]` at `r age_cor_min_row$timepoint`) to r = `r round(age_cor_max_row$r_age, 2)` (`r ef_label_lookup[as.character(age_cor_max_row$variable)]` in `r country_label_lookup[as.character(age_cor_max_row$country)]` at `r age_cor_max_row$timepoint`), justifying residualization of age prior to network estimation. Zero-order correlations between EF components were small to moderate (r = `r round(cor_summary$min_r, 2)`–`r round(cor_summary$max_r, 2)`; @tbl-render-table1), indicating partially overlapping but distinct constructs. A network approach was therefore used to examine the conditional dependencies between EF 
+components — that is, associations between pairs of measures after accounting for their shared variance with the remaining component.
 
 ```{r}
 #| label: report-missingness
@@ -2164,7 +2168,7 @@ ei_report <- function(country, tp, node_label) {
 ```
 
 ### Measurement Invariance Testing
-Prior to the primary analyses, we evaluated the cross-cohort comparability of EF indicators using multi-group Bayesian confirmatory factor analysis across all four cohort×wave groups (AU_T1, AU_T2, SA_T1, SA_T2). A sequence of increasingly constrained models was compared using the leave-one-out information criterion (LOOIC). Both metric invariance (equal factor loadings) and scalar invariance (equal thresholds) were supported, with each additional set of constraints improving predictive fit by a margin well exceeding its standard error. Full scalar invariance supports the comparison of structures and latent performance levels across cohorts [@vandenberg2000review; @putnick2016measurement]. Full details of the invariance testing procedure and results are reported in Appendix A.
+Prior to the primary analyses, we evaluated the cross-cohort comparability of EF indicators using multi-group Bayesian confirmatory factor analysis across all four cohort×wave groups (AU_T1, AU_T2, SA_T1, SA_T2). A sequence of increasingly constrained models was compared using the leave-one-out information criterion (LOOIC). Both metric invariance (equal factor loadings) and scalar invariance (equal thresholds) were supported, with each additional set of constraints improving predictive fit by a margin well exceeding its standard error. Full scalar invariance supports the comparison of structures and latent performance levels across cohorts [@vandenberg2000review; @putnick2016measurement]. Full details of the invariance testing procedure and results are reported in Appendix B.
 
 ### Research Question 1 (Primary): EF Network Structure Within Cohorts
 
@@ -2291,6 +2295,9 @@ knitr::raw_latex("\\begin{landscape}\n")
 #| fig-height: 6
 #| include: true
 #| out-width: "100%"
+#| warning: false
+#| message: false
+#| fig-cap: "EF network structure and within-wave coupling estimates. (A) EF network structure by cohort and wave. Nodes positioned consistently across panels; edge thickness reflects partial correlation strength; edges with P(|r|>0.05) < 0.75 are omitted for clarity. (B) Within-wave EF coupling (posterior partial correlations). Points show posterior medians; bars show 95% credible intervals. Solid line = 0; dashed lines = ROPE (±0.05)."
 
 library(ggplot2)
 library(patchwork)
@@ -2341,11 +2348,11 @@ plot_ef_network <- function(fit, title, threshold = 0.75) {
          title            = title,
          title.cex        = 1.1,
          edge.labels      = TRUE,
-         edge.label.cex   = 2,
+         edge.label.cex   = 3.5,
          edge.label.bg    = "white",
          edge.label.color = "black",
          edge.label.font  = 2,
-         vsize            = 22,
+         vsize            = 18,
          esize            = 15,
          asize            = 6,
          curve            = 0.2,
@@ -2377,8 +2384,8 @@ edges_df2 <- edge_tbl %>%
   ) %>%
   dplyr::filter(!(timepoint == "T3" & country == "SA")) %>%
   dplyr::mutate(
-    facet_combo = paste(timepoint, country, sep = "\n"),
-    facet_combo = factor(facet_combo, levels = c("T1\nAU", "T1\nSA", "T2\nAU", "T2\nSA", "T3\nAU"))
+    facet_combo = paste(timepoint, country, sep = " "),
+    facet_combo = factor(facet_combo, levels = c("T1 AU", "T1 SA", "T2 AU", "T2 SA", "T3 AU"))
   )
 
 p_forest <- ggplot(edges_df2, aes(x = q50, y = edge_short, colour = edge_short)) +
@@ -2406,7 +2413,7 @@ p_forest <- ggplot(edges_df2, aes(x = q50, y = edge_short, colour = edge_short))
 
 # save network panels to png
 net_png <- "fig-rq1-network.png"
-png(net_png, width = 700, height = 550, res = 120)
+png(net_png, width = 700, height = 600, res = 120)
 par(mfrow = c(2, 3), mar = c(1, 1, 3, 1))
 plot_ef_network(get_fit("AU", "T1", fit_tbl_uniq), "AU T1")
 plot_ef_network(get_fit("AU", "T2", fit_tbl_uniq), "AU T2")
@@ -2415,27 +2422,56 @@ plot_ef_network(get_fit("SA", "T1", fit_tbl_uniq), "SA T1")
 plot_ef_network(get_fit("SA", "T2", fit_tbl_uniq), "SA T2")
 plot.new()
 par(mfrow = c(1, 1))
-dev.off()
+invisible(dev.off())
 
-# save forest plot panels to png
+# save forest plot to png
 forest_png <- "fig-rq1-forest.png"
-ggsave(forest_png, p_forest, width = 7, height = 6, dpi = 120)
+ggsave(forest_png, p_forest, width = 700/120, height = 600/120, dpi = 120)
 
-#combine
+# combine into final figure with panel labels
 img_net    <- png::readPNG(net_png)
 img_forest <- png::readPNG(forest_png)
+final_png <- "fig-rq1-combined-final.png" 
 
-final_png <- "fig-rq1-combined-final.png"
-png(final_png, width = 1400, height = 600, res = 120)
+png(final_png, width = 1400, height = 640, res = 120)
 grid.newpage()
+
+# outer layout: 1 row with 2 columns
 pushViewport(viewport(layout = grid.layout(1, 2)))
+
+# left column (A)
 pushViewport(viewport(layout.pos.col = 1))
+pushViewport(viewport(layout = grid.layout(2, 1, heights = unit(c(0.05, 0.95), "npc"))))
+
+pushViewport(viewport(layout.pos.row = 1))
+grid.text("(A)", x = 0.5, y = 0.5, just = "center",
+          gp = gpar(fontsize = 14, fontface = "bold"))
+popViewport()
+
+pushViewport(viewport(layout.pos.row = 2))
 grid.raster(img_net)
 popViewport()
+
+popViewport()  # inner layout
+popViewport()  # col 1
+
+# right column (B) 
 pushViewport(viewport(layout.pos.col = 2))
+pushViewport(viewport(layout = grid.layout(2, 1, heights = unit(c(0.05, 0.95), "npc"))))
+
+pushViewport(viewport(layout.pos.row = 1))
+grid.text("(B)", x = 0.5, y = 0.5, just = "center",
+          gp = gpar(fontsize = 14, fontface = "bold"))
+popViewport()
+
+pushViewport(viewport(layout.pos.row = 2))
 grid.raster(img_forest)
 popViewport()
-dev.off()
+
+popViewport()  # inner layout
+popViewport()  # col 2
+
+invisible(dev.off())
 
 knitr::include_graphics(final_png)
 ```
@@ -2445,6 +2481,7 @@ knitr::include_graphics(final_png)
 #| include: true
 knitr::raw_latex("\\end{landscape}\n")
 ```
+
 ### Global strength
 
 Global strength estimates (sum of absolute partial correlations over unique edges) are reported in @tbl-rq1-gt-all (above) and visualized over time in @fig-rq1-strength-ei (below). Global strength estimates showed substantial overlap in their credible intervals across timepoints, indicating that the data did not provide reliable evidence for change in global strength over time (despite variation in point estimates, for example from T1 to T2 in the SA cohort).
@@ -2461,7 +2498,7 @@ knitr::raw_latex("\\begin{landscape}\n")
 
 ```{r}
 #| label: fig-rq1-strength-ei
-#| fig-cap: "**Global strength and expected influence over time by cohort.** Left panel: points show posterior median; whiskers show 95% credible intervals. Global strength is the sum of absolute partial correlations over unique edges. Right panel: points show posterior median; whiskers show 95% credible intervals. N per wave is shown beneath the zero line within each panel."
+#| fig-cap: "**Global strength and expected influence over time by cohort.** (A) Global strength: points show posterior median; whiskers show 95% credible intervals. Global strength is the sum of absolute partial correlations over unique edges. (B) Expected influence: points show posterior median; whiskers show 95% credible intervals. N per wave is shown beneath the zero line within each panel."
 #| fig-width: 14
 #| fig-height: 6
 #| include: true
@@ -2576,8 +2613,16 @@ p_ei <- ggplot(rq1_ei, aes(x = timepoint, y = q50, group = 1)) +
   coord_cartesian(clip = "off") +
   scale_y_continuous(expand = expansion(mult = c(0.12, 0.05)))
 
-# combine
-p_gs | p_ei
+p_gs_labeled <- p_gs + 
+  ggtitle("(A)") + 
+  theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold"))
+
+p_ei_labeled <- p_ei + 
+  ggtitle("(B)") + 
+  theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold"))
+
+p_gs_labeled | p_ei_labeled
+
 ```
 
 ```{r}
@@ -2787,7 +2832,7 @@ rq2_table_all
 
 For each wave transition, we computed posterior distributions of change in edge weights (Δr = later wave − earlier wave), global strength (Δ), and expected influence (Δ). We evaluated whether changes exceeded a region of practical equivalence (ROPE; |Δr| > 0.05) to distinguish meaningful developmental change from negligible fluctuation. We found little evidence for meaningful change in EF network summaries across adjacent waves within either cohort (see @tbl-rq2-gt-all). Posterior 95% CrIs for all Δs included 0, and probabilities that edge changes exceeded the ROPE (|Δr| > 0.05) were modest (≈0.6–0.8), indicating substantial uncertainty and no clear support for meaningful change.
 
-Despite the absence of meaningful change in EF network structure across adjacent waves, mean EF performance increased clearly across the same period (see @fig-mean-trend below and Appendix @fig-spaghetti-plot). Children in both cohorts showed reliable improvement in raw EF scores across waves — consistent with the well-documented rapid growth of executive abilities during the preschool years [@best2010developmental; @diamond2013executive] — yet the conditional associations among EF components remained largely stable in both magnitude and pattern.
+Despite the absence of meaningful change in EF network structure across adjacent waves, mean EF performance increased clearly across the same period (see @fig-mean-trend below and Appendix @fig-spaghetti-plot for individualized trajectories). Children in both cohorts showed reliable improvement in raw EF scores across waves — consistent with the well-documented rapid growth of executive abilities during the preschool years [@best2010developmental; @diamond2013executive] — yet the conditional associations among EF components remained largely stable in both magnitude and pattern.
 ```{r}
 #| label: tbl-rq2-gt-all
 #| tbl-cap: "Change in EF network summaries across adjacent waves within cohort. Cells show posterior median [95% CrI] for Δ (later − earlier). For edges, cells also show $P(|\\Delta r| > 0.05)$."
@@ -3492,15 +3537,15 @@ excl_pct <- function(country, timepoint) {
 ```
 ### Research Question 3 (Secondary): Cross-Cohort Comparisons
 
-A substantial floor effect was observed in Australian T1 cognitive flexibility (32.3% scoring zero), raising potential concerns for cross-cohort network comparisons. Floor effects can induce artificial correlations through range restriction and may bias partial correlation estimates. To address this, we (1) Report cross-cohort comparisons using the full sample, and (2) Conduct sensitivity analyses excluding children who scored zero on cognitive flexibility at each wave. If results converge across analyses, this would suggest floor effects do not meaningfully distort cross-cohort comparisons. Divergence would indicate that apparent cohort differences partly reflect measurement artefacts.
+We observed a substantial floor effect in Australian T1 cognitive flexibility (32.3% scoring zero) (see Appendix @fig-ef-boxplots-by-wave), raising potential concerns for cross-cohort network comparisons. Floor effects can induce artificial correlations through range restriction and may bias partial correlation estimates. To address this, we (1) Report cross-cohort comparisons using the full sample, and (2) Conduct sensitivity analyses excluding children who scored zero on cognitive flexibility at each wave. If results converge across analyses, this would suggest floor effects do not meaningfully distort cross-cohort comparisons. Divergence would indicate that apparent cohort differences partly reflect measurement artefacts.
 
-Each cell in @tbl-rq3-sensitivity-comparison represents the posterior distribution of a difference in a pairwise EF partial correlation between the AU and SA cohorts. For the cohort difference panels (T1 and T2), the median Δr [95% CrI] reflects the estimated AU minus SA difference in that edge at a single wave: a positive value indicates AU showed a stronger correlation between those two EF components than SA, while a negative value indicates the reverse. For the difference-in-differences panel, the quantity is (Δr_T2−T1)_AU − (Δr_T2−T1)_SA — that is, how much the AU cohort's change in that edge across waves exceeded SA's change. A positive DiD therefore means the AU cohort showed greater developmental growth in that edge relative to SA, and a negative value means SA grew more. The ROPE-based probability P(|Δr|>0.05) reflects the proportion of posterior draws exceeding a minimally meaningful threshold of 0.05; values approaching 1.0 indicate the posterior is concentrated away from negligible differences. Credible intervals that exclude zero provide the strongest evidence of a true difference, while wide intervals crossing zero — as seen throughout this table — indicate that despite non-zero point estimates, substantial uncertainty remains about the direction and magnitude of any cohort difference.
+Each cell in @tbl-rq3-sensitivity-comparison represents the posterior distribution of a difference in a pairwise EF partial correlation between the AU and SA cohorts. For the cohort difference panels (T1 and T2), the median Δr [95% CrI] reflects the estimated AU minus SA difference in that edge at a single wave: a positive value indicates AU showed a stronger correlation between those two EF components than SA, while a negative value indicates the reverse. For the difference-in-differences panel, the quantity is (Δr_T2−T1)_AU − (Δr_T2−T1)_SA — that is, how much the AU cohort's change in that edge across waves exceeded SA's change. A positive DiD therefore means the AU cohort showed greater developmental growth in that edge relative to SA, and a negative value means SA grew more. The ROPE-based probability P(|Δr|>0.05) reflects the proportion of posterior draws exceeding a minimally meaningful threshold of 0.05; values approaching 1.0 indicate the posterior is concentrated away from negligible differences. Credible intervals that exclude zero provide the strongest evidence of a true difference, while wide intervals crossing zero indicate that despite non-zero point estimates, substantial uncertainty remains about the direction and magnitude of any cohort difference.
 
-**Main Analysis (Full Sample)**: At T1, posterior medians suggested modest AU–SA differences in several edges; however, all 95% credible intervals overlapped zero. At T2, cohort differences were smaller and predominantly positive, but again uncertain. In the difference-in-differences analysis, most edges were centered near zero. The largest deviation was observed for CogFlex–Inhibition (median = `r round(rq3_ci("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition", "Main analysis")["m"], 2)`; 95% CrI [`r round(rq3_ci("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition", "Main analysis")["lo"], 2)`, `r round(rq3_ci("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition", "Main analysis")["hi"], 2)`]; P(|Δr|>0.05) = `r round(rq3_rope("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition", "Main analysis"), 2)`), though its credible interval still included zero, indicating substantial uncertainty. Results were substantively unchanged when differences were summarized on the Fisher z (atanh) scale (see Appendix @tbl-rq3-gt-edges-dual).
+**Main Analysis (Full Sample)**: At T1, posterior medians suggested modest AU–SA differences in several edges; however, all 95% credible intervals overlapped zero. At T2, cohort differences were smaller and predominantly positive, but again uncertain. In the difference-in-differences analysis, most edges were centered near zero. The largest deviation was observed for cognitive flexibility–inhibition (median = `r round(rq3_ci("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition", "Main analysis")["m"], 2)`; 95% CrI [`r round(rq3_ci("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition", "Main analysis")["lo"], 2)`, `r round(rq3_ci("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition", "Main analysis")["hi"], 2)`]; P(|Δr|>0.05) = `r round(rq3_rope("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition", "Main analysis"), 2)`), though its credible interval still included zero, indicating substantial uncertainty. Results were substantively unchanged when differences were summarized on the Fisher z (atanh) scale (see Appendix @tbl-rq3-gt-edges-dual).
 
 **Sensitivity Analysis (Excluding Cognitive Flexibility Floor Performers)**: Given the pronounced floor effect in Australian T1 cognitive flexibility (`r excl_n("AU","T1")`/`r orig_n("AU","T1")` excluded [`r excl_pct("AU","T1")`%]; AU T2: `r excl_n("AU","T2")`/`r orig_n("AU","T2")` [`r excl_pct("AU","T2")`%]; we refitted networks after wave-specific exclusion of children scoring zero on cognitive flexibility. Estimates were highly similar in direction and magnitude to the main analysis (see @tbl-rq3-sensitivity-comparison), with credible intervals widening due to reduced sample size. Patterns at T2 and in the difference-in-differences analysis were nearly identical. Together, these results indicate that cross-cohort differences in EF network structure are small and uncertain.
 
-Although formal cross-cohort tests were inconclusive — credible intervals for all AU–SA differences included zero — the largest difference-in-differences contrast was observed for the cogflex–inhibition edge (median Δ = `r rq3_ci("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition")["m"]`; 95% CrI [`r rq3_ci("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition")["lo"]`, `r rq3_ci("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition")["hi"]`]; P(|Δr|>0.05) = `r rq3_rope("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition")`). At T1, this edge appeared stronger in SA than AU (median Δ = `r rq3_ci("Cohort difference (AU − SA) at T1", "ef_cogflex - ef_inhibition")["m"]`; 95% CrI [`r rq3_ci("Cohort difference (AU − SA) at T1", "ef_cogflex - ef_inhibition")["lo"]`, `r rq3_ci("Cohort difference (AU − SA) at T1", "ef_cogflex - ef_inhibition")["hi"]`]), whereas at T2 the difference was negligible (median Δ = `r rq3_ci("Cohort difference (AU − SA) at T2", "ef_cogflex - ef_inhibition")["m"]`; 95% CrI [`r rq3_ci("Cohort difference (AU − SA) at T2", "ef_cogflex - ef_inhibition")["lo"]`, `r rq3_ci("Cohort difference (AU − SA) at T2", "ef_cogflex - ef_inhibition")["hi"]`]). The remaining edges showed little evidence of cohort differences at either wave or across the T1–T2 interval. Taken together, these results do not provide strong evidence for cohort differences in EF network structure, though the relatively high ROPE probability for the cogflex–inhibition difference-in-differences contrast warrants replication with larger samples and additional timepoints.
+Although formal cross-cohort tests were inconclusive — credible intervals for all AU–SA differences included zero — the largest difference-in-differences contrast was observed for the cognitive flexibilty–inhibition edge (median Δ = `r rq3_ci("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition")["m"]`; 95% CrI [`r rq3_ci("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition")["lo"]`, `r rq3_ci("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition")["hi"]`]; P(|Δr|>0.05) = `r rq3_rope("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition")`). At T1, this edge appeared stronger in SA than AU (median Δ = `r rq3_ci("Cohort difference (AU − SA) at T1", "ef_cogflex - ef_inhibition")["m"]`; 95% CrI [`r rq3_ci("Cohort difference (AU − SA) at T1", "ef_cogflex - ef_inhibition")["lo"]`, `r rq3_ci("Cohort difference (AU − SA) at T1", "ef_cogflex - ef_inhibition")["hi"]`]), whereas at T2 the difference was negligible (median Δ = `r rq3_ci("Cohort difference (AU − SA) at T2", "ef_cogflex - ef_inhibition")["m"]`; 95% CrI [`r rq3_ci("Cohort difference (AU − SA) at T2", "ef_cogflex - ef_inhibition")["lo"]`, `r rq3_ci("Cohort difference (AU − SA) at T2", "ef_cogflex - ef_inhibition")["hi"]`]). The remaining edges showed little evidence of cohort differences at either wave or across the T1–T2 interval. Taken together, these results do not provide strong evidence for cohort differences in EF network structure, though the relatively high ROPE probability for the cognitive flexibility–inhibition difference-in-differences contrast warrants replication with larger samples and additional timepoints.
 
 ```{r}
 #| label: tbl-rq3-sensitivity-comparison
@@ -3612,15 +3657,7 @@ tp_hle_aus <- summ_cont_tp(
 Descriptive statistics for socioeconomic status and home learning environment by cohort and timepoint are presented in @tbl-render-table2. We examined whether these factors moderated EF network structure within each cohort.
 
 ```{r}
-#| results: asis
-#| include: true
-knitr::raw_latex("\\begin{landscape}\n")
-```
-
-```{r}
-#| label: tbl-render-table2
-#| tbl-cap: "Socioeconomic status and home learning environment by country and timepoint."
-#| include: true
+#| include: false
 
 group_levels <- bind_rows(
   aus_income_tp %>% distinct(country, timepoint),
@@ -3635,7 +3672,8 @@ group_levels <- bind_rows(
     group     = paste(country, timepoint, sep = " — ")
   ) %>%
   arrange(match(country, c("Australia", "South Africa")), timepoint) %>%  # <- fix order string
-  pull(group)
+  pull(group) %>%
+  unique()
 
 # SA income (continuous)
 income2_long <- bind_rows(
@@ -3671,6 +3709,7 @@ hle_sa_long <- bind_rows(
               group, value = fmt_mean_sd(mean, sd, digits = 2))
 )
 
+# this thing's fault:
 hle_sa_wide <- hle_sa_long %>%
   mutate(group = factor(group, levels = group_levels)) %>%
   select(section, row, group, value) %>%
@@ -3690,7 +3729,7 @@ hle_aus_long <- bind_rows(
               row = paste0(variable, ", Mean (SD)"),
               group, value = fmt_mean_sd(mean, sd, digits = 2))
 )
-
+#
 hle_aus_wide <- hle_aus_long %>%
   mutate(group = factor(group, levels = group_levels)) %>%
   select(section, row, group, value) %>%
@@ -3719,6 +3758,19 @@ paper_table2 <- bind_rows(ses2_wide, income2_wide, hle_aus_wide, hle_sa_wide) %>
 
 au_cols <- grep("Australia", names(paper_table2), value = TRUE)
 sa_cols <- grep("South Africa", names(paper_table2), value = TRUE)
+```
+
+```{r}
+#| results: asis
+#| include: true
+#| eval: true
+knitr::raw_latex("\\begin{landscape}\n")
+```
+
+```{r}
+#| label: tbl-render-table2
+#| tbl-cap: "Socioeconomic status and home learning environment by country and timepoint."
+#| include: true
 
 paper_table2 %>%
   gt(groupname_col = "section", rowname_col = "row") %>%
@@ -3771,6 +3823,7 @@ paper_table2 %>%
 ```{r}
 #| results: asis
 #| include: true
+#| eval: true
 knitr::raw_latex("\\end{landscape}\n")
 ```
 \clearpage
@@ -4190,7 +4243,7 @@ rq4_mod_meaningful <- function(moderator, country, wave, contrast, edge) {
 }
 ```
 
-Within-cohort moderation analyses compared EF edge strengths across SES strata within each cohort×wave. In AU at T2, the cognitive flexibility–working memory edge was stronger in middle- relative to high-income children (Δ = `r rq4_mod_report("income","AU","T2","High - Middle","ef_cogflex - ef_workingmem")`; P(|Δ|>0.10) = `r rq4_mod_meaningful("income","AU","T2","High - Middle","ef_cogflex - ef_workingmem")`). In SA at T2, the inhibition–working memory edge was stronger in high- relative to low-income children (Δ = `r rq4_mod_report("income","SA","T2","High - Low","ef_inhibition - ef_workingmem")`; P(|Δ|>0.05) = `r rq4_mod_meaningful("income","SA","T2","High - Low","ef_inhibition - ef_workingmem")`).
+Within-cohort moderation analyses compared EF edge strengths across SES strata within each cohort×wave (see Appendix @tbl-rq4-sample-sizes for sample sizes per stratum). In AU at T2, the cognitive flexibility–working memory edge was stronger in middle- relative to high-income children (Δ = `r rq4_mod_report("income","AU","T2","High - Middle","ef_cogflex - ef_workingmem")`; P(|Δ|>0.10) = `r rq4_mod_meaningful("income","AU","T2","High - Middle","ef_cogflex - ef_workingmem")`). In SA at T2, the inhibition–working memory edge was stronger in high- relative to low-income children (Δ = `r rq4_mod_report("income","SA","T2","High - Low","ef_inhibition - ef_workingmem")`; P(|Δ|>0.05) = `r rq4_mod_meaningful("income","SA","T2","High - Low","ef_inhibition - ef_workingmem")`).
 
 ```{r}
 #| label: tbl-rq4-moderation
@@ -4251,7 +4304,7 @@ rq4_table %>%
 
 Each cell in @tbl-rq4-moderation represents the posterior distribution of the difference in a pairwise EF partial correlation between two SES groups, within a given cohort and wave. The median [95% CrI] quantifies the estimated magnitude and direction of the group difference: a positive value indicates the first-named group (e.g., High income) showed a stronger EF edge than the second (e.g., Low income), while a negative value indicates the reverse. The ROPE-based probability P(|Δ|>0.05) reflects the proportion of posterior draws exceeding a minimally meaningful effect size threshold of 0.05; values approaching 1.0 indicate that the posterior mass is concentrated away from negligible differences. Credible intervals that exclude zero provide the strongest evidence of a difference, while wide intervals crossing zero indicate substantial uncertainty regardless of the point estimate.
 
-Despite limited statistical power given income group sample sizes — particularly at later Australian waves where low-income cells fell below the n = 20 estimation threshold — two SES moderation effects met the meaningfulness criterion. In Australia at T2, high-income children showed a weaker cognitive flexibility–working memory edge than middle-income children (Δ = `r rq4_mod_report("income", "AU", "T2", "High - Middle", "ef_cogflex - ef_workingmem")`; P(|Δ|>0.10) = `r rq4_mod_meaningful("income", "AU", "T2", "High - Middle", "ef_cogflex - ef_workingmem")`). In South Africa at T2, the inhibition–working memory edge was stronger in high- relative to low-income children (Δ = `r rq4_mod_report("income", "SA", "T2", "High - Low", "ef_inhibition - ef_workingmem")`; P(|Δ|>0.05) = `r rq4_mod_meaningful("income", "SA", "T2", "High - Low", "ef_inhibition - ef_workingmem")`). 
+Despite limited statistical power given income group sample sizes, particularly at later Australian waves where low-income cells fell below the n = 20 estimation threshold, two SES moderation effects met the meaningfulness criterion. In Australia at T2, high-income children showed a weaker cognitive flexibility–working memory edge than middle-income children (Δ = `r rq4_mod_report("income", "AU", "T2", "High - Middle", "ef_cogflex - ef_workingmem")`; P(|Δ|>0.10) = `r rq4_mod_meaningful("income", "AU", "T2", "High - Middle", "ef_cogflex - ef_workingmem")`). In South Africa at T2, the inhibition–working memory edge was stronger in high- relative to low-income children (Δ = `r rq4_mod_report("income", "SA", "T2", "High - Low", "ef_inhibition - ef_workingmem")`; P(|Δ|>0.05) = `r rq4_mod_meaningful("income", "SA", "T2", "High - Low", "ef_inhibition - ef_workingmem")`). 
 
 \clearpage
 
@@ -4265,16 +4318,17 @@ First, EF components in early childhood show moderate and selective coupling, co
 
 These edge-level results point to a consistent pattern across cohorts: EF components in early childhood are moderately but selectively coupled, rather than uniformly interconnected. The inhibition–working memory edge was the most reliable connection across all waves and both cohorts, suggesting that these two components share the strongest conditional association once cognitive flexibility and age are accounted for. This pattern converges with prior network modelling of EF tasks; for example, in @karr2022unity, the partial correlation between inhibition and working memory was likewise the strongest edge in the EF network across ages 3–6, indicating a robust and developmentally stable coupling between these components. Together, these findings are consistent with theoretical accounts in which inhibitory control and working memory are closely related facets of a common executive control mechanism [@friedman2017unity; @miyake2000unity], and extend this evidence into early childhood using a longitudinal, multi-cohort network framework.
 
-Within this broadly shared architecture, the specific topology differed between cohorts -- In Australia, working memory emerged as the most connected node, with reliable edges to both inhibition and cognitive flexibility. In South Africa, inhibition played a comparably connected role, with a strong cognitive flexibility–inhibition edge at T1 (`r edge_report("SA", "T1", "Cognitive flexibility–Inhibition")`; `r edge_meaningful("SA", "T1", "Cognitive flexibility–Inhibition")`) that attenuated over time (T2: `r edge_report("SA", "T2", "Cognitive flexibility–Inhibition")`; `r edge_meaningful("SA", "T2", "Cognitive flexibility–Inhibition")`), while the cognitive flexibility–working memory edge remained weaker and more uncertain across waves (T1: `r edge_report("SA", "T1", "Cognitive flexibility–Working memory")`; `r edge_meaningful("SA", "T1", "Cognitive flexibility–Working memory")`). This divergence in network topology — not simply overall connectivity, provides a preliminary indication that the relational architecture of executive function may be sensitive to sociocultural and environmental context [@williams2022learning].
+Within this broadly shared architecture, the specific topology differed between cohorts — in Australia, working memory emerged as the most connected node, with reliable edges to both inhibition and cognitive flexibility. In South Africa, inhibition played a comparably
+connected role, with a strong cognitive flexibility–inhibition edge at T1 (`r edge_report("SA", "T1", "Cognitive flexibility–Inhibition")`; `r edge_meaningful("SA", "T1", "Cognitive flexibility–Inhibition")`) that showed some attenuation at T2, though with considerable uncertainty (T2: `r edge_report("SA", "T2", "Cognitive flexibility–Inhibition")`;
+`r edge_meaningful("SA", "T2", "Cognitive flexibility–Inhibition")`). The cognitive
+flexibility–working memory edge was weak and uncertain across waves (T1: `r edge_report("SA", "T1", "Cognitive flexibility–Working memory")`; `r edge_meaningful("SA", "T1", "Cognitive flexibility–Working memory")`), and should be interpreted cautiously given the modest posterior evidence. Taken together, these patterns raise the possibility that the relational architecture of executive function may be sensitive to sociocultural and environmental context [@williams2022learning], though replication in independent samples is needed before stronger conclusions can be drawn.
 
-A further notable difference concerns the cognitive flexibility–inhibition edge, which was weakly supported in the Australian network at T1 (`r edge_meaningful("AU", "T1", "Cognitive flexibility–Inhibition")`) but more credibly present in South Africa (`r edge_meaningful("SA", "T1", "Cognitive flexibility–Inhibition")`). Caution is warranted in interpreting this difference, given the pronounced floor effect in Australian cognitive flexibility scores at T1 (32.5% scoring zero). Floor effects can artificially suppress partial correlations through range restriction. Sensitivity analyses excluding floor performers are reported in the cross-cohort comparisons section (RQ3) and results were substantively unchanged, but this AU T1 edge should nonetheless be interpreted with caution.
+A further difference concerns the cognitive flexibility–inhibition edge, which was 
+weakly supported in the Australian network at T1 (`r edge_meaningful("AU", "T1", "Cognitive flexibility–Inhibition")`) but more credibly present in South Africa (`r edge_meaningful("SA", "T1", "Cognitive flexibility–Inhibition")`). This is theoretically noteworthy: @karr2024network identified the cognitive flexibility–inhibition edge as a marker of EF network maturation, showing the greatest increase with age and stronger weighting in neurotypically developing children relative to those with ADHD across US and Australian samples. The comparatively stronger presence of this edge in South Africa at T1 — among younger children on average — may therefore reflect a different developmental trajectory or timing of EF integration, rather than simply a quantitative difference in connectivity. Caution is warranted, however, given the pronounced floor effect in Australian cognitive flexibility scores at T1 (32.5% scoring zero), which may artificially suppress this edge.; sensitivity analyses excluding floor performers are reported in the cross-cohort comparisons section (Research Question 3) and were substantively unchanged.
 
-We found little evidence of reliable change in both global strength and expected influence which may reflect the brief longitudinal window in the present studies. Network-level connectivity (global strength) and node centrality (expected influence) may be comparatively stable over short developmental intervals, such that meaningful change—if present—is subtle and difficult to distinguish from measurement uncertainty. This interpretation is consistent with prior EF network modelling spanning preschool through adulthood, where global strength and centrality indices within childhood age bands are often estimated with uncertainty and developmental differences are primarily characterized via between-group contrasts rather than within-person change [@karr2022unity].
+We found little evidence of reliable change in both global strength and expected influence which may reflect the brief longitudinal window in the present studies. Network-level connectivity (global strength) and node centrality (expected influence) may be comparatively stable over short developmental intervals, such that meaningful change, if present, is subtle and difficult to distinguish from measurement uncertainty. This interpretation is consistent with prior EF network modelling spanning preschool through adulthood, where global strength and centrality indices within childhood age bands are often estimated with uncertainty and developmental differences are primarily characterized via between-group contrasts rather than within-person change [@karr2022unity].
 
 The finding that EF components in early childhood are moderately but selectively coupled — rather than either strongly integrated or largely independent — is broadly consistent with a substantial body of developmental factor analytic work. Confirmatory factor analyses with preschool samples consistently support unidimensional or two-factor representations of EF, in contrast to the three-factor unity-diversity structure characteristic of adults [@karr2018unity; @lee2013developmental; @wiebe2008using; @willoughby2012measurement]. The network approach taken here complements these findings by revealing which pairwise associations drive this partial integration: across both cohorts, working memory and inhibitory control shared the strongest conditional association. This is consistent with @karr2022unity who find that the inhibition–working memory edge weight was the strongest at ages 3-6 in a US sample. In the bifactor framework of @friedman2017unity, inhibition loads primarily on a Common EF factor, and the inhibition–working memory coupling observed here may reflect this shared common control variance, even in early childhood when the three-factor structure has not yet fully differentiated.
-
-# question form Steven: I imagine this will be taken up in Discussion, but I am wondering how this articulates (or not) with the finding profiled in the Intro that inhibition tends to get subsumed within the central EF factor with additional WM and CF components? At least in AU, does this point to centrality of WM? Or at least the WM-IC (activation/inhibition) coupling?
-
 
 ## Stability of EF Network Structure Amid Developmental Growth
 
@@ -4290,7 +4344,7 @@ Exploratory moderation analyses identified two edges that differed across income
 
 In South Africa at T2, higher household income was associated with stronger inhibition–working memory coupling. The directional divergence between Australian and South African income moderation effects — where higher income predicted weaker cognitive flexibility–working memory coupling in Australia but stronger inhibition–working memory coupling in South Africa — is interesting, though difficult to interpret. Both patterns are consistent with plausible theoretical accounts: differentiation frameworks would predict weaker edges in higher-resource contexts as EF components become more specialized and independent [@karr2022unity], while resource-dependent co-development accounts would predict stronger edges where greater economic scaffolding supports the joint development of closely related components [@rosen2020cognitive]. That the findings pattern differently across the two samples may reflect genuine contextual variation in how income-related resources shape EF network organisation — or may simply reflect sampling variability and the instability of moderation estimates in small groups. Current theory does not generate clear a priori predictions about the direction of income moderation effects on specific edges, and post-hoc mechanistic accounts risk overfitting narrative to noise. These findings are therefore reported descriptively, and replication in larger, more representative samples with granular SES measurement is necessary before any interpretive weight can be placed on the direction of these effects.
 
-Home learning environment moderation effects were modest and did not reliably exceed the ROPE threshold. This is somewhat surprising given established links between HLE quality and EF development [@melhuish2008effects; @sylva2004effective]. One possibility is that HLE influences the level of EF abilities rather than the relational architecture among components: children from enriched home learning environments may perform better on individual EF tasks without showing systematically different coupling among components. Alternatively, the composite HLE scores used here may not capture the specific dimensions of home experience most relevant to EF network structure. Future work employing more detailed and observational HLE measures may be better positioned to detect HLE-related differences in EF network topology. For example,measures may need to move away from frequency-based indices (“how many books can you access?”, “how often do you read to your child?”) to indices that capture the quality of EF supportive interactions between caregivers and children around resources (as suggested by the literature on interaction quality in childcare settings [@howard2020measuring].
+Home learning environment moderation effects were modest and did not reliably exceed the ROPE threshold. This is somewhat surprising given established links between HLE quality and EF development [@melhuish2008effects; @sylva2004effective]. One possibility is that HLE influences the level of EF abilities rather than the relational architecture among components: children from enriched home learning environments may perform better on individual EF tasks without showing systematically different coupling among components. Alternatively, the composite HLE scores used here may not capture the specific dimensions of home experience most relevant to EF network structure. Future work employing more detailed and observational HLE measures may be better positioned to detect HLE-related differences in EF network topology. For example, measures may need to move away from frequency-based indices (“how many books can you access?”, “how often do you read to your child?”) to indices that capture the quality of EF supportive interactions between caregivers and children around resources (as suggested by the literature on interaction quality in childcare settings [@howard2020measuring].
 
 ## Methodological Contributions and Limitations
 
@@ -4306,9 +4360,204 @@ This study mapped the conditional architecture of executive function in early ch
 
 # References
 
-\printbibliography[heading=none]
+::: {#refs}
+:::
 
 \clearpage
+
+```{r}
+#| label: fig-test-re-test
+#| include: false
+
+# keep only children who have >1 wave for a given task (within country)
+# (ef_std already enforces canonical country codes AU/SA in the standardize chunk)
+
+ef_retest_scores <- ef_std %>%
+  dplyr::mutate(
+    country   = factor(as.character(country), levels = c("AU","SA")),
+    timepoint = factor(as.character(timepoint), levels = c("T1","T2","T3"), ordered = TRUE),
+    id        = as.character(id)
+  ) %>%
+  dplyr::group_by(country, id, task) %>%
+  dplyr::arrange(country, id, task, timepoint) %>%
+  dplyr::filter(dplyr::n_distinct(timepoint) > 1) %>%
+  dplyr::ungroup()
+
+# wide format: one row per child × task (within country), columns per wave
+# (also widens age so we can compute age gaps)
+retest_wide <- ef_retest_scores %>%
+  # if you *ever* have duplicates within a wave, this collapses safely
+  dplyr::group_by(country, id, task, timepoint) %>%
+  dplyr::summarise(
+    value_z = mean(value_z, na.rm = TRUE),
+    age     = mean(age,     na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  tidyr::pivot_wider(
+    id_cols     = c(country, id, task),
+    names_from  = timepoint,
+    values_from = c(value_z, age),
+    names_sep   = "_"
+  ) %>%
+  dplyr::mutate(
+    mean_age      = rowMeans(dplyr::select(., dplyr::starts_with("age_")), na.rm = TRUE),
+    age_gap_T12_y = age_T2 - age_T1,
+    age_gap_T23_y = age_T3 - age_T2
+  ) %>%
+  dplyr::select(
+    country, id, task,
+    mean_age,
+    age_gap_T12_y, age_gap_T23_y,
+    value_z_T1, value_z_T2, value_z_T3
+  )
+
+# helper: only compute r if there are enough complete pairs
+safe_cor <- function(a, b, min_n = 3) {
+  n <- sum(stats::complete.cases(a, b))
+  if (n < min_n) return(NA_real_)
+  suppressWarnings(stats::cor(a, b, use = "complete.obs"))
+}
+
+# 3) test–retest correlations by country × task
+trt <- retest_wide %>%
+  dplyr::group_by(country, task) %>%
+  dplyr::summarise(
+    r_T12   = safe_cor(value_z_T1, value_z_T2),
+    n_T12   = sum(stats::complete.cases(value_z_T1, value_z_T2)),
+    gap_T12 = mean(age_gap_T12_y, na.rm = TRUE) * 12,  # months
+
+    r_T23   = safe_cor(value_z_T2, value_z_T3),
+    n_T23   = sum(stats::complete.cases(value_z_T2, value_z_T3)),
+    gap_T23 = mean(age_gap_T23_y, na.rm = TRUE) * 12,  # months
+    .groups = "drop"
+  ) %>%
+  dplyr::arrange(task, country)
+
+trt
+```
+
+```{r}
+# Age associations {.appendix}
+# #| label: fig-test-re-test-plot
+# #| fig-cap: "Executive Function associations across waves. Note: Standardised scores (z); colour indicates mean age across available waves"
+# #| include: true
+# #| fig-align: center
+# #| fig-width: 8
+# #| fig-height: 7
+# #| fig-pos: 'H'
+# 
+# # From retest_wide -> one row per child × task × pair (T1–T2 and T2–T3),
+# # then build a single row facet that only includes observed combos.
+# 
+# retest_long_pairs <- dplyr::bind_rows(
+#   retest_wide %>%
+#     dplyr::transmute(
+#       country, id, task, mean_age,
+#       pair = "T1–T2",
+#       x = value_z_T1, y = value_z_T2
+#     ),
+#   retest_wide %>%
+#     dplyr::transmute(
+#       country, id, task, mean_age,
+#       pair = "T2–T3",
+#       x = value_z_T2, y = value_z_T3
+#     )
+# ) %>%
+#   dplyr::filter(!is.na(x) & !is.na(y)) %>%
+#   dplyr::mutate(
+#     country = factor(as.character(country), levels = c("AU","SA")),
+#     pair    = factor(pair, levels = c("T1–T2", "T2–T3")),
+#     row_facet = paste(country, pair, sep = "\n"),
+#     row_facet = factor(
+#       row_facet,
+#       levels = c(
+#         "AU\nT1–T2",
+#         "AU\nT2–T3",
+#         "SA\nT1–T2"
+#       )
+#     )
+#   )
+# 
+# # Panel stats (r + N), using the same "safe" logic as above
+# pair_stats <- retest_long_pairs %>%
+#   dplyr::group_by(country, task, pair, row_facet) %>%
+#   dplyr::summarise(
+#     n = sum(stats::complete.cases(x, y)),
+#     r = safe_cor(x, y, min_n = 3),
+#     .groups = "drop"
+#   ) %>%
+#   dplyr::mutate(
+#     label = ifelse(
+#       is.na(r),
+#       paste0("r = NA\nN = ", n),
+#       paste0("r = ", sprintf("%.2f", r), "\nN = ", n)
+#     )
+#   )
+# 
+# # Plot
+# p_retest_simple <- ggplot(retest_long_pairs, aes(x = x, y = y)) +
+#   geom_abline(slope = 1, intercept = 0, linetype = "dotted", alpha = 0.6) +
+#   geom_point(aes(colour = mean_age), alpha = 0.5, size = 1.4) +
+#   geom_smooth(method = "lm", formula = y ~ x, se = TRUE) +
+#   geom_text(
+#     data = pair_stats,
+#     aes(label = label),
+#     x = -Inf, y = Inf,
+#     inherit.aes = FALSE,
+#     hjust = -0.05, vjust = 1.1, size = 3.5
+#   ) +
+#   facet_grid(row_facet ~ task) +
+#   labs(
+#     x = "Earlier wave (z)",
+#     y = "Later wave (z)",
+#     colour = "Mean age (years)"
+#   ) +
+#   theme(legend.position = "bottom")
+# p_retest_simple
+```
+
+# Executive Function across waves {.appendix}
+```{r}
+#| label: fig-age-ef-wave
+#| fig-cap: "Executive Function by age across waves (z-scored within EF task). Note: Points jittered + transparent; lines are linear fits with 95% CI"
+#| include: true
+#| fig-align: center
+#| fig-width: 8
+#| fig-height: 7
+#| fig-pos: 'H'
+
+# set up plot scales
+.scale_colour_country <- function() {
+  scale_colour_discrete()
+}
+
+# Age x EF x wave (standardized)
+p_age_by_wave <- ggplot(
+  ef_std %>%
+    dplyr::filter(!is.na(age), !is.na(value_z)) %>%
+    dplyr::mutate(
+      country   = factor(as.character(country), levels = c("AU","SA")),
+      timepoint = factor(as.character(timepoint), levels = c("T1","T2","T3"), ordered = TRUE)
+    ),
+  aes(x = age, y = value_z, colour = country)
+) +
+  geom_point(
+    alpha = 0.15, size = 1,
+    position = position_jitter(width = 0.03, height = 0.03)
+  ) +
+  geom_smooth(
+    method = "lm", formula = y ~ x, se = TRUE, linewidth = 1
+  ) +
+  facet_grid(timepoint ~ task, scales = "fixed") +
+  labs(
+    x = "Age (years)",
+    y = "EF (z-score within task)",
+    colour = "Country"
+  ) +
+  .scale_colour_country() +
+  theme(legend.position = "bottom")
+p_age_by_wave
+```
 
 # Measurement Invariance Testing {.appendix}
 ```{r}
@@ -4499,7 +4748,7 @@ invariance_results
 
 ```
 
-To evaluate cross-cohort comparability of EF indicators, we conducted multi-group Bayesian confirmatory factor analysis (bCFA) across four cohort×wave groups (AU_T1, AU_T2, SA_T1, SA_T2), testing invariance simultaneously across countries and developmental timepoints using Markov chain Monte Carlo estimation via Stan. In ordinal CFA, each observed categorical indicator reflects an underlying continuous latent response variable partitioned by thresholds. Factor loadings capture the strength of association between the latent EF construct and each indicator, while thresholds capture the distributional placement of categories—allowing floor effect severity (e.g., 32.5% of Australian children at T1 scoring zero on cognitive flexibility) to be represented through threshold parameters without distorting factor loadings.
+To evaluate cross-cohort comparability of EF indicators, we conducted multi-group Bayesian confirmatory factor analysis (bCFA) across four cohort×wave groups (AU_T1, AU_T2, SA_T1, SA_T2), estimated via Markov chain Monte Carlo sampling in Stan using blavaan (v0.5.10) [@merkle2018blavaan; @merkle2021efficient]. Because cognitive flexibility exhibited pronounced floor effects in Australian children at T1 (32.5% scoring zero), and to accommodate heterogeneous measurement scales across cohorts (cognitive flexibility: 0–12 switch accuracy; working memory: 0–4.33 scaled score; inhibition: 0–1 proportion), we treated all three EF indicators as ordinal variables, segmenting them into tertiles (Low/Medium/High) based on pooled distributions. In ordinal CFA, factor loadings capture the strength of association between the latent EF construct and each indicator, while thresholds capture distributional placement of categories — allowing floor effect severity to be represented through threshold parameters without distorting factor loadings. We fit a one-factor model tested in a sequence of increasingly constrained models (configural, metric, scalar) and compared fit using the leave-one-out information criterion (LOOIC). See Appendix A for further detail.
 
 We estimated a one-factor model in a sequence of increasingly constrained models and compared fit using the leave-one-out information criterion (LOOIC; lower = better predictive accuracy). The configural model showed adequate fit (PPP = 0.391). Constraining factor loadings to be equal across groups (metric invariance) improved predictive fit relative to the configural model (ΔLOOIC = `r round(invariance_results$looic_diff[1], 1)`, SE = `r round(invariance_results$se_diff[1] * 2, 1)`), indicating that the constrained parameterisation better captured the data-generating structure. Further constraining thresholds to equality (scalar invariance) improved fit further still (ΔLOOIC = `r round(invariance_results$looic_diff[2], 1)`, SE = `r round(invariance_results$se_diff[2] * 2, 1)`). In both cases, the magnitude of improvement far exceeded its standard error, providing strong evidence that the equality constraints reflect genuine cross-group consistency rather than model misspecification (see @tbl-invariance). Full scalar invariance supports comparison of both network structures and latent performance levels across cohorts [@boer2018detecting].
 
@@ -4566,200 +4815,6 @@ tibble(
     footnote  = "Bayesian ordinal CFA via Stan (blavaan); four groups: AU_T1, AU_T2, SA_T1, SA_T2.",
     locations = cells_column_labels(columns = Model)
   )
-```
-
-```{r}
-#| label: fig-test-re-test
-#| include: false
-
-# keep only children who have >1 wave for a given task (within country)
-# (ef_std already enforces canonical country codes AU/SA in the standardize chunk)
-
-ef_retest_scores <- ef_std %>%
-  dplyr::mutate(
-    country   = factor(as.character(country), levels = c("AU","SA")),
-    timepoint = factor(as.character(timepoint), levels = c("T1","T2","T3"), ordered = TRUE),
-    id        = as.character(id)
-  ) %>%
-  dplyr::group_by(country, id, task) %>%
-  dplyr::arrange(country, id, task, timepoint) %>%
-  dplyr::filter(dplyr::n_distinct(timepoint) > 1) %>%
-  dplyr::ungroup()
-
-# wide format: one row per child × task (within country), columns per wave
-# (also widens age so we can compute age gaps)
-retest_wide <- ef_retest_scores %>%
-  # if you *ever* have duplicates within a wave, this collapses safely
-  dplyr::group_by(country, id, task, timepoint) %>%
-  dplyr::summarise(
-    value_z = mean(value_z, na.rm = TRUE),
-    age     = mean(age,     na.rm = TRUE),
-    .groups = "drop"
-  ) %>%
-  tidyr::pivot_wider(
-    id_cols     = c(country, id, task),
-    names_from  = timepoint,
-    values_from = c(value_z, age),
-    names_sep   = "_"
-  ) %>%
-  dplyr::mutate(
-    mean_age      = rowMeans(dplyr::select(., dplyr::starts_with("age_")), na.rm = TRUE),
-    age_gap_T12_y = age_T2 - age_T1,
-    age_gap_T23_y = age_T3 - age_T2
-  ) %>%
-  dplyr::select(
-    country, id, task,
-    mean_age,
-    age_gap_T12_y, age_gap_T23_y,
-    value_z_T1, value_z_T2, value_z_T3
-  )
-
-# helper: only compute r if there are enough complete pairs
-safe_cor <- function(a, b, min_n = 3) {
-  n <- sum(stats::complete.cases(a, b))
-  if (n < min_n) return(NA_real_)
-  suppressWarnings(stats::cor(a, b, use = "complete.obs"))
-}
-
-# 3) test–retest correlations by country × task
-trt <- retest_wide %>%
-  dplyr::group_by(country, task) %>%
-  dplyr::summarise(
-    r_T12   = safe_cor(value_z_T1, value_z_T2),
-    n_T12   = sum(stats::complete.cases(value_z_T1, value_z_T2)),
-    gap_T12 = mean(age_gap_T12_y, na.rm = TRUE) * 12,  # months
-
-    r_T23   = safe_cor(value_z_T2, value_z_T3),
-    n_T23   = sum(stats::complete.cases(value_z_T2, value_z_T3)),
-    gap_T23 = mean(age_gap_T23_y, na.rm = TRUE) * 12,  # months
-    .groups = "drop"
-  ) %>%
-  dplyr::arrange(task, country)
-
-trt
-```
-
-# Age associations {.appendix}
-```{r}
-#| label: fig-test-re-test-plot
-#| fig-cap: "Executive Function associations across waves. Note: Standardised scores (z); colour indicates mean age across available waves"
-#| include: true
-#| fig-align: center
-#| fig-width: 8
-#| fig-height: 7
-#| fig-pos: 'H'
-
-# From retest_wide -> one row per child × task × pair (T1–T2 and T2–T3),
-# then build a single row facet that only includes observed combos.
-
-retest_long_pairs <- dplyr::bind_rows(
-  retest_wide %>%
-    dplyr::transmute(
-      country, id, task, mean_age,
-      pair = "T1–T2",
-      x = value_z_T1, y = value_z_T2
-    ),
-  retest_wide %>%
-    dplyr::transmute(
-      country, id, task, mean_age,
-      pair = "T2–T3",
-      x = value_z_T2, y = value_z_T3
-    )
-) %>%
-  dplyr::filter(!is.na(x) & !is.na(y)) %>%
-  dplyr::mutate(
-    country = factor(as.character(country), levels = c("AU","SA")),
-    pair    = factor(pair, levels = c("T1–T2", "T2–T3")),
-    row_facet = paste(country, pair, sep = "\n"),
-    row_facet = factor(
-      row_facet,
-      levels = c(
-        "AU\nT1–T2",
-        "AU\nT2–T3",
-        "SA\nT1–T2"
-      )
-    )
-  )
-
-# Panel stats (r + N), using the same "safe" logic as above
-pair_stats <- retest_long_pairs %>%
-  dplyr::group_by(country, task, pair, row_facet) %>%
-  dplyr::summarise(
-    n = sum(stats::complete.cases(x, y)),
-    r = safe_cor(x, y, min_n = 3),
-    .groups = "drop"
-  ) %>%
-  dplyr::mutate(
-    label = ifelse(
-      is.na(r),
-      paste0("r = NA\nN = ", n),
-      paste0("r = ", sprintf("%.2f", r), "\nN = ", n)
-    )
-  )
-
-# Plot
-p_retest_simple <- ggplot(retest_long_pairs, aes(x = x, y = y)) +
-  geom_abline(slope = 1, intercept = 0, linetype = "dotted", alpha = 0.6) +
-  geom_point(aes(colour = mean_age), alpha = 0.5, size = 1.4) +
-  geom_smooth(method = "lm", formula = y ~ x, se = TRUE) +
-  geom_text(
-    data = pair_stats,
-    aes(label = label),
-    x = -Inf, y = Inf,
-    inherit.aes = FALSE,
-    hjust = -0.05, vjust = 1.1, size = 3.5
-  ) +
-  facet_grid(row_facet ~ task) +
-  labs(
-    x = "Earlier wave (z)",
-    y = "Later wave (z)",
-    colour = "Mean age (years)"
-  ) +
-  theme(legend.position = "bottom")
-p_retest_simple
-```
-
-# Executive Function across waves {.appendix}
-```{r}
-#| label: fig-age-ef-wave
-#| fig-cap: "Executive Function by age across waves (z-scored within EF task). Note: Points jittered + transparent; lines are linear fits with 95% CI"
-#| include: true
-#| fig-align: center
-#| fig-width: 8
-#| fig-height: 7
-#| fig-pos: 'H'
-
-# set up plot scales
-.scale_colour_country <- function() {
-  scale_colour_discrete()
-}
-
-# Age x EF x wave (standardized)
-p_age_by_wave <- ggplot(
-  ef_std %>%
-    dplyr::filter(!is.na(age), !is.na(value_z)) %>%
-    dplyr::mutate(
-      country   = factor(as.character(country), levels = c("AU","SA")),
-      timepoint = factor(as.character(timepoint), levels = c("T1","T2","T3"), ordered = TRUE)
-    ),
-  aes(x = age, y = value_z, colour = country)
-) +
-  geom_point(
-    alpha = 0.15, size = 1,
-    position = position_jitter(width = 0.03, height = 0.03)
-  ) +
-  geom_smooth(
-    method = "lm", formula = y ~ x, se = TRUE, linewidth = 1
-  ) +
-  facet_grid(timepoint ~ task, scales = "fixed") +
-  labs(
-    x = "Age (years)",
-    y = "EF (z-score within task)",
-    colour = "Country"
-  ) +
-  .scale_colour_country() +
-  theme(legend.position = "bottom")
-p_age_by_wave
 ```
 
 # Executive Function individual trajectories {.appendix}
@@ -4858,6 +4913,72 @@ p_box
 ```
 \clearpage
 
+# Results reported on the Fisher z scale {.appendix}
+```{r}
+#| label: tbl-rq3-gt-edges-dual
+#| tbl-cap: "Between-cohort differences (edges only) at matched waves (AU − SA at T1/T2) and difference-in-differences for change from T1 to T2 (ΔAU − ΔSA). Columns show posterior median [95% CrI] on the raw partial-correlation scale (Δr) and Fisher-z scale (Δz = atanh(r)). ROPE probabilities are computed on Δr: $P(|\\Delta r| > 0.05)$."
+#| include: true
+
+rq3_edges_dual %>%
+  select(-analysis) %>%
+  gt(rowname_col = "term", groupname_col = "panel") %>%
+  tab_options(
+    table.width                         = pct(100),
+    table.font.size                     = px(10),
+    table.border.top.style              = "solid",
+    table.border.top.width              = px(2),
+    table.border.bottom.style           = "solid",
+    table.border.bottom.width           = px(2),
+    column_labels.border.top.style      = "solid",
+    column_labels.border.top.width      = px(2),
+    column_labels.border.bottom.style   = "solid",
+    column_labels.border.bottom.width   = px(1),
+    table_body.hlines.style             = "none",
+    row_group.border.top.style          = "none",
+    row_group.border.bottom.style       = "none",
+    table_body.border.bottom.style      = "solid",
+    table_body.border.bottom.width      = px(2)
+  ) %>%
+  sub_missing(missing_text = "\u2014") %>%
+  cols_align(align = "center") %>%
+  cols_align(align = "left", columns = stub()) %>%
+  tab_style(
+    style     = cell_text(style = "italic"),
+    locations = cells_row_groups()
+  ) %>%
+  tab_style(
+    style     = cell_text(indent = px(8)),
+    locations = cells_stub()
+  ) %>%
+  tab_stubhead(label = "Edge") %>%
+  tab_spanner(
+    label   = md("\u0394r (raw partial correlation)"),
+    columns = c(estimate_r, rope_p_r)
+  ) %>%
+  tab_spanner(
+    label   = md("\u0394z (Fisher atanh scale)"),
+    columns = c(estimate_z)
+  ) %>%
+  tab_style(
+    style     = cell_text(align = "center"),
+    locations = cells_column_spanners(spanners = "\u0394z (Fisher atanh scale)")
+  ) %>%
+  cols_label(
+    estimate_r = "Median [95% CrI]",
+    estimate_z = "Median [95% CrI]",
+    rope_p_r   = paste0("P(|\u0394r|>", rope_rq3, ")")
+  ) %>%
+  cols_width(
+  stub()     ~ pct(30),
+  estimate_r ~ pct(22),
+  rope_p_r   ~ pct(15),
+  estimate_z ~ pct(33)
+  ) %>%
+  tab_source_note(
+    source_note = md("*Note.* CrI = credible interval. ROPE threshold = 0.05.")
+  )
+```
+
 # Sample sizes for moderation analysis {.appendix}
 ```{r}
 #| label: tbl-rq4-sample-sizes
@@ -4935,74 +5056,6 @@ rq4_n_table %>%
   tab_footnote(
     footnote = "Minimum n = 20 required for stable network estimation. Groups with insufficient n were excluded from moderation analyses.",
     locations = cells_column_labels(columns = status)
-  )
-```
-
-\clearpage
-
-# Results reported on the Fisher z scale {.appendix}
-```{r}
-#| label: tbl-rq3-gt-edges-dual
-#| tbl-cap: "Between-cohort differences (edges only) at matched waves (AU − SA at T1/T2) and difference-in-differences for change from T1 to T2 (ΔAU − ΔSA). Columns show posterior median [95% CrI] on the raw partial-correlation scale (Δr) and Fisher-z scale (Δz = atanh(r)). ROPE probabilities are computed on Δr: $P(|\\Delta r| > 0.05)$."
-#| include: true
-
-rq3_edges_dual %>%
-  select(-analysis) %>%
-  gt(rowname_col = "term", groupname_col = "panel") %>%
-  tab_options(
-    table.width                         = pct(100),
-    table.font.size                     = px(10),
-    table.border.top.style              = "solid",
-    table.border.top.width              = px(2),
-    table.border.bottom.style           = "solid",
-    table.border.bottom.width           = px(2),
-    column_labels.border.top.style      = "solid",
-    column_labels.border.top.width      = px(2),
-    column_labels.border.bottom.style   = "solid",
-    column_labels.border.bottom.width   = px(1),
-    table_body.hlines.style             = "none",
-    row_group.border.top.style          = "none",
-    row_group.border.bottom.style       = "none",
-    table_body.border.bottom.style      = "solid",
-    table_body.border.bottom.width      = px(2)
-  ) %>%
-  sub_missing(missing_text = "\u2014") %>%
-  cols_align(align = "center") %>%
-  cols_align(align = "left", columns = stub()) %>%
-  tab_style(
-    style     = cell_text(style = "italic"),
-    locations = cells_row_groups()
-  ) %>%
-  tab_style(
-    style     = cell_text(indent = px(8)),
-    locations = cells_stub()
-  ) %>%
-  tab_stubhead(label = "Edge") %>%
-  tab_spanner(
-    label   = md("\u0394r (raw partial correlation)"),
-    columns = c(estimate_r, rope_p_r)
-  ) %>%
-  tab_spanner(
-    label   = md("\u0394z (Fisher atanh scale)"),
-    columns = c(estimate_z)
-  ) %>%
-  tab_style(
-    style     = cell_text(align = "center"),
-    locations = cells_column_spanners(spanners = "\u0394z (Fisher atanh scale)")
-  ) %>%
-  cols_label(
-    estimate_r = "Median [95% CrI]",
-    estimate_z = "Median [95% CrI]",
-    rope_p_r   = paste0("P(|\u0394r|>", rope_rq3, ")")
-  ) %>%
-  cols_width(
-  stub()     ~ pct(30),
-  estimate_r ~ pct(22),
-  rope_p_r   ~ pct(15),
-  estimate_z ~ pct(33)
-  ) %>%
-  tab_source_note(
-    source_note = md("*Note.* CrI = credible interval. ROPE threshold = 0.05.")
   )
 ```
 
