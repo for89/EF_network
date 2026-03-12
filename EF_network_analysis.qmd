@@ -1,5 +1,5 @@
 ---
-title: "Modeling the Dynamics of Executive Function Networks: A Longitudinal Bayesian Network Analysis Across Two Countries" 
+title: "Modeling the Architecture of Executive Function Networks: A Longitudinal Bayesian Network Analysis Across Two Countries" 
 shorttitle: "Modeling Executive Function Networks"
 author:
     
@@ -10,35 +10,78 @@ author:
     - ref: oxford
   email: foreilly@stanford.edu
   corresponding: true
-    
+  roles:
+      - conceptualization
+      - formal analysis
+      - investigation
+      - methodology
+      - project administration
+      - visualization
+      - validation
+      - writing – original draft
+      - writing – review & editing
 - name: "Jelena Sučević" 
   orcid: 0000-0001-5091-5434 
   affiliations: 
     - ref: oxford
+  roles:
+    - conceptualization
+    - investigation
+    - writing – review & editing
 - name: "Caylee Cook"
   orcid: 0000-0001-9718-8887
   affiliations:
     - ref: witwatersrand
+  roles:
+    - data curation
+    - investigation
+    - writing – review & editing
 - name: "Justin E. Karr"
   orcid: 0000-0003-3653-332X
   affiliations:
     - ref: kentucky
+  roles:
+    - investigation
+    - methodology
+    - writing – review & editing
 - name: "Philippe Rast"
   orcid: 0000-0003-3630-6629
   affiliations:
     - ref: ucdavis
+  roles:
+    - investigation
+    - methodology
+    - writing – review & editing
 - name: "Catherine E. Draper*"
   orcid: 0000-0002-2885-437X
   affiliations:
     - ref: witwatersrand
+  roles:
+    - data curation
+    - funding acquisition
+    - investigation
+    - writing – review & editing
 - name: "Steven J. Howard*" 
   orcid: 0000-0002-1258-3210 
   affiliations: 
     - ref: oxford
+  roles:
+    - conceptualization
+    - data curation
+    - investigation
+    - funding acquisition
+    - supervision  
+    - writing – review & editing
 - name: "Gaia Scerif*" 
   orcid: 0000-0002-6371-8874 
   affiliations: 
     - ref: oxford
+  roles:
+    - conceptualization
+    - investigation
+    - funding acquisition
+    - supervision
+    - writing – review & editing
 affiliations: 
   - id: stanford 
     name: "Stanford University" 
@@ -50,34 +93,28 @@ affiliations:
     name: "University of Kentucky"
   - id: ucdavis
     name: "University of California, Davis"
-author-note: 
-  disclosures: 
-    financial-support: "This work was supported by X." 
-    conflict-of-interest: "The author has no conflict of interest to declare."
+roles:
+      - conceptualization
+      - data curation
+      - formal analysis
+      - funding acquisition
+      - investigation
+      - methodology
+      - project administration
+      - resources
+      - software
+      - supervision
+      - validation
+      - visualization
+      - writing – original draft
+      - writing – review & editing
+author-note:
+  disclosures:
+    conflict-of-interest: "The authors have no conflict of interest to declare. Fionnuala O’Reilly was supported by a doctoral training scholarship from the Economic and Social Research Council, and Gaia Scerif was supported in this work by the Economic and Social Research Council (Grants ES/X013561/1 and ES/W002914/1). *Joint senior authorship: Catherine E. Draper, Steven J. Howard, and Gaia Scerif contributed equally to this work."
 
-abstract: "Executive functions (EFs) are foundational cognitive abilities that develop
-  rapidly during early childhood. Although latent variable approaches have
-  characterized the unity and diversity of EF structure extensively, less is
-  known about the conditional associations among EF components—how these
-  associations change as children develop, and whether they vary across
-  sociocultural contexts. The present study applied Bayesian Gaussian Graphical
-  Models to model age-adjusted EF networks across two longitudinal preschool
-  cohorts from Australia (N = 232; M age = 4.43 years; three waves) and South
-  Africa (N = 217; M age = 4.70 years; two waves). Results suggest moderate and
-  selective coupling among EF components, consistent with partial unity: the
-  inhibition–working memory edge was the most reliable connection across cohorts
-  and waves. Despite substantial gains in EF performance across waves, network
-  structure remained stable over time, suggesting a dissociation between the
-  level of executive abilities and the relational architecture organizing them.
-  Exploratory moderation analyses indicated that income-related differences in
-  specific edges emerged at T2 in both cohorts, though these findings require
-  replication in larger samples. Together, these results advance a network
-  perspective on early EF development that complements latent variable
-  approaches, highlighting that the pattern of coupling among EF components,
-  and not just children's performance levels, may be sensitive to the
-  environments in which development occurs."
+abstract: "Executive functions (EFs) are foundational cognitive abilities that develop rapidly during early childhood. Although latent variable approaches have characterized the unity and diversity of EF structure extensively, less is known about the conditional associations among EF components—how these associations change as children develop, and whether they vary across  sociocultural contexts. The present study applied Bayesian Gaussian Graphical Models to model age-adjusted EF networks across two longitudinal preschool cohorts from Australia (N = 232; M age = 4.43 years; three waves) and South Africa (N = 217; M age = 4.70 years; two waves). Results suggest moderate and selective coupling among EF components, consistent with partial unity: the inhibition–working memory edge was the most reliable connection across cohorts and waves. Despite substantial gains in EF performance across waves, network structure remained stable over time, suggesting a dissociation between the level of executive abilities and the relational architecture organizing them. Exploratory moderation analyses identified income-related differences in specific edges at T2 in both cohorts, though these findings require replication in larger samples. Together, these results advance a network perspective on early EF development that complements latent variable approaches, highlighting the value of examining not just children's performance levels but the conditional architecture organising EF components across development."
 
-keywords: ["Executive Function", "Bayesian network analysis", "dimensionality"] 
+keywords: ["Executive Function", "Bayesian network analysis", "Dimensionality"] 
 word-count: false
 project:
 type: default
@@ -132,21 +169,17 @@ A related but largely unexamined question concerns whether the organizational st
 
 ## Neural Architecture of Executive Function
 
-The brain networks supporting EF have been characterized in neuroimaging research with adults. The fronto-parietal network (FPN) and cingulo-opercular network (CON) are the core control networks central to executive processing [@dosenbach2008dual; @niendam2012meta], with a superordinate fronto-cingulo-parietal network consistently engaged across EF domains — providing neural evidence for the unity component observed in behavioral models [@niendam2012meta]. More recent work proposes this shared architecture corresponds to the 'multiple demand' (MD) system — frontal, parietal, and posterior temporal regions active across diverse cognitive demands — as the neural substrate for EF unity [@duncan2024brain]. Alongside this shared architecture, component-specific neural signatures mirror the diversity observed in behavioral factor structures: inhibition, working memory, and shifting tasks produce overlapping activations within common network territories while each recruiting component-specific regions [@assem2024basis; @collette2006exploration; @mckenna2017informing; @rodriguez2022inhibition; @rottschy2012modelling], complementing nested-factor behavioral models wherein a Common EF factor coexists with component-specific factors.
-
-## Developmental Emergence of Executive Networks
-
-During early childhood, neural networks supporting EF are less differentiated than in adults, with weaker frontal-frontal interactions and less refined fronto-parietal connectivity at ages 3–4, and strengthened connections emerging by ages 4–5 [@buss2018changes; @fiske2019neural; @kelsey2025forming]. The core architecture of adult executive networks is established by middle childhood (~8–10 years), after which developmental improvements in EF reflect strengthening of connectivity within established networks rather than reorganization of overall network structure [@engelhardt2019neural]. Across childhood and adolescence, activation patterns show progressive differentiation — younger children recruit prefrontal regions more diffusely, while with age there is increasing specialization within FPN and CON [@crone2006neurocognitive; @rubia2013functional]. This neural trajectory closely parallels the behavioral differentiation of EF components, with developmental specialization occurring through synaptic pruning, myelination, and refinement of functional connectivity [@baum2020development; @tamnes2017development], underscoring that the unity-diversity structure of EF is grounded in the developing architecture of distributed brain networks [@karr2018unity; @li2025structural].
+The brain networks supporting EF have been characterized in neuroimaging research with adults. The fronto-parietal network (FPN) and cingulo-opercular network (CON) are the core control networks central to executive processing [@dosenbach2008dual; @niendam2012meta], with a superordinate fronto-cingulo-parietal network consistently engaged across EF domains — providing neural evidence for the unity component observed in behavioral models [@niendam2012meta; @duncan2024brain]. Alongside this shared architecture, component-specific neural signatures mirror the diversity observed in behavioral factor structures: inhibition, working memory, and shifting tasks produce overlapping activations within common network territories while each recruiting component-specific regions [@assem2024basis; @rodriguez2022inhibition; @rottschy2012modelling], complementing nested-factor behavioral models wherein a Common EF factor coexists with component-specific factors. During early childhood, these networks are less differentiated than in adults, with weaker fronto-parietal connectivity at ages 3–4 strengthening by ages 4–5 [@buss2018changes; @fiske2019neural; @kelsey2025forming]. Across development, activation patterns show progressive specialization within FPN and CON [@crone2006neurocognitive; @rubia2013functional], closely paralleling the behavioral differentiation of EF components through synaptic pruning, myelination, and refinement of functional connectivity [@baum2020development; @tamnes2017development] — underscoring that the unity-diversity structure of EF is grounded in the developing architecture of distributed brain networks [@karr2018unity; @li2025structural].
 
 ## Methodological Approaches to Studying Executive Organization
 
-Capturing this developmental trajectory in behavioral data requires analytic approaches that can model the structure of EF — not just its level — and track how that structure changes with age. Latent variable methodologies have been central to advancing the unity/diversity framework: confirmatory factor analysis addresses task impurity by extracting shared variance across tasks, enabling comparison of factor structures across age groups while accounting for measurement error [@karr2018unity; @wiebe2008using]. However, latent modelling relies on specific assumptions about how executive abilities are represented, and the factor structure obtained can vary depending on tasks selected, performance indicators, and analytic specification [@miller2012latent; @vandierendonck2021utility]. Importantly, latent models characterize executive organization in terms of shared variance explained by unobserved factors, and do not directly model conditional dependencies among observed executive task variables — a meaningful limitation from a systems perspective, given that executive control reflects coordinated activity within distributed neural networks. Network analytic approaches address this directly — @karr2022unity was among the first to apply Bayesian Gaussian Graphical Models (BGGM) to EF across developmental stages, with subsequent work integrating network and latent approaches [@menu2024latent]. By modeling conditional associations among executive components, a network perspective provides a systems-level complement to latent approaches and enables more direct investigation of developmental change in executive architecture.
+Capturing this developmental trajectory in behavioral data requires analytic approaches that can model the structure of EF — not just its level — and track how that structure changes with age. Latent variable methodologies have been central to advancing the unity/diversity framework: confirmatory factor analysis addresses task impurity by extracting shared variance across tasks, enabling comparison of factor structures across age groups while accounting for measurement error [@karr2018unity; @wiebe2008using]. However, latent modelling relies on specific assumptions about how executive abilities are represented, and the factor structure obtained can vary depending on tasks selected, performance indicators, and analytic specification [@miller2012latent; @vandierendonck2021utility]. While interfactor correlations are estimable in standard factor models, the focus of inference typically centers on loadings and model fit rather than the relative strength of specific pairwise dependencies — a meaningful limitation from a systems perspective.
+
+Network analytic approaches address this directly. By estimating partial correlations among observed task variables, Bayesian Gaussian Graphical Models (BGGM) make the conditional dependencies among EF components the primary inferential target [@karr2022unity; @menu2024latent]. With three nodes — reflecting the standard theoretical parsing of EF into inhibition, working memory, and cognitive flexibility — BGGM yields posterior distributions over each partial correlation, enabling principled probabilistic inference about individual edge strength, developmental change, and cross-context differences with full uncertainty propagation. This is not achievable through piecemeal correlation testing.
 
 ## The Present Study 
 
-The present study applies Bayesian Gaussian Graphical Models to examine the organization of EF during early childhood across two longitudinal cohorts from Australia and South Africa, estimating age-adjusted partial correlations among inhibitory control, working memory, and cognitive flexibility. This approach captures direct conditional associations among EF components after accounting for shared relationships and age-related variance, enabling investigation of which components show direct coupling, how these associations change developmentally, and whether network structure varies across sociocultural and socioeconomic contexts. Finally, we exploratorily examine whether SES moderates EF network structure within each cohort — specifically, whether edges are systematically stronger or weaker among children from high versus low household income and home learning environment backgrounds. If socioeconomic conditions shape not just EF level but the conditional dependencies among components, this would suggest that the relational architecture of EF is sensitive to proximal environmental variation within as well as between sociocultural contexts.
-
-Understanding how EF components are organized during early development holds implications for both theory and practice. Network analysis can reveal whether components function as tightly coupled systems or operate more independently, informing intervention design: strong coupling would favor broad general executive control training, while weak coupling would favor targeted domain-specific approaches [@li2025structural; @scerif2025enhancing]. Longitudinal network analysis also offers a means of detecting intervention effects directly — strengthening or reorganization of specific edges following targeted training would provide fine-grained evidence that an intervention has altered conditional relationships among EF components — though interpretation must be grounded in theory, since differentiation accounts predict that adaptive change involves increasing component independence rather than uniformly stronger coupling.
+The present study applies BGGM to examine the organisation of EF during early childhood across two longitudinal cohorts from Australia and South Africa, estimating age-adjusted partial correlations among inhibitory control, working memory, and cognitive flexibility. This approach captures direct conditional associations among EF components after accounting for shared relationships and age-related variance, enabling investigation of which components show direct coupling, how these associations change developmentally, and whether network structure varies across sociocultural contexts. We additionally examine whether SES moderates EF network structure within each cohort — specifically, whether edges are systematically stronger or weaker among children from high versus low household income and home learning environment backgrounds — to assess whether the relational architecture of EF is sensitive to proximal environmental variation within as well as between sociocultural contexts.
 
 ### Research Questions
 
@@ -168,43 +201,29 @@ Within each cohort, does EF network structure differ between children from high 
 
 ## Participants 
 
-#### Australia
-The Australian sample was the control group from an intervention study, comprising 232 children recruited from 25 preschools across diverse socioeconomic metropolitan and regional areas of New South Wales (M age = 4.43 years, SD = 0.38; 46.1% girls). Ninety-four percent were retained at T2. A geographically constrained subset (within 1 hour of the lead institution) was followed at T3, yielding a sample of 105 children with no significant demographic differences from those not followed up. For full details on recruitment and sample characteristics, see @howard2020everyday.
-
-#### South Africa
-The South African sample was drawn from a longitudinal study recruiting 243 preschool-aged children from four low-income communities in Cape Town characterized by informal housing, poverty, and exposure to violence [@cook2024risk]. The analytic sample comprised children with EF data at each timepoint: 217 at T1 (M age = 4.70 years, SD = 0.60; 48.1% female) and 189 at T2. For full details see @cook2024risk.
+The Australian sample was the control group from an intervention study: 232 children from 25 preschools across diverse socioeconomic areas of New South Wales (M age = 4.43 years, SD = 0.38; 46.1% girls). Ninety-four percent were retained at T2; a geographically constrained subset was followed at T3 (n = 105, no significant demographic differences from those not followed up). The South African sample comprised children from four low-income Cape Town communities characterised by informal housing, poverty, and exposure to violence [@cook2024risk]: 217 at T1 (M age = 4.70 years, SD = 0.60; 48.1% female) and 189 at T2. For full recruitment details see @howard2020everyday and @cook2024risk. The cohorts were not matched by design — differing in recruitment context, SES range, and study type — and cross-cohort comparisons should be interpreted with caution, as observed differences may reflect design-level confounds rather than genuine cross-cultural variation in EF network structure.
 
 ## Measures
 
 ### Executive Function
 EF was assessed using three measures from the Early Years Toolbox (EYT; @howard2017early), a suite of iPad-based assessments with integrated audio instructions ensuring standardized delivery across languages. The EYT has been validated across diverse cultural contexts including South Africa [@cook2019associations; @draper2020understanding] and internationally [@hossain2021international; @munambah202124].
 
-#### Working Memory (Mr. Ant)
+### Working Memory (Mr. Ant)
 Children are shown stickers placed on a cartoon ant, which disappear after a brief delay, and must tap the locations where the stickers appeared across increasing set sizes (1–8 stickers), with three trials at each level [@howard2017early; @case2013intellectual]. Testing continues until a child fails all three trials at the same level. Working memory capacity was indexed by a point score: one point per consecutive level with at least two correct trials, plus 1/3 point per additional correct trial [@howard2017early].
 
-#### Inhibition (Go/No-Go)
+### Inhibition (Go/No-Go)
 Children tap the screen for go trials (catch a fish; 80% of trials) and withhold responses on no-go trials (avoid a shark; 20% of trials) across 75 trials in three blocks [@howard2017early; @wiebe2012separating]. The high proportion of go trials generates a prepotent response tendency that children must overcome on no-go trials. Inhibition was indexed by an impulse control score: the product of go and no-go proportional accuracy.
 
-#### Cognitive Flexibility (Card Sorting)
+### Cognitive Flexibility (Card Sorting)
 Children sort stimuli (e.g., blue rabbits, red boats) first by one dimension (e.g., color) then switch to an alternate dimension (e.g., shape); children meeting performance criteria proceed to a mixed border phase requiring flexible switching between both rules [@howard2017early; @zelazo2006dimensional]. Cognitive flexibility was scored as switch accuracy across post-switch and border phases (range 0–12). A substantial floor effect was observed in the Australian sample at T1 (75/232 children, 32.3%), reflecting perseveration on the initial sorting rule consistent with classic DCCS findings [@zelazo2006dimensional].
 
 ### Socioeconomic Status
 
 ### Income
-
-#### Australia
-Caregivers reported gross annual household income using three bands aligned with Australia's Child Care Subsidy eligibility thresholds: low (AUD $0–$45,144), middle (AUD $45,145–$156,914), or high (>AUD $156,915).
-
-#### South Africa
-Caregivers reported household income using items adapted from the National Income Dynamics Survey [@nids2017], yielding seven ordered categories. To facilitate comparability with the Australian sample and ensure adequate cell sizes, categories were collapsed into three: low (categories 1–2), middle (categories 3–5), and high (categories 6–7).
+Caregivers reported gross annual household income in both cohorts using three bands. In Australia, bands were aligned with Child Care Subsidy eligibility thresholds: low (AUD $0–$45,144), middle (AUD $45,145–$156,914), or high (>AUD $156,915). In South Africa, income was reported using seven ordered categories adapted from the National Income Dynamics Survey [@nids2017], collapsed into low (categories 1–2), middle (3–5), and high (6–7) to facilitate cross-cohort comparability and ensure adequate cell sizes.
 
 ### The Home Learning Environment
-
-#### Australia
-Caregivers reported the frequency of eight home learning activities in the past 7 days (e.g., reading to the child, visiting the library, teaching sports), using a 5-point scale from 0 to 7 days, adapted from the EPPSE study [@melhuish2008effects; @sylva2004effective]. An HLE composite score was calculated by summing responses across all eight activities.
-
-#### South Africa
-Caregivers reported how frequently their child engaged in eight enrichment activities in the past 7 days (e.g., reading books, counting, singing songs) using a 3-point scale (never, sometimes, many times), using a measure developed for the South African context [@dawes2020early; @melhuish2010impact]. An HLE composite score was calculated by summing frequencies across all eight activities.
+In both cohorts, caregivers reported the frequency of eight home learning/enrichment activities in the past 7 days, with an HLE composite score calculated by summing responses. In Australia, activities (e.g., reading to the child, visiting the library, teaching sports) were rated on a 5-point scale adapted from the EPPSE study [@melhuish2008effects; @sylva2004effective]. In South Africa, activities (e.g., reading books, counting, singing songs) were rated on a 3-point scale (never, sometimes, many times) using a measure developed for the South African context [@dawes2020early; @melhuish2010impact].
 
 ## Statistical Analysis
 
@@ -3470,7 +3489,6 @@ A substantial floor effect in Australian T1 cognitive flexibility (32.3% scoring
 
 Each cell in @tbl-rq3-sensitivity-comparison shows the posterior distribution of a pairwise EF partial correlation difference (AU minus SA). Cohort difference panels (T1, T2) report median Δr [95% CrI] at a single wave; positive values indicate a stronger AU correlation, negative values a stronger SA correlation. The difference-in-differences panel reports (Δr_T2−T1)_AU − (Δr_T2−T1)_SA, with positive values indicating greater developmental growth in AU and negative values indicating greater SA growth. P(|Δr|>0.05) is the proportion of posterior draws exceeding a minimally meaningful threshold; credible intervals excluding zero provide the strongest evidence of a true difference.
 
-
 **Main Analysis (Full Sample)**: At T1, posterior medians suggested modest AU–SA differences in several edges; however, all 95% credible intervals overlapped zero. At T2, cohort differences were smaller and predominantly positive, but again uncertain. In the difference-in-differences analysis, most edges were centered near zero. The largest deviation was observed for cognitive flexibility–inhibition (median = `r round(rq3_ci("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition", "Main analysis")["m"], 2)`; 95% CrI [`r round(rq3_ci("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition", "Main analysis")["lo"], 2)`, `r round(rq3_ci("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition", "Main analysis")["hi"], 2)`]; P(|Δr|>0.05) = `r round(rq3_rope("Difference-in-differences (ΔAU − ΔSA)", "ef_cogflex - ef_inhibition", "Main analysis"), 2)`), though its credible interval still included zero, indicating substantial uncertainty. Results were substantively unchanged when differences were summarized on the Fisher z (atanh) scale (see Appendix @tbl-rq3-gt-edges-dual).
 
 **Sensitivity Analysis (Excluding Cognitive Flexibility Floor Performers)**: Given the pronounced floor effect in Australian T1 cognitive flexibility (`r excl_n("AU","T1")`/`r orig_n("AU","T1")` excluded [`r excl_pct("AU","T1")`%]; AU T2: `r excl_n("AU","T2")`/`r orig_n("AU","T2")` [`r excl_pct("AU","T2")`%]; we refitted networks after wave-specific exclusion of children scoring zero on cognitive flexibility. Estimates were highly similar in direction and magnitude to the main analysis (see @tbl-rq3-sensitivity-comparison), with credible intervals widening due to reduced sample size. Patterns at T2 and in the difference-in-differences analysis were nearly identical. Together, these results indicate that cross-cohort differences in EF network structure are small and uncertain.
@@ -3575,7 +3593,7 @@ tp_hle_aus <- summ_cont_tp(
 
 ### Research Question 4 (Exploratory): Socioeconomic Moderation of Network Structure
 
-Descriptive statistics for socioeconomic status and home learning environment by cohort and timepoint are presented in @tbl-render-table2. We examined whether these factors moderated EF network structure within each cohort.
+Descriptive statistics for socioeconomic status and home learning environment by cohort and timepoint are presented in @tbl-render-table2. We examined whether these factors moderated EF network structure within each cohort. Sensitivity analyses indicated that children excluded due to missing moderator data were broadly similar to the included sample, with the exception of SA at T2 where excluded children were slightly younger and more likely to be female (see Appendix @tbl-rq4-attrition).
 
 ```{r}
 #| include: false
@@ -4162,11 +4180,71 @@ rq4_mod_meaningful <- function(moderator, country, wave, contrast, edge) {
 }
 ```
 
-Within-cohort moderation analyses compared EF edge strengths across SES strata within each cohort×wave (see Appendix @tbl-rq4-sample-sizes for sample sizes per stratum). In AU at T2, the cognitive flexibility–working memory edge was stronger in middle- relative to high-income children (Δ = `r rq4_mod_report("income","AU","T2","High - Middle","ef_cogflex - ef_workingmem")`; P(|Δ|>0.10) = `r rq4_mod_meaningful("income","AU","T2","High - Middle","ef_cogflex - ef_workingmem")`). In SA at T2, the inhibition–working memory edge was stronger in high- relative to low-income children (Δ = `r rq4_mod_report("income","SA","T2","High - Low","ef_inhibition - ef_workingmem")`; P(|Δ|>0.05) = `r rq4_mod_meaningful("income","SA","T2","High - Low","ef_inhibition - ef_workingmem")`).
+Within-cohort moderation analyses compared EF edge strengths across SES strata within each cohort×wave. In AU at T2, the cognitive flexibility–working memory edge was stronger in middle- relative to high-income children (Δ = `r rq4_mod_report("income","AU","T2","High - Middle","ef_cogflex - ef_workingmem")`; P(|Δ|>0.10) = `r rq4_mod_meaningful("income","AU","T2","High - Middle","ef_cogflex - ef_workingmem")`). In SA at T2, the inhibition–working memory edge was stronger in high- relative to low-income children (Δ = `r rq4_mod_report("income","SA","T2","High - Low","ef_inhibition - ef_workingmem")`; P(|Δ|>0.05) = `r rq4_mod_meaningful("income","SA","T2","High - Low","ef_inhibition - ef_workingmem")`). Each cell in Appendix @tbl-rq4-moderation represents the posterior distribution of a pairwise EF partial correlation difference between two SES groups within a given cohort and wave, using the same conventions as @tbl-rq3-sensitivity-comparison: median Δ [95% CrI] reflects direction and magnitude of the group difference, and P(|Δ|>0.05) reflects the proportion of posterior draws exceeding a minimally meaningful threshold.
 
+Despite limited statistical power given income group sample sizes (see Appendix @tbl-rq4-sample-sizes for sample sizes per stratum), particularly at later Australian waves where low-income cells fell below the n = 20 estimation threshold, two SES moderation effects met the meaningfulness criterion. In Australia at T2, high-income children showed a weaker cognitive flexibility–working memory edge than middle-income children (Δ = `r rq4_mod_report("income", "AU", "T2", "High - Middle", "ef_cogflex - ef_workingmem")`; P(|Δ|>0.10) = `r rq4_mod_meaningful("income", "AU", "T2", "High - Middle", "ef_cogflex - ef_workingmem")`). In South Africa at T2, the inhibition–working memory edge was stronger in high- relative to low-income children (Δ = `r rq4_mod_report("income", "SA", "T2", "High - Low", "ef_inhibition - ef_workingmem")`; P(|Δ|>0.05) = `r rq4_mod_meaningful("income", "SA", "T2", "High - Low", "ef_inhibition - ef_workingmem")`). 
+
+\clearpage
+
+# Discussion
+
+The present study applied BGGM to map the conditional architecture of executive function across two longitudinal preschool cohorts from Australia and South Africa. Using age-adjusted partial correlations among inhibitory control, working memory, and cognitive flexibility, we examined how EF components directly relate to one another — moving beyond shared variance to characterize the relational structure of the EF system. Several findings emerge from this analysis. 
+
+First, EF components showed moderate and selective coupling, consistent with partial unity: the inhibition–working memory edge was the most reliable connection across both cohorts and all waves, while cognitive flexibility showed more context-dependent coupling — more strongly linked to inhibition in South Africa and to working memory in Australia. Second, network structure remained stable across adjacent developmental timepoints despite clear increases in EF performance, suggesting a dissociation between the level of executive abilities and the relational architecture that organizes them. Finally, exploratory moderation analyses identified two edges differing across income groups: in Australia at T2, middle-income children showed stronger cognitive flexibility–working memory coupling than high-income children; in South Africa at T2, high-income children showed stronger inhibition–working memory coupling than low-income children — a divergence suggesting that socioeconomic context may modulate EF coupling differently depending on baseline economic conditions, though replication is needed before strong conclusions can be drawn.
+
+## Partial Unity and Context-Dependent Coupling in Early Childhood EF Networks
+
+The inhibition–working memory edge was the most reliable connection across all waves and both cohorts, suggesting these two components share the strongest conditional association once cognitive flexibility and age are accounted for. This converges with @karr2022unity, where the same edge was strongest across ages 3–6, and is consistent with theoretical accounts in which inhibitory control and working memory are closely related facets of a common executive control mechanism [@friedman2017unity; @miyake2000unity].
+
+Within this broadly shared architecture, structure differed between cohorts: in Australia, working memory was the most connected node; in South Africa, inhibition played a comparably central role, with a strong cognitive flexibility–inhibition edge at T1 (`r edge_report("SA", "T1", "Cognitive flexibility–Inhibition")`; `r edge_meaningful("SA", "T1", "Cognitive flexibility–Inhibition")`) that showed some attenuation at T2, though with considerable uncertainty (T2: `r edge_report("SA", "T2", "Cognitive flexibility–Inhibition")`; `r edge_meaningful("SA", "T2", "Cognitive flexibility–Inhibition")`). The cognitive flexibility–working memory edge was weak and uncertain across waves (T1: `r edge_report("SA", "T1", "Cognitive flexibility–Working memory")`; `r edge_meaningful("SA", "T1", "Cognitive flexibility–Working memory")`), and should be interpreted cautiously given the modest posterior evidence. Taken together, these patterns raise the possibility that the relational architecture of executive function may be sensitive to sociocultural and environmental context [@williams2022learning], though replication in independent samples is needed before stronger conclusions can be drawn.
+
+A further difference concerns the cognitive flexibility–inhibition edge, which was weakly supported in the Australian network at T1 (`r edge_meaningful("AU", "T1", "Cognitive flexibility–Inhibition")`) but more credibly present in South Africa (`r edge_meaningful("SA", "T1", "Cognitive flexibility–Inhibition")`). This is theoretically noteworthy: @karr2024network identified the cognitive flexibility–inhibition edge as a marker of EF network maturation, showing the greatest increase with age and stronger weighting in neurotypically developing children relative to those with ADHD across US and Australian samples. The comparatively stronger presence of this edge in South Africa at T1 — among younger children on average — may therefore reflect a different developmental trajectory or timing of EF integration. Caution is warranted however given the pronounced floor effect in Australian cognitive flexibility at T1 (32.5% scoring zero), which may artificially suppress this edge; sensitivity analyses excluding floor performers were substantively unchanged (see RQ3).
+
+We found little evidence of reliable change in global strength or expected influence, which may reflect the brief longitudinal window. Both indices may be comparatively stable over short developmental intervals, such that meaningful change is subtle and difficult to distinguish from measurement uncertainty. This is consistent with prior EF network modelling where global strength and centrality indices within childhood age bands are often estimated with uncertainty, and developmental differences are primarily characterized via between-group contrasts rather than within-person change [@karr2022unity]."
+
+These findings are broadly consistent with developmental factor analytic work: confirmatory factor analyses with preschool samples consistently support unidimensional or two-factor representations of EF, in contrast to the three-factor structure characteristic of adults [@karr2018unity; @lee2013developmental; @wiebe2008using; @willoughby2012measurement]. The network approach complements these findings by revealing which pairwise associations drive partial integration. In the bifactor framework of @friedman2017unity, inhibition loads primarily on a Common EF factor, and the inhibition–working memory coupling observed here may reflect this shared common control variance, even before the three-factor structure has fully differentiated.
+
+## Stability of EF Network Structure Amid Developmental Growth
+
+Our results did not support meaningful change in EF network summaries across waves within either cohort: posterior 95% CrIs for all Δs included 0, and probabilities that edge changes exceeded the ROPE (|Δr| > 0.05) were modest (≈0.6–0.8). Notably, children in both cohorts showed improvements in raw EF scores — consistent with the well-documented rapid growth of executive abilities during the preschool years [@best2010developmental; @diamond2013executive] — yet conditional associations among components remained stable. Network structure and mean performance thus appear to capture dissociable aspects of EF development, consistent with early childhood being a period of relative EF unity [@nelson2016structure; @wiebe2008using] in which components strengthen together rather than becoming more distinct.
+
+Although wide credible intervals mean these results cannot be interpreted as strong evidence of stability in the psychometric sense, two patterns speak against a purely imprecision-based account. First, EF performance increased reliably across the same interval in both cohorts — demonstrating that the design was sensitive to developmental change in EF level while conditional associations remained largely invariant. Second, the inhibition–working memory edge was consistently among the strongest connections across all waves and both cohorts — a pattern of selective consistency unlikely to arise from measurement noise alone. Together these observations are more consistent with genuine architectural stability during this developmental window than with undifferentiated imprecision [@menu2024latent].
+
+Descriptively, working memory was the most centrally connected node in Australia across all three waves, while inhibitory control showed comparably high centrality in South Africa at T1, where the cognitive flexibility–inhibition edge — absent in Australia at T1 — was the strongest in the network. These descriptive differences should be interpreted cautiously: the comparative analyses were insufficiently powered to resolve whether they reflect genuine cross-cohort variation — a question that warrants replication with larger samples.
+
+Notwithstanding this uncertainty, one interpretation of the descriptive pattern invokes the role of environmental adversity in shaping executive development. The South African sample was drawn from low-income Cape Town communities characterized by informal housing, poverty, and community violence [@cook2024risk]. Environments characterized by chronic stress and threat can selectively promote the development of reactive, threat-focused cognitive processes — including inhibitory control — potentially at the expense of other executive capacities [@blair2016poverty; @sheridan2014dimensions]. A parallel literature points away from deficit accounts, highlighting how contextual and cultural factors shape EF development adaptively [@doebel2020rethinking; @niebaum2025adaptive; @frankenhuis2020hidden], sometimes resulting in high EF performance despite adversity [@howard2020challenging]. Whether reflecting a stress response or contextual adaptation, the more prominent role of inhibition in the South African network may reflect an environment in which inhibitory control is particularly salient and practiced, resulting in stronger coupling between inhibitory processes and cognitive flexibility in early childhood.
+
+## Socioeconomic Moderation of EF Network Structure
+
+Exploratory moderation analyses identified two edges differing across income groups; in Australia at T2, higher household income was associated with a weaker cognitive flexibility–working memory edge relative to middle-income families — possibly reflecting greater EF differentiation in higher-SES environments, where a weaker edge may indicate reduced reliance on one ability to engage another rather than poorer functioning [@karr2022unity]. However, this is one of several possible accounts, and given the exploratory nature of this analysis and the nascent application of network modelling to EF cognitive data, strong interpretive claims about the meaning of edge strength differences remain premature. 
+
+In South Africa at T2, higher household income was associated with stronger inhibition–working memory coupling. The divergence between cohorts — weaker coupling with higher income in Australia, stronger in South Africa — points to contextual specificity in how income-related resources shape EF coupling. Differentiation frameworks predict weaker edges in higher-resource contexts [@karr2022unity], while resource-dependent co-development accounts predict stronger edges where economic scaffolding supports joint development [@rosen2020cognitive]. Current theory does not generate clear a priori predictions, and post-hoc accounts risk overfitting narrative to noise; these findings are therefore reported descriptively, and replication in larger samples with granular SES measurement is needed before interpretive weight can be placed on the direction of these effects.
+
+Home learning environment moderation effects were modest and did not reliably exceed the ROPE threshold, despite established links between HLE quality and EF development [@melhuish2008effects; @sylva2004effective].One possibility is that HLE influences the level of EF abilities rather than the relational architecture among components: children from enriched home learning environments may perform better on individual EF tasks without showing systematically different coupling among components. Alternatively, the composite HLE scores used here may not capture the specific dimensions of home experience most relevant to EF network structure. Future work employing more detailed and observational HLE measures may be better positioned to detect HLE-related differences in EF network topology. For example, measures may need to move away from frequency-based indices (“how many books can you access?”, “how often do you read to your child?”) to indices that capture the quality of EF supportive interactions between caregivers and children around resources (as suggested by the literature on interaction quality in childcare settings [@howard2020measuring].
+
+## Methodological Contributions and Limitations
+
+The present study is, to our knowledge, the first to apply BGGM to cross-cultural EF data, extending network approaches to a comparative developmental context. While interfactor correlations are estimable in standard factor models, the focus of inference typically centers on loadings and model fit rather than on the relative strength of specific pairwise dependencies; network models make those dependencies the primary inferential target [@karr2018unity; @borsboom2021network; @cramer2010comorbidity] — capturing direct pairwise coupling after removing shared age-related variance and covariance with other components. Beyond this structural contrast, ROPE-based inference provides a principled alternative to binary significance testing well-suited to modest sample sizes: rather than asking whether an edge differs from zero, it asks whether the effect is large enough to be practically meaningful.
+
+Several limitations bear on interpretation, however. First, with only three nodes, graph-theoretic metrics such as clustering and path length cannot be meaningfully interpreted; the value of the network approach here lies in the interpretability of individual edge weights and their comparison across cohorts and timepoints. Second, the EF battery comprised a single task per construct, meaning partial correlations reflect a mixture of construct-level associations and task-specific variance that cannot be separated. This concern is most acute for the stability finding — consistent attenuation across waves cannot be ruled out — and for cognitive flexibility edges, where the Card Sorting task's distinctive procedural demands may independently influence conditional associations.A natural extension would apply BGGM within a latent variable network framework [@menu2024latent], addressing task impurity while preserving the inferential advantages of the network approach. Third, the South African cohort lacked a third wave, limiting developmental inference to a single transition. Fourth, attrition in the Australian sample — particularly the reduction to n = 105 at T3 — increases uncertainty in late-wave estimates and raises the possibility of selective retention. Fifth, the stability finding should be interpreted cautiously — credible intervals spanning zero for change scores reflect imprecision as well as stability, and the present design cannot fully distinguish these accounts. A sensitivity analysis examining the magnitude of change detectable given current sample sizes and edge estimates would strengthen future claims of architectural invariance.
+
+# Conclusion
+
+This study applied Bayesian Gaussian Graphical Models to map the conditional architecture of executive function across two longitudinal preschool cohorts from Australia and South Africa, extending network approaches to a cross-cultural developmental context. Three findings emerge. First, EF components showed moderate and selective coupling consistent with partial unity: the inhibition–working memory edge was the most reliable connection across both cohorts and all waves, while cognitive flexibility showed more context-dependent coupling — more strongly linked to inhibition in South Africa and to working memory in Australia. Second, network structure remained stable across adjacent developmental timepoints despite clear gains in EF performance, suggesting a dissociation between the level of executive abilities and the relational architecture that organises them. Third, exploratory moderation analyses indicated that socioeconomic context may modulate specific aspects of EF coupling in ways that differ by environmental context, though the divergent direction of effects across cohorts resists simple interpretation and replication in larger samples is needed. Together, these findings advance a network perspective on EF development that is complementary to the latent variable tradition, and highlight the value of examining not just how well children perform on EF tasks, but how the components of executive control are functionally coupled as a system.
+
+\clearpage
+
+# References
+
+::: {#refs}
+:::
+
+\clearpage
+
+# Within-cohort moderation of EF edges by income and HLE {.appendix}
 ```{r}
 #| label: tbl-rq4-moderation
-#| tbl-cap: "Within-cohort moderation of EF edges by income and HLE. For income, cells show posterior median [95% CrI] for pairwise group differences. For HLE, cells show High - Low differences. ROPE probability indicates P(|difference| > 0.05)."
+#| tbl-cap: "**Within-cohort moderation of EF edges.** For income, cells show posterior median [95% CrI] for pairwise group differences. For HLE, cells show High - Low differences. ROPE probability indicates P(|difference| > 0.05)."
 #| include: true
 
 rq4_tbl_print <- rq4_table %>%
@@ -4213,65 +4291,6 @@ flextable(rq4_tbl_print, col_keys = col_keys) %>%
   ) %>%
   italic(i = 1:2, part = "footer")
 ```
-
-Each cell in @tbl-rq4-moderation represents the posterior distribution of a pairwise EF partial correlation difference between two SES groups within a given cohort and wave, using the same conventions as @tbl-rq3-sensitivity-comparison: median Δ [95% CrI] reflects direction and magnitude of the group difference, and P(|Δ|>0.05) reflects the proportion of posterior draws exceeding a minimally meaningful threshold.
-
-Despite limited statistical power given income group sample sizes, particularly at later Australian waves where low-income cells fell below the n = 20 estimation threshold, two SES moderation effects met the meaningfulness criterion. In Australia at T2, high-income children showed a weaker cognitive flexibility–working memory edge than middle-income children (Δ = `r rq4_mod_report("income", "AU", "T2", "High - Middle", "ef_cogflex - ef_workingmem")`; P(|Δ|>0.10) = `r rq4_mod_meaningful("income", "AU", "T2", "High - Middle", "ef_cogflex - ef_workingmem")`). In South Africa at T2, the inhibition–working memory edge was stronger in high- relative to low-income children (Δ = `r rq4_mod_report("income", "SA", "T2", "High - Low", "ef_inhibition - ef_workingmem")`; P(|Δ|>0.05) = `r rq4_mod_meaningful("income", "SA", "T2", "High - Low", "ef_inhibition - ef_workingmem")`). 
-
-\clearpage
-
-# Discussion
-
-The present study applied Bayesian Gaussian Graphical Models to map the conditional architecture of executive function across two longitudinal preschool cohorts from Australia and South Africa. Using age-adjusted partial correlations among inhibitory control, working memory, and cognitive flexibility, we examined how EF components directly relate to one another — moving beyond shared variance to characterize the relational structure of the EF system. Several findings emerge from this analysis. 
-
-First, EF components showed moderate and selective coupling, consistent with partial unity: the inhibition–working memory edge was the most reliable connection across both cohorts and all waves, while cognitive flexibility showed more context-dependent coupling — more strongly linked to inhibition in South Africa and to working memory in Australia. Second, network structure remained stable across adjacent developmental timepoints despite clear increases in EF performance, suggesting a dissociation between the level of executive abilities and the relational architecture that organizes them. Finally, exploratory moderation analyses identified two edges differing across income groups: in Australia at T2, middle-income children showed stronger cognitive flexibility–working memory coupling than high-income children; in South Africa at T2, high-income children showed stronger inhibition–working memory coupling than low-income children — a divergence suggesting that socioeconomic context may modulate EF coupling differently depending on baseline economic conditions, though replication is needed before strong conclusions can be drawn.
-
-## Partial Unity and Context-Dependent Coupling in Early Childhood EF Networks
-
-The inhibition–working memory edge was the most reliable connection across all waves and both cohorts, suggesting these two components share the strongest conditional association once cognitive flexibility and age are accounted for. This converges with @karr2022unity, where the same edge was strongest across ages 3–6, and is consistent with theoretical accounts in which inhibitory control and working memory are closely related facets of a common executive control mechanism [@friedman2017unity; @miyake2000unity].
-
-Within this broadly shared architecture, structure differed between cohorts: in Australia, working memory was the most connected node; in South Africa, inhibition played a comparably central role, with a strong cognitive flexibility–inhibition edge at T1 (`r edge_report("SA", "T1", "Cognitive flexibility–Inhibition")`; `r edge_meaningful("SA", "T1", "Cognitive flexibility–Inhibition")`) that showed some attenuation at T2, though with considerable uncertainty (T2: `r edge_report("SA", "T2", "Cognitive flexibility–Inhibition")`; `r edge_meaningful("SA", "T2", "Cognitive flexibility–Inhibition")`). The cognitive flexibility–working memory edge was weak and uncertain across waves (T1: `r edge_report("SA", "T1", "Cognitive flexibility–Working memory")`; `r edge_meaningful("SA", "T1", "Cognitive flexibility–Working memory")`), and should be interpreted cautiously given the modest posterior evidence. Taken together, these patterns raise the possibility that the relational architecture of executive function may be sensitive to sociocultural and environmental context [@williams2022learning], though replication in independent samples is needed before stronger conclusions can be drawn.
-
-A further difference concerns the cognitive flexibility–inhibition edge, which was weakly supported in the Australian network at T1 (`r edge_meaningful("AU", "T1", "Cognitive flexibility–Inhibition")`) but more credibly present in South Africa (`r edge_meaningful("SA", "T1", "Cognitive flexibility–Inhibition")`). This is theoretically noteworthy: @karr2024network identified the cognitive flexibility–inhibition edge as a marker of EF network maturation, showing the greatest increase with age and stronger weighting in neurotypically developing children relative to those with ADHD across US and Australian samples. The comparatively stronger presence of this edge in South Africa at T1 — among younger children on average — may therefore reflect a different developmental trajectory or timing of EF integration. Caution is warranted however given the pronounced floor effect in Australian cognitive flexibility at T1 (32.5% scoring zero), which may artificially suppress this edge; sensitivity analyses excluding floor performers were substantively unchanged (see RQ3).
-
-We found little evidence of reliable change in global strength or expected influence, which may reflect the brief longitudinal window. Both indices may be comparatively stable over short developmental intervals, such that meaningful change is subtle and difficult to distinguish from measurement uncertainty. This is consistent with prior EF network modelling where global strength and centrality indices within childhood age bands are often estimated with uncertainty, and developmental differences are primarily characterized via between-group contrasts rather than within-person change [@karr2022unity]."
-
-These findings are broadly consistent with developmental factor analytic work: confirmatory factor analyses with preschool samples consistently support unidimensional or two-factor representations of EF, in contrast to the three-factor structure characteristic of adults [@karr2018unity; @lee2013developmental; @wiebe2008using; @willoughby2012measurement]. The network approach complements these findings by revealing which pairwise associations drive partial integration. In the bifactor framework of @friedman2017unity, inhibition loads primarily on a Common EF factor, and the inhibition–working memory coupling observed here may reflect this shared common control variance, even before the three-factor structure has fully differentiated.
-
-## Stability of EF Network Structure Amid Developmental Growth
-
-Our results did not support meaningful change in EF network summaries across waves within either cohort: posterior 95% CrIs for all Δs included 0, and probabilities that edge changes exceeded the ROPE (|Δr| > 0.05) were modest (≈0.6–0.8). Notably, children in both cohorts showed improvements in raw EF scores — consistent with the well-documented rapid growth of executive abilities during the preschool years [@best2010developmental; @diamond2013executive] — yet conditional associations among components remained stable. Network structure and mean performance thus appear to capture dissociable aspects of EF development, consistent with early childhood being a period of relative EF unity [@nelson2016structure; @wiebe2008using] in which components strengthen together rather than becoming more distinct.
-
-Descriptively, working memory was the most centrally connected node in Australia across all three waves, while inhibitory control showed comparably high centrality in South Africa at T1, where the cognitive flexibility–inhibition edge — absent in Australia at T1 — was the strongest in the network. These descriptive differences should be interpreted cautiously: credible intervals for all edge estimates crossed zero, and formal cross-cohort tests (RQ3) were inconclusive, with all AU–SA difference estimates also spanning zero. The descriptive patterns are therefore neither confirmed nor contradicted by the comparative analyses. 
-
-Notwithstanding this uncertainty, one interpretation of the descriptive pattern invokes the role of environmental adversity in shaping executive development. The South African sample was drawn from low-income Cape Town communities characterized by informal housing, poverty, and community violence [@cook2024risk]. Environments characterized by chronic stress and threat can selectively promote the development of reactive, threat-focused cognitive processes — including inhibitory control — potentially at the expense of other executive capacities [@blair2016poverty; @sheridan2014dimensions]. A parallel theoretical and empirical literature points away from deficit accounts of adversity, and to the role of contextual and cultural factors in shaping EF development adaptively [@doebel2020rethinking; @niebaum2025adaptive; @frankenhuis2020hidden], to sometimes result in surprising and high EF performance, despite adversity [@howard2020challenging]. Whether reflecting a stress response or contextual adaptation, the more prominent role of inhibition in the South African network may reflect an environment in which inhibitory control is particularly salient and practiced, resulting in stronger coupling between inhibitory processes and cognitive flexibility in early childhood - though this interpretation is speculative and requires further investigation.
-
-## Socioeconomic Moderation of EF Network Structure
-
-Exploratory moderation analyses identified two edges differing across income groups; in Australia at T2, higher household income was associated with a weaker cognitive flexibility–working memory edge relative to middle-income families — possibly reflecting greater EF differentiation in higher-SES environments, where a weaker edge may indicate reduced reliance on one ability to engage another rather than poorer functioning [@karr2022unity]. However, this is one of several possible accounts, and given the exploratory nature of this analysis and the nascent application of network modelling to EF cognitive data, strong interpretive claims about the meaning of edge strength differences remain premature. 
-
-In South Africa at T2, higher household income was associated with stronger inhibition–working memory coupling. The divergence between cohorts — weaker coupling with higher income in Australia, stronger in South Africa — points to contextual specificity in how income-related resources shape EF coupling. Differentiation frameworks predict weaker edges in higher-resource contexts [@karr2022unity], while resource-dependent co-development accounts predict stronger edges where economic scaffolding supports joint development [@rosen2020cognitive]. Current theory does not generate clear a priori predictions, and post-hoc accounts risk overfitting narrative to noise; these findings are therefore reported descriptively, and replication in larger samples with granular SES measurement is needed before interpretive weight can be placed on the direction of these effects.
-
-Home learning environment moderation effects were modest and did not reliably exceed the ROPE threshold, despite established links between HLE quality and EF development [@melhuish2008effects; @sylva2004effective].One possibility is that HLE influences the level of EF abilities rather than the relational architecture among components: children from enriched home learning environments may perform better on individual EF tasks without showing systematically different coupling among components. Alternatively, the composite HLE scores used here may not capture the specific dimensions of home experience most relevant to EF network structure. Future work employing more detailed and observational HLE measures may be better positioned to detect HLE-related differences in EF network topology. For example, measures may need to move away from frequency-based indices (“how many books can you access?”, “how often do you read to your child?”) to indices that capture the quality of EF supportive interactions between caregivers and children around resources (as suggested by the literature on interaction quality in childcare settings [@howard2020measuring].
-
-## Methodological Contributions and Limitations
-
-The present study has several methodological features worth noting. To our knowledge, this is  the first study to apply BGGM to cross-cultural EF data, extending network approaches to a comparative developmental context. BGGM offer a systems-level complement to the latent variable approaches that have characterized much of the existing literature: whereas factor models treat shared variance as attributable to an unobserved common factor, network models treat the conditional associations among components as the primary target of inference [@borsboom2021network; @cramer2010comorbidity]. By estimating age-adjusted partial correlations, this approach captures direct pairwise coupling after removing shared age-related variance and covariance with other components — providing a less confounded view of specific relationships than zero-order correlations. While interfactor correlations are estimable in standard factor models, the focus of inference typically centres on loadings and model fit rather than on the relative strength of specific pairwise dependencies; network models make those dependencies the primary inferential target [@karr2018unity; @borsboom2021network]. ROPE-based inference offers a further advantage, providing a principled alternative to binary significance testing well-suited to modest sample sizes: rather than asking whether an edge differs from zero, it asks whether the effect is large enough to be practically meaningful.
-
-Our findings are subject to several limitations. First, with only three nodes, graph-theoretic metrics such as clustering and path length cannot be meaningfully interpreted; the value of the network approach here lies in the interpretability of individual edge weights and their comparison across cohorts and timepoints. Second, the EF battery comprised a single task per construct, limiting construct reliability and precluding correction for measurement error; future studies employing multiple tasks per domain would allow latent network models accounting for task impurity. Third, the South African cohort lacked a third wave, limiting developmental inference to a single T1–T2 transition. Fourth, attrition in the Australian sample — particularly the reduction to n = 105 at T3 — increases uncertainty in late-wave estimates and raises the possibility of selective retention.
-
-# Conclusion
-
-This study applied Bayesian Gaussian Graphical Models to map the conditional architecture of executive function across two longitudinal preschool cohorts from Australia and South Africa, extending network approaches to a cross-cultural developmental context. Three findings emerge. First, EF components showed moderate and selective coupling consistent with partial unity: the inhibition–working memory edge was the most reliable connection across both cohorts and all waves, while cognitive flexibility showed more context-dependent coupling — more strongly linked to inhibition in South Africa and to working memory in Australia. Second, network structure remained stable across adjacent developmental timepoints despite clear gains in EF performance, suggesting a dissociation between the level of executive abilities and the relational architecture that organises them. Third, exploratory moderation analyses indicated that socioeconomic context may modulate specific aspects of EF coupling in ways that differ by environmental context, though the divergent direction of effects across cohorts resists simple interpretation and replication in larger samples is needed. Together, these findings advance a network perspective on EF development that is complementary to the latent variable tradition, and highlight the value of examining not just how well children perform on EF tasks, but how the components of executive control are functionally coupled as a system.
-
-\clearpage
-
-# References
-
-::: {#refs}
-:::
-
-\clearpage
 
 ```{r}
 #| label: fig-test-re-test
@@ -4926,6 +4945,150 @@ flextable(rq4_n_table, col_keys = col_keys) %>%
   italic(i = 1, part = "footer")
 ```
 
+# Sensitivity analysis: Reseach Question 4 - Attriction across SES variables {.appendix}
+Children excluded from RQ4 due to missing moderator data were demographically similar to the included sample in Australia across all waves. In South Africa, excluded children at T2 were slightly younger and more likely to be female than included children (excluded: n = 20; mean age = 4.98 vs 5.39 years; 60.0% vs 43.2% female); findings from the SA moderation analyses should therefore be interpreted with some caution given potential selectivity in moderator data availability.
+```{r}
+#| label: rq4-attrition-check
+#| include: false
+
+# Identify included vs excluded children in RQ4
+# Base: ef_net_wide (wave-specific network sample)
+# RQ4: additionally requires non-missing income AND hle
+
+rq4_ids_base <- ef_net_wide %>%
+  dplyr::distinct(country, timepoint, id)
+
+rq4_ids_included <- ef_net_stratified %>%
+  dplyr::distinct(country, timepoint, id) %>%
+  dplyr::mutate(rq4_included = TRUE)
+
+rq4_attrition <- rq4_ids_base %>%
+  dplyr::left_join(rq4_ids_included, by = c("country", "timepoint", "id")) %>%
+  dplyr::mutate(
+    rq4_included = tidyr::replace_na(rq4_included, FALSE),
+    group = ifelse(rq4_included, "Included", "Excluded")
+  )
+
+cat("=== RQ4 ATTRITION BY COHORT×WAVE ===\n")
+rq4_attrition %>%
+  dplyr::count(country, timepoint, group) %>%
+  tidyr::pivot_wider(names_from = group, values_from = n, values_fill = 0) %>%
+  dplyr::mutate(pct_included = round(100 * Included / (Included + Excluded), 1)) %>%
+  print()
+
+# Join age, sex onto attrition frame
+rq4_attrition_demo <- rq4_attrition %>%
+  dplyr::left_join(
+    age_all_keep %>%
+      dplyr::mutate(
+        country   = as.character(country),
+        timepoint = as.character(timepoint),
+        id        = as.character(id)
+      ),
+    by = c("country", "timepoint", "id")
+  ) %>%
+  dplyr::left_join(
+    dplyr::bind_rows(
+      sa_sex_long %>%
+        dplyr::mutate(
+          country   = as.character(country),
+          timepoint = as.character(timepoint),
+          id        = as.character(id)
+        ),
+      aus_sex_tp %>%
+        dplyr::mutate(
+          country   = as.character(country),
+          timepoint = as.character(timepoint),
+          id        = as.character(id)
+        )
+    ),
+    by = c("country", "timepoint", "id")
+  )
+
+# Summarize age by included/excluded
+age_compare <- rq4_attrition_demo %>%
+  dplyr::filter(!is.na(age)) %>%
+  dplyr::group_by(country, timepoint, group) %>%
+  dplyr::summarise(
+    n    = dplyr::n(),
+    mean = mean(age, na.rm = TRUE),
+    sd   = sd(age,  na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  dplyr::mutate(
+    variable = "Age (years)",
+    cell     = fmt_mean_sd(mean, sd, digits = 2)
+  )
+
+# Summarize sex by included/excluded
+sex_compare <- rq4_attrition_demo %>%
+  dplyr::filter(!is.na(sex)) %>%
+  dplyr::count(country, timepoint, group, sex) %>%
+  dplyr::group_by(country, timepoint, group) %>%
+  dplyr::mutate(pct = 100 * n / sum(n)) %>%
+  dplyr::ungroup() %>%
+  dplyr::filter(sex == "Female") %>%
+  dplyr::transmute(
+    country, timepoint, group,
+    variable = "Female, n (%)",
+    cell     = paste0(n, " (", sprintf("%.1f", pct), "%)")
+  )
+
+# Combine
+demo_compare <- dplyr::bind_rows(
+  age_compare %>% dplyr::select(country, timepoint, group, variable, cell),
+  sex_compare
+) %>%
+  dplyr::mutate(
+    country   = country_for_table(country),
+    timepoint = as.character(timepoint)
+  ) %>%
+  tidyr::pivot_wider(names_from = group, values_from = cell) %>%
+  dplyr::arrange(country, timepoint, variable)
+```
+
+```{r}
+#| label: tbl-rq4-attrition
+#| tbl-cap: "Demographic comparison of children included versus excluded from RQ4 moderation analyses due to missing income or home learning environment data."
+#| include: true
+
+attrition_col_keys <- c("country", "timepoint", "variable", "Included", "Excluded")
+
+section_starts_att <- which(!duplicated(paste(demo_compare$country, demo_compare$timepoint)))
+divider_rows_att   <- section_starts_att[-1] - 1
+
+demo_compare %>%
+  dplyr::mutate(across(everything(), ~ ifelse(is.na(.), "\u2014", as.character(.)))) %>%
+  flextable(col_keys = attrition_col_keys) %>%
+  set_header_labels(
+    country   = "Cohort",
+    timepoint = "Wave",
+    variable  = "Measure",
+    Included  = "Included in RQ4",
+    Excluded  = "Excluded from RQ4"
+  ) %>%
+  merge_v(j = c("country", "timepoint"), part = "body") %>%
+  valign(j = c("country", "timepoint"), valign = "top", part = "body") %>%
+  border_remove() %>%
+  hline_top(border = thick, part = "header") %>%
+  hline_bottom(border = thin,  part = "header") %>%
+  hline(i = divider_rows_att, border = thin, part = "body") %>%
+  hline_bottom(border = thick, part = "body") %>%
+  align(align = "center", part = "header") %>%
+  align(align = "center", part = "body") %>%
+  align(j = c("country", "timepoint", "variable"), align = "left", part = "body") %>%
+  italic(j = "country", part = "body") %>%
+  padding(j = "variable", padding.left = 14, part = "body") %>%
+  fontsize(size = 10, part = "all") %>%
+  set_table_properties(layout = "autofit", width = 1) %>%
+  add_footer_lines(
+    "Note. Excluded children are those in the wave-specific network sample (RQ1–RQ3) who had missing data on household income or home learning environment at T1. Age reported as mean (SD)."
+  ) %>%
+  italic(i = 1, part = "footer")
+
+```
+
+<!--
 # Sensitivity analysis: Multi-wave restricted sample {.appendix}
 ```{r}
 #| label: sens-multiwave-prep
@@ -5209,150 +5372,6 @@ flextable(sens_long,
     "Note. Multi-wave restricted sample: AU and SA = EF observed at both T1 and T2. CrI = credible interval."
   ) %>%
   italic(i = 1, part = "footer")
-```
-
-# Sensitivity analysis: Reseach Question 4 - Attriction across SES variables {.appendix}
-Children excluded from RQ4 due to missing moderator data were demographically similar to the included sample in Australia across all waves. In South Africa, excluded children at T2 were slightly younger and more likely to be female than included children (excluded: n = 20; mean age = 4.98 vs 5.39 years; 60.0% vs 43.2% female); findings from the SA moderation analyses should therefore be interpreted with some caution given potential selectivity in moderator data availability.
-```{r}
-#| label: rq4-attrition-check
-#| include: false
-
-# Identify included vs excluded children in RQ4
-# Base: ef_net_wide (wave-specific network sample)
-# RQ4: additionally requires non-missing income AND hle
-
-rq4_ids_base <- ef_net_wide %>%
-  dplyr::distinct(country, timepoint, id)
-
-rq4_ids_included <- ef_net_stratified %>%
-  dplyr::distinct(country, timepoint, id) %>%
-  dplyr::mutate(rq4_included = TRUE)
-
-rq4_attrition <- rq4_ids_base %>%
-  dplyr::left_join(rq4_ids_included, by = c("country", "timepoint", "id")) %>%
-  dplyr::mutate(
-    rq4_included = tidyr::replace_na(rq4_included, FALSE),
-    group = ifelse(rq4_included, "Included", "Excluded")
-  )
-
-cat("=== RQ4 ATTRITION BY COHORT×WAVE ===\n")
-rq4_attrition %>%
-  dplyr::count(country, timepoint, group) %>%
-  tidyr::pivot_wider(names_from = group, values_from = n, values_fill = 0) %>%
-  dplyr::mutate(pct_included = round(100 * Included / (Included + Excluded), 1)) %>%
-  print()
-
-# Join age, sex onto attrition frame
-rq4_attrition_demo <- rq4_attrition %>%
-  dplyr::left_join(
-    age_all_keep %>%
-      dplyr::mutate(
-        country   = as.character(country),
-        timepoint = as.character(timepoint),
-        id        = as.character(id)
-      ),
-    by = c("country", "timepoint", "id")
-  ) %>%
-  dplyr::left_join(
-    dplyr::bind_rows(
-      sa_sex_long %>%
-        dplyr::mutate(
-          country   = as.character(country),
-          timepoint = as.character(timepoint),
-          id        = as.character(id)
-        ),
-      aus_sex_tp %>%
-        dplyr::mutate(
-          country   = as.character(country),
-          timepoint = as.character(timepoint),
-          id        = as.character(id)
-        )
-    ),
-    by = c("country", "timepoint", "id")
-  )
-
-# Summarize age by included/excluded
-age_compare <- rq4_attrition_demo %>%
-  dplyr::filter(!is.na(age)) %>%
-  dplyr::group_by(country, timepoint, group) %>%
-  dplyr::summarise(
-    n    = dplyr::n(),
-    mean = mean(age, na.rm = TRUE),
-    sd   = sd(age,  na.rm = TRUE),
-    .groups = "drop"
-  ) %>%
-  dplyr::mutate(
-    variable = "Age (years)",
-    cell     = fmt_mean_sd(mean, sd, digits = 2)
-  )
-
-# Summarize sex by included/excluded
-sex_compare <- rq4_attrition_demo %>%
-  dplyr::filter(!is.na(sex)) %>%
-  dplyr::count(country, timepoint, group, sex) %>%
-  dplyr::group_by(country, timepoint, group) %>%
-  dplyr::mutate(pct = 100 * n / sum(n)) %>%
-  dplyr::ungroup() %>%
-  dplyr::filter(sex == "Female") %>%
-  dplyr::transmute(
-    country, timepoint, group,
-    variable = "Female, n (%)",
-    cell     = paste0(n, " (", sprintf("%.1f", pct), "%)")
-  )
-
-# Combine
-demo_compare <- dplyr::bind_rows(
-  age_compare %>% dplyr::select(country, timepoint, group, variable, cell),
-  sex_compare
-) %>%
-  dplyr::mutate(
-    country   = country_for_table(country),
-    timepoint = as.character(timepoint)
-  ) %>%
-  tidyr::pivot_wider(names_from = group, values_from = cell) %>%
-  dplyr::arrange(country, timepoint, variable)
-
-```
-
-```{r}
-#| label: tbl-rq4-attrition
-#| tbl-cap: "Demographic comparison of children included versus excluded from RQ4 moderation analyses due to missing income or home learning environment data."
-#| include: true
-
-attrition_col_keys <- c("country", "timepoint", "variable", "Included", "Excluded")
-
-section_starts_att <- which(!duplicated(paste(demo_compare$country, demo_compare$timepoint)))
-divider_rows_att   <- section_starts_att[-1] - 1
-
-demo_compare %>%
-  dplyr::mutate(across(everything(), ~ ifelse(is.na(.), "\u2014", as.character(.)))) %>%
-  flextable(col_keys = attrition_col_keys) %>%
-  set_header_labels(
-    country   = "Cohort",
-    timepoint = "Wave",
-    variable  = "Measure",
-    Included  = "Included in RQ4",
-    Excluded  = "Excluded from RQ4"
-  ) %>%
-  merge_v(j = c("country", "timepoint"), part = "body") %>%
-  valign(j = c("country", "timepoint"), valign = "top", part = "body") %>%
-  border_remove() %>%
-  hline_top(border = thick, part = "header") %>%
-  hline_bottom(border = thin,  part = "header") %>%
-  hline(i = divider_rows_att, border = thin, part = "body") %>%
-  hline_bottom(border = thick, part = "body") %>%
-  align(align = "center", part = "header") %>%
-  align(align = "center", part = "body") %>%
-  align(j = c("country", "timepoint", "variable"), align = "left", part = "body") %>%
-  italic(j = "country", part = "body") %>%
-  padding(j = "variable", padding.left = 14, part = "body") %>%
-  fontsize(size = 10, part = "all") %>%
-  set_table_properties(layout = "autofit", width = 1) %>%
-  add_footer_lines(
-    "Note. Excluded children are those in the wave-specific network sample (RQ1–RQ3) who had missing data on household income or home learning environment at T1. Age reported as mean (SD)."
-  ) %>%
-  italic(i = 1, part = "footer")
-
 ```
 
 ```{r}
@@ -5670,3 +5689,4 @@ cat("  IQR:", IQR(sa_hle_t1$hla_frequency1), "\n\n")
 
 cat("NOTE: Different scales make cross-cohort comparisons non-interpretable\n")
 ```
+-->
