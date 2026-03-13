@@ -13,11 +13,9 @@ author:
   roles:
       - conceptualization
       - formal analysis
-      - investigation
       - methodology
       - project administration
       - visualization
-      - validation
       - writing – original draft
       - writing – review & editing
 - name: "Jelena Sučević" 
@@ -26,7 +24,7 @@ author:
     - ref: oxford
   roles:
     - conceptualization
-    - investigation
+    - methodology
     - writing – review & editing
 - name: "Caylee Cook"
   orcid: 0000-0001-9718-8887
@@ -41,7 +39,7 @@ author:
   affiliations:
     - ref: kentucky
   roles:
-    - investigation
+    - conceptualization
     - methodology
     - writing – review & editing
 - name: "Philippe Rast"
@@ -49,8 +47,9 @@ author:
   affiliations:
     - ref: ucdavis
   roles:
-    - investigation
+    - conceptualization
     - methodology
+    - software
     - writing – review & editing
 - name: "Catherine E. Draper*"
   orcid: 0000-0002-2885-437X
@@ -112,7 +111,7 @@ author-note:
   disclosures:
     conflict-of-interest: "The authors have no conflict of interest to declare. Fionnuala O’Reilly was supported by a doctoral training scholarship from the Economic and Social Research Council, and Gaia Scerif was supported in this work by the Economic and Social Research Council (Grants ES/X013561/1 and ES/W002914/1). *Joint senior authorship: Catherine E. Draper, Steven J. Howard, and Gaia Scerif contributed equally to this work."
 
-abstract: "Executive functions (EFs) are foundational cognitive abilities that develop rapidly during early childhood. Although latent variable approaches have characterized the unity and diversity of EF structure extensively, less is known about the conditional associations among EF components—how these associations change as children develop, and whether they vary across  sociocultural contexts. The present study applied Bayesian Gaussian Graphical Models to model age-adjusted EF networks across two longitudinal preschool cohorts from Australia (N = 232; M age = 4.43 years; three waves) and South Africa (N = 217; M age = 4.70 years; two waves). Results suggest moderate and selective coupling among EF components, consistent with partial unity: the inhibition–working memory edge was the most reliable connection across cohorts and waves. Despite substantial gains in EF performance across waves, network structure remained stable over time, suggesting a dissociation between the level of executive abilities and the relational architecture organizing them. Exploratory moderation analyses identified income-related differences in specific edges at T2 in both cohorts, though these findings require replication in larger samples. Together, these results advance a network perspective on early EF development that complements latent variable approaches, highlighting the value of examining not just children's performance levels but the conditional architecture organising EF components across development."
+abstract: "Executive functions (EFs) are foundational cognitive abilities that develop rapidly during early childhood. Although latent variable approaches have characterized the unity and diversity of EF structure extensively, less is known about the conditional associations among EF components—how these associations change as children develop, and whether they vary across  sociocultural contexts. The present study applied Bayesian Gaussian Graphical Models to model age-adjusted EF networks across two longitudinal preschool cohorts from Australia (N = 232; M age = 4.43 years; three waves) and South Africa (N = 217; M age = 4.70 years; two waves). Results suggest moderate and selective coupling among EF components, consistent with partial unity: the inhibition–working memory edge was the most reliable connection across cohorts and waves. Despite substantial gains in EF performance across waves, network structure remained stable over time, suggesting a dissociation between the level of executive abilities and the relational architecture organizing them. Exploratory moderation analyses identified income-related differences in specific edges at T2 in both cohorts, though these findings require replication in larger samples. Together, these results advance a network perspective on early EF development that complements latent variable approaches, highlighting the value of examining not just children's performance levels but the conditional architecture organizing EF components across development."
 
 keywords: ["Executive Function", "Bayesian network analysis", "Dimensionality"] 
 word-count: false
@@ -179,7 +178,7 @@ Network analytic approaches address this directly. By estimating partial correla
 
 ## The Present Study 
 
-The present study applies BGGM to examine the organisation of EF during early childhood across two longitudinal cohorts from Australia and South Africa, estimating age-adjusted partial correlations among inhibitory control, working memory, and cognitive flexibility. This approach captures direct conditional associations among EF components after accounting for shared relationships and age-related variance, enabling investigation of which components show direct coupling, how these associations change developmentally, and whether network structure varies across sociocultural contexts. We additionally examine whether SES moderates EF network structure within each cohort — specifically, whether edges are systematically stronger or weaker among children from high versus low household income and home learning environment backgrounds — to assess whether the relational architecture of EF is sensitive to proximal environmental variation within as well as between sociocultural contexts.
+The present study applies BGGM to examine the organization of EF during early childhood across two longitudinal cohorts from Australia and South Africa, estimating age-adjusted partial correlations among inhibitory control, working memory, and cognitive flexibility. This approach captures direct conditional associations among EF components after accounting for shared relationships and age-related variance, enabling investigation of which components show direct coupling, how these associations change developmentally, and whether network structure varies across sociocultural contexts. We additionally examine whether SES moderates EF network structure within each cohort — specifically, whether edges are systematically stronger or weaker among children from high versus low household income and home learning environment backgrounds — to assess whether the relational architecture of EF is sensitive to proximal environmental variation within as well as between sociocultural contexts.
 
 ### Research Questions
 
@@ -201,7 +200,7 @@ Within each cohort, does EF network structure differ between children from high 
 
 ## Participants 
 
-The Australian sample was the control group from an intervention study: 232 children from 25 preschools across diverse socioeconomic areas of New South Wales (M age = 4.43 years, SD = 0.38; 46.1% girls). Ninety-four percent were retained at T2; a geographically constrained subset was followed at T3 (n = 105, no significant demographic differences from those not followed up). The South African sample comprised children from four low-income Cape Town communities characterised by informal housing, poverty, and exposure to violence [@cook2024risk]: 217 at T1 (M age = 4.70 years, SD = 0.60; 48.1% female) and 189 at T2. For full recruitment details see @howard2020everyday and @cook2024risk. The cohorts were not matched by design — differing in recruitment context, SES range, and study type — and cross-cohort comparisons should be interpreted with caution, as observed differences may reflect design-level confounds rather than genuine cross-cultural variation in EF network structure.
+The Australian sample was the control group from an intervention study: 232 children from 25 preschools across diverse socioeconomic areas of New South Wales (M age = 4.43 years, SD = 0.38; 46.1% girls). Ninety-four percent were retained at T2; a geographically constrained subset was followed at T3 (n = 105, no significant demographic differences from those not followed up). The South African sample comprised children from four low-income Cape Town communities characterized by informal housing, poverty, and exposure to violence [@cook2024risk]: 217 at T1 (M age = 4.70 years, SD = 0.60; 48.1% female) and 189 at T2. For full recruitment details see @howard2020everyday and @cook2024risk. The cohorts were not matched by design — differing in recruitment context, SES range, and study type — and cross-cohort comparisons should be interpreted with caution, as observed differences may reflect design-level confounds rather than genuine cross-cultural variation in EF network structure.
 
 ## Measures
 
@@ -4210,7 +4209,7 @@ Our results did not support meaningful change in EF network summaries across wav
 
 Although wide credible intervals mean these results cannot be interpreted as strong evidence of stability in the psychometric sense, two patterns speak against a purely imprecision-based account. First, EF performance increased reliably across the same interval in both cohorts — demonstrating that the design was sensitive to developmental change in EF level while conditional associations remained largely invariant. Second, the inhibition–working memory edge was consistently among the strongest connections across all waves and both cohorts — a pattern of selective consistency unlikely to arise from measurement noise alone. Together these observations are more consistent with genuine architectural stability during this developmental window than with undifferentiated imprecision [@menu2024latent].
 
-Descriptively, working memory was the most centrally connected node in Australia across all three waves, while inhibitory control showed comparably high centrality in South Africa at T1, where the cognitive flexibility–inhibition edge — absent in Australia at T1 — was the strongest in the network. These descriptive differences should be interpreted cautiously: the comparative analyses were insufficiently powered to resolve whether they reflect genuine cross-cohort variation — a question that warrants replication with larger samples.
+Descriptively, working memory was the most centrally connected node in Australia across all three waves, while inhibitory control showed comparably high centrality in South Africa at T1, where the cognitive flexibility–inhibition edge — absent in Australia at T1 — was the strongest in the network. These descriptive differences should be interpreted cautiously: the comparative analyses (RQ3) were insufficiently powered to resolve whether they reflect genuine cross-cohort variation — a question that warrants replication with larger samples.
 
 Notwithstanding this uncertainty, one interpretation of the descriptive pattern invokes the role of environmental adversity in shaping executive development. The South African sample was drawn from low-income Cape Town communities characterized by informal housing, poverty, and community violence [@cook2024risk]. Environments characterized by chronic stress and threat can selectively promote the development of reactive, threat-focused cognitive processes — including inhibitory control — potentially at the expense of other executive capacities [@blair2016poverty; @sheridan2014dimensions]. A parallel literature points away from deficit accounts, highlighting how contextual and cultural factors shape EF development adaptively [@doebel2020rethinking; @niebaum2025adaptive; @frankenhuis2020hidden], sometimes resulting in high EF performance despite adversity [@howard2020challenging]. Whether reflecting a stress response or contextual adaptation, the more prominent role of inhibition in the South African network may reflect an environment in which inhibitory control is particularly salient and practiced, resulting in stronger coupling between inhibitory processes and cognitive flexibility in early childhood.
 
@@ -4230,7 +4229,7 @@ Several limitations bear on interpretation, however. First, with only three node
 
 # Conclusion
 
-This study applied Bayesian Gaussian Graphical Models to map the conditional architecture of executive function across two longitudinal preschool cohorts from Australia and South Africa, extending network approaches to a cross-cultural developmental context. Three findings emerge. First, EF components showed moderate and selective coupling consistent with partial unity: the inhibition–working memory edge was the most reliable connection across both cohorts and all waves, while cognitive flexibility showed more context-dependent coupling — more strongly linked to inhibition in South Africa and to working memory in Australia. Second, network structure remained stable across adjacent developmental timepoints despite clear gains in EF performance, suggesting a dissociation between the level of executive abilities and the relational architecture that organises them. Third, exploratory moderation analyses indicated that socioeconomic context may modulate specific aspects of EF coupling in ways that differ by environmental context, though the divergent direction of effects across cohorts resists simple interpretation and replication in larger samples is needed. Together, these findings advance a network perspective on EF development that is complementary to the latent variable tradition, and highlight the value of examining not just how well children perform on EF tasks, but how the components of executive control are functionally coupled as a system.
+This study applied Bayesian Gaussian Graphical Models to map the conditional architecture of executive function across two longitudinal preschool cohorts from Australia and South Africa, extending network approaches to a cross-cultural developmental context. Three findings emerge. First, EF components showed moderate and selective coupling consistent with partial unity: the inhibition–working memory edge was the most reliable connection across both cohorts and all waves, while cognitive flexibility showed more context-dependent coupling — more strongly linked to inhibition in South Africa and to working memory in Australia. Second, network structure remained stable across adjacent developmental timepoints despite clear gains in EF performance, suggesting a dissociation between the level of executive abilities and the relational architecture that organizes them. Third, exploratory moderation analyses indicated that socioeconomic context may modulate specific aspects of EF coupling in ways that differ by environmental context, though the divergent direction of effects across cohorts resists simple interpretation and replication in larger samples is needed. Together, these findings advance a network perspective on EF development that is complementary to the latent variable tradition, and highlight the value of examining not just how well children perform on EF tasks, but how the components of executive control are functionally coupled as a system.
 
 \clearpage
 
@@ -4945,7 +4944,7 @@ flextable(rq4_n_table, col_keys = col_keys) %>%
   italic(i = 1, part = "footer")
 ```
 
-# Sensitivity analysis: Reseach Question 4 - Attriction across SES variables {.appendix}
+# Sensitivity analysis: Research Question 4 - Attrition across SES variables {.appendix}
 Children excluded from RQ4 due to missing moderator data were demographically similar to the included sample in Australia across all waves. In South Africa, excluded children at T2 were slightly younger and more likely to be female than included children (excluded: n = 20; mean age = 4.98 vs 5.39 years; 60.0% vs 43.2% female); findings from the SA moderation analyses should therefore be interpreted with some caution given potential selectivity in moderator data availability.
 ```{r}
 #| label: rq4-attrition-check
